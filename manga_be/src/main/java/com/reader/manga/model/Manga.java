@@ -2,6 +2,7 @@ package com.reader.manga.model;
 
 import com.reader.manga.enums.StatusType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,7 +36,7 @@ public class Manga {
 
     @NotNull
     @Column(name = "size_manga")
-    @Size(min = 1)
+    @Min(value = 1)
     private Integer size;
 
     @NotNull
@@ -68,5 +69,17 @@ public class Manga {
     @Column(name = "image")
     @Length(min = 10, max = 100)
     private String image;
+
+    public Manga(String title, String description, Integer size, String creationDate, String closingDate, StatusType status, String gender, String author, String image) {
+        this.title = title;
+        this.description = description;
+        this.size = size;
+        this.creationDate = creationDate;
+        this.closingDate = closingDate;
+        this.status = status;
+        this.gender = gender;
+        this.author = author;
+        this.image = image;
+    }
 
 }
