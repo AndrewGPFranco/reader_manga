@@ -13,8 +13,12 @@ public class MangaService {
     private MangaRepository repository;
 
     public MangaDTO createManga(MangaDTO dto) {
-        Manga manga = new Manga(dto.title(), dto.description(), dto.size(), dto.creationDate(), dto.closingDate(), dto.status(), dto.gender(), dto.author(),  dto.image());
-        repository.save(manga);
-        return dto;
+        try {
+            Manga manga = new Manga(dto.title(), dto.description(), dto.size(), dto.creationDate(), dto.closingDate(), dto.status(), dto.gender(), dto.author(),  dto.image());
+            repository.save(manga);
+            return dto;
+        }catch (Exception e) {
+            throw new RuntimeException("Error creating Manga. Please try again...");
+        }
     }
 }
