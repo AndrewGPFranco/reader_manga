@@ -1,6 +1,6 @@
 package com.reader.manga.enums;
 
 public enum StatusType {
-    EM_ANDAMENTO,
+    ANDAMENTO,
     FINALIZADO
 }

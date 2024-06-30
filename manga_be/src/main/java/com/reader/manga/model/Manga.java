@@ -34,16 +34,16 @@ public class Manga {
     private String description;
 
     @NotNull
-    @Column(name = "size")
+    @Column(name = "size_manga")
     @Size(min = 1)
     private Integer size;
 
     @NotNull
     @NotBlank
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     private String creationDate;
 
-    @Column(name = "closingDate")
+    @Column(name = "closing_date")
     private String closingDate;
 
     @NotNull
