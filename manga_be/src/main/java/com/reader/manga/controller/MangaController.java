@@ -23,7 +23,7 @@ public class MangaController {
 
     @PostMapping("/create")
     public GetMangaDTO createManga(@RequestBody @Valid MangaDTO dto) {
-        logger.info("Creating mangá!");
+        logger.info("*******************Creating mangá!*******************");
         return service.createManga(dto);
     }
 }
