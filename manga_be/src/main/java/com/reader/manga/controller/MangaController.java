@@ -1,5 +1,6 @@
 package com.reader.manga.controller;
 
+import com.reader.manga.dto.GetMangaDTO;
 import com.reader.manga.dto.MangaDTO;
 import com.reader.manga.service.MangaService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class MangaController {
     private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
 
     @PostMapping("/create")
-    public MangaDTO createManga(@RequestBody @Valid MangaDTO dto) {
+    public GetMangaDTO createManga(@RequestBody @Valid MangaDTO dto) {
         logger.info("Creating mangá!");
         return service.createManga(dto);
     }
