@@ -37,4 +37,10 @@ class MangaServiceTest {
         MangaDTO expected = new MangaDTO("test","test description",1,"2024-06-28","N/D",StatusType.ONGOING,"Andrew","Shonen","url.com.br");
         assertEquals(expected, mangaDTO);
     }
+
+    @Test
+    public void testDeleteManga() {
+        service.deleteManga(1L);
+        Mockito.verify(service, Mockito.times(1)).deleteManga(1L);
+    }
 }
