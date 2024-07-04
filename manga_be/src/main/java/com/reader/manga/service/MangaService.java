@@ -22,4 +22,9 @@ public class MangaService {
             throw new RuntimeException("Error creating Manga. Please try again...");
         }
     }
+
+    public void deleteManga(Long id) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Manga not found"));
+        repository.deleteById(id);
+    }
 }
