@@ -1,35 +1,31 @@
-# Issue description
+# Problem description
 
 **Summary:**
-Describe the problem or functionality here to be innovative.
+Describe the problem or functionality here to be innovative:
+- 
 
-**Steps to Reproduce:**
+**Steps to reproduce:**
 1. Detail the steps required to reproduce the issue (if applicable).
 
-**Expected outcome:**
-Describe what behavior is expected after resolving the issue.
-
-**Current results:**
-Describe the current behavior being observed.
+**Expected result:** and **Current results:**
+Describe what behavior is expected after resolving the issue:
+- 
 
 # Checklist
 
-- [ ] Did you carry out tests?
-    - Describe here the tests carried out (unit, integration, etc.)
-- [ ] Did you link an Issue with Merge Request (MR)?
-    - Include the link to MR here: [Link to MR](URL_DO_MR)
-- [ ] Did you review the code?
-    - Describe here who did the review and if there was important feedback.
+- [ ] Did you perform tests?
+  - Describe the tests carried out here (unit, integration, etc.) : 
+- [ ] Did you link an issue to the merge request (MR)?
+  - Include the link to MR here: [Link to MR]() .
+- [ ] Have you reviewed the code?
+  - Review done by me.
 
 # Additional Information
-
-**Context:**
-Provide additional information about the context of the issue or feature.
 
 **Screenshots (if applicable):**
 Include screenshots or gifs that help illustrate the issue or functionality.
 
-**Logs and Error Messages (if applicable):**
+**Logs and error messages (if applicable):**
 Include any relevant log or error messages here.
 
 # References
