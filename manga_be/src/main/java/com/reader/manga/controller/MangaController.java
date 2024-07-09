@@ -67,7 +67,14 @@ public class MangaController {
     }
 
     @PutMapping("edit")
-    public void updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
-        service.updateManga(id, dto);
+    public ResponseEntity<String> updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
+        try {
+            service.updateManga(id, dto);
+            logger.info("*******************Updating mangá!*******************");
+            return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
+        } catch (RuntimeException e) {
+            logger.info("*******************Error to update mangá!*******************");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
