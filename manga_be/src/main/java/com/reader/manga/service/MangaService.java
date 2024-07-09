@@ -5,14 +5,12 @@ import com.reader.manga.dto.MangaDTO;
 import com.reader.manga.dto.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
