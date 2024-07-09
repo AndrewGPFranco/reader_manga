@@ -5,7 +5,11 @@ import com.reader.manga.dto.MangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MangaService {
@@ -26,5 +30,14 @@ public class MangaService {
     public void deleteManga(Long id) {
         repository.findById(id).orElseThrow(() -> new RuntimeException("Manga not found"));
         repository.deleteById(id);
+    }
+
+    public List<Manga> readAllMangas(Pageable pageable) {
+        if (pageable == null) {
+            return repository.findAll();
+        }
+
+        Page<Manga> pageResult = repository.findAll(pageable);
+        return pageResult.getContent();
     }
 }
