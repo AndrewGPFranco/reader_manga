@@ -2,6 +2,7 @@ package com.reader.manga.controller;
 
 import com.reader.manga.dto.GetMangaDTO;
 import com.reader.manga.dto.MangaDTO;
+import com.reader.manga.dto.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
 import jakarta.validation.Valid;
@@ -63,5 +64,10 @@ public class MangaController {
             logger.info("*******************Error to read all mangas!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    @PutMapping("edit")
+    public void updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
+        service.updateManga(id, dto);
     }
 }
