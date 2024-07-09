@@ -15,5 +15,4 @@ public record GetMangaDTO(
         @NotNull @NotBlank String author,
         @NotNull @NotBlank String gender,
         @NotNull @NotBlank String image
-
 ) {}
