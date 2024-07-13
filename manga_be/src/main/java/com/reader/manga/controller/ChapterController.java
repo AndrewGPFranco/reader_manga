@@ -1,13 +1,9 @@
 package com.reader.manga.controller;
 
 import com.reader.manga.dto.ChapterDTO;
-import com.reader.manga.dto.GetMangaDTO;
 import com.reader.manga.dto.UpdateChapterDTO;
-import com.reader.manga.dto.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
-import com.reader.manga.model.Manga;
 import com.reader.manga.service.ChapterService;
-import com.reader.manga.service.MangaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/chapter")
 public class ChapterController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChapterService.class);
 
     @Autowired
     private ChapterService service;
@@ -56,10 +52,10 @@ public class ChapterController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteManga(@PathVariable Long id) {
+    public ResponseEntity<String> deleteChapter(@PathVariable Long id) {
         try {
             logger.info("*******************Deleting mangá!*******************");
-            service.deleteManga(id);
+            service.deleteChapter(id);
             return ResponseEntity.status(HttpStatus.OK).body("Chapter deleted successfully!");
         } catch(RuntimeException e) {
             logger.error("*******************Mangá not found!*******************");

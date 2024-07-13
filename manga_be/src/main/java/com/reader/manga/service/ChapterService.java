@@ -48,7 +48,7 @@ public class ChapterService {
         return pageResult.getContent();
     }
 
-    public void deleteManga(Long id) {
+    public void deleteChapter(Long id) {
         repository.findById(id).orElseThrow(() -> new RuntimeException("Chapter not found"));
         repository.deleteById(id);
     }
