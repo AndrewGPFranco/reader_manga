@@ -68,7 +68,7 @@ public class MangaController {
         }
     }
 
-    @PutMapping("edit")
+    @PutMapping("/edit")
     public ResponseEntity<String> updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
         try {
             service.updateManga(id, dto);
