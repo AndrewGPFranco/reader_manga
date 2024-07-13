@@ -1,6 +1,4 @@
-package com.reader.manga.dto;
-
-import com.reader.manga.enums.StatusType;
+package com.reader.manga.dto.chapter;
 
 public record UpdateChapterDTO(
         String title,

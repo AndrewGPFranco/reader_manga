@@ -1,7 +1,8 @@
 package com.reader.manga.controller;
 
-import com.reader.manga.dto.ChapterDTO;
-import com.reader.manga.dto.UpdateChapterDTO;
+import com.reader.manga.dto.chapter.ChapterDTO;
+import com.reader.manga.dto.chapter.GetChapterDTO;
+import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import org.slf4j.Logger;
@@ -25,11 +26,12 @@ public class ChapterController {
     private ChapterService service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createChapter(@RequestBody ChapterDTO dto, Long id) {
+    public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto, Long id) {
         try {
             logger.info("*******************Creating mangá!*******************");
             Chapter chapter = service.createChapter(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(chapter);
+            GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
+            return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
         } catch(RuntimeException e) {
             logger.error("*******************Error to create mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

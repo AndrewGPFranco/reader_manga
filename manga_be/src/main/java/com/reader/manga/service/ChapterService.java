@@ -1,8 +1,7 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.ChapterDTO;
-import com.reader.manga.dto.UpdateChapterDTO;
-import com.reader.manga.dto.UpdateMangaDTO;
+import com.reader.manga.dto.chapter.ChapterDTO;
+import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.ChapterRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 public class ChapterService {

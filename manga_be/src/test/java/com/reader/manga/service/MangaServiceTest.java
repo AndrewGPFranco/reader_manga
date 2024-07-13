@@ -1,6 +1,6 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.MangaDTO;
+import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.enums.StatusType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

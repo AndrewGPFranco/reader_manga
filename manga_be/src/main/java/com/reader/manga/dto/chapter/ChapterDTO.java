@@ -1,6 +1,4 @@
-package com.reader.manga.dto;
-
-import com.reader.manga.model.Manga;
+package com.reader.manga.dto.chapter;
 
 public record ChapterDTO(
         String title,

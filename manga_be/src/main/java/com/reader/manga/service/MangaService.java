@@ -1,8 +1,8 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.GetMangaDTO;
-import com.reader.manga.dto.MangaDTO;
-import com.reader.manga.dto.UpdateMangaDTO;
+import com.reader.manga.dto.manga.GetMangaDTO;
+import com.reader.manga.dto.manga.MangaDTO;
+import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 @Service
 public class MangaService {
