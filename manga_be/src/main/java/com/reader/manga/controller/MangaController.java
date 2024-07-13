@@ -30,13 +30,13 @@ public class MangaController {
     private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
+    public ResponseEntity<?> createManga(@RequestBody @Valid MangaDTO dto) {
         try {
             logger.info("*******************Creating mangá!*******************");
             GetMangaDTO manga = service.createManga(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(manga);
         } catch(RuntimeException e) {
-            logger.info("*******************Error to create mangá!*******************");
+            logger.error("*******************Error to create mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -48,7 +48,7 @@ public class MangaController {
             service.deleteManga(id);
             return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
         } catch(RuntimeException e) {
-            logger.info("*******************Mangá not found!*******************");
+            logger.error("*******************Mangá not found!*******************");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mangá not found!");
         }
     }
@@ -63,7 +63,7 @@ public class MangaController {
             List<Manga> mangas = service.readAllMangas(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(mangas);
         } catch (RuntimeException e) {
-            logger.info("*******************Error to read all mangas!*******************");
+            logger.error("*******************Error to read all mangas!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -75,7 +75,7 @@ public class MangaController {
             logger.info("*******************Updating mangá!*******************");
             return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
         } catch (RuntimeException e) {
-            logger.info("*******************Error to update mangá!*******************");
+            logger.error("*******************Error to update mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

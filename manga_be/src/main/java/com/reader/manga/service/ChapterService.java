@@ -1,6 +1,7 @@
 package com.reader.manga.service;
 
 import com.reader.manga.dto.ChapterDTO;
+import com.reader.manga.dto.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.ChapterRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 public class ChapterService {
@@ -37,4 +39,10 @@ public class ChapterService {
     public List<Chapter> listOfChapters() {
         return repository.findAll();
     }
+
+    public void deleteManga(Long id) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Chapter not found"));
+        repository.deleteById(id);
+    }
+
 }

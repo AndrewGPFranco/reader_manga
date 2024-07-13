@@ -47,22 +47,17 @@ public class MangaService {
         Manga manga = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Manga not found"));
 
-        updateField(dto.title(), manga::setTitle);
-        updateField(dto.description(), manga::setDescription);
-        updateField(dto.size(), manga::setSize);
-        updateField(dto.creationDate(), manga::setCreationDate);
-        updateField(dto.closingDate(), manga::setClosingDate);
-        updateField(dto.status(), manga::setStatus);
-        updateField(dto.author(), manga::setAuthor);
-        updateField(dto.gender(), manga::setGender);
-        updateField(dto.image(), manga::setImage);
+        Utils.updateField(dto.title(), manga::setTitle);
+        Utils.updateField(dto.description(), manga::setDescription);
+        Utils.updateField(dto.size(), manga::setSize);
+        Utils.updateField(dto.creationDate(), manga::setCreationDate);
+        Utils.updateField(dto.closingDate(), manga::setClosingDate);
+        Utils.updateField(dto.status(), manga::setStatus);
+        Utils.updateField(dto.author(), manga::setAuthor);
+        Utils.updateField(dto.gender(), manga::setGender);
+        Utils.updateField(dto.image(), manga::setImage);
 
         repository.save(manga);
     }
 
-    private <T> void updateField(T fieldValue, Consumer<T> setter) {
-        if (fieldValue != null) {
-            setter.accept(fieldValue);
-        }
-    }
 }
