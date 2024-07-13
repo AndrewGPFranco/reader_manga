@@ -1,5 +1,6 @@
 package com.reader.manga.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.reader.manga.enums.StatusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -10,11 +11,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "manga")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Manga {
 
     @Id
@@ -68,6 +73,9 @@ public class Manga {
     @Column(name = "image")
     @Length(min = 10, max = 100)
     private String image;
+
+    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Chapter> chapters = new HashSet<>();
 
     public Manga(String title, String description, Integer size, String creationDate, String closingDate, StatusType status, String gender, String author, String image) {
         this.title = title;

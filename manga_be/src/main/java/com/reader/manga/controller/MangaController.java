@@ -1,9 +1,12 @@
 package com.reader.manga.controller;
 
+import com.reader.manga.dto.ChapterDTO;
 import com.reader.manga.dto.GetMangaDTO;
 import com.reader.manga.dto.MangaDTO;
 import com.reader.manga.dto.UpdateMangaDTO;
+import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
+import com.reader.manga.service.ChapterService;
 import com.reader.manga.service.MangaService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,6 +26,9 @@ public class MangaController {
 
     @Autowired
     private MangaService service;
+
+    @Autowired
+    private ChapterService chapterService;
 
     private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
 
@@ -75,5 +81,15 @@ public class MangaController {
             logger.info("*******************Error to update mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @PostMapping("chapter")
+    public void createChapter(@RequestBody ChapterDTO dto, Long id) {
+        chapterService.createChapter(dto);
+    }
+
+    @GetMapping("chapter")
+    public List<Chapter> readAllChapters() {
+        return chapterService.listOfChapters();
     }
 }
