@@ -61,7 +61,7 @@ public class MangaController {
             return ResponseEntity.status(HttpStatus.OK).body(mangas);
         } catch (RuntimeException e) {
             logger.error("*******************Error to read all mangas!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -73,7 +73,7 @@ public class MangaController {
             return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
         } catch (RuntimeException e) {
             logger.error("*******************Error to update mangá!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

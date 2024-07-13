@@ -47,7 +47,7 @@ public class ChapterController {
             return ResponseEntity.status(HttpStatus.OK).body(chapters);
         } catch (RuntimeException e) {
             logger.error("*******************Error to read all chapters!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -71,7 +71,7 @@ public class ChapterController {
             return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
         } catch (RuntimeException e) {
             logger.error("*******************Error to update chapter!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
