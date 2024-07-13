@@ -27,9 +27,6 @@ public class MangaController {
     @Autowired
     private MangaService service;
 
-    @Autowired
-    private ChapterService chapterService;
-
     private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
 
     @PostMapping("/create")
@@ -81,15 +78,5 @@ public class MangaController {
             logger.info("*******************Error to update mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-    }
-
-    @PostMapping("chapter")
-    public void createChapter(@RequestBody ChapterDTO dto, Long id) {
-        chapterService.createChapter(dto);
-    }
-
-    @GetMapping("chapter")
-    public List<Chapter> readAllChapters() {
-        return chapterService.listOfChapters();
     }
 }
