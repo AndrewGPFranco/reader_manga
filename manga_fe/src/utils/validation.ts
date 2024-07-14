@@ -1,6 +1,6 @@
 import type { MangaData } from "@/interface/Manga";
 
-export function validationFields(data: MangaData): string {
+export function validationFields(data: MangaData): string | boolean{
     if(data.title === "") {
         return "Field title is required";
     }
@@ -36,4 +36,6 @@ export function validationFields(data: MangaData): string {
     if(data.image === "") {
         return "Field image is required";
     }
+
+    return true;
 }

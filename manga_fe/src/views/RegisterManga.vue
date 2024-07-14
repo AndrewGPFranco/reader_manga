@@ -41,7 +41,7 @@
     import { StatusType } from "@/enum/StatusType";
     import { api } from "../network/axiosInstance"
     import type { MangaData } from "@/interface/Manga.js";
-import { validationFields } from "@/utils/validation";
+    import { validationFields } from "@/utils/validation";
 
     export default {
         name: "RegisterManga",
