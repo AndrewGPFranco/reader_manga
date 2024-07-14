@@ -1,8 +1,8 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.GetMangaDTO;
-import com.reader.manga.dto.MangaDTO;
-import com.reader.manga.dto.UpdateMangaDTO;
+import com.reader.manga.dto.manga.GetMangaDTO;
+import com.reader.manga.dto.manga.MangaDTO;
+import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 @Service
 public class MangaService {
@@ -47,22 +46,17 @@ public class MangaService {
         Manga manga = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Manga not found"));
 
-        updateField(dto.title(), manga::setTitle);
-        updateField(dto.description(), manga::setDescription);
-        updateField(dto.size(), manga::setSize);
-        updateField(dto.creationDate(), manga::setCreationDate);
-        updateField(dto.closingDate(), manga::setClosingDate);
-        updateField(dto.status(), manga::setStatus);
-        updateField(dto.author(), manga::setAuthor);
-        updateField(dto.gender(), manga::setGender);
-        updateField(dto.image(), manga::setImage);
+        UtilsService.updateField(dto.title(), manga::setTitle);
+        UtilsService.updateField(dto.description(), manga::setDescription);
+        UtilsService.updateField(dto.size(), manga::setSize);
+        UtilsService.updateField(dto.creationDate(), manga::setCreationDate);
+        UtilsService.updateField(dto.closingDate(), manga::setClosingDate);
+        UtilsService.updateField(dto.status(), manga::setStatus);
+        UtilsService.updateField(dto.author(), manga::setAuthor);
+        UtilsService.updateField(dto.gender(), manga::setGender);
+        UtilsService.updateField(dto.image(), manga::setImage);
 
         repository.save(manga);
     }
 
-    private <T> void updateField(T fieldValue, Consumer<T> setter) {
-        if (fieldValue != null) {
-            setter.accept(fieldValue);
-        }
-    }
 }

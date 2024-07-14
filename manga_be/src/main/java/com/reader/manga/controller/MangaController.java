@@ -1,8 +1,8 @@
 package com.reader.manga.controller;
 
-import com.reader.manga.dto.GetMangaDTO;
-import com.reader.manga.dto.MangaDTO;
-import com.reader.manga.dto.UpdateMangaDTO;
+import com.reader.manga.dto.manga.GetMangaDTO;
+import com.reader.manga.dto.manga.MangaDTO;
+import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class MangaController {
             GetMangaDTO manga = service.createManga(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(manga);
         } catch(RuntimeException e) {
-            logger.info("*******************Error to create mangá!*******************");
+            logger.error("*******************Error to create mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -45,7 +45,7 @@ public class MangaController {
             service.deleteManga(id);
             return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
         } catch(RuntimeException e) {
-            logger.info("*******************Mangá not found!*******************");
+            logger.error("*******************Mangá not found!*******************");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mangá not found!");
         }
     }
@@ -60,20 +60,20 @@ public class MangaController {
             List<Manga> mangas = service.readAllMangas(pageable);
             return ResponseEntity.status(HttpStatus.OK).body(mangas);
         } catch (RuntimeException e) {
-            logger.info("*******************Error to read all mangas!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            logger.error("*******************Error to read all mangas!*******************");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @PutMapping("edit")
+    @PutMapping("/edit")
     public ResponseEntity<String> updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
         try {
             service.updateManga(id, dto);
             logger.info("*******************Updating mangá!*******************");
             return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
         } catch (RuntimeException e) {
-            logger.info("*******************Error to update mangá!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            logger.error("*******************Error to update mangá!*******************");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

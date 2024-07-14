@@ -1,4 +1,4 @@
-package com.reader.manga.dto;
+package com.reader.manga.dto.manga;
 
 import com.reader.manga.enums.StatusType;
 
