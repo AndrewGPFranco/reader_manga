@@ -55,9 +55,9 @@ public class ChapterService {
         Chapter chapter = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
-        Utils.updateField(dto.title(), chapter::setTitle);
-        Utils.updateField(dto.description(), chapter::setDescription);
-        Utils.updateField(dto.numberPages(), chapter::setNumberPages);
+        UtilsService.updateField(dto.title(), chapter::setTitle);
+        UtilsService.updateField(dto.description(), chapter::setDescription);
+        UtilsService.updateField(dto.numberPages(), chapter::setNumberPages);
 
         repository.save(chapter);
     }

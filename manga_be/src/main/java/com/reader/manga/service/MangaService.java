@@ -46,15 +46,15 @@ public class MangaService {
         Manga manga = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Manga not found"));
 
-        Utils.updateField(dto.title(), manga::setTitle);
-        Utils.updateField(dto.description(), manga::setDescription);
-        Utils.updateField(dto.size(), manga::setSize);
-        Utils.updateField(dto.creationDate(), manga::setCreationDate);
-        Utils.updateField(dto.closingDate(), manga::setClosingDate);
-        Utils.updateField(dto.status(), manga::setStatus);
-        Utils.updateField(dto.author(), manga::setAuthor);
-        Utils.updateField(dto.gender(), manga::setGender);
-        Utils.updateField(dto.image(), manga::setImage);
+        UtilsService.updateField(dto.title(), manga::setTitle);
+        UtilsService.updateField(dto.description(), manga::setDescription);
+        UtilsService.updateField(dto.size(), manga::setSize);
+        UtilsService.updateField(dto.creationDate(), manga::setCreationDate);
+        UtilsService.updateField(dto.closingDate(), manga::setClosingDate);
+        UtilsService.updateField(dto.status(), manga::setStatus);
+        UtilsService.updateField(dto.author(), manga::setAuthor);
+        UtilsService.updateField(dto.gender(), manga::setGender);
+        UtilsService.updateField(dto.image(), manga::setImage);
 
         repository.save(manga);
     }
