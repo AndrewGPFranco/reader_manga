@@ -1,5 +1,16 @@
 <template>
     <main>
+
+        <h1>Register Manga</h1>
+
+        <div class="containerError">
+            <p v-if="error" class="errorMessage">{{ error }}</p>
+        </div>
+
+        <div class="containerSuccess">
+            <p v-if="success" class="successMessage">{{ success }}</p>
+        </div>
+
         <form @submit.prevent="register">
 
             <label for="title">Title</label>
@@ -56,7 +67,9 @@
                 author: "",
                 gender: "",
                 image: "",
-                statusType: StatusType
+                statusType: StatusType,
+                error: "",
+                success: "",
             }
         },
         methods: {
@@ -87,13 +100,20 @@
                 const result = validationFields(data);
 
                 if(typeof result === "string") {
-                    console.log(result);
+                    this.error = result;
+                    setTimeout(() => {
+                            this.error = "";
+                        }, 5000);
                     return;
                 }
 
                 api.post('/api/v1/manga/create', data)
                     .then(() => {
                         this.clearFields();
+                        this.success = "Manga created successfully";
+                        setTimeout(() => {
+                            this.success = "";
+                        }, 5000);
                     })
                     .catch(() => {
                         console.log("Error to register mangá!");
@@ -106,7 +126,7 @@
 <style scoped>
 
     main {
-        padding: 100px;
+        padding: 0 100px;
     }
 
     form {
@@ -114,4 +134,34 @@
         flex-direction: column;
         gap: 10px;
     }
+
+    .containerError,
+    .containerSuccess {
+        padding: 10px;
+    }
+
+    .errorMessage {
+        background-color: #f8d7da;
+        color: #721c24; 
+        padding: 10px; 
+        border: 1px solid #721c24; 
+        border-radius: 4px;
+        width: 60%;
+        margin: 0 auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+    }
+
+    .successMessage {
+        background-color: #d4edda; 
+        color: #155724; 
+        padding: 10px;
+        border: 1px solid #155724;
+        border-radius: 4px; 
+        width: 60%;
+        margin: 0 auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        text-align: center; 
+    }
+
 </style>
