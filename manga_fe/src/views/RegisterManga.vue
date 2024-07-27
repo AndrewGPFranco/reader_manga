@@ -30,7 +30,7 @@
 
             <label for="status">Status</label>
             <select name="status" id="status" v-model="status">
-                <option v-for="status in Object.values(statusType)" :key="status">{{ status }}</option>
+                <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
             </select>
 
             <label for="author">Author</label>
@@ -49,76 +49,91 @@
 </template>
 
 <script lang="ts">
+    import { ref } from 'vue';
     import { StatusType } from "@/enum/StatusType";
-    import { api } from "../network/axiosInstance"
+    import { api } from "../network/axiosInstance";
     import type { MangaData } from "@/interface/Manga.js";
     import { validationFields } from "@/utils/validation";
 
     export default {
         name: "RegisterManga",
-        data() {
-            return {
-                title: "",
-                description: "",
-                size: 1,
-                creationDate: new Date,
-                closingDate: new Date,
-                status: StatusType.ONGOING,
-                author: "",
-                gender: "",
-                image: "",
-                statusType: StatusType,
-                error: "",
-                success: "",
-            }
-        },
-        methods: {
-            clearFields() {
-                this.title = "",
-                this.description = "",
-                this.size = 1,
-                this.creationDate = new Date,
-                this.closingDate = new Date,
-                this.status = StatusType.ONGOING,
-                this.author = "",
-                this.gender = "",
-                this.image = ""
-            },
-            register() {
+        setup() {
+            const title = ref("");
+            const description = ref("");
+            const size = ref(1);
+            const creationDate = ref(new Date());
+            const closingDate = ref(new Date());
+            const status = ref(StatusType.ONGOING);
+            const author = ref("");
+            const gender = ref("");
+            const image = ref("");
+            const error = ref("");
+            const success = ref("");
+
+            const clearFields = () => {
+                title.value = "";
+                description.value = "";
+                size.value = 1;
+                creationDate.value = new Date();
+                closingDate.value = new Date();
+                status.value = StatusType.ONGOING;
+                author.value = "";
+                gender.value = "";
+                image.value = "";
+            };
+
+            const register = () => {
                 const data: MangaData = {
-                    title: this.title,
-                    description: this.description,
-                    size: this.size,
-                    creationDate: this.creationDate,
-                    closingDate: this.closingDate,
-                    status: this.status,
-                    author: this.author,
-                    gender: this.gender,
-                    image: this.image,
+                    title: title.value,
+                    description: description.value,
+                    size: size.value,
+                    creationDate: creationDate.value,
+                    closingDate: closingDate.value,
+                    status: status.value,
+                    author: author.value,
+                    gender: gender.value,
+                    image: image.value,
                 };
 
                 const result = validationFields(data);
 
-                if(typeof result === "string") {
-                    this.error = result;
+                if (typeof result === "string") {
+                    error.value = result;
                     setTimeout(() => {
-                            this.error = "";
-                        }, 5000);
+                        error.value = "";
+                    }, 5000);
                     return;
                 }
 
                 api.post('/api/v1/manga/create', data)
                     .then(() => {
-                        this.clearFields();
-                        this.success = "Manga created successfully";
+                        clearFields();
+                        success.value = "Manga created successfully";
                         setTimeout(() => {
-                            this.success = "";
+                            success.value = "";
                         }, 5000);
                     })
                     .catch(() => {
                         console.log("Error to register mangá!");
-                    })
-            }
+                    });
+            };
+
+            return {
+                title,
+                description,
+                size,
+                creationDate,
+                closingDate,
+                status,
+                author,
+                gender,
+                image,
+                error,
+                success,
+                clearFields,
+                register,
+                StatusType,
+            };
         },
     }
 </script>
