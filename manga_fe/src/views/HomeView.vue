@@ -4,6 +4,6 @@
 <template>
   <main>
     <h1>Home</h1>
-    <router-link to="/register/manga"></router-link>
+    <router-link to="/register/manga">LINK</router-link>
   </main>
 </template>
