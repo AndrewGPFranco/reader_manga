@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Register Manga</h1>
+        <h1 class="text-3xl font-bold underline">Register Manga</h1>
 
         <div class="containerError">
             <p v-if="error" class="errorMessage">{{ error }}</p>
@@ -26,7 +26,7 @@
             <input type="date" name="closingDate" v-model="closingDate">
 
             <label for="status">Status</label>
-            <select name="status" id="status" v-model="status">
+            <select name="status" id="status" v-model="status">gvv
                 <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
             </select>
 
