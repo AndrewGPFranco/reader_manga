@@ -1,45 +1,63 @@
 <template>
-    <div>
-        <h1 class="text-3xl font-bold underline">Register Manga</h1>
+    <div class="flex flex-col p-9 bg-gray-100 min-h-screen">
+        <h1 class="text-3xl text-center font-bold underline text-gray-900">Register Manga</h1>
 
         <div class="containerError">
-            <p v-if="error" class="errorMessage">{{ error }}</p>
+            <p v-if="error" class="errorMessage text-red-600 font-semibold">{{ error }}</p>
         </div>
         
         <div class="containerSuccess">
-            <p v-if="success" class="successMessage">{{ success }}</p>
+            <p v-if="success" class="successMessage text-green-600 font-semibold">{{ success }}</p>
         </div>
-        <form @submit.prevent="register">
-            <label for="title">Title</label>
-            <input type="text" name="title" v-model="title">
+        <form @submit.prevent="register" class="flex flex-col space-y-4 m-7 p-6 bg-white shadow-md rounded-md">
+            <div class="flex flex-col">
+                <label for="title" class="mb-2 font-semibold text-gray-800">Title</label>
+                <input type="text" name="title" v-model="title" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="description">Description</label>
-            <input type="text" name="description" v-model="description">
+            <div class="flex flex-col">
+                <label for="description" class="mb-2 font-semibold text-gray-800">Description</label>
+                <input type="text" name="description" v-model="description" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="size">Size</label>
-            <input type="text" name="size" v-model="size">
+            <div class="flex flex-col">
+                <label for="size" class="mb-2 font-semibold text-gray-800">Size</label>
+                <input type="text" name="size" v-model="size" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="creationDate">Creation Date</label>
-            <input type="date" name="creationDate" v-model="creationDate">
+            <div class="flex flex-col">
+                <label for="creationDate" class="mb-2 font-semibold text-gray-800">Creation Date</label>
+                <input type="date" name="creationDate" v-model="creationDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="closingDate">Closing Date</label>
-            <input type="date" name="closingDate" v-model="closingDate">
+            <div class="flex flex-col">
+                <label for="closingDate" class="mb-2 font-semibold text-gray-800">Closing Date</label>
+                <input type="date" name="closingDate" v-model="closingDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="status">Status</label>
-            <select name="status" id="status" v-model="status">gvv
-                <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
-            </select>
+            <div class="flex flex-col">
+                <label for="status" class="mb-2 font-semibold text-gray-800">Status</label>
+                <select name="status" id="status" v-model="status" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
+                </select>
+            </div>
 
-            <label for="author">Author</label>
-            <input type="text" name="author" v-model="author">
+            <div class="flex flex-col">
+                <label for="author" class="mb-2 font-semibold text-gray-800">Author</label>
+                <input type="text" name="author" v-model="author" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="gender">Gender</label>
-            <input type="text" name="gender" v-model="gender">
+            <div class="flex flex-col">
+                <label for="gender" class="mb-2 font-semibold text-gray-800">Gender</label>
+                <input type="text" name="gender" v-model="gender" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <label for="image">Image</label>
-            <input type="text" name="image" v-model="image">
+            <div class="flex flex-col">
+                <label for="image" class="mb-2 font-semibold text-gray-800">Image</label>
+                <input type="text" name="image" v-model="image" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
 
-            <button type="submit">Register</button>
+            <button type="submit" class="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Register</button>
         </form>
     </div>
 </template>
@@ -135,16 +153,6 @@
 </script>
 
 <style scoped>
-
-    main {
-        padding: 0 100px;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
 
     .containerError,
     .containerSuccess {
