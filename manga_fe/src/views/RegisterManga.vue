@@ -1,6 +1,6 @@
 <template>
     <NavbarComponent />
-    <main class="flex justify-center p-5 bg-orange-400">
+    <main class="flex justify-center p-4">
         <formToRegister />
     </main>
 </template>

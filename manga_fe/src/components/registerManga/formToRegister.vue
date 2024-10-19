@@ -1,7 +1,5 @@
 <template>
-    <div class="flex flex-col p-9 bg-gray-100 min-h-screen w-2/4 rounded-3xl">
-        <h1 class="text-3xl text-center font-bold text-gray-900">Manga register</h1>
-
+    <div class="flex flex-col bg-gray-100 w-2/4 rounded-3xl">
         <div class="containerError">
             <p v-if="error" class="errorMessage text-red-600 font-semibold">{{ error }}</p>
         </div>
@@ -9,56 +7,59 @@
         <div class="containerSuccess">
             <p v-if="success" class="successMessage text-green-600 font-semibold">{{ success }}</p>
         </div>
-        <form @submit.prevent="register" class="flex flex-col space-y-4 m-7 p-6 bg-white shadow-md rounded-md">
-            <div class="flex flex-col">
-                <label for="title" class="mb-2 font-semibold text-gray-800">Title</label>
-                <input type="text" name="title" v-model="title" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+        
+        <div class="form-container flex-1 overflow-y-auto max-h-[100vh]">
+            <form @submit.prevent="register" class="flex flex-col space-y-4 ml-7 mb-7 mr-7 p-6 bg-white shadow-md rounded-md">
+                <div class="flex flex-col">
+                    <label for="title" class="mb-2 font-semibold text-gray-800">Title</label>
+                    <input type="text" name="title" v-model="title" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="description" class="mb-2 font-semibold text-gray-800">Description</label>
-                <input type="text" name="description" v-model="description" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="description" class="mb-2 font-semibold text-gray-800">Description</label>
+                    <input type="text" name="description" v-model="description" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="size" class="mb-2 font-semibold text-gray-800">Size</label>
-                <input type="text" name="size" v-model="size" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="size" class="mb-2 font-semibold text-gray-800">Size</label>
+                    <input type="text" name="size" v-model="size" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="creationDate" class="mb-2 font-semibold text-gray-800">Creation Date</label>
-                <input type="date" name="creationDate" v-model="creationDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="creationDate" class="mb-2 font-semibold text-gray-800">Creation Date</label>
+                    <input type="date" name="creationDate" v-model="creationDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="closingDate" class="mb-2 font-semibold text-gray-800">Closing Date</label>
-                <input type="date" name="closingDate" v-model="closingDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="closingDate" class="mb-2 font-semibold text-gray-800">Closing Date</label>
+                    <input type="date" name="closingDate" v-model="closingDate" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="status" class="mb-2 font-semibold text-gray-800">Status</label>
-                <select name="status" id="status" v-model="status" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
-                </select>
-            </div>
+                <div class="flex flex-col">
+                    <label for="status" class="mb-2 font-semibold text-gray-800">Status</label>
+                    <select name="status" id="status" v-model="status" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option v-for="status in Object.values(StatusType)" :key="status">{{ status }}</option>
+                    </select>
+                </div>
 
-            <div class="flex flex-col">
-                <label for="author" class="mb-2 font-semibold text-gray-800">Author</label>
-                <input type="text" name="author" v-model="author" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="author" class="mb-2 font-semibold text-gray-800">Author</label>
+                    <input type="text" name="author" v-model="author" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="gender" class="mb-2 font-semibold text-gray-800">Gender</label>
-                <input type="text" name="gender" v-model="gender" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="gender" class="mb-2 font-semibold text-gray-800">Gender</label>
+                    <input type="text" name="gender" v-model="gender" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <div class="flex flex-col">
-                <label for="image" class="mb-2 font-semibold text-gray-800">Image</label>
-                <input type="text" name="image" v-model="image" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+                <div class="flex flex-col">
+                    <label for="image" class="mb-2 font-semibold text-gray-800">Image</label>
+                    <input type="text" name="image" v-model="image" class="p-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
 
-            <button type="submit" class="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Register</button>
-        </form>
+                <button type="submit" class="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Register</button>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -181,6 +182,10 @@
         margin: 0 auto;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
         text-align: center; 
+    }
+
+    .form-container {
+        max-height: 85vh;
     }
 
 </style>
