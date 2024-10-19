@@ -75,8 +75,8 @@
             const title = ref("");
             const description = ref("");
             const size = ref(1);
-            const creationDate = ref(new Date());
-            const closingDate = ref(new Date());
+            const creationDate = ref();
+            const closingDate = ref();
             const status = ref(StatusType.ONGOING);
             const author = ref("");
             const gender = ref("");
@@ -89,7 +89,7 @@
                 description.value = "";
                 size.value = 1;
                 creationDate.value = new Date();
-                closingDate.value = new Date();
+                closingDate.value = "";
                 status.value = StatusType.ONGOING;
                 author.value = "";
                 gender.value = "";
