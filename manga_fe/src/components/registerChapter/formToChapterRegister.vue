@@ -86,7 +86,7 @@ function handleValidateButtonClick(e: MouseEvent) {
         if (!errors) {
             chapterRegister();
         } else {
-            message.error('Enter with data valids.')
+            message.error('Enter valid data')
         }
     })
 }
