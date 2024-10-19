@@ -1,7 +1,7 @@
 <template>
-  <n-layout-sider bordered collapse-mode="width" :collapsed-width="64" :width="240" :collapsed="collapsed" show-trigger
-    @collapse="collapsed = true" @expand="collapsed = false" position="absolute" top="0" left="0" height="100%" :aria-expanded="!collapsed">
-    <n-menu :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="30" :options="menuOptions"
+  <n-layout-sider bordered collapse-mode="width" :collapsed-width="250" :width="240"
+    position="absolute" top="0" left="0" height="100%" :aria-expanded="true">
+    <n-menu :collapsed-width="64" :collapsed-icon-size="30" :options="menuOptions"
       key-field="whateverKey" label-field="whateverLabel" children-field="whateverChildren" />
   </n-layout-sider>
 </template>
@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { defineComponent, h, ref } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, GridOutline as newManga } from '@vicons/ionicons5'
+import { ScanCircleOutline as ScanCircle, GridOutline as newManga, BookOutline as newChapter } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 
 function renderIcon(icon: Component) {
@@ -30,13 +30,18 @@ const menuOptions: MenuOption[] = [
       h(RouterLink, { to: '/register/manga' }, { default: () => 'Mangá Register' }),
     icon: renderIcon(newManga),
     path: '/register/manga'
+  },
+  {
+    whateverLabel: () =>
+      h(RouterLink, { to: '/register/chapter' }, { default: () => 'Chapter Register' }),
+    icon: renderIcon(newChapter),
+    path: '/register/chapter'
   }
 ]
 
 export default defineComponent({
   setup() {
     return {
-      collapsed: ref(true),
       menuOptions
     }
   }
