@@ -9,3 +9,9 @@
     import formToRegister from '@/components/registerManga/formToRegister.vue';
     import NavbarComponent from '@/components/global/NavbarComponent.vue';
 </script>
+
+<style scoped>
+    main {
+        max-height: 100vh;
+    }
+</style>
