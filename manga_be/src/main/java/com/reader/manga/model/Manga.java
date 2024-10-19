@@ -47,7 +47,7 @@ public class Manga {
     @Column(name = "creation_date")
     private String creationDate;
 
-    @Column(name = "closing_date")
+    @Column(name = "closing_date", nullable = true)
     private String closingDate;
 
     @NotNull
