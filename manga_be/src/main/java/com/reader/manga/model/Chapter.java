@@ -1,5 +1,6 @@
 package com.reader.manga.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -37,15 +38,10 @@ public class Chapter {
     @Min(1)
     private Integer numberPages;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
-
-    public Chapter(String title, String description, Integer numberPages) {
-        this.title = title;
-        this.description = description;
-        this.numberPages = numberPages;
-    }
 
     public Chapter(String title, String description, Integer numberPages, Manga manga) {
         this.title = title;
