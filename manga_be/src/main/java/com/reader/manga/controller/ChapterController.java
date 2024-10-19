@@ -28,7 +28,7 @@ public class ChapterController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto, Long id) {
+    public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
         try {
             logger.info("*******************Creating mangá!*******************");
             service.createChapter(dto);

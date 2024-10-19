@@ -4,5 +4,5 @@ public record ChapterDTO(
         String title,
         String description,
         Integer numberPages,
-        Long manga
+        Long mangaId
 ) {}
