@@ -78,4 +78,15 @@ public class MangaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllMangaForSelect() {
+        try {
+            List<Manga> allMangas = service.getAll();
+            return ResponseEntity.ok().body(allMangas);
+        } catch (RuntimeException e) {
+            logger.error("A error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

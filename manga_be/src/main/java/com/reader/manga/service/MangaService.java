@@ -61,4 +61,8 @@ public class MangaService {
         repository.save(manga);
     }
 
+    public List<Manga> getAll() {
+        return repository.findAll();
+    }
+
 }
