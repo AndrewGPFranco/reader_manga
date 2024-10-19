@@ -5,7 +5,6 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,11 @@ import java.util.List;
 @Service
 public class MangaService {
 
-    @Autowired
-    private MangaRepository repository;
+    private final MangaRepository repository;
+
+    public MangaService(MangaRepository repository) {
+        this.repository = repository;
+    }
 
     public GetMangaDTO createManga(MangaDTO dto) {
         try {

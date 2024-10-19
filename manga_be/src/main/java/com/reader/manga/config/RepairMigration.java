@@ -1,6 +1,5 @@
 package com.reader.manga.config;
 
-import org.flywaydb.core.Flyway;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
@@ -14,14 +13,11 @@ public class RepairMigration {
 
     @Bean
     public FlywayMigrationStrategy cleanMigrateStrategy() {
-        FlywayMigrationStrategy strategy = new FlywayMigrationStrategy() {
-
-            @Override
-            public void migrate(Flyway flyway) {
-                flyway.repair();
-                flyway.migrate();
-            }
+        return flyway -> {
+            flyway.repair();
+            log.info("Migrations repair");
+            flyway.migrate();
+            log.info("Migrations migrate");
         };
-        return strategy;
     }
 }

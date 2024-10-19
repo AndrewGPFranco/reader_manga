@@ -8,7 +8,6 @@ import com.reader.manga.service.MangaService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,10 +20,13 @@ import java.util.List;
 @RequestMapping("/api/v1/manga")
 public class MangaController {
 
-    @Autowired
-    private MangaService service;
+    private final MangaService service;
 
-    private static final Logger logger = LoggerFactory.getLogger(MangaService.class);
+    public MangaController(MangaService service) {
+        this.service = service;
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @PostMapping("/create")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {

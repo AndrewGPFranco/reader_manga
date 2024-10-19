@@ -7,7 +7,6 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,16 +19,19 @@ import java.util.List;
 @RequestMapping("/api/v1/chapter")
 public class ChapterController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChapterService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChapterController.class);
 
-    @Autowired
-    private ChapterService service;
+    private final ChapterService service;
+
+    public ChapterController(ChapterService service) {
+        this.service = service;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto, Long id) {
         try {
             logger.info("*******************Creating mangá!*******************");
-            Chapter chapter = service.createChapter(dto);
+            service.createChapter(dto);
             GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
             return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
         } catch(RuntimeException e) {

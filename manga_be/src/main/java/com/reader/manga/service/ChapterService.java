@@ -6,7 +6,6 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,18 +16,21 @@ import java.util.Optional;
 @Service
 public class ChapterService {
 
-    @Autowired
-    private ChapterRepository repository;
+    private final ChapterRepository repository;
 
-    @Autowired
-    private MangaRepository mangaRepository;
+    private final MangaRepository mangaRepository;
 
-    public Chapter createChapter(ChapterDTO dto) {
+    public ChapterService(ChapterRepository repository, MangaRepository mangaRepository) {
+        this.repository = repository;
+        this.mangaRepository = mangaRepository;
+    }
+
+    public void createChapter(ChapterDTO dto) {
         try {
-            Optional<Manga> mangaById = mangaRepository.findById(2L);
+            Optional<Manga> mangaById = mangaRepository.findById(1L);
             if (mangaById.isPresent()) {
                 Chapter chapter = new Chapter(dto.title(), dto.description(), dto.numberPages(), mangaById.get());
-                return repository.save(chapter);
+                repository.save(chapter);
             } else {
                 throw new RuntimeException("Manga not found");
             }
