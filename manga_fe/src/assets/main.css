@@ -7,3 +7,8 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+main {
+  margin-left: 17vw;
+  height: 100vh;
+}

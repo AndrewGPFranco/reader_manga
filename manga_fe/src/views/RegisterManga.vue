@@ -1,6 +1,8 @@
 <template>
-    <NavbarComponent />
-    <main class="flex justify-center p-4">
+    <header>
+        <NavbarComponent />
+    </header>
+    <main>
         <formToRegister />
     </main>
 </template>
@@ -12,6 +14,8 @@
 
 <style scoped>
     main {
-        max-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

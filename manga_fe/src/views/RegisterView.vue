@@ -5,9 +5,6 @@
     <main>
         <h1>OLA</h1>
     </main>
-    <footer>
-        Desenvolvido por Andrew GPFranco!
-    </footer>
 </template>
 
 <script setup lang="ts">
