@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vicons/ionicons5": "^0.12.0",
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
@@ -29,6 +30,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
+    "naive-ui": "^2.40.1",
     "npm-run-all2": "^6.2.0",
     "postcss": "^8.4.40",
     "prettier": "^3.2.5",
