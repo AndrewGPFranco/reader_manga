@@ -27,13 +27,7 @@ const menuOptions: MenuOption[] = [
   },
   {
     whateverLabel: () =>
-      h(RouterLink, { to: '/register/manga' }, { default: () => 'Mangá Register' }),
-    icon: renderIcon(newManga),
-    path: '/register/manga'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/register/chapter' }, { default: () => 'Chapter Register' }),
+      h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
     icon: renderIcon(newChapter),
     path: '/register/chapter'
   }
