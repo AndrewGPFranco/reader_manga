@@ -27,7 +27,7 @@ public class ChapterService {
 
     public void createChapter(ChapterDTO dto) {
         try {
-            Optional<Manga> mangaById = mangaRepository.findById(1L);
+            Optional<Manga> mangaById = mangaRepository.findById(2L);
             if (mangaById.isPresent()) {
                 Chapter chapter = new Chapter(dto.title(), dto.description(), dto.numberPages(), mangaById.get());
                 repository.save(chapter);

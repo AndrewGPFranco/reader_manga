@@ -11,8 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -74,8 +73,8 @@ public class Manga {
     @Length(min = 10, max = 100)
     private String image;
 
-    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Chapter> chapters = new HashSet<>();
+    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Chapter> chapters;
 
     public Manga(String title, String description, Integer size, String creationDate, String closingDate, StatusType status, String gender, String author, String image) {
         this.title = title;
