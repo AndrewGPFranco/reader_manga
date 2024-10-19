@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col p-9 bg-gray-100 min-h-screen">
-        <h1 class="text-3xl text-center font-bold underline text-gray-900">Register Manga</h1>
+    <div class="flex flex-col p-9 bg-gray-100 min-h-screen w-2/4 rounded-3xl">
+        <h1 class="text-3xl text-center font-bold text-gray-900">Manga register</h1>
 
         <div class="containerError">
             <p v-if="error" class="errorMessage text-red-600 font-semibold">{{ error }}</p>

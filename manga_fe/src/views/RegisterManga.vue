@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class="flex justify-center p-5 bg-orange-400">
         <formToRegister />
     </main>
 </template>
