@@ -34,7 +34,6 @@ async function getAllMangas() {
     api.get("/api/v1/manga/all")
         .then((response) => {
             mangasArray = response.data;
-            console.info(mangasArray);
         })
         .catch((error) =>{
             message.error(error);

@@ -12,11 +12,11 @@
                             maxRows: 5,
                         }" />
                 </n-form-item-gi>
-                <n-form-item-gi :span="12" label="Pages number" path="pagesNumber">
-                    <n-input-number v-model:value="model.pagesNumber" />
-                </n-form-item-gi>
                 <n-form-item-gi :span="12" label="Mangá" path="manga">
                     <n-select v-model:value="model.manga" placeholder="Choose the mangá" :options="generalOptions" />
+                </n-form-item-gi>
+                <n-form-item-gi :span="12" label="Pages number" path="pagesNumber">
+                    <n-input-number v-model:value="model.pagesNumber" />
                 </n-form-item-gi>
                 <n-gi :span="24">
                     <div style="display: flex; justify-content: flex-end">
@@ -30,69 +30,90 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { defineProps, ref } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
+import { api } from '@/network/axiosInstance';
 
-export default defineComponent({
-    props: {
-        mangas: {
-            type: Array,
-            required: true
-        }
-    },
-    setup(props) {
-        const formRef = ref<FormInst | null>(null)
-        const message = useMessage();
-        return {
-            formRef,
-            size: ref('medium'),
-            model: ref({
-                title: null,
-                description: null,
-                pagesNumber: null,
-                manga: null
-            }),
-            generalOptions: props.mangas.map(
-                v => ({
-                    // @ts-ignore
-                    label: v.title,
-                    // @ts-ignore
-                    value: v.id
-                })
-            ),
-            rules: {
-                title: {
-                    required: true,
-                    message: 'Please enter the title...'
-                },
-                description: {
-                    required: true,
-                    message: 'Please enter description...'
-                },
-                pagesNumber: {
-                    type: 'number',
-                    required: true,
-                    message: 'Please enter the pages number...'
-                },
-                manga: {
-                    required: true,
-                    message: 'Please select the mangá...'
-                }
-            },
-            handleValidateButtonClick(e: MouseEvent) {
-                e.preventDefault();
-                formRef.value?.validate((errors) => {
-                    if (!errors) {
-                        message.success('Valid');
-                    }
-                    else {
-                        message.error('Invalid');
-                    }
-                })
-            }
-        }
+const props = defineProps({
+    mangas: {
+        type: Array as () => { title: string, id: string }[],
+        required: true
     }
 })
+
+const formRef = ref<FormInst | null>(null)
+const message = useMessage()
+
+const size = ref('medium')
+
+const model = ref({
+    title: '',
+    description: '',
+    pagesNumber: null as number | null,
+    manga: null as string | null
+})
+
+const generalOptions = props.mangas.map(v => ({
+    label: v.title,
+    value: v.id
+}))
+
+const rules = {
+    title: {
+        required: true,
+        message: 'Please enter the title...'
+    },
+    description: {
+        required: true,
+        message: 'Please enter description...'
+    },
+    pagesNumber: {
+        type: 'number',
+        required: true,
+        message: 'Please enter the pages number...'
+    },
+    manga: {
+        required: true,
+        message: 'Please select the manga...'
+    }
+}
+
+function handleValidateButtonClick(e: MouseEvent) {
+    e.preventDefault()
+    formRef.value?.validate((errors) => {
+        if (!errors) {
+            chapterRegister();
+        } else {
+            message.error('Enter with data valids.')
+        }
+    })
+}
+
+function chapterRegister() {
+    const { title, description, pagesNumber, manga } = model.value;
+    const data = {
+        title: title,
+        description: description,
+        numberPages: pagesNumber,
+        mangaId: manga
+    }
+    
+    api.post("/api/v1/chapter/create", data)
+        .then(() => {
+            message.success("Chapter successfully registered!");
+            model.value = {
+                title: '',
+                description: '',
+                pagesNumber: null,
+                manga: null
+            }
+
+            formRef.value?.restoreValidation();
+        })
+        .catch(() => {
+            message.error("An error occurred while registering, check the data.");
+        })
+}
 </script>
