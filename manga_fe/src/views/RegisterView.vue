@@ -3,16 +3,16 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="Records management" style="height: 100%;" size="huge">
+        <n-card title="Records management" style="height: 95vh;" size="huge">
             <n-tabs style="height: 100%" type="card">
                 <n-tab-pane name="Mangá" tab="Mangá register" style="height: 95%">
                     <section class="container">
-                        <!-- <FormToRegister /> -->
+                        
                     </section>
                 </n-tab-pane>
                 <n-tab-pane name="Chapter" tab="Chapter register" style="height: 95%">
                     <section class="container">
-                        <FormToChapterRegister />
+                        <FormToChapterRegister :mangas="mangasArray" />
                     </section>
                 </n-tab-pane>
             </n-tabs>
@@ -23,11 +23,37 @@
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue';
-import FormToRegister from '@/components/registerManga/formToRegister.vue';
+import { api } from '@/network/axiosInstance';
+import { useMessage } from 'naive-ui';
+import { onMounted } from 'vue';
+
+let mangasArray: any[] = [];
+const message = useMessage();
+
+async function getAllMangas() {
+    api.get("/api/v1/manga/all")
+        .then((response) => {
+            mangasArray = response.data;
+            console.info(mangasArray);
+        })
+        .catch((error) =>{
+            message.error(error);
+        })
+}
+
+onMounted(() => {
+    getAllMangas();
+})
 </script>
 
 <style scoped>
     main {
         padding: 15px;
+    }
+
+    .container {
+        padding: 10px;
+        max-height: 70vh; 
+        overflow-y: auto;
     }
 </style>
