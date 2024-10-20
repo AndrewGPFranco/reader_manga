@@ -7,7 +7,7 @@
             <n-tabs style="height: 100%" type="card">
                 <n-tab-pane name="Mangá" tab="Mangá register" style="height: 95%">
                     <section class="container">
-                        
+                        <FormToMangaRegister />
                     </section>
                 </n-tab-pane>
                 <n-tab-pane name="Chapter" tab="Chapter register" style="height: 95%">
@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue';
+import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue';
 import { api } from '@/network/axiosInstance';
 import { useMessage } from 'naive-ui';
 import { onMounted } from 'vue';
