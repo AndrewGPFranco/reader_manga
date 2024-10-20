@@ -7,6 +7,7 @@ Nesse projeto o meu intuito é criar um leitor de mangás do meu jeito, com os m
 - Java
 - My SQL
 - Vue Js
+- Docker
 
 ## Linha do tempo
 
