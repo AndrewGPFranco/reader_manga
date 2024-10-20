@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -45,10 +46,10 @@ public class Manga {
     @NotNull
     @NotBlank
     @Column(name = "creation_date")
-    private String creationDate;
+    private Date creationDate;
 
     @Column(name = "closing_date", nullable = true)
-    private String closingDate;
+    private Date closingDate;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -76,7 +77,7 @@ public class Manga {
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Chapter> chapters;
 
-    public Manga(String title, String description, Integer size, String creationDate, String closingDate, StatusType status, String gender, String author, String image) {
+    public Manga(String title, String description, Integer size, Date creationDate, Date closingDate, StatusType status, String gender, String author, String image) {
         this.title = title;
         this.description = description;
         this.size = size;
