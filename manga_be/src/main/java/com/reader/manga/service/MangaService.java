@@ -9,6 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,12 +26,29 @@ public class MangaService {
 
     public GetMangaDTO createManga(MangaDTO dto) {
         try {
-            Manga manga = new Manga(dto.title(), dto.description(), dto.size(), dto.creationDate(), dto.closingDate(), dto.status(), dto.gender(), dto.author(),  dto.image());
+            Instant instantCreationDate = Instant.parse(dto.creationDate());
+            Manga manga = getManga(dto, instantCreationDate);
             Manga savedManga = repository.save(manga);
             return new GetMangaDTO(savedManga.getId(), savedManga.getTitle(), savedManga.getDescription(), savedManga.getSize(), savedManga.getCreationDate(), savedManga.getClosingDate(), savedManga.getStatus(), savedManga.getGender(), savedManga.getAuthor(),  savedManga.getImage());
         }catch (Exception e) {
             throw new RuntimeException("Error creating Manga. Please try again...");
         }
+    }
+
+    private Manga getManga(MangaDTO dto, Instant instantCreationDate) {
+        Date creationDate = Date.from(instantCreationDate);
+        String pattern = "yyyy-MM-dd";
+        DateFormat df = new SimpleDateFormat(pattern);
+        String creationDateStr = df.format(creationDate);
+        String closingDateStr = null;
+
+        if(dto.closingDate() != null) {
+            Instant instantClosingDate = Instant.parse(dto.closingDate());
+            Date closingDate = Date.from(instantClosingDate);
+            closingDateStr = df.format(closingDate);
+        }
+
+        return new Manga(dto.title(), dto.description(), dto.size(), creationDateStr, closingDateStr, dto.status(), dto.gender(), dto.author(),  dto.image());
     }
 
     public void deleteManga(Long id) {
