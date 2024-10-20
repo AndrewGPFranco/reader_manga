@@ -112,7 +112,8 @@ function chapterRegister() {
 
             formRef.value?.restoreValidation();
         })
-        .catch(() => {
+        .catch((error) => {
+            console.error(error);
             message.error("An error occurred while registering, check the data.");
         })
 }

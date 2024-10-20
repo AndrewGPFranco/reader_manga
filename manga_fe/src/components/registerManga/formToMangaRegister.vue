@@ -49,6 +49,8 @@
 </template>
 
 <script setup lang="ts">
+import { StatusType } from '@/enum/StatusType';
+import { api } from '@/network/axiosInstance';
 import { useMessage, type FormInst } from 'naive-ui';
 import { ref } from 'vue';
 
@@ -60,7 +62,7 @@ const model = ref({
     title: '' as string,
     description: '' as string,
     sizeManga: null as number | null,
-    status: '' as string,
+    status: StatusType.ONGOING as string,
     author: '' as string,
     gender: '' as string,
     image: '' as string,
@@ -68,7 +70,7 @@ const model = ref({
     closingDate: null as Date | null,
 });
 
-const status = ['ONGOING', "FINISHED"].map(
+const status = [StatusType.ONGOING, StatusType.FINISHED].map(
     v => ({
         label: v,
         value: v
@@ -79,7 +81,7 @@ function handleValidateButtonClick(e: MouseEvent) {
     e.preventDefault()
     formRef.value?.validate((errors) => {
         if (!errors) {
-            // chamar método de criação
+            mangaRegister();
         } else {
             message.error('Enter valid data')
         }
@@ -116,13 +118,53 @@ const rules = {
         message: 'Please enter the creation date...'
     },
     closingDate: {
-        required: true,
-        message: 'Please enter the closing date...'
+        required: false,
     },
     sizeManga: {
         type: 'number',
         required: true,
         message: 'Please enter the size...'
     }
+}
+
+function mangaRegister() {
+    const { title, description, sizeManga, creationDate, closingDate, status, author, gender, image } = model.value;
+    const data = {
+        title: title,
+        description: description,
+        size: sizeManga,
+        creationDate: creationDate != null ? new Date(creationDate) : creationDate,
+        closingDate: closingDate != null ? new Date(closingDate) : closingDate,
+        status: status,
+        author: author,
+        gender: gender,
+        image: image
+    }
+
+    api.post("/api/v1/manga/create", data)
+        .then(() => {
+            message.success("Mangá successfully registered!");
+        })
+        .catch((error) => {
+            console.error(error);
+            message.error("An error occurred while registering, check the data.");
+        })
+    clearFields();
+}
+
+function clearFields() {
+    model.value = {
+        title: '',
+        description: '',
+        sizeManga: null,
+        status: StatusType.ONGOING,
+        author: '',
+        gender: '',
+        image: '',
+        creationDate: null,
+        closingDate: null,
+    }
+
+    formRef.value?.restoreValidation();
 }
 </script>
