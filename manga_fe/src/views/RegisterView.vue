@@ -36,8 +36,8 @@ async function getAllMangas() {
         .then((response) => {
             mangasArray = response.data;
         })
-        .catch((error) =>{
-            message.error(error);
+        .catch((error) => {
+            message.error(error.message);
         })
 }
 
