@@ -1,5 +1,7 @@
 package com.reader.manga.service;
 
+import com.reader.manga.exception.CreationErrorException;
+import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
@@ -32,10 +34,10 @@ public class ChapterService {
                 Chapter chapter = new Chapter(dto.title(), dto.description(), dto.numberPages(), mangaById.get());
                 repository.save(chapter);
             } else {
-                throw new RuntimeException("Manga not found");
+                throw new NotFoundException("manga with ID " + dto.mangaId() + " not found");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error creating Chapter. Please try again...", e);
+            throw new CreationErrorException("Error creating Chapter. Please try again... " + e.getMessage());
         }
     }
 
@@ -49,7 +51,7 @@ public class ChapterService {
     }
 
     public void deleteChapter(Long id) {
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Chapter not found"));
+        repository.findById(id);
         repository.deleteById(id);
     }
 

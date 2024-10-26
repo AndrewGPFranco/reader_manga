@@ -3,6 +3,7 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.GetChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
+import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class ChapterController {
             service.createChapter(dto);
             GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
             return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
-        } catch(RuntimeException e) {
+        } catch(CreationErrorException e) {
             logger.error("*******************Error to create mangá!*******************");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
