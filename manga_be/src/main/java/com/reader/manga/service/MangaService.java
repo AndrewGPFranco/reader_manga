@@ -3,6 +3,7 @@ package com.reader.manga.service;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
+import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import org.springframework.data.domain.Page;
@@ -26,12 +27,12 @@ public class MangaService {
             Manga savedManga = repository.save(manga);
             return new GetMangaDTO(savedManga.getId(), savedManga.getTitle(), savedManga.getDescription(), savedManga.getSize(), savedManga.getCreationDate(), savedManga.getClosingDate(), savedManga.getStatus(), savedManga.getGender(), savedManga.getAuthor(),  savedManga.getImage());
         }catch (Exception e) {
-            throw new RuntimeException("Error creating Manga. Please try again...");
+            throw new CreationErrorException("Error creating Manga. Please try again... " + e.getMessage());
         }
     }
 
     public void deleteManga(Long id) {
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Manga not found"));
+        repository.findById(id);
         repository.deleteById(id);
     }
 
