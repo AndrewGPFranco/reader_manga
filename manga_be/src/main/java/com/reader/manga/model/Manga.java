@@ -44,7 +44,6 @@ public class Manga {
     private Integer size;
 
     @NotNull
-    @NotBlank
     @Column(name = "creation_date")
     private Date creationDate;
 

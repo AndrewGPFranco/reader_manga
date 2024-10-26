@@ -10,7 +10,7 @@ public record MangaDTO(
         @NotNull @NotBlank String title,
         @NotNull @NotBlank String description,
         @NotNull Integer size,
-        @NotNull @NotBlank Date creationDate,
+        @NotNull Date creationDate,
         Date closingDate,
         @NotNull StatusType status,
         @NotNull @NotBlank String author,
