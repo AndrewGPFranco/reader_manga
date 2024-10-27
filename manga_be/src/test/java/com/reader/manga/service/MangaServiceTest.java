@@ -2,29 +2,34 @@ package com.reader.manga.service;
 
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.enums.StatusType;
-import org.junit.jupiter.api.BeforeEach;
+import com.reader.manga.model.Manga;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DataJpaTest
+@Import(MangaService.class)
 class MangaServiceTest {
 
+    @Autowired
     private MangaService service;
-
-    @BeforeEach
-    void setUp() {
-        this.service = Mockito.mock(MangaService.class);
-    }
 
     @Test
     void testCreateMangaWithSuccess() {
+        Date date = new Date(2024, Calendar.JUNE, 28);
         MangaDTO mangaDTO = new MangaDTO(
                 "test",
                 "test description",
                 1,
-                "2024-06-28",
-                "N/D",
+                date,
+                null,
                 StatusType.ONGOING,
                 "Andrew",
                 "Shonen",
@@ -32,8 +37,13 @@ class MangaServiceTest {
         );
 
         service.createManga(mangaDTO);
-        MangaDTO expected = new MangaDTO("test","test description",1,"2024-06-28","N/D",StatusType.ONGOING,"Andrew","Shonen","url.com.br");
-        assertEquals(expected, mangaDTO);
+        Manga expected = new Manga(1L, "test", "test description", 1,
+                date,null, StatusType.ONGOING,
+                "Andrew","Shonen","url.com.br", null);
+
+        Manga result = service.findById(expected.getId());
+
+        assertEquals(expected, result);
     }
 
     @Test
