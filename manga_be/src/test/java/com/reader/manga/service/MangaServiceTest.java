@@ -4,7 +4,6 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.enums.StatusType;
 import com.reader.manga.model.Manga;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -21,14 +20,26 @@ class MangaServiceTest {
     @Autowired
     private MangaService service;
 
+    private static final Date DATE = new Date(2024, Calendar.JUNE, 28);
+
     @Test
     void testCreateMangaWithSuccess() {
-        Date date = new Date(2024, Calendar.JUNE, 28);
+        createManga();
+        Manga expected = new Manga(1L, "test", "test description", 1,
+                DATE,null, StatusType.ONGOING,
+                "Andrew","Shonen","url.com.br", null);
+
+        Manga result = service.findById(expected.getId());
+
+        assertEquals(expected, result);
+    }
+
+    private void createManga() {
         MangaDTO mangaDTO = new MangaDTO(
                 "test",
                 "test description",
                 1,
-                date,
+                DATE,
                 null,
                 StatusType.ONGOING,
                 "Andrew",
@@ -37,18 +48,11 @@ class MangaServiceTest {
         );
 
         service.createManga(mangaDTO);
-        Manga expected = new Manga(1L, "test", "test description", 1,
-                date,null, StatusType.ONGOING,
-                "Andrew","Shonen","url.com.br", null);
-
-        Manga result = service.findById(expected.getId());
-
-        assertEquals(expected, result);
     }
 
     @Test
     public void testDeleteManga() {
+        createManga();
         service.deleteManga(1L);
-        Mockito.verify(service, Mockito.times(1)).deleteManga(1L);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MangaService {
@@ -33,7 +34,10 @@ public class MangaService {
     }
 
     public void deleteManga(Long id) {
-        repository.findById(id);
+        Optional<Manga> mangaById = repository.findById(id);
+        if(mangaById.isEmpty()){
+            throw new NotFoundException("No manga found with the id: " + id + ".");
+        }
         repository.deleteById(id);
     }
 
