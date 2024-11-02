@@ -35,7 +35,7 @@ public class Manga {
     @NotNull
     @NotBlank
     @Column(name = "description")
-    @Length(min = 10, max = 255)
+    @Length(min = 10, max = 5000)
     private String description;
 
     @NotNull
@@ -70,7 +70,7 @@ public class Manga {
     @NotNull
     @NotBlank
     @Column(name = "image")
-    @Length(min = 10, max = 100)
+    @Length(min = 10, max = 255)
     private String image;
 
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
