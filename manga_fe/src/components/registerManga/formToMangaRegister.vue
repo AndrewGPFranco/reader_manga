@@ -144,12 +144,12 @@ function mangaRegister() {
     api.post("/api/v1/manga/create", data)
         .then(() => {
             message.success("Mangá successfully registered!");
+            clearFields();
         })
         .catch((error) => {
             console.error(error);
             message.error("An error occurred while registering, check the data.");
         })
-    clearFields();
 }
 
 function clearFields() {
