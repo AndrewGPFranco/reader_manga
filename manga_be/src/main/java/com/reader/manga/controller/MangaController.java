@@ -28,6 +28,18 @@ public class MangaController {
 
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
+    @GetMapping("/read/{id}")
+    public ResponseEntity<Manga> getMangaById(@PathVariable Long id) {
+        try {
+            logger.info("*******************Reading manga!*******************");
+            Manga manga = service.findById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(manga);
+        } catch (RuntimeException e) {
+            logger.error("*******************Manga not found!*******************");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
         try {
