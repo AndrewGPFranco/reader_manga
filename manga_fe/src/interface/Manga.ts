@@ -1,6 +1,8 @@
 import { StatusType } from '../enum/StatusType';
+import type ChapterData from './Chapter';
 
 export interface MangaData {
+    id: number;
     title: string;
     description: string;
     size: number;
@@ -10,4 +12,5 @@ export interface MangaData {
     author: string;
     gender: string;
     image: string;
+    chapters: ChapterData[];
 }
