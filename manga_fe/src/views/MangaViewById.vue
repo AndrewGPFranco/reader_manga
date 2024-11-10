@@ -2,12 +2,12 @@
     <header>
         <NavbarComponent />
     </header>
-    <main class="bg-gray-900 text-gray-100 p-10 shadow-lg max-h-screen overflow-y-auto">
+    <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
         <div class="flex items-center space-x-4 mb-6">
             <img :src="manga.image" alt="Imagem do Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg">
             <div>
-            <h1 class="text-2xl font-bold">{{ manga.title }}</h1>
-            <p class="text-gray-400 text-sm">{{ manga.author }}</p>
+                <h1 class="text-2xl font-bold">{{ manga.title }}</h1>
+                <p class="text-black text-sm">{{ manga.author }}</p>
             </div>
         </div>
 
@@ -21,12 +21,12 @@
         </div>
 
         <div>
-            <h2 class="text-xl font-semibold border-b border-gray-700 mb-4 pb-2">Chapters</h2>
+            <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Chapters</h2>
             <ul class="space-y-4">
-                <li v-for="chapter in manga.chapters" :key="chapter.title" class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                <li v-for="chapter in manga.chapters" :key="chapter.title" class="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
                     <p class="font-semibold text-lg">{{ chapter.title }}</p>
-                    <p class="text-gray-300">{{ chapter.description }}</p>
-                    <p><span class="text-gray-500">Páginas:</span> {{ chapter.numberPages }}</p>
+                    <p class="text-black">{{ chapter.description }}</p>
+                    <p><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
                 </li>
             </ul>
         </div>
