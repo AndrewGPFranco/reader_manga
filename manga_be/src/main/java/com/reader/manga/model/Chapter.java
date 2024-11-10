@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -42,6 +44,10 @@ public class Chapter {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Page> pages;
 
     public Chapter(String title, String description, Integer numberPages, Manga manga) {
         this.title = title;
