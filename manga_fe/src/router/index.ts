@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import MangaView from '@/views/MangaView.vue'
 import MangaViewById from '@/views/MangaViewById.vue'
+import ChapterReading from '@/views/ChapterReading.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/manga/:id',
       name: 'mangaId',
       component: MangaViewById
+    },
+    {
+      path: '/manga/:id/chapter/:id',
+      name: 'chapterReading',
+      component: ChapterReading
     }
   ]
 })

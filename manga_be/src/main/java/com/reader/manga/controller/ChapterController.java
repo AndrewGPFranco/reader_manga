@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/chapter")
@@ -76,6 +77,18 @@ public class ChapterController {
             return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
         } catch (RuntimeException e) {
             logger.error("*******************Error to update chapter!*******************");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/read/{id}")
+    public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
+        try {
+            Optional<Chapter> chapter = service.getChapterByID(id);
+            logger.info("*******************Searching chapter!*******************");
+            return ResponseEntity.ok().body(chapter);
+        } catch (RuntimeException e) {
+            logger.error("*******************Error when searching for chapter!*******************");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

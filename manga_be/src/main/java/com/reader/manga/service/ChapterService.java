@@ -66,4 +66,8 @@ public class ChapterService {
         repository.save(chapter);
     }
 
+    public Optional<Chapter> getChapterByID(Long id) {
+        return repository.findById(id);
+    }
+
 }
