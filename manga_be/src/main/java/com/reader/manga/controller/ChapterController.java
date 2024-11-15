@@ -83,13 +83,8 @@ public class ChapterController {
 
     @GetMapping("/read/{id}")
     public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
-        try {
-            Optional<Chapter> chapter = service.getChapterByID(id);
-            logger.info("*******************Searching chapter!*******************");
-            return ResponseEntity.ok().body(chapter);
-        } catch (RuntimeException e) {
-            logger.error("*******************Error when searching for chapter!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        Chapter chapter = service.getChapterByID(id);
+        logger.info("*******************Searching chapter!*******************");
+        return ResponseEntity.ok().body(chapter);
     }
 }
