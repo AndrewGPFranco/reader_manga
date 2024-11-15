@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 public class ChapterService {
@@ -67,7 +68,8 @@ public class ChapterService {
     }
 
     public Chapter getChapterByID(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Chapter not found."));
+        Supplier<NotFoundException> exceptionSupplier = () -> new NotFoundException("Chapter not found");
+        return repository.findById(id).orElseThrow(exceptionSupplier);
     }
 
 }
