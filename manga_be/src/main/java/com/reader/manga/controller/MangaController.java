@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,77 +29,51 @@ public class MangaController {
 
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/read/{id}")
     public ResponseEntity<Manga> getMangaById(@PathVariable Long id) {
-        try {
-            logger.info("*******************Reading manga!*******************");
-            Manga manga = service.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(manga);
-        } catch (RuntimeException e) {
-            logger.error("*******************Manga not found!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        logger.info("*******************Reading manga!*******************");
+        Manga manga = service.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(manga);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
-        try {
-            logger.info("*******************Creating mangá!*******************");
-            GetMangaDTO manga = service.createManga(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(manga);
-        } catch(RuntimeException e) {
-            logger.error("*******************Error to create mangá!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        logger.info("*******************Creating mangá!*******************");
+        GetMangaDTO manga = service.createManga(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(manga);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteManga(@PathVariable Long id) {
-        try {
-            logger.info("*******************Deleting mangá!*******************");
-            service.deleteManga(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
-        } catch(RuntimeException e) {
-            logger.error("*******************Mangá not found!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mangá not found!");
-        }
+        logger.info("*******************Deleting mangá!*******************");
+        service.deleteManga(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
     @GetMapping("/readAll")
     public ResponseEntity<List<Manga>> readAllMangas(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        try {
-            logger.info("*******************Reading all mangas!*******************");
-            Pageable pageable = PageRequest.of(page, size);
-            List<Manga> mangas = service.readAllMangas(pageable);
-            return ResponseEntity.status(HttpStatus.OK).body(mangas);
-        } catch (RuntimeException e) {
-            logger.error("*******************Error to read all mangas!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        logger.info("*******************Reading all mangas!*******************");
+        Pageable pageable = PageRequest.of(page, size);
+        List<Manga> mangas = service.readAllMangas(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
-        try {
-            service.updateManga(id, dto);
-            logger.info("*******************Updating mangá!*******************");
-            return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
-        } catch (RuntimeException e) {
-            logger.error("*******************Error to update mangá!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        service.updateManga(id, dto);
+        logger.info("*******************Updating mangá!*******************");
+        return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllMangaForSelect() {
-        try {
-            List<Manga> allMangas = service.getAll();
-            return ResponseEntity.ok().body(allMangas);
-        } catch (RuntimeException e) {
-            logger.error("A error");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        List<Manga> allMangas = service.getAll();
+        return ResponseEntity.ok().body(allMangas);
     }
 }

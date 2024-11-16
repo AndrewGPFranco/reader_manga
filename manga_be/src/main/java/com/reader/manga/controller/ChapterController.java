@@ -3,7 +3,6 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.GetChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
-import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import org.slf4j.Logger;
@@ -12,10 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/chapter")
@@ -29,56 +28,40 @@ public class ChapterController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
-        try {
-            logger.info("*******************Creating mangá!*******************");
-            service.createChapter(dto);
-            GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
-            return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
-        } catch(CreationErrorException e) {
-            logger.error("*******************Error to create mangá!*******************");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        logger.info("*******************Creating mangá!*******************");
+        service.createChapter(dto);
+        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
+        return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/readAll")
     public ResponseEntity<List<Chapter>> readAllChapters(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        try {
-            logger.info("*******************Reading all chapters!*******************");
-            Pageable pageable = PageRequest.of(page, size);
-            List<Chapter> chapters = service.readAllChapters(pageable);
-            return ResponseEntity.status(HttpStatus.OK).body(chapters);
-        } catch (RuntimeException e) {
-            logger.error("*******************Error to read all chapters!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        logger.info("*******************Reading all chapters!*******************");
+        Pageable pageable = PageRequest.of(page, size);
+        List<Chapter> chapters = service.readAllChapters(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(chapters);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteChapter(@PathVariable Long id) {
-        try {
-            logger.info("*******************Deleting mangá!*******************");
-            service.deleteChapter(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Chapter deleted successfully!");
-        } catch(RuntimeException e) {
-            logger.error("*******************Mangá not found!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chapter not found!");
-        }
+        logger.info("*******************Deleting mangá!*******************");
+        service.deleteChapter(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Chapter deleted successfully!");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<String> updateChapterById(@RequestParam Long id, @RequestBody UpdateChapterDTO dto) {
-        try {
-            service.updateChapter(id, dto);
-            logger.info("*******************Updating chapter!*******************");
-            return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
-        } catch (RuntimeException e) {
-            logger.error("*******************Error to update chapter!*******************");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        service.updateChapter(id, dto);
+        logger.info("*******************Updating chapter!*******************");
+        return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
     }
 
     @GetMapping("/read/{id}")
