@@ -1,7 +1,7 @@
 import { StatusType } from '../enum/StatusType';
 import type ChapterData from './Chapter';
 
-export interface MangaData {
+export default interface MangaData {
     id: number;
     title: string;
     description: string;

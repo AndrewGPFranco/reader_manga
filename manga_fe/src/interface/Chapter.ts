@@ -1,4 +1,4 @@
-import type { PageData } from "./Page"
+import type PageData from "./Page"
 
 export default interface ChapterData {
     id: number
