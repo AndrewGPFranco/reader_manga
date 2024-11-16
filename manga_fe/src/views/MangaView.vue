@@ -9,7 +9,7 @@
                     <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
                     <div class="p-4">
                         <router-link :to="`/manga/${manga.id}`" class="text-xl font-bold mb-2 text-gray-800">{{ manga.title }}</router-link>
-                        <div class="text-gray-700 text-sm mb-4">
+                        <div class="text-gray-700 text-sm mt-2">
                             <p><span class="font-semibold">Number of chapters: </span>{{ manga.size }}</p>
                             <p><span class="font-semibold">Status: </span> {{ manga.status }}</p>
                             <p><span class="font-semibold">Author: </span> {{ manga.author }}</p>
@@ -26,9 +26,9 @@
 
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import { onMounted, ref } from 'vue';
-import type { MangaData } from '@/interface/Manga';
 import { useMessage } from 'naive-ui';
 import { useMangaStore } from '@/store/MangaStore';
+import type MangaData from '@/interface/Manga';
 
 const message = useMessage();
 const mangasArray = ref<MangaData[]>([]);
