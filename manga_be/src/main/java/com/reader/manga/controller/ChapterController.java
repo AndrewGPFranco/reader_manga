@@ -2,9 +2,11 @@ package com.reader.manga.controller;
 
 import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.GetChapterDTO;
+import com.reader.manga.dto.chapter.PageDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -70,4 +72,12 @@ public class ChapterController {
         logger.info("*******************Searching chapter!*******************");
         return ResponseEntity.ok().body(chapter);
     }
+
+    // TODO arrumar funcionamento
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/register/page")
+    public void registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {
+        service.pageChapterRegister(pageDTO);
+    }
+
 }

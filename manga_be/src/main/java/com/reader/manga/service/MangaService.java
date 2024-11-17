@@ -5,6 +5,7 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
+import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import org.springframework.data.domain.Page;
@@ -73,6 +74,10 @@ public class MangaService {
 
     public Manga findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Mangá not found"));
+    }
+
+    public List<Chapter> getChaptersByManga(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Mangá not found")).getChapters();
     }
 
 }

@@ -29,7 +29,8 @@ public class Page {
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
-    public Page(String page) {
+    public Page(String page, Chapter chapter) {
         this.page = page;
+        this.chapter = chapter;
     }
 }

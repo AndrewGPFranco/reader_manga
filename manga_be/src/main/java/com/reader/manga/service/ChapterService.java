@@ -1,5 +1,6 @@
 package com.reader.manga.service;
 
+import com.reader.manga.dto.chapter.PageDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.dto.chapter.ChapterDTO;
@@ -8,6 +9,7 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
+import com.reader.manga.repository.PageRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,12 @@ public class ChapterService {
 
     private final MangaRepository mangaRepository;
 
-    public ChapterService(ChapterRepository repository, MangaRepository mangaRepository) {
+    private final PageRepository pageRepository;
+
+    public ChapterService(ChapterRepository repository, MangaRepository mangaRepository, PageRepository pageRepository) {
         this.repository = repository;
         this.mangaRepository = mangaRepository;
+        this.pageRepository = pageRepository;
     }
 
     public void createChapter(ChapterDTO dto) {
@@ -70,6 +75,12 @@ public class ChapterService {
     public Chapter getChapterByID(Long id) {
         Supplier<NotFoundException> exceptionSupplier = () -> new NotFoundException("Chapter not found");
         return repository.findById(id).orElseThrow(exceptionSupplier);
+    }
+
+    public void pageChapterRegister(PageDTO pageDTO) {
+        Chapter chapter = repository.findById(pageDTO.chapter_id()).orElseThrow(() -> new NotFoundException("Chapter not found."));
+        com.reader.manga.model.Page page = new com.reader.manga.model.Page(pageDTO.page(), chapter);
+        pageRepository.save(page);
     }
 
 }
