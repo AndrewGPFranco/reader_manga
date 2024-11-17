@@ -1,25 +1,37 @@
 <template>
     <div class="home">
+      <n-card>
         <div class="banner"></div>
+        <h2 class="section-title">Famous Mangá</h2>
 
-        <h2 class="section-title">Favorites mangás</h2>
         <div class="favorites-grid">
-            <div v-for="(item, index) in favoriteMangas" :key="index" class="item-card"></div>
+            <div v-for="(item, index) in mangas" :key="index" class="item-card">
+              <img :src="item.imageUrl" alt="Capa de mangá">
+            </div>
         </div>
-
-        <h2 class="section-title">Wish List</h2>
-        <div class="wishlist-grid">
-            <div v-for="(item, index) in wishList" :key="index" class="item-card"></div>
-        </div>
+      </n-card>
     </div>
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue';
+import type MangaDexData from '@/interface/MangaDex';
+import { useMangaStore } from '@/store/MangaStore';
+import { useMessage } from 'naive-ui';
+import { onMounted, ref } from 'vue';
   
-const favoriteMangas = ref(new Array(5).fill({}));
-const wishList = ref(new Array(5).fill({}));
-  
+const mangas = ref<MangaDexData[]>([]);
+const message = useMessage();
+const mangaStore = useMangaStore();
+
+onMounted(() => getMangaRandom());
+
+const getMangaRandom = async () => {
+  try {
+    mangas.value = await mangaStore.getFiveMangaRandom();
+  } catch (error) {
+    message.error("Error loading sleeves.");
+  }
+};
 </script>
   
 <style scoped>
@@ -42,21 +54,16 @@ const wishList = ref(new Array(5).fill({}));
     font-weight: bold;
     margin-top: 1rem;
   }
-  
-  .favorites-grid,
-  .wishlist-grid {
+
+  .favorites-grid {
     display: flex;
     justify-content: center;
-    align-items: center;
+    padding: 20px;
     flex-wrap: wrap;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
+    gap: 20px;
   }
-  
-  .item-card {
-    width: 15vw;
-    height: 20vh;
-    background-color: #bbb;
-    border-radius: 8px;
+
+  .item-card img {
+    height: 250px;
   }
 </style>  

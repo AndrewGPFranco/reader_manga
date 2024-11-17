@@ -10,4 +10,4 @@
   <main>
     <HomeComponent />
   </main>
-</template> 
+</template>

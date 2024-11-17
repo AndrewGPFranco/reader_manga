@@ -15,6 +15,11 @@
                         <FormToChapterRegister :mangas="mangasArray" />
                     </section>
                 </n-tab-pane>
+                <n-tab-pane name="Chapter pages" tab="Chapter pages register" style="height: 95%">
+                    <section class="container">
+                        <FormToChapterPages :mangas="mangasArray" />
+                    </section>
+                </n-tab-pane>
             </n-tabs>
         </n-card>
     </main>
@@ -23,6 +28,7 @@
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue';
+import FormToChapterPages from '@/components/registerChapterPages/formToChapterPages.vue';
 import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue';
 import { api } from '@/network/axiosInstance';
 import { useMessage } from 'naive-ui';
