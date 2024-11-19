@@ -58,7 +58,11 @@ const generalOptionsManga = props.mangas.map(v => ({
 }));
 
 const pageRegister = () => {
-    api.post("/api/v1/chapter/register/page")
+    const data = {
+        page: model.value.page,
+        chapter_id: model.value.chapter
+    }
+    api.post("/api/v1/chapter/register/page", data)
         .then(() => message.create("Register successfully"))
         .catch((error) => message.error(error));
 };
@@ -85,8 +89,9 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 }
 
 watch(model.value, () => {
+    if(model.value.manga == '') return;
     if(model.value.manga != null || model.value.manga != undefined) {
-        api.get(`/api/v1/manga/chapter/by-id/${model.value.manga}`)
+        api.get(`/api/v1/manga/chapter_id/by-id/${model.value.manga}`)
             .then((response) => {
                 mangaSelected.value = response.data
             })
