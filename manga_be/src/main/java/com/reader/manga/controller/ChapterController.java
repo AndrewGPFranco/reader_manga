@@ -76,8 +76,10 @@ public class ChapterController {
     // TODO arrumar funcionamento
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register/page")
-    public void registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {
+    public ResponseEntity<String> registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {
         service.pageChapterRegister(pageDTO);
+        logger.info("Chapter page registered successfully");
+        return ResponseEntity.ok().body("Chapter page registered successfully");
     }
 
 }
