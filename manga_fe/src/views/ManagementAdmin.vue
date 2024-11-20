@@ -17,7 +17,7 @@
                 </n-tab-pane>
                 <n-tab-pane name="Pages Management" tab="Pages Management" style="height: 95%">
                     <section class="container">
-                        <!-- TODO implementar -->
+                        <ChapterPagesManagement />
                     </section>
                 </n-tab-pane>
             </n-tabs>
@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import ChapterManagement from '@/components/admin/ChapterManagement.vue';
+import ChapterPagesManagement from '@/components/admin/ChapterPagesManagement.vue';
 import MangaManagement from '@/components/admin/MangaManagement.vue';
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 

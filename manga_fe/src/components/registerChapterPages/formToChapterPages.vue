@@ -24,23 +24,39 @@
 </template>
 
 <script setup lang="ts">
+import type PageData from '@/interface/Page';
 import { api } from '@/network/axiosInstance';
+import { useChapterStore } from '@/store/ChapterStore';
 import { useMessage, type FormInst } from 'naive-ui';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, type PropType } from 'vue';
 
 const message = useMessage();
 const formRef = ref<FormInst | null>(null);
+const chapterStore = useChapterStore();
 let mangaSelected = ref();
+
+const emit = defineEmits<{
+  (event: 'requestResult', result: boolean): void;
+  (event: 'cancelEdit', result: boolean): void
+}>();
 
 const props = defineProps({
     mangas: {
         type: Array as () => { title: string; id: number }[],
         required: true
+    },
+    page: {
+        type: Object as PropType<PageData>,
+        required: true
+    },
+    isEdit: {
+        type: Boolean,
+        required: true
     }
 });
 
 const model = ref({
-    page: '',
+    page: props.page != undefined ? props.page.chapterPage : '',
     chapter: null as string | null,
     manga: null as string | null
 })
@@ -57,11 +73,23 @@ const generalOptionsManga = props.mangas.map(v => ({
     value: v.id
 }));
 
-const pageRegister = () => {
+const pageRegister = async () => {
     const data = {
         page: model.value.page,
         chapter_id: model.value.chapter
     }
+
+    let response = "";
+    
+    if(!props.isEdit)
+        response = await chapterStore.registerChapter(data, clearFields);
+    else {
+        response = await chapterStore.editChapter(props.page.id, data, clearFields);
+        emit('requestResult', true);
+    }
+
+    message.info(response);
+
     api.post("/api/v1/chapter/register/page", data)
         .then(() => message.create("Register successfully"))
         .catch((error) => message.error(error));
@@ -86,6 +114,17 @@ const handleValidateButtonClick = (e: MouseEvent) => {
             message.error('Enter valid data')
         }
     })
+}
+
+
+const clearFields = () => {
+    model.value = {
+        page: '',
+        chapter: null as string | null,
+        manga: null as string | null
+    }
+
+    formRef.value?.restoreValidation();
 }
 
 watch(model.value, () => {

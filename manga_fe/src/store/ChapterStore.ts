@@ -1,4 +1,5 @@
 import type ChapterData from "@/interface/Chapter";
+import type PageData from "@/interface/Page";
 import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
 
@@ -50,6 +51,22 @@ export const useChapterStore = defineStore('chapter', {
         async deleteChapterById(id: number): Promise<String> {
             try {
                 const response = await api.delete(`/api/v1/chapter/delete/${id}`);
+                return response.data;
+            } catch(error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+        async getAllPages(): Promise<PageData[]> {
+            try {
+                const response = await api.get("/api/v1/chapter/getAll-pages");
+                return response.data;
+            } catch(error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+        async deletePageById(id: number): Promise<String> {
+            try {
+                const response = await api.delete(`/api/v1/chapter/delete/page/${id}`);
                 return response.data;
             } catch(error: any) {
                 throw new Error(error.response.data);

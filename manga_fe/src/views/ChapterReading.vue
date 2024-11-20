@@ -4,7 +4,7 @@
     </header>
     <main>
         <n-card class="flex flex-col items-center">
-            <img v-if="currentPage" :src="currentPage.page" alt="Página do mangá" :style="{ maxHeight: '85vh', objectFit: 'cover' }"  />
+            <img v-if="currentPage" :src="currentPage.chapterPage" alt="Página do mangá" :style="{ maxHeight: '85vh', objectFit: 'cover' }"  />
             <h1 v-if="!currentPage">No pages for this chapter yet</h1>
             <aside class="flex justify-between" v-if="currentPage">
                 <n-button @click="previousPage" class="mt-2">Previous page</n-button>
