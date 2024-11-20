@@ -1,5 +1,6 @@
 package com.reader.manga.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
@@ -8,9 +9,12 @@ import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
+import com.reader.manga.vo.MangaCoverVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,4 +84,45 @@ public class MangaService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Mangá not found")).getChapters();
     }
 
+    public Mono<MangaCoverVO> fetchCoverForTitle(String title, WebClient webClient) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/manga")
+                        .queryParam("title", title)
+                        .queryParam("limit", 1)
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .flatMap(jsonNode -> {
+                    JsonNode data = jsonNode.get("data");
+                    if (data != null && !data.isEmpty()) {
+                        JsonNode manga = data.get(0);
+                        String mangaId = manga.get("id").asText();
+                        return fetchCoverImage(mangaId, webClient);
+                    }
+                    return Mono.empty();
+                });
+    }
+
+    private Mono<MangaCoverVO> fetchCoverImage(String mangaId, WebClient webClient) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/cover")
+                        .queryParam("manga[]", mangaId)
+                        .queryParam("limit", 1)
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(jsonNode -> {
+                    JsonNode data = jsonNode.get("data");
+                    if (data != null && !data.isEmpty()) {
+                        JsonNode cover = data.get(0);
+                        String fileName = cover.get("attributes").get("fileName").asText();
+                        String imageUrl = "https://uploads.mangadex.org/covers/" + mangaId + "/" + fileName;
+
+                        return MangaCoverVO.builder().id(mangaId).imageUrl(imageUrl).build();
+                    }
+                    return null;
+                });
+    }
 }

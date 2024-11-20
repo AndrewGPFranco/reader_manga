@@ -73,7 +73,6 @@ public class ChapterController {
         return ResponseEntity.ok().body(chapter);
     }
 
-    // TODO arrumar funcionamento
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register/page")
     public ResponseEntity<String> registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {

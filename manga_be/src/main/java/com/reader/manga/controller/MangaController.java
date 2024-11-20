@@ -1,6 +1,5 @@
 package com.reader.manga.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
@@ -97,52 +96,9 @@ public class MangaController {
         List<String> titles = List.of("Naruto", "Death Note", "One Piece", "Fullmetal Alchemist", "Dragon Ball");
 
         return Flux.fromIterable(titles)
-                .flatMap(this::fetchCoverForTitle)
+                .flatMap(t -> service.fetchCoverForTitle(t, webClient))
                 .take(5)
                 .collectList();
     }
 
-    // TODO passar lógica para um service
-    private Mono<MangaCoverVO> fetchCoverForTitle(String title) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/manga")
-                        .queryParam("title", title)
-                        .queryParam("limit", 1)
-                        .build())
-                .retrieve()
-                .bodyToMono(JsonNode.class)
-                .flatMap(jsonNode -> {
-                    JsonNode data = jsonNode.get("data");
-                    if (data != null && !data.isEmpty()) {
-                        JsonNode manga = data.get(0);
-                        String mangaId = manga.get("id").asText();
-                        return fetchCoverImage(mangaId);
-                    }
-                    return Mono.empty();
-                });
-    }
-
-    // TODO passar lógica para um service
-    private Mono<MangaCoverVO> fetchCoverImage(String mangaId) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/cover")
-                        .queryParam("manga[]", mangaId)
-                        .queryParam("limit", 1)
-                        .build())
-                .retrieve()
-                .bodyToMono(JsonNode.class)
-                .map(jsonNode -> {
-                    JsonNode data = jsonNode.get("data");
-                    if (data != null && !data.isEmpty()) {
-                        JsonNode cover = data.get(0);
-                        String fileName = cover.get("attributes").get("fileName").asText();
-                        String imageUrl = "https://uploads.mangadex.org/covers/" + mangaId + "/" + fileName;
-
-                        return MangaCoverVO.builder().id(mangaId).imageUrl(imageUrl).build();
-                    }
-                    return null;
-                });
-    }
 }
