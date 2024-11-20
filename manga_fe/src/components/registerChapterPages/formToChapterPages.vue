@@ -41,8 +41,8 @@ const props = defineProps({
 
 const model = ref({
     page: '',
-    chapter: '',
-    manga: ''
+    chapter: null as string | null,
+    manga: null as string | null
 })
 
 const rules = {
@@ -90,10 +90,12 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 
 watch(model.value, () => {
     if(model.value.manga == '') return;
-    if(model.value.manga != null || model.value.manga != undefined) {
+    if(model.value.manga != null || model.value.manga != undefined) {        
         api.get(`/api/v1/manga/chapter_id/by-id/${model.value.manga}`)
             .then((response) => {
                 mangaSelected.value = response.data
+                if(mangaSelected.value == undefined || mangaSelected.value == "")
+                    model.value.chapter = null as string | null
             })
             .catch((error) => {
                 message.error(error);
