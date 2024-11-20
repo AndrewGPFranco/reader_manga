@@ -34,7 +34,7 @@ let mangaSelected = ref();
 
 const props = defineProps({
     mangas: {
-        type: Array as () => { title: string; id: string }[],
+        type: Array as () => { title: string; id: number }[],
         required: true
     }
 });

@@ -7,12 +7,12 @@
             <n-tabs style="height: 100%" type="card">
                 <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
                     <section class="container">
-                        <FormToMangaRegister />
+                        <FormToMangaRegister :is-edit="false" :manga="mangasArray[0]" />
                     </section>
                 </n-tab-pane>
                 <n-tab-pane name="Chapter" tab="Chapter Register" style="height: 95%">
                     <section class="container">
-                        <FormToChapterRegister :mangas="mangasArray" />
+                        <FormToChapterRegister :mangas="mangasArray" :is-edit="false" :chapter="chapter" />
                     </section>
                 </n-tab-pane>
                 <n-tab-pane name="Chapter Pages" tab="Chapter Pages Register" style="height: 95%">
@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { Chapter } from '@/class/Chapter';
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue';
 import FormToChapterPages from '@/components/registerChapterPages/formToChapterPages.vue';
@@ -35,6 +36,7 @@ import { useMangaStore } from '@/store/MangaStore';
 import { onMounted, ref } from 'vue';
 
 let mangasArray = ref([] as MangaData[])
+const chapter = new Chapter(1, "Generic title", "Generic description", 1, []);
 const mangaStore = useMangaStore();
 
 onMounted(async () => {
