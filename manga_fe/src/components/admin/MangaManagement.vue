@@ -15,11 +15,14 @@
                 <td>{{ manga.status }}</td>
                 <td class="tdButtons">
                     <Delete class="buttonDelete" @click="deleteManga(manga.id)" />
-                    <Edit class="buttonEdit" @click="editManga(manga.id)" />
+                    <Edit class="buttonEdit" @click="editManga(manga)" />
                 </td>
             </tr>
         </tbody>
     </n-table>
+    <div v-if="isEdit" class="containerForm">
+        <FormToMangaRegister :manga="mangaToBeEdited"/>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -28,18 +31,22 @@ import { useMangaStore } from '@/store/MangaStore';
 import { onMounted, ref } from 'vue';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
+import FormToMangaRegister from '../registerManga/formToMangaRegister.vue';
 
+const isEdit = ref(false);
+const message = useMessage();
 const mangaStore = useMangaStore();
 const allManga = ref<MangaData[]>([]);
-const message = useMessage();
+const mangaToBeEdited = ref({} as MangaData);
 
 const deleteManga = async (id: number) => {
     const response = await mangaStore.deleteMangaById(id);
     message.success(String(response));
 }
 
-const editManga = (id: number) => {
-    // TODO implementar método
+const editManga = (manga: MangaData) => {
+    isEdit.value = true;
+    mangaToBeEdited.value = manga;
 }
 
 onMounted(async () => {
@@ -71,5 +78,9 @@ onMounted(async () => {
 
 .buttonDelete { color: rgba(255, 0, 0, 0.678); }
 .buttonEdit { color: rgb(0, 109, 0); }
+
+.containerForm {
+    margin-top: 40px;
+}
 
 </style>

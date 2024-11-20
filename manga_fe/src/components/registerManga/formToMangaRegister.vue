@@ -50,24 +50,31 @@
 
 <script setup lang="ts">
 import { StatusType } from '@/enum/StatusType';
-import { api } from '@/network/axiosInstance';
+import type MangaData from '@/interface/Manga';
+import { useMangaStore } from '@/store/MangaStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { ref } from 'vue';
 
 const formRef = ref<FormInst | null>(null);
+const mangaStore = useMangaStore();
 const message = useMessage();
 const size = ref('medium');
 
+const props = defineProps<{
+  manga: MangaData;
+  isEdit: boolean;
+}>();
+
 const model = ref({
-    title: '' as string,
-    description: '' as string,
-    sizeManga: null as number | null,
-    status: StatusType.ONGOING as string,
-    author: '' as string,
-    gender: '' as string,
-    image: '' as string,
-    creationDate: null as Date | null,
-    closingDate: null as Date | null,
+    title: props.manga != undefined ? props.manga.title : '' as string,
+    description: props.manga != undefined ? props.manga.title : '' as string,
+    sizeManga: props.manga != undefined ? props.manga.size : null as number | null,
+    status: props.manga != undefined ? props.manga.status : StatusType.ONGOING as string,
+    author: props.manga != undefined ? props.manga.author : '' as string,
+    gender: props.manga != undefined ? props.manga.gender : '' as string,
+    image: props.manga != undefined ? props.manga.image : '' as string,
+    creationDate: props.manga != undefined ? props.manga.creationDate : null as Date | null,
+    closingDate: props.manga != undefined ? props.manga.closingDate : null as Date | null,
 });
 
 const status = [StatusType.ONGOING, StatusType.FINISHED].map(
@@ -77,7 +84,7 @@ const status = [StatusType.ONGOING, StatusType.FINISHED].map(
     })
 );
 
-function handleValidateButtonClick(e: MouseEvent) {
+const handleValidateButtonClick = (e: MouseEvent) => {
     e.preventDefault()
     formRef.value?.validate((errors) => {
         if (!errors) {
@@ -127,7 +134,7 @@ const rules = {
     }
 }
 
-function mangaRegister() {
+const mangaRegister = async () => {
     const { title, description, sizeManga, creationDate, closingDate, status, author, gender, image } = model.value;
     const data = {
         title: title,
@@ -139,20 +146,13 @@ function mangaRegister() {
         author: author,
         gender: gender,
         image: image
-    }
+    };
 
-    api.post("/api/v1/manga/create", data)
-        .then(() => {
-            message.success("Mangá successfully registered!");
-            clearFields();
-        })
-        .catch((error) => {
-            console.error(error);
-            message.error("An error occurred while registering, check the data.");
-        })
+    const response = await mangaStore.registerManga(data, clearFields);
+    message.info(response);
 }
 
-function clearFields() {
+const clearFields = () => {
     model.value = {
         title: '',
         description: '',
