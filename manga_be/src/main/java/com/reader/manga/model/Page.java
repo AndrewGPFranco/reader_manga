@@ -22,15 +22,15 @@ public class Page {
     @NotNull
     @NotBlank
     @Column(name = "page")
-    private String page;
+    private String chapterPage;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
-    public Page(String page, Chapter chapter) {
-        this.page = page;
+    public Page(String chapterPage, Chapter chapter) {
+        this.chapterPage = chapterPage;
         this.chapter = chapter;
     }
 }

@@ -1,9 +1,6 @@
 package com.reader.manga.controller;
 
-import com.reader.manga.dto.chapter.ChapterDTO;
-import com.reader.manga.dto.chapter.GetChapterDTO;
-import com.reader.manga.dto.chapter.PageDTO;
-import com.reader.manga.dto.chapter.UpdateChapterDTO;
+import com.reader.manga.dto.chapter.*;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
@@ -79,6 +76,29 @@ public class ChapterController {
         service.pageChapterRegister(pageDTO);
         logger.info("Chapter page registered successfully");
         return ResponseEntity.ok().body("Chapter page registered successfully");
+    }
+
+    @GetMapping("/getAll-pages")
+    public ResponseEntity<List<com.reader.manga.model.Page>> getAllPages() {
+        List<com.reader.manga.model.Page> allPages = service.getAllPages();
+        logger.info("Searching all pages");
+        return ResponseEntity.ok().body(allPages);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/page/{id}")
+    public ResponseEntity<String> deletePage(@PathVariable Long id) {
+        logger.info("*******************Deleting page!*******************");
+        service.deletePage(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Page deleted successfully!");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/edit/page/{id}")
+    public ResponseEntity<String> updatePageById(@PathVariable Long id, @RequestBody UpdatePageDTO dto) {
+        service.updatePage(id, dto);
+        logger.info("*******************Updating page!*******************");
+        return ResponseEntity.status(HttpStatus.OK).body("Page updated successfully!");
     }
 
 }
