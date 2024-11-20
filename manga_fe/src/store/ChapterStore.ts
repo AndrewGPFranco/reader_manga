@@ -72,5 +72,25 @@ export const useChapterStore = defineStore('chapter', {
                 throw new Error(error.response.data);
             }
         },
+        async editPage(id: number, data: {}, callback: Function): Promise<string> {
+            try {
+                await api.put(`/api/v1/chapter/edit/page/${id}`, data);
+                callback();
+                return "Successfully edited page!";
+            } catch (error: any) {
+                console.error(error);
+                return "An error occurred while editing, please check the data.";
+            }
+        },
+        async registerPage(data: {}, callback: Function): Promise<string> {
+            try {
+                await api.post("/api/v1/chapter/register/page", data);
+                callback();
+                return "Page successfully registered!";
+            } catch (error: any) {
+                console.error(error);
+                return "An error occurred while registering, check the data.";
+            }
+        },
     }
 })

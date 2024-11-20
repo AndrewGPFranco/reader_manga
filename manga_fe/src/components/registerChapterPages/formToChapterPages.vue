@@ -5,10 +5,10 @@
                 <n-form-item-gi :span="12" label="Image link" path="page">
                     <n-input v-model:value="model.page" placeholder="Enter the image link" />
                 </n-form-item-gi>
-                <n-form-item-gi :span="12" label="Manga" path="manga">
+                <n-form-item-gi :span="12" label="Manga" path="manga" v-if="!props.isEdit">
                     <n-select v-model:value="model.manga" placeholder="Choose the mangá" :options="generalOptionsManga" />
                 </n-form-item-gi>
-                <n-form-item-gi :span="12" label="Chapter" path="chapter">
+                <n-form-item-gi :span="12" label="Chapter" path="chapter" v-if="!props.isEdit">
                     <n-select v-model:value="model.chapter" placeholder="Choose the chapter" :options="generalOptionsChapter" />
                 </n-form-item-gi>
                 <n-gi :span="24">
@@ -82,17 +82,13 @@ const pageRegister = async () => {
     let response = "";
     
     if(!props.isEdit)
-        response = await chapterStore.registerChapter(data, clearFields);
+        response = await chapterStore.registerPage(data, clearFields);
     else {
-        response = await chapterStore.editChapter(props.page.id, data, clearFields);
+        response = await chapterStore.editPage(props.page.id, data, clearFields);
         emit('requestResult', true);
     }
 
     message.info(response);
-
-    api.post("/api/v1/chapter/register/page", data)
-        .then(() => message.create("Register successfully"))
-        .catch((error) => message.error(error));
 };
 
 const generalOptionsChapter = computed(() => {
