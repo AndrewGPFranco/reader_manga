@@ -55,7 +55,6 @@ export const useMangaStore = defineStore('manga', {
         },
         async editManga(id: number, data: {}, callback: Function): Promise<string> {
             try {
-                // @ts-ignore
                 await api.put(`/api/v1/manga/edit/${id}`, data);
                 callback();
                 return "Successfully edited manga!";
