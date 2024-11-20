@@ -1,4 +1,4 @@
-import type { MangaData } from "@/interface/Manga";
+import type MangaData from "@/interface/Manga";
 
 export function formatDate(date: MangaData): string {
     const creationDate = new Date(date.creationDate);
