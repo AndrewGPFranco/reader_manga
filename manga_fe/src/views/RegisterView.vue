@@ -30,25 +30,15 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue';
 import FormToChapterPages from '@/components/registerChapterPages/formToChapterPages.vue';
 import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue';
-import { api } from '@/network/axiosInstance';
-import { useMessage } from 'naive-ui';
-import { onMounted } from 'vue';
+import type MangaData from '@/interface/Manga';
+import { useMangaStore } from '@/store/MangaStore';
+import { onMounted, ref } from 'vue';
 
-let mangasArray: any[] = [];
-const message = useMessage();
+let mangasArray = ref([] as MangaData[])
+const mangaStore = useMangaStore();
 
-async function getAllMangas() {
-    api.get("/api/v1/manga/all")
-        .then((response) => {
-            mangasArray = response.data;
-        })
-        .catch((error) => {
-            message.error(error.message);
-        })
-}
-
-onMounted(() => {
-    getAllMangas();
+onMounted(async () => {
+    mangasArray.value = await mangaStore.getAllManga();
 })
 </script>
 

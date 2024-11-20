@@ -19,7 +19,10 @@
                     <n-input-number v-model:value="model.pagesNumber" />
                 </n-form-item-gi>
                 <n-gi :span="24">
-                    <div style="display: flex; justify-content: flex-end">
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <n-button round type="info" @click="cancel">
+                            Cancel
+                        </n-button>
                         <n-button round type="primary" @click="handleValidateButtonClick">
                             Register
                         </n-button>
@@ -34,16 +37,16 @@
 import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
-import type MangaData from '@/interface/Manga';
 import { useChapterStore } from '@/store/ChapterStore';
+import type ChapterData from '@/interface/Chapter';
 
 const props = defineProps({
     mangas: {
-        type: Array as PropType<{ title: string; id: string }[]>,
+        type: Array as PropType<{ title: string; id: number }[]>,
         required: true
     },
     chapter: {
-        type: Object as PropType<MangaData>,
+        type: Object as PropType<ChapterData>,
         required: true
     },
     isEdit: {
@@ -64,9 +67,9 @@ const emit = defineEmits<{
 const size = ref('medium')
 
 const model = ref({
-    title: '',
-    description: '',
-    pagesNumber: null as number | null,
+    title: props.chapter.title != undefined ? props.chapter.title : '',
+    description: props.chapter.description != undefined ? props.chapter.description : '',
+    pagesNumber: props.chapter.numberPages != undefined ? props.chapter.numberPages : null as number | null,
     manga: null as string | null
 })
 
@@ -136,5 +139,9 @@ const chapterRegister = async () => {
     }
 
     message.info(response);
+}
+
+const cancel = () => {
+    emit("cancelEdit", true);
 }
 </script>

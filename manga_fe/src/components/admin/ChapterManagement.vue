@@ -21,7 +21,7 @@
         </tbody>
     </n-table>
     <div v-if="isEdit && !finishedEdition" class="containerForm">
-        <FormToMangaRegister :manga="chapterToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
+        <FormToChapterRegister :mangas="allManga" :chapter="chapterToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
     </div>
 </template>
 
@@ -31,18 +31,25 @@ import { useChapterStore } from '@/store/ChapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
+import FormToChapterRegister from '../registerChapter/formToChapterRegister.vue';
+import type MangaData from '@/interface/Manga';
+import { useMangaStore } from '@/store/MangaStore';
 
 const isEdit = ref(false);
 const message = useMessage();
+const allManga = ref([] as MangaData[])
 const chapterStore = useChapterStore();
+const mangaStore = useMangaStore();
 const allChapter = ref([] as ChapterData[]);
 const chapterToBeEdited = ref({} as ChapterData);
 
 let finishedEdition = ref(false);
 
 onMounted(async () => {
-    const response = await chapterStore.getAllChapter();
-    allChapter.value = response;
+    const responseChapter = await chapterStore.getAllChapter();
+    const responseManga = await mangaStore.getAllManga();
+    allChapter.value = responseChapter;
+    allManga.value = responseManga;
 })
 
 const deleteChapter = async (id: number) => {
