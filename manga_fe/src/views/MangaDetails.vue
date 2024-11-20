@@ -36,7 +36,7 @@
 <script setup lang="ts">
 
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
-import type { MangaData } from '@/interface/Manga';
+import type MangaData from '@/interface/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { formatDate } from '@/utils/utils';
 import { onMounted, ref } from 'vue';
