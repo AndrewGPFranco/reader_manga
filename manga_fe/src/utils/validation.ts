@@ -1,4 +1,4 @@
-import type { MangaData } from "@/interface/Manga";
+import type MangaData from "@/interface/Manga";
 
 export function validationFields(data: MangaData): string | boolean{
     if(data.title === "") {
