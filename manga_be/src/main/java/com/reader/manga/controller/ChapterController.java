@@ -59,8 +59,8 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit")
-    public ResponseEntity<String> updateChapterById(@RequestParam Long id, @RequestBody UpdateChapterDTO dto) {
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<String> updateChapterById(@PathVariable Long id, @RequestBody UpdateChapterDTO dto) {
         service.updateChapter(id, dto);
         logger.info("*******************Updating chapter!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
