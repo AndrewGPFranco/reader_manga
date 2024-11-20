@@ -39,7 +39,7 @@
                 <n-gi :span="24">
                     <div style="display: flex; justify-content: flex-end">
                         <n-button round type="primary" @click="handleValidateButtonClick">
-                            Register
+                            {{ action }}
                         </n-button>
                     </div>
                 </n-gi>
@@ -63,6 +63,12 @@ const size = ref('medium');
 const props = defineProps<{
   manga: MangaData;
   isEdit: boolean;
+}>();
+
+const action = props.isEdit ? "Edit" : "Register";
+
+const emit = defineEmits<{
+  (event: 'requestResult', result: boolean): void;
 }>();
 
 const model = ref({
@@ -149,10 +155,14 @@ const mangaRegister = async () => {
     };
 
     let response = "";
+    
     if(!props.isEdit)
         response = await mangaStore.registerManga(data, clearFields);
-    else
+    else {
         response = await mangaStore.editManga(props.manga.id, data, clearFields);
+        emit('requestResult', true);
+    }
+
     message.info(response);
 }
 

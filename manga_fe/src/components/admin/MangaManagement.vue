@@ -20,8 +20,8 @@
             </tr>
         </tbody>
     </n-table>
-    <div v-if="isEdit" class="containerForm">
-        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit"/>
+    <div v-if="isEdit && !finishedEdition" class="containerForm">
+        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult"/>
     </div>
 </template>
 
@@ -39,6 +39,8 @@ const mangaStore = useMangaStore();
 const allManga = ref<MangaData[]>([]);
 const mangaToBeEdited = ref({} as MangaData);
 
+let finishedEdition = ref(false);
+
 const deleteManga = async (id: number) => {
     const response = await mangaStore.deleteMangaById(id);
     message.success(String(response));
@@ -53,6 +55,10 @@ onMounted(async () => {
     const newLocal = await mangaStore.getAllManga();
     allManga.value = newLocal;
 })
+
+const handleRequestResult = (result: boolean) => {
+    finishedEdition.value = result;
+};
 </script>
 
 <style scoped>
