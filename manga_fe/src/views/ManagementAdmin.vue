@@ -1,0 +1,38 @@
+<template>
+    <header>
+        <NavbarComponent />
+    </header>
+    <main>
+        <n-card title="General Management" style="height: 95vh;" size="huge">
+            <n-tabs style="height: 100%" type="card">
+                <n-tab-pane name="Mangá Management" tab="Mangá Management" style="height: 95%">
+                    <section class="container">
+                        <MangaManagement />
+                    </section>
+                </n-tab-pane>
+                <n-tab-pane name="Chapter Management" tab="Chapter Management" style="height: 95%">
+                    <section class="container">
+                        <!-- TODO implementar -->
+                    </section>
+                </n-tab-pane>
+                <n-tab-pane name="Pages Management" tab="Pages Management" style="height: 95%">
+                    <section class="container">
+                        <!-- TODO implementar -->
+                    </section>
+                </n-tab-pane>
+            </n-tabs>
+        </n-card>
+    </main>
+</template>
+
+<script setup lang="ts">
+import MangaManagement from '@/components/admin/MangaManagement.vue';
+import NavbarComponent from '@/components/global/NavbarComponent.vue';
+
+</script>
+
+<style scoped>
+    main {
+        padding: 15px;
+    }
+</style>

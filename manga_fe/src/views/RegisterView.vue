@@ -5,17 +5,17 @@
     <main>
         <n-card title="Records management" style="height: 95vh;" size="huge">
             <n-tabs style="height: 100%" type="card">
-                <n-tab-pane name="Mangá" tab="Mangá register" style="height: 95%">
+                <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
                     <section class="container">
                         <FormToMangaRegister />
                     </section>
                 </n-tab-pane>
-                <n-tab-pane name="Chapter" tab="Chapter register" style="height: 95%">
+                <n-tab-pane name="Chapter" tab="Chapter Register" style="height: 95%">
                     <section class="container">
                         <FormToChapterRegister :mangas="mangasArray" />
                     </section>
                 </n-tab-pane>
-                <n-tab-pane name="Chapter pages" tab="Chapter pages register" style="height: 95%">
+                <n-tab-pane name="Chapter Pages" tab="Chapter Pages Register" style="height: 95%">
                     <section class="container">
                         <FormToChapterPages :mangas="mangasArray" />
                     </section>

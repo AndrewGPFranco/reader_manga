@@ -4,6 +4,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import MangaList from '@/views/MangaList.vue'
 import MangaDetails from '@/views/MangaDetails.vue'
 import ChapterReading from '@/views/ChapterReading.vue'
+import ManagementAdmin from '@/views/ManagementAdmin.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/manga/:id/chapter/:id',
       name: 'chapterReading',
       component: ChapterReading
+    },
+    {
+      path: '/management/admin',
+      name: 'managementAdmin',
+      component: ManagementAdmin
     }
   ]
 })

@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter } from '@vicons/ionicons5'
+import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter, SettingsOutline as Management } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 
 function renderIcon(icon: Component) {
@@ -36,6 +36,12 @@ const menuOptions: MenuOption[] = [
       h(RouterLink, { to: '/manga/all' }, { default: () => 'My Library' }),
     icon: renderIcon(Library),
     path: '/manga/all'
+  },
+  {
+    whateverLabel: () =>
+      h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
+    icon: renderIcon(Management),
+    path: '/management/admin'
   }
 ]
 
