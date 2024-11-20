@@ -28,7 +28,7 @@ export const useMangaStore = defineStore('manga', {
         },
         async getFiveMangaRandom(): Promise<MangaDexData[]> {
             try {
-                const response = await api.get("/api/v1/chapter/get-covers")
+                const response = await api.get("/api/v1/manga/get-covers")
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response.data);
