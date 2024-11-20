@@ -72,8 +72,8 @@ public class MangaController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit")
-    public ResponseEntity<String> updateMangaById(@RequestParam Long id, @RequestBody UpdateMangaDTO dto) {
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<String> updateMangaById(@PathVariable Long id, @RequestBody UpdateMangaDTO dto) {
         service.updateManga(id, dto);
         logger.info("*******************Updating mangá!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
