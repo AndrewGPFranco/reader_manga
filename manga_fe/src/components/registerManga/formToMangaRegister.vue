@@ -37,7 +37,10 @@
                     <n-input-number v-model:value="model.sizeManga" placeholder="Enter size" />
                 </n-form-item-gi>
                 <n-gi :span="24">
-                    <div style="display: flex; justify-content: flex-end">
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <n-button round type="info" @click="cancel">
+                            Cancel
+                        </n-button>
                         <n-button round type="primary" @click="handleValidateButtonClick">
                             {{ action }}
                         </n-button>
@@ -69,6 +72,7 @@ const action = props.isEdit ? "Edit" : "Register";
 
 const emit = defineEmits<{
   (event: 'requestResult', result: boolean): void;
+  (event: 'cancelEdit', result: boolean): void
 }>();
 
 const model = ref({
@@ -180,5 +184,9 @@ const clearFields = () => {
     }
 
     formRef.value?.restoreValidation();
+}
+
+const cancel = () => {
+    emit("cancelEdit", true);
 }
 </script>

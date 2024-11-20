@@ -21,7 +21,7 @@
         </tbody>
     </n-table>
     <div v-if="isEdit && !finishedEdition" class="containerForm">
-        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult"/>
+        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
     </div>
 </template>
 
@@ -59,6 +59,10 @@ onMounted(async () => {
 const handleRequestResult = (result: boolean) => {
     finishedEdition.value = result;
 };
+
+const cancelEdit = () => {
+    isEdit.value = false;
+}
 </script>
 
 <style scoped>
