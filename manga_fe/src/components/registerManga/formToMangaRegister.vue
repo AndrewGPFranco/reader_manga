@@ -67,7 +67,7 @@ const props = defineProps<{
 
 const model = ref({
     title: props.manga != undefined ? props.manga.title : '' as string,
-    description: props.manga != undefined ? props.manga.title : '' as string,
+    description: props.manga != undefined ? props.manga.description : '' as string,
     sizeManga: props.manga != undefined ? props.manga.size : null as number | null,
     status: props.manga != undefined ? props.manga.status : StatusType.ONGOING as string,
     author: props.manga != undefined ? props.manga.author : '' as string,
@@ -148,7 +148,11 @@ const mangaRegister = async () => {
         image: image
     };
 
-    const response = await mangaStore.registerManga(data, clearFields);
+    let response = "";
+    if(!props.isEdit)
+        response = await mangaStore.registerManga(data, clearFields);
+    else
+        response = await mangaStore.editManga(props.manga.id, data, clearFields);
     message.info(response);
 }
 

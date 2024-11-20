@@ -21,7 +21,7 @@
         </tbody>
     </n-table>
     <div v-if="isEdit" class="containerForm">
-        <FormToMangaRegister :manga="mangaToBeEdited"/>
+        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit"/>
     </div>
 </template>
 

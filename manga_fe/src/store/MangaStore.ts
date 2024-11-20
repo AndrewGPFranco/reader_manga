@@ -52,6 +52,17 @@ export const useMangaStore = defineStore('manga', {
                 console.error(error);
                 return "An error occurred while registering, check the data.";
             }
-        }        
+        },
+        async editManga(id: number, data: {}, callback: Function): Promise<string> {
+            try {
+                // @ts-ignore
+                await api.put(`/api/v1/manga/edit/${id}`, data);
+                callback();
+                return "Successfully edited manga!";
+            } catch (error: any) {
+                console.error(error);
+                return "An error occurred while editing, please check the data.";
+            }
+        }    
     },
 })
