@@ -27,12 +27,15 @@ import type MangaData from '@/interface/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { onMounted, ref } from 'vue';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
+import { useMessage } from 'naive-ui';
 
 const mangaStore = useMangaStore();
 const allManga = ref<MangaData[]>([]);
+const message = useMessage();
 
-const deleteManga = (id: number) => {
-    // TODO implementar método
+const deleteManga = async (id: number) => {
+    const response = await mangaStore.deleteMangaById(id);
+    message.success(String(response));
 }
 
 const editManga = (id: number) => {

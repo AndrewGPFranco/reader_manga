@@ -33,6 +33,14 @@ export const useMangaStore = defineStore('manga', {
             } catch (error: any) {
                 throw new Error(error.response.data);
             }
+        },
+        async deleteMangaById(id: number): Promise<String> {
+            try {
+                const response = await api.delete(`/api/v1/manga/delete/${id}`);
+                return response.data;
+            } catch(error: any) {
+                throw new Error(error.response.data);
+            }
         }
     },
 })
