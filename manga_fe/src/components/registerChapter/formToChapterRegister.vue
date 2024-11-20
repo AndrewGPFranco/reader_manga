@@ -31,20 +31,35 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
-import { api } from '@/network/axiosInstance';
+import type MangaData from '@/interface/Manga';
+import { useChapterStore } from '@/store/ChapterStore';
 
 const props = defineProps({
     mangas: {
-        type: Array as () => { title: string, id: string }[],
+        type: Array as PropType<{ title: string; id: string }[]>,
+        required: true
+    },
+    chapter: {
+        type: Object as PropType<MangaData>,
+        required: true
+    },
+    isEdit: {
+        type: Boolean,
         required: true
     }
-})
+});
 
 const formRef = ref<FormInst | null>(null)
-const message = useMessage()
+const message = useMessage();
+const chapterStore = useChapterStore();
+
+const emit = defineEmits<{
+  (event: 'requestResult', result: boolean): void;
+  (event: 'cancelEdit', result: boolean): void
+}>();
 
 const size = ref('medium')
 
@@ -80,7 +95,7 @@ const rules = {
     }
 }
 
-function handleValidateButtonClick(e: MouseEvent) {
+const handleValidateButtonClick = (e: MouseEvent) => {
     e.preventDefault()
     formRef.value?.validate((errors) => {
         if (!errors) {
@@ -91,7 +106,18 @@ function handleValidateButtonClick(e: MouseEvent) {
     })
 }
 
-function chapterRegister() {
+const clearFields = () => {
+    model.value = {
+        title: '',
+        description: '',
+        pagesNumber: null as number | null,
+        manga: null as string | null
+    }
+
+    formRef.value?.restoreValidation();
+}
+
+const chapterRegister = async () => {
     const { title, description, pagesNumber, manga } = model.value;
     const data = {
         title: title,
@@ -99,22 +125,16 @@ function chapterRegister() {
         numberPages: pagesNumber,
         mangaId: manga
     }
-    
-    api.post("/api/v1/chapter/create", data)
-        .then(() => {
-            message.success("Chapter successfully registered!");
-            model.value = {
-                title: '',
-                description: '',
-                pagesNumber: null,
-                manga: null
-            }
 
-            formRef.value?.restoreValidation();
-        })
-        .catch((error) => {
-            console.error(error);
-            message.error("An error occurred while registering, check the data.");
-        })
+    let response = "";
+    
+    if(!props.isEdit)
+        response = await chapterStore.registerChapter(data, clearFields);
+    else {
+        response = await chapterStore.editChapter(props.chapter.id, data, clearFields);
+        emit('requestResult', true);
+    }
+
+    message.info(response);
 }
 </script>

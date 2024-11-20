@@ -4,57 +4,56 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>Status</th>
+                <th>Number of Pages</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="manga in allManga" :key="manga.id">
-                <td>{{ manga.id }}</td>
-                <td>{{ manga.title }}</td>
-                <td>{{ manga.status }}</td>
+            <tr v-for="chapter in allChapter" :key="chapter.id">
+                <td>{{ chapter.id }}</td>
+                <td>{{ chapter.title }}</td>
+                <td>{{ chapter.numberPages }}</td>
                 <td class="tdButtons">
-                    <Delete class="buttonDelete" @click="deleteManga(manga.id)" />
-                    <Edit class="buttonEdit" @click="editManga(manga)" />
+                    <Delete class="buttonDelete" @click="deleteChapter(chapter.id)" />
+                    <Edit class="buttonEdit" @click="editChapter(chapter)" />
                 </td>
             </tr>
         </tbody>
     </n-table>
     <div v-if="isEdit && !finishedEdition" class="containerForm">
-        <FormToMangaRegister :manga="mangaToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
+        <FormToMangaRegister :manga="chapterToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
     </div>
 </template>
 
 <script setup lang="ts">
-import type MangaData from '@/interface/Manga';
-import { useMangaStore } from '@/store/MangaStore';
-import { onMounted, ref } from 'vue';
+import type ChapterData from '@/interface/Chapter';
+import { useChapterStore } from '@/store/ChapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
-import FormToMangaRegister from '../registerManga/formToMangaRegister.vue';
+import { onMounted, ref } from 'vue';
 
 const isEdit = ref(false);
 const message = useMessage();
-const mangaStore = useMangaStore();
-const allManga = ref<MangaData[]>([]);
-const mangaToBeEdited = ref({} as MangaData);
+const chapterStore = useChapterStore();
+const allChapter = ref([] as ChapterData[]);
+const chapterToBeEdited = ref({} as ChapterData);
 
 let finishedEdition = ref(false);
 
-const deleteManga = async (id: number) => {
-    const response = await mangaStore.deleteMangaById(id);
+onMounted(async () => {
+    const response = await chapterStore.getAllChapter();
+    allChapter.value = response;
+})
+
+const deleteChapter = async (id: number) => {
+    const response = await chapterStore.deleteChapterById(id);
     message.success(String(response));
 }
 
-const editManga = (manga: MangaData) => {
+const editChapter = (chapter: ChapterData) => {
     isEdit.value = true;
-    mangaToBeEdited.value = manga;
+    chapterToBeEdited.value = chapter;
 }
-
-onMounted(async () => {
-    const response = await mangaStore.getAllManga();
-    allManga.value = response;
-})
 
 const handleRequestResult = (result: boolean) => {
     finishedEdition.value = result;

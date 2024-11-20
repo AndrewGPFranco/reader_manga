@@ -4,7 +4,8 @@ import { defineStore } from "pinia";
 
 export const useChapterStore = defineStore('chapter', {
     state: () => ({
-        chapter: {} as ChapterData
+        chapter: {} as ChapterData,
+        allChapter: [] as ChapterData[]
     }),
 
     actions: {
@@ -16,6 +17,43 @@ export const useChapterStore = defineStore('chapter', {
             } catch (error: any) {
                 throw new Error(error.response.data);
             }
-        }
-    },
+        },
+        async getAllChapter(): Promise<ChapterData[]> {
+            try {
+                const response = await api.get("/api/v1/chapter/readAll");
+                this.allChapter = response.data;
+                return this.allChapter;
+            } catch (error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+        async registerChapter(data: {}, callback: Function): Promise<string> {
+            try {
+                await api.post("/api/v1/chapter/create", data);
+                callback();
+                return "Chapter successfully registered!";
+            } catch (error: any) {
+                console.error(error);
+                return "An error occurred while registering, check the data.";
+            }
+        },
+        async editChapter(id: number, data: {}, callback: Function): Promise<string> {
+            try {
+                await api.put(`/api/v1/chapter/edit/${id}`, data);
+                callback();
+                return "Successfully edited chapter!";
+            } catch (error: any) {
+                console.error(error);
+                return "An error occurred while editing, please check the data.";
+            }
+        },
+        async deleteChapterById(id: number): Promise<String> {
+            try {
+                const response = await api.delete(`/api/v1/chapter/delete/${id}`);
+                return response.data;
+            } catch(error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+    }
 })
