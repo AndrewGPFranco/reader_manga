@@ -24,7 +24,7 @@
                             Cancel
                         </n-button>
                         <n-button round type="primary" @click="handleValidateButtonClick">
-                            Register
+                            {{ action }}
                         </n-button>
                     </div>
                 </n-gi>
@@ -58,6 +58,7 @@ const props = defineProps({
 const formRef = ref<FormInst | null>(null)
 const message = useMessage();
 const chapterStore = useChapterStore();
+const action = props.isEdit ? "Edit" : "Register";
 
 const emit = defineEmits<{
   (event: 'requestResult', result: boolean): void;

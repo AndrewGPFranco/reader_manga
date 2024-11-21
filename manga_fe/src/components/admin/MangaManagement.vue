@@ -43,6 +43,9 @@ let finishedEdition = ref(false);
 
 const deleteManga = async (id: number) => {
     const response = await mangaStore.deleteMangaById(id);
+    if(response)
+        allManga.value = allManga.value.filter(manga => manga.id !== id);
+
     message.success(String(response));
 }
 
@@ -56,8 +59,10 @@ onMounted(async () => {
     allManga.value = response;
 })
 
-const handleRequestResult = (result: boolean) => {
+const handleRequestResult = async (result: boolean) => {
     finishedEdition.value = result;
+    if (result)
+        allManga.value = await mangaStore.getAllManga();
 };
 
 const cancelEdit = () => {

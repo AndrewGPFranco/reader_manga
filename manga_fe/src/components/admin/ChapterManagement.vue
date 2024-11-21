@@ -54,6 +54,9 @@ onMounted(async () => {
 
 const deleteChapter = async (id: number) => {
     const response = await chapterStore.deleteChapterById(id);
+    if(response)
+        allChapter.value = allChapter.value.filter(chapter => chapter.id !== id);
+
     message.success(String(response));
 }
 
@@ -62,8 +65,10 @@ const editChapter = (chapter: ChapterData) => {
     chapterToBeEdited.value = chapter;
 }
 
-const handleRequestResult = (result: boolean) => {
+const handleRequestResult = async (result: boolean) => {
     finishedEdition.value = result;
+    if (result)
+        allChapter.value = await chapterStore.getAllChapter();
 };
 
 const cancelEdit = () => {

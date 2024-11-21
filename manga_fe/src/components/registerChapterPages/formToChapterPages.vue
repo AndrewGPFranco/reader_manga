@@ -17,7 +17,7 @@
                             Cancel
                         </n-button>
                         <n-button round type="primary" @click="handleValidateButtonClick">
-                            Register
+                            {{ action }}
                         </n-button>
                     </div>
                 </n-gi>
@@ -33,16 +33,6 @@ import { useChapterStore } from '@/store/ChapterStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { computed, ref, watch, type PropType } from 'vue';
 
-const message = useMessage();
-const formRef = ref<FormInst | null>(null);
-const chapterStore = useChapterStore();
-let mangaSelected = ref();
-
-const emit = defineEmits<{
-  (event: 'requestResult', result: boolean): void;
-  (event: 'cancelEdit', result: boolean): void
-}>();
-
 const props = defineProps({
     mangas: {
         type: Array as () => { title: string; id: number }[],
@@ -57,6 +47,18 @@ const props = defineProps({
         required: true
     }
 });
+
+const message = useMessage();
+const formRef = ref<FormInst | null>(null);
+const chapterStore = useChapterStore();
+const action = props.isEdit ? "Edit" : "Register";
+
+let mangaSelected = ref();
+
+const emit = defineEmits<{
+  (event: 'requestResult', result: boolean): void;
+  (event: 'cancelEdit', result: boolean): void
+}>();
 
 const model = ref({
     page: props.page != undefined && props.isEdit ? props.page.chapterPage : '',

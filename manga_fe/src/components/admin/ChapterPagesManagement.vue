@@ -27,7 +27,7 @@
 import { useChapterStore } from '@/store/ChapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useMangaStore } from '@/store/MangaStore';
 import type PageData from '@/interface/Page';
 import type MangaData from '@/interface/Manga';
@@ -53,6 +53,9 @@ onMounted(async () => {
 
 const deletePage = async (id: number) => {
     const response = await chapterStore.deletePageById(id);
+    if(response)
+        allPages.value = allPages.value.filter(page => page.id !== id);
+
     message.success(String(response));
 }
 
@@ -61,8 +64,11 @@ const editPage = (page: PageData) => {
     pageToBeEdited.value = page;
 }
 
-const handleRequestResult = (result: boolean) => {
+const handleRequestResult = async (result: boolean) => {
     finishedEdition.value = result;
+
+    if (result)
+        allPages.value = await chapterStore.getAllPages();
 };
 
 const cancelEdit = () => {
