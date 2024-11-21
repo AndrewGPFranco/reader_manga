@@ -56,4 +56,9 @@ onMounted(async () => {
         max-height: 70vh; 
         overflow-y: auto;
     }
+
+    .n-card {
+        height: 95vh;
+        box-sizing: border-box;
+    }
 </style>

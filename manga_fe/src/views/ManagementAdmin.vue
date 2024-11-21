@@ -37,4 +37,9 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue';
     main {
         padding: 15px;
     }
+
+    .n-card {
+        height: 95vh;
+        box-sizing: border-box;
+    }
 </style>

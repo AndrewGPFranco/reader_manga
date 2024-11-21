@@ -4,7 +4,7 @@
         <div class="banner"></div>
         <h2 class="section-title">Famous Mangá</h2>
 
-        <div class="favorites-grid">
+        <div class="favorites-grid" v-if="mangas.length != 0">
             <div v-for="(item, index) in mangas" :key="index" class="item-card">
               <img :src="item.imageUrl" alt="Capa de mangá">
             </div>
@@ -65,5 +65,10 @@ const getMangaRandom = async () => {
 
   .item-card img {
     height: 250px;
+  }
+
+  .n-card {
+    height: 95vh;
+    box-sizing: border-box;
   }
 </style>  

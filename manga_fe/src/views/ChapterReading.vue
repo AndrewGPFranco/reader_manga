@@ -65,4 +65,9 @@ onMounted(async () => {
         align-items: center;
         padding: 15px;
     }
+
+    .n-card {
+        height: 95vh;
+        box-sizing: border-box;
+    }
 </style>

@@ -27,7 +27,7 @@
 import { useChapterStore } from '@/store/ChapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useMangaStore } from '@/store/MangaStore';
 import type PageData from '@/interface/Page';
 import type MangaData from '@/interface/Manga';

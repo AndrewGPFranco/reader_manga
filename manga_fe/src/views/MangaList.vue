@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="My library" style="height: 95vh;" size="huge">
+        <n-card title="My library" size="huge">
             <section class="container flex gap-5 wrap justify-center">
                 <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray" :key="manga.title">
                     <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
@@ -46,7 +46,12 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-main {
-    padding: 15px;
-}
+    main {
+        padding: 15px;
+    }
+
+    .n-card {
+        height: 95vh;
+        box-sizing: border-box;
+    }
 </style>
