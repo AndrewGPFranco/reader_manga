@@ -76,15 +76,15 @@ const emit = defineEmits<{
 }>();
 
 const model = ref({
-    title: props.manga != undefined ? props.manga.title : '' as string,
-    description: props.manga != undefined ? props.manga.description : '' as string,
-    sizeManga: props.manga != undefined ? props.manga.size : null as number | null,
-    status: props.manga != undefined ? props.manga.status : StatusType.ONGOING as string,
-    author: props.manga != undefined ? props.manga.author : '' as string,
-    gender: props.manga != undefined ? props.manga.gender : '' as string,
-    image: props.manga != undefined ? props.manga.image : '' as string,
-    creationDate: props.manga != undefined ? props.manga.creationDate : null as Date | null,
-    closingDate: props.manga != undefined ? props.manga.closingDate : null as Date | null,
+    title: props.manga != undefined && props.isEdit ? props.manga.title : '' as string,
+    description: props.manga != undefined && props.isEdit ? props.manga.description : '' as string,
+    sizeManga: props.manga != undefined && props.isEdit ? props.manga.size : null as number | null,
+    status: props.manga != undefined && props.isEdit ? props.manga.status : StatusType.ONGOING as string,
+    author: props.manga != undefined && props.isEdit ? props.manga.author : '' as string,
+    gender: props.manga != undefined && props.isEdit ? props.manga.gender : '' as string,
+    image: props.manga != undefined && props.isEdit ? props.manga.image : '' as string,
+    creationDate: props.manga != undefined && props.isEdit ? props.manga.creationDate : null as Date | null,
+    closingDate: props.manga != undefined && props.isEdit ? props.manga.closingDate : null as Date | null,
 });
 
 const status = [StatusType.ONGOING, StatusType.FINISHED].map(

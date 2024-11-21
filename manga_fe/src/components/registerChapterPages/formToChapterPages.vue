@@ -59,7 +59,7 @@ const props = defineProps({
 });
 
 const model = ref({
-    page: props.page != undefined ? props.page.chapterPage : '',
+    page: props.page != undefined && props.isEdit ? props.page.chapterPage : '',
     chapter: null as string | null,
     manga: null as string | null
 })

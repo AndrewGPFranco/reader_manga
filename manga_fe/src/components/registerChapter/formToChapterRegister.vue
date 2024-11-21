@@ -67,9 +67,9 @@ const emit = defineEmits<{
 const size = ref('medium')
 
 const model = ref({
-    title: props.chapter.title != undefined ? props.chapter.title : '',
-    description: props.chapter.description != undefined ? props.chapter.description : '',
-    pagesNumber: props.chapter.numberPages != undefined ? props.chapter.numberPages : null as number | null,
+    title: props.chapter.title != undefined && props.isEdit ? props.chapter.title : '',
+    description: props.chapter.description != undefined && props.isEdit ? props.chapter.description : '',
+    pagesNumber: props.chapter.numberPages != undefined && props.isEdit ? props.chapter.numberPages : null as number | null,
     manga: null as string | null
 })
 
