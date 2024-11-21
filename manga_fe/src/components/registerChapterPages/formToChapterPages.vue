@@ -12,7 +12,10 @@
                     <n-select v-model:value="model.chapter" placeholder="Choose the chapter" :options="generalOptionsChapter" />
                 </n-form-item-gi>
                 <n-gi :span="24">
-                    <div style="display: flex; justify-content: flex-end">
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <n-button round type="info" @click="cancel">
+                            Cancel
+                        </n-button>
                         <n-button round type="primary" @click="handleValidateButtonClick">
                             Register
                         </n-button>
@@ -137,4 +140,8 @@ watch(model.value, () => {
             })
     }
 })
+
+const cancel = () => {
+    emit("cancelEdit", true);
+}
 </script>
