@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +28,7 @@ class MangaServiceTest {
         createManga();
         Manga expected = new Manga(1L, "test", "test description", 1,
                 DATE,null, StatusType.ONGOING,
-                "Andrew","Shonen","url.com.br", null);
+                "Andrew","Shonen","url.com.br", true, List.of());
 
         Manga result = service.findById(expected.getId());
 
@@ -51,7 +52,7 @@ class MangaServiceTest {
     }
 
     @Test
-    public void testDeleteManga() {
+    void testDeleteManga() {
         createManga();
         service.deleteManga(1L);
     }

@@ -6,6 +6,7 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
+import com.reader.manga.mapper.MangaMapper;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
@@ -24,8 +25,11 @@ public class MangaService {
 
     private final MangaRepository repository;
 
-    public MangaService(MangaRepository repository) {
+    private final MangaMapper mangaMapper;
+
+    public MangaService(MangaRepository repository, MangaMapper mangaMapper) {
         this.repository = repository;
+        this.mangaMapper = mangaMapper;
     }
 
     public GetMangaDTO createManga(MangaDTO dto) {
@@ -124,5 +128,11 @@ public class MangaService {
                     }
                     return null;
                 });
+    }
+
+    public void changeMangaFavoriteStatus(boolean isFavorite, Long idManga) {
+        Manga manga = repository.findById(idManga).orElseThrow(() -> new NotFoundException("Mangá not found."));
+        manga.setFavorite(isFavorite);
+        updateManga(idManga, mangaMapper.mangaToUpdateMangaDTO(manga));
     }
 }

@@ -1,9 +1,11 @@
 package com.reader.manga.dto.manga;
 
 import com.reader.manga.enums.StatusType;
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
 public record UpdateMangaDTO(
         String title,
         String description,
@@ -13,5 +15,6 @@ public record UpdateMangaDTO(
         StatusType status,
         String author,
         String gender,
-        String image
+        String image,
+        boolean isFavorite
 ) {}

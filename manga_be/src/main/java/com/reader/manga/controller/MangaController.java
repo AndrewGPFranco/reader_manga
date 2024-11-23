@@ -101,4 +101,10 @@ public class MangaController {
                 .collectList();
     }
 
+    @PostMapping("/favorite/{id}")
+    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long id, @RequestBody boolean newStatus) {
+        service.changeMangaFavoriteStatus(newStatus, id);
+        return ResponseEntity.ok().body("Change made");
+    }
+
 }
