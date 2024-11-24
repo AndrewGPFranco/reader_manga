@@ -1,7 +1,7 @@
 import type MangaData from "@/interface/Manga";
 import type MangaDexData from "@/interface/MangaDex";
+import type ResponseRequest from "@/interface/ResponseRequest";
 import { api } from "@/network/axiosInstance";
-import type { MessageApiInjection } from "naive-ui/es/message/src/MessageProvider";
 import { defineStore } from "pinia";
 
 export const useMangaStore = defineStore('manga', {
@@ -62,6 +62,16 @@ export const useMangaStore = defineStore('manga', {
                 console.error(error);
                 return "An error occurred while editing, please check the data.";
             }
-        }    
+        },
+        async setFavorite(isFavorite: boolean, id: number): Promise<ResponseRequest> {
+            try {
+                const data = { isFavorite: isFavorite }
+                const response = await api.post(`/api/v1/manga/favorite/${id}`, data);
+                return { statusCode: response.status, message: response.data };
+            } catch (error: any) {
+                console.error(error);
+                return { statusCode: error, message: "An error occurred while editing, please check the data." };
+            }
+        }             
     },
 })

@@ -13,4 +13,5 @@ export default interface MangaData {
     gender: string;
     image: string;
     chapters: ChapterData[];
+    favorite: boolean;
 }
