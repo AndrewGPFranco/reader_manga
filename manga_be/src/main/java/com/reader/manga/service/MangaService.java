@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MangaService {
@@ -27,9 +26,29 @@ public class MangaService {
 
     private final MangaMapper mangaMapper;
 
+    static Map<String, String> coversManga = new HashMap<>();
+
     public MangaService(MangaRepository repository, MangaMapper mangaMapper) {
         this.repository = repository;
         this.mangaMapper = mangaMapper;
+    }
+
+    static {
+        // Manga Covers
+        coversManga.put("Naruto", "https://m.media-amazon.com/images/I/91xUwI2UEVL._AC_UF894,1000_QL80_.jpg");
+        coversManga.put("Demon Slayer", "https://http2.mlstatic.com/D_NQ_NP_942681-MLU50423106087_062022-O.webp");
+        coversManga.put("Jojo's", "https://m.media-amazon.com/images/I/91XRYa+4cHL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("My Hero Academia", "https://m.media-amazon.com/images/I/71bELfIWTDL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("One Piece", "https://m.media-amazon.com/images/I/716EGgqzyOL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("Hunter x Hunter", "https://www.jbchost.com.br/editorajbc/wp-content/uploads/2008/01/hunterxhunter-01-capaaz.jpg");
+        coversManga.put("Bungo Stray Dogs", "https://m.media-amazon.com/images/I/81zJTGwXrtL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("Boruto", "https://m.media-amazon.com/images/I/81HpeSpReJL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("Tokyo Revengers", "https://m.media-amazon.com/images/I/711RqaljbIL.jpg");
+        coversManga.put("Record of Ragnarok", "https://m.media-amazon.com/images/I/91ifr0L+XrL.jpg");
+        coversManga.put("Dragon Ball", "https://m.media-amazon.com/images/I/81fHfEpEHTL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("Hellsing", "https://m.media-amazon.com/images/I/71KIyHsciwL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("Noragami", "https://m.media-amazon.com/images/I/91f63co2jKL._AC_UF1000,1000_QL80_.jpg");
+        coversManga.put("The Rising of the Shield Hero", "https://m.media-amazon.com/images/I/71szZSLOYGL._AC_UF894,1000_QL80_.jpg");
     }
 
     public GetMangaDTO createManga(MangaDTO dto) {
@@ -138,5 +157,11 @@ public class MangaService {
 
     public List<Manga> getFavoriteManga() {
         return repository.getAllFavoriteManga();
+    }
+
+    public List<Map.Entry<String, String>> getRandomCovers(int max) {
+        List<Map.Entry<String, String>> covers = new ArrayList<>(coversManga.entrySet());
+        Collections.shuffle(covers);
+        return covers.stream().limit(max).toList();
     }
 }

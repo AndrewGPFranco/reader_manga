@@ -21,7 +21,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/manga")
@@ -112,5 +114,13 @@ public class MangaController {
     public ResponseEntity<List<Manga>> getAllFavoriteManga() {
         List<Manga> favoriteManga = service.getFavoriteManga();
         return ResponseEntity.ok().body(favoriteManga);
+    }
+
+    @GetMapping("/my-covers/{max}")
+    public ResponseEntity<List<String>> getMyCovers(@PathVariable int max) {
+        List<Map.Entry<String, String>> randomCovers = service.getRandomCovers(max);
+        List<String> finalList = new ArrayList<>();
+        randomCovers.forEach(r -> finalList.add(r.getValue()));
+        return ResponseEntity.ok().body(finalList);
     }
 }
