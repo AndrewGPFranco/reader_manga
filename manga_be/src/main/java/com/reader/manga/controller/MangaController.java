@@ -2,6 +2,7 @@ package com.reader.manga.controller;
 
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
+import com.reader.manga.dto.manga.UpdateFavoriteDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
@@ -102,8 +103,8 @@ public class MangaController {
     }
 
     @PostMapping("/favorite/{id}")
-    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long id, @RequestBody boolean newStatus) {
-        service.changeMangaFavoriteStatus(newStatus, id);
+    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long id, @RequestBody UpdateFavoriteDTO favoriteDTO) {
+        service.changeMangaFavoriteStatus(favoriteDTO.isFavorite(), id);
         return ResponseEntity.ok().body("Change made");
     }
 
