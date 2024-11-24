@@ -72,6 +72,10 @@ export const useMangaStore = defineStore('manga', {
                 console.error(error);
                 return { statusCode: error, message: "An error occurred while editing, please check the data." };
             }
-        }             
+        },
+        async getAllFavorites(): Promise<MangaData[]> {
+            const response = await api.get("/api/v1/manga/favorites");
+            return response.data;
+        }          
     },
 })

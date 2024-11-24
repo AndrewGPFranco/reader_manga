@@ -108,4 +108,9 @@ public class MangaController {
         return ResponseEntity.ok().body("Change made");
     }
 
+    @GetMapping("/favorites")
+    public ResponseEntity<List<Manga>> getAllFavoriteManga() {
+        List<Manga> favoriteManga = service.getFavoriteManga();
+        return ResponseEntity.ok().body(favoriteManga);
+    }
 }

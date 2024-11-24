@@ -135,4 +135,8 @@ public class MangaService {
         manga.setFavorite(isFavorite);
         updateManga(idManga, mangaMapper.mangaToUpdateMangaDTO(manga));
     }
+
+    public List<Manga> getFavoriteManga() {
+        return repository.getAllFavoriteManga();
+    }
 }
