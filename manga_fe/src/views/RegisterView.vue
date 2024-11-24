@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="Records management" style="height: 95vh;" size="huge">
+        <n-card title="Records management" size="huge">
             <n-tabs style="height: 100%" type="card">
                 <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
                     <section class="container">
@@ -60,5 +60,7 @@ onMounted(async () => {
     .n-card {
         height: 95vh;
         box-sizing: border-box;
+        overflow: scroll;
+        overflow-x: hidden;
     }
 </style>

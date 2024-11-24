@@ -65,6 +65,8 @@ onMounted(async () => {
     .n-card {
         height: 95vh;
         box-sizing: border-box;
+        overflow: scroll;
+        overflow-x: hidden;
     }
 
     .relative {

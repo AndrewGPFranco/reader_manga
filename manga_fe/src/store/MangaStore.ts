@@ -27,9 +27,19 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
-        async getFiveMangaRandom(): Promise<MangaDexData[]> {
+        // Get 5 manga covers from the MangaDex API
+        async getFiveMangaRandomMD(): Promise<MangaDexData[]> {
             try {
                 const response = await api.get("/api/v1/manga/get-covers")
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+        // Get 5 manga covers from my library
+        async getFiveMangaRandom(): Promise<string[]> {
+            try {
+                const response = await api.get("/api/v1/manga/my-covers/30")
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response.data);

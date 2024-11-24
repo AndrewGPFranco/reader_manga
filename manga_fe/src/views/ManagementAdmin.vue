@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="General Management" style="height: 95vh;" size="huge">
+        <n-card title="General Management" size="huge">
             <n-tabs style="height: 100%" type="card">
                 <n-tab-pane name="Mangá Management" tab="Mangá Management" style="height: 95%">
                     <section class="container">
@@ -41,5 +41,7 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue';
     .n-card {
         height: 95vh;
         box-sizing: border-box;
+        overflow: scroll;
+        overflow-x: hidden;
     }
 </style>

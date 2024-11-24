@@ -6,7 +6,7 @@
 
         <div class="favorites-grid" v-if="mangas.length != 0">
             <div v-for="(item, index) in mangas" :key="index" class="item-card">
-              <img :src="item.imageUrl" alt="Capa de mangá">
+              <img :src="item" alt="Capa de mangá">
             </div>
         </div>
       </n-card>
@@ -14,12 +14,11 @@
 </template>
   
 <script setup lang="ts">
-import type MangaDexData from '@/interface/MangaDex';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
   
-const mangas = ref<MangaDexData[]>([]);
+const mangas = ref<string[]>([]);
 const message = useMessage();
 const mangaStore = useMangaStore();
 
@@ -65,10 +64,13 @@ const getMangaRandom = async () => {
 
   .item-card img {
     height: 250px;
+    border-radius: 5px;
   }
 
   .n-card {
     height: 95vh;
     box-sizing: border-box;
+    overflow: scroll;
+    overflow-x: hidden;
   }
 </style>  
