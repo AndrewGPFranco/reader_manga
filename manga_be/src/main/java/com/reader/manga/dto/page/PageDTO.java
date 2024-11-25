@@ -1,4 +1,4 @@
-package com.reader.manga.dto.chapter;
+package com.reader.manga.dto.page;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

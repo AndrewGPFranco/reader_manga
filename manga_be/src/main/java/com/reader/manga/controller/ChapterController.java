@@ -1,6 +1,8 @@
 package com.reader.manga.controller;
 
 import com.reader.manga.dto.chapter.*;
+import com.reader.manga.dto.page.PageDTO;
+import com.reader.manga.dto.page.UpdatePageDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
@@ -32,7 +34,7 @@ public class ChapterController {
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
         logger.info("*******************Creating mangá!*******************");
         service.createChapter(dto);
-        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), dto.numberPages());
+        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), 0);
         return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
     }
 

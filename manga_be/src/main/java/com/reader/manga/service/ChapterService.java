@@ -1,7 +1,7 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.chapter.PageDTO;
-import com.reader.manga.dto.chapter.UpdatePageDTO;
+import com.reader.manga.dto.page.PageDTO;
+import com.reader.manga.dto.page.UpdatePageDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.dto.chapter.ChapterDTO;
@@ -38,7 +38,7 @@ public class ChapterService {
         try {
             Optional<Manga> mangaById = mangaRepository.findById(dto.mangaId());
             if (mangaById.isPresent()) {
-                Chapter chapter = new Chapter(dto.title(), dto.description(), dto.numberPages(), mangaById.get());
+                Chapter chapter = new Chapter(dto.title(), dto.description(), 0, mangaById.get());
                 repository.save(chapter);
             } else {
                 throw new NotFoundException("manga with ID " + dto.mangaId() + " not found");
@@ -68,7 +68,6 @@ public class ChapterService {
 
         UtilsService.updateField(dto.title(), chapter::setTitle);
         UtilsService.updateField(dto.description(), chapter::setDescription);
-        UtilsService.updateField(dto.numberPages(), chapter::setNumberPages);
 
         repository.save(chapter);
     }

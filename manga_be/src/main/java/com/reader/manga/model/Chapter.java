@@ -37,8 +37,7 @@ public class Chapter {
 
     @NotNull
     @Column(name = "number_pages")
-    @Min(1)
-    private Integer numberPages;
+    private Integer numberPages = 0;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
