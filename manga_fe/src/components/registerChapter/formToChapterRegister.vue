@@ -15,9 +15,6 @@
                 <n-form-item-gi :span="12" label="Mangá" path="manga">
                     <n-select v-model:value="model.manga" placeholder="Choose the mangá" :options="generalOptions" />
                 </n-form-item-gi>
-                <n-form-item-gi :span="12" label="Pages number" path="pagesNumber">
-                    <n-input-number v-model:value="model.pagesNumber" />
-                </n-form-item-gi>
                 <n-gi :span="24">
                     <div style="display: flex; justify-content: flex-end; gap: 10px;">
                         <n-button round type="info" @click="cancel">
@@ -70,7 +67,6 @@ const size = ref('medium')
 const model = ref({
     title: props.chapter.title != undefined && props.isEdit ? props.chapter.title : '',
     description: props.chapter.description != undefined && props.isEdit ? props.chapter.description : '',
-    pagesNumber: props.chapter.numberPages != undefined && props.isEdit ? props.chapter.numberPages : null as number | null,
     manga: null as string | null
 })
 
@@ -87,11 +83,6 @@ const rules = {
     description: {
         required: true,
         message: 'Please enter description...'
-    },
-    pagesNumber: {
-        type: 'number',
-        required: true,
-        message: 'Please enter the pages number...'
     },
     manga: {
         required: true,
@@ -114,7 +105,6 @@ const clearFields = () => {
     model.value = {
         title: '',
         description: '',
-        pagesNumber: null as number | null,
         manga: null as string | null
     }
 
@@ -122,11 +112,10 @@ const clearFields = () => {
 }
 
 const chapterRegister = async () => {
-    const { title, description, pagesNumber, manga } = model.value;
+    const { title, description, manga } = model.value;
     const data = {
         title: title,
         description: description,
-        numberPages: pagesNumber,
         mangaId: manga
     }
 
