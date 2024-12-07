@@ -81,7 +81,8 @@ const generalOptionsManga = props.mangas.map(v => ({
 const pageRegister = async () => {
     const data = {
         page: model.value.page,
-        chapter_id: model.value.chapter
+        chapter_id: model.value.chapter,
+        idChapter: model.value.chapter
     }
 
     let response = "";

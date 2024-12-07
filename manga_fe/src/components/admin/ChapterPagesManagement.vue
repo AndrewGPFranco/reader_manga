@@ -12,7 +12,7 @@
                 <td>{{ page.id }}</td>
                 <td>{{ page.chapterPage }}</td>
                 <td class="tdButtons">
-                    <Delete class="buttonDelete" @click="deletePage(page.id)" />
+                    <Delete class="buttonDelete" @click="deletePage(page.id, page.idChapter)" />
                     <Edit class="buttonEdit" @click="editPage(page)" />
                 </td>
             </tr>
@@ -51,10 +51,10 @@ onMounted(async () => {
     allPages.value =  await chapterStore.getAllPages();
 })
 
-const deletePage = async (id: number) => {
-    const response = await chapterStore.deletePageById(id);
+const deletePage = async (idPage: number, idChapter: number) => {
+    const response = await chapterStore.deletePageById(idPage, idChapter);
     if(response)
-        allPages.value = allPages.value.filter(page => page.id !== id);
+        allPages.value = allPages.value.filter(page => page.id !== idPage);
 
     message.success(String(response));
 }
