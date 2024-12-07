@@ -1,0 +1,19 @@
+{
+    "name": "Node.js Development",
+    "dockerFile": "../Dockerfile",
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "extensions": [
+        "ms-vscode.node-debug2",
+        "dbaeumer.vscode-eslint",
+        "vue.volar",
+        "vitest.explorer",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode"
+    ],
+    "forwardPorts": [
+        3000
+    ],
+    "postCreateCommand": "npm install"
+}
