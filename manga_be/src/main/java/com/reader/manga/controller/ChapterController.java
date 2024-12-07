@@ -4,6 +4,7 @@ import com.reader.manga.dto.chapter.*;
 import com.reader.manga.dto.page.PageDTO;
 import com.reader.manga.dto.page.UpdatePageDTO;
 import com.reader.manga.model.Chapter;
+import com.reader.manga.model.PageChapter;
 import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -81,8 +82,8 @@ public class ChapterController {
     }
 
     @GetMapping("/getAll-pages")
-    public ResponseEntity<List<com.reader.manga.model.Page>> getAllPages() {
-        List<com.reader.manga.model.Page> allPages = service.getAllPages();
+    public ResponseEntity<List<PageChapter>> getAllPages() {
+        List<PageChapter> allPages = service.getAllPages();
         logger.info("Searching all pages");
         return ResponseEntity.ok().body(allPages);
     }

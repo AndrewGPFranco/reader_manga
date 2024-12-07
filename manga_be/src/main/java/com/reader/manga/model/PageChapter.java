@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "page")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Page {
+public class PageChapter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Page {
     @Column(name = "id_chapter")
     private Long idChapter;
 
-    public Page(String chapterPage, Chapter chapter, Long idChapter) {
+    public PageChapter(String chapterPage, Chapter chapter, Long idChapter) {
         this.chapterPage = chapterPage;
         this.chapter = chapter;
         this.idChapter = idChapter;

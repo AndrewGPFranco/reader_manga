@@ -8,6 +8,7 @@ import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
+import com.reader.manga.model.PageChapter;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PageRepository;
@@ -79,13 +80,13 @@ public class ChapterService {
 
     public void pageChapterRegister(PageDTO pageDTO) {
         Chapter chapter = repository.findById(pageDTO.chapter_id()).orElseThrow(() -> new NotFoundException("Chapter not found."));
-        com.reader.manga.model.Page page = new com.reader.manga.model.Page(pageDTO.page(), chapter, pageDTO.idChapter());
+        PageChapter page = new PageChapter(pageDTO.page(), chapter, pageDTO.idChapter());
         chapter.setNumberPages(chapter.getNumberPages() + 1);
         repository.save(chapter);
         pageRepository.save(page);
     }
 
-    public List<com.reader.manga.model.Page> getAllPages() {
+    public List<PageChapter> getAllPages() {
         return pageRepository.findAll();
     }
 
@@ -98,7 +99,7 @@ public class ChapterService {
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {
-        com.reader.manga.model.Page page = pageRepository.findById(id)
+        PageChapter page = pageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Page not found"));
 
         UtilsService.updateField(dto.page(), page::setChapterPage);
