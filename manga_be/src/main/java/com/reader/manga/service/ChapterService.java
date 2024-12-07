@@ -92,10 +92,11 @@ public class ChapterService {
 
     public void deletePage(Long idPage, Long idChapter) {
         Chapter chapter = repository.findById(idChapter).orElseThrow(() -> new NotFoundException("Chapter not found."));
-        pageRepository.findById(idPage);
         pageRepository.deleteById(idPage);
-        chapter.setNumberPages(chapter.getNumberPages() - 1);
-        repository.save(chapter);
+        if(chapter.getNumberPages() > 0) {
+            chapter.setNumberPages(chapter.getNumberPages() - 1);
+            repository.save(chapter);
+        }
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {
