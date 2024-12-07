@@ -79,7 +79,9 @@ public class ChapterService {
 
     public void pageChapterRegister(PageDTO pageDTO) {
         Chapter chapter = repository.findById(pageDTO.chapter_id()).orElseThrow(() -> new NotFoundException("Chapter not found."));
-        com.reader.manga.model.Page page = new com.reader.manga.model.Page(pageDTO.page(), chapter);
+        com.reader.manga.model.Page page = new com.reader.manga.model.Page(pageDTO.page(), chapter, pageDTO.idChapter());
+        chapter.setNumberPages(chapter.getNumberPages() + 1);
+        repository.save(chapter);
         pageRepository.save(page);
     }
 
@@ -87,9 +89,12 @@ public class ChapterService {
         return pageRepository.findAll();
     }
 
-    public void deletePage(Long id) {
-        pageRepository.findById(id);
-        pageRepository.deleteById(id);
+    public void deletePage(Long idPage, Long idChapter) {
+        Chapter chapter = repository.findById(idChapter).orElseThrow(() -> new NotFoundException("Chapter not found."));
+        pageRepository.findById(idPage);
+        pageRepository.deleteById(idPage);
+        chapter.setNumberPages(chapter.getNumberPages() - 1);
+        repository.save(chapter);
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {

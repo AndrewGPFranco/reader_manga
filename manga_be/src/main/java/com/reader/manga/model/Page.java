@@ -29,8 +29,12 @@ public class Page {
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
-    public Page(String chapterPage, Chapter chapter) {
+    @Column(name = "id_chapter")
+    private Long idChapter;
+
+    public Page(String chapterPage, Chapter chapter, Long idChapter) {
         this.chapterPage = chapterPage;
         this.chapter = chapter;
+        this.idChapter = idChapter;
     }
 }

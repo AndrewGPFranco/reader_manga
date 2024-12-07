@@ -88,10 +88,10 @@ public class ChapterController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/page/{id}")
-    public ResponseEntity<String> deletePage(@PathVariable Long id) {
+    @DeleteMapping("/delete/page/{idPage}/{idChapter}")
+    public ResponseEntity<String> deletePage(@PathVariable Long idPage, @PathVariable Long idChapter) {
         logger.info("*******************Deleting page!*******************");
-        service.deletePage(id);
+        service.deletePage(idPage,idChapter);
         return ResponseEntity.status(HttpStatus.OK).body("Page deleted successfully!");
     }
 
