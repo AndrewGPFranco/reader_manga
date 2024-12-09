@@ -1,16 +1,10 @@
-FROM ubuntu:latest AS build
-
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
-
-RUN apt-get install maven -y
-RUN mvn clean install
-
 FROM openjdk:17-jdk-slim
 
+WORKDIR /app
+
+COPY target/manga-0.0.1-SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005", "-jar", "app.jar"]
+
 EXPOSE 8080
-
-COPY --from=build /target/manga-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+EXPOSE 5005
