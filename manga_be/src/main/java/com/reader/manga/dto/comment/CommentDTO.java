@@ -7,6 +7,5 @@ public record CommentDTO(
         String nameUser,
         String commentText,
         FeedbackType feedback,
-        CommentCategoryType commentCategoryType,
         Long mangaId
 ) {}

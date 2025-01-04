@@ -42,21 +42,16 @@ public class Comment {
     @Column(name = "feedback")
     private FeedbackType feedback;
 
-    @NotNull
-    @Column(name = "comment_category")
-    private CommentCategoryType commentCategoryType;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
 
-    public Comment(String nameUser, String commentText, LocalDateTime timestamp, FeedbackType feedback, CommentCategoryType commentCategoryType, Manga manga) {
+    public Comment(String nameUser, String commentText, LocalDateTime timestamp, FeedbackType feedback, Manga manga) {
         this.nameUser = nameUser;
         this.commentText = commentText;
         this.timestamp = timestamp;
         this.feedback = feedback;
-        this.commentCategoryType = commentCategoryType;
         this.manga = manga;
     }
 }

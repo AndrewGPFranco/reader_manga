@@ -14,12 +14,12 @@ public class CommentMapper {
 
     public static Comment dtoToEntity(CommentDTO commentDTO, Manga manga) {
         return new Comment(commentDTO.nameUser(), commentDTO.commentText(),
-                LocalDateTime.now(), commentDTO.feedback(), commentDTO.commentCategoryType(), manga);
+                LocalDateTime.now(), commentDTO.feedback(), manga);
     }
 
     public static CommentDTO entityToDto(Comment comment) {
         return new CommentDTO(comment.getNameUser(), comment.getCommentText(),
-                comment.getFeedback(), comment.getCommentCategoryType(), comment.getId());
+                comment.getFeedback(), comment.getId());
     }
 
 }
