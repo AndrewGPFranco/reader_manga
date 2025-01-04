@@ -20,7 +20,7 @@ public class CommentController {
     }
 
     @PostMapping("/new/manga")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CommentDTO> registerCommentForManga(@RequestBody CommentDTO dto) {
         CommentDTO comment = commentService.registerComment(dto);
         return ResponseEntity.ok().body(comment);
