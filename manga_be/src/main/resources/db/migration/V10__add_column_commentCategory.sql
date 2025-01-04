@@ -1,2 +1,0 @@
-ALTER TABLE comment
-ADD COLUMN comment_category VARCHAR(11) NOT NULL;
