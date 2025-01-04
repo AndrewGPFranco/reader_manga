@@ -1,17 +1,16 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
+  postgres:
+    image: postgres:latest
     environment:
-      MYSQL_ROOT_PASSWORD: andrew
-      MYSQL_DATABASE: reader
-      MYSQL_USER: andrew
-      MYSQL_PASSWORD: gomes
+      - 'POSTGRES_DB=reader'
+      - 'POSTGRES_USER=andrew'
+      - 'POSTGRES_PASSWORD=gomes'
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgres
 
   app:
     build:
@@ -21,7 +20,7 @@ services:
       - "8080:8080"
       - "5005:5005"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/reader
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/reader
       SPRING_DATASOURCE_USERNAME: andrew
       SPRING_DATASOURCE_PASSWORD: gomes
       SPRING_PROFILES_ACTIVE: dev
@@ -29,7 +28,7 @@ services:
       - ./src:/app/src
       - ~/.m2:/root/.m2
     depends_on:
-      - mysql
+      - postgres
     command: ./mvnw spring-boot:run
 
 volumes:
