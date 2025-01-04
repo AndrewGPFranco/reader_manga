@@ -42,4 +42,11 @@ public class Comment {
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
 
+    public Comment(String nameUser, String commentText, LocalDateTime timestamp, FeedbackType feedback, Manga manga) {
+        this.nameUser = nameUser;
+        this.commentText = commentText;
+        this.timestamp = timestamp;
+        this.feedback = feedback;
+        this.manga = manga;
+    }
 }
