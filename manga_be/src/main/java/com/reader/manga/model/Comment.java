@@ -40,6 +40,7 @@ public class Comment {
 
     @NotNull
     @Column(name = "feedback")
+    @Enumerated(EnumType.STRING)
     private FeedbackType feedback;
 
     @JsonIgnore

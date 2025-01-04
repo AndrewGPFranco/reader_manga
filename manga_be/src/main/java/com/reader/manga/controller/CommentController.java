@@ -3,6 +3,7 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.comment.CommentDTO;
 import com.reader.manga.service.CommentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class CommentController {
     }
 
     @PostMapping("/new/manga")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CommentDTO> registerCommentForManga(@RequestBody CommentDTO dto) {
         CommentDTO comment = commentService.registerComment(dto);
         return ResponseEntity.ok().body(comment);
