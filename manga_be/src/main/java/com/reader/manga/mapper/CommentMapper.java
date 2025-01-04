@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Component
 public class CommentMapper {
 
+    private CommentMapper() {}
+
     public static Comment dtoToEntity(CommentDTO commentDTO, Manga manga) {
         return new Comment(commentDTO.nameUser(), commentDTO.commentText(),
                 LocalDateTime.now(), commentDTO.feedback(), commentDTO.commentCategoryType(), manga);
