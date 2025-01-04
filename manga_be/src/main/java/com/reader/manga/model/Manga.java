@@ -79,6 +79,9 @@ public class Manga {
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Chapter> chapters;
 
+    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Comment> comments;
+
     public Manga(String title, String description, Integer size, Date creationDate, Date closingDate, StatusType status, String gender, String author, String image) {
         this.title = title;
         this.description = description;
