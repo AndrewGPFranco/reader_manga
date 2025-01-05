@@ -1,7 +1,9 @@
 <template>
     <div class="home">
       <n-card>
-        <div class="banner"></div>
+        <div class="banner">
+          <img src="../../assets/home/bannerHome.jpeg" alt="Banner do site">
+        </div>
         <h2 class="section-title">Famous Mangá</h2>
 
         <div class="favorites-grid" v-if="mangas.length != 0">
@@ -40,12 +42,11 @@ const getMangaRandom = async () => {
     flex-direction: column;
     gap: 1rem;
   }
-  
-  .banner {
+
+  .banner img {
     width: 100%;
-    height: 30vh;
-    background-image: url("../../assets/home/bannerHome.jpeg");
-    border-radius: 8px;
+    height: 250px;
+    border-radius: 5px;
   }
   
   .section-title {
