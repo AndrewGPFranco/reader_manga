@@ -5,7 +5,7 @@ Nesse projeto o meu intuito é criar um leitor de mangás do meu jeito, com os m
 ## Stack Utilizada
 
 - Java
-- My SQL
+- ~~My SQL~~ PostgreSQL
 - Vue Js
 - Docker
 - Typescript
