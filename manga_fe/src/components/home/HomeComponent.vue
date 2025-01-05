@@ -45,7 +45,7 @@ const getMangaRandom = async () => {
 
   .banner img {
     width: 100%;
-    height: 250px;
+    height: 400px;
     border-radius: 5px;
   }
   
