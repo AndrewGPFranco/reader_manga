@@ -1,7 +1,6 @@
 package com.reader.manga.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.reader.manga.enums.CommentCategoryType;
 import com.reader.manga.enums.FeedbackType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
