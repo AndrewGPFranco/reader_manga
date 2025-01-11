@@ -2,10 +2,11 @@ package com.reader.manga.service;
 
 import com.reader.manga.enums.FeedbackType;
 import com.reader.manga.enums.StatusType;
+import com.reader.manga.mapper.CommentMapper;
+import com.reader.manga.mapper.MangaMapper;
 import com.reader.manga.model.Comment;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.CommentRepository;
-import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.utils.AbstractTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +19,13 @@ import java.util.Date;
 class CommentServiceTest extends AbstractTests {
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @Autowired
-    private MangaRepository mangaRepository;
+    private MangaService mangaService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     @DisplayName("Responsável por salvar um comentário no banco de dados.")
@@ -38,7 +42,7 @@ class CommentServiceTest extends AbstractTests {
                 "www.imagem.com.br"
         );
 
-        mangaRepository.save(manga);
+        mangaService.createManga(MangaMapper.entityToDto(manga));
 
         Comment comment = new Comment(
                 "Andrew Silva",
@@ -48,7 +52,7 @@ class CommentServiceTest extends AbstractTests {
                 manga
         );
 
-        commentRepository.save(comment);
+        commentService.registerComment(CommentMapper.entityToDto(comment));
 
         Assertions.assertEquals(1, commentRepository.findAll().size());
     }

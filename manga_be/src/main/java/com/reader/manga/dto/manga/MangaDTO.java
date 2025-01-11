@@ -3,9 +3,11 @@ package com.reader.manga.dto.manga;
 import com.reader.manga.enums.StatusType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
 public record MangaDTO(
         @NotNull @NotBlank String title,
         @NotNull @NotBlank String description,
