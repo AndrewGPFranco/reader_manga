@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -27,14 +26,10 @@ public class CommentService {
     }
 
     public CommentDTO registerComment(CommentDTO commentDTO) {
-        try {
-            Manga mangaById = mangaService.findById(commentDTO.mangaId());
-            Comment comment = CommentMapper.dtoToEntity(commentDTO, mangaById);
-            Comment commentSaved = commentRepository.save(comment);
-            return CommentMapper.entityToDto(commentSaved);
-        } catch (NotFoundException e) {
-            throw new NotFoundException(e.getMessage());
-        }
+        Manga mangaById = mangaService.findById(commentDTO.mangaId());
+        Comment comment = CommentMapper.dtoToEntity(commentDTO, mangaById);
+        Comment commentSaved = commentRepository.save(comment);
+        return CommentMapper.entityToDto(commentSaved);
     }
 
     /**
@@ -43,14 +38,11 @@ public class CommentService {
      * @return lista de comentários do mangá pesquisado.
      */
     public List<CommentDTO> getComments(Long idManga) {
-        try {
-            Manga mangaById = mangaService.findById(idManga);
-            List<CommentDTO> listCommentDto = new ArrayList<>();
-            mangaById.getComments().forEach(comment -> listCommentDto.add(CommentMapper.entityToDto(comment)));
-            return listCommentDto;
-        } catch (NotFoundException e) {
-            throw new NotFoundException(e.getMessage());
-        }
+        Manga mangaById = mangaService.findById(idManga);
+        return mangaById.getComments()
+                .stream()
+                .map(CommentMapper::entityToDto)
+                .toList();
     }
 
     /**
@@ -71,9 +63,7 @@ public class CommentService {
      * Responsável por remover todos os comentários do sistema.
      */
     public void deleteAllComments() {
-        List<Comment> allComments = commentRepository.findAll();
-        if(!allComments.isEmpty())
-            allComments.forEach(comment -> commentRepository.deleteById(comment.getId()));
+        commentRepository.deleteAll();
     }
 
     /**
@@ -95,11 +85,11 @@ public class CommentService {
      * @param id do comentário a ser excluído.
      */
     public void deleteCommentById(Long id) {
-        Optional<Comment> commentById = commentRepository.findById(id);
-        if(commentById.isPresent())
-            commentRepository.deleteById(id);
-        else
-            throw new NotFoundException("Nenhum comentário encontrado com o id: " + id);
+        commentRepository.findById(id)
+                .ifPresentOrElse(
+                        comment -> commentRepository.deleteById(comment.getId()),
+                        () -> { throw new NotFoundException("Nenhum comentário encontrado com o id: " + id); }
+                );
     }
 
     public CommentDTO updateComment(Long id, String commentUser) {
