@@ -33,8 +33,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         var admin = User.withUsername("andrew")
                 .password(encoder.encode(password))
                 .roles("ADMIN")
@@ -57,5 +56,10 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public WebClient webClient(WebClient.Builder builder) {
         return builder.baseUrl("https://api.mangadex.org").build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
