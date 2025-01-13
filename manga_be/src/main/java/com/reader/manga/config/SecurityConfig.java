@@ -1,5 +1,6 @@
 package com.reader.manga.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -7,7 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -20,26 +21,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
+    @Value("${reader.user.password}")
+    private String password;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((auth) -> auth
+        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
                 .anyRequest().authenticated()
         ).httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
+    public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails userAdmin = User.withUsername("andrew")
-                .password(encoder.encode("mypassword"))
+        var admin = User.withUsername("andrew")
+                .password(encoder.encode(password))
                 .roles("ADMIN")
                 .build();
-        UserDetails user = User.withUsername("beatriz")
-                .password(encoder.encode("mypassword"))
+        var user = User.withUsername("beatriz")
+                .password(encoder.encode(password))
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(userAdmin, user);
+        return new InMemoryUserDetailsManager(admin, user);
     }
 
     @Override
