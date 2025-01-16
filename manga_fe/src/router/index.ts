@@ -6,6 +6,7 @@ import MangaDetails from '@/views/MangaDetails.vue'
 import ChapterReading from '@/views/ChapterReading.vue'
 import ManagementAdmin from '@/views/ManagementAdmin.vue'
 import FavoriteManga from '@/views/FavoriteManga.vue'
+import AllMangasList from '@/views/AllMangasList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/manga/favorites',
       name: 'favoriteManga',
       component: FavoriteManga
+    },
+    {
+      path: '/mangas',
+      name: 'mangas',
+      component: AllMangasList
     }
   ]
 })

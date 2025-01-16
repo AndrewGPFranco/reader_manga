@@ -1,0 +1,44 @@
+<template>
+    <header>
+        <NavbarComponent />
+    </header>
+    <main>
+        <n-card title="My library" size="huge">
+            <section class="container flex gap-5 wrap justify-center">
+                <!-- TODO: popular com dados da API -->
+                <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray" :key="manga.title">
+                    <div class="relative">
+                        <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
+                    </div>
+                    <div class="p-4">
+                        <router-link :to="`/manga/${manga.id}`" class="text-xl font-bold mb-2 text-gray-800">{{ manga.title }}</router-link>
+                        <div class="text-gray-700 text-sm mt-2">
+                            <p><span class="font-semibold">Number of chapters: </span>{{ manga.size }}</p>
+                            <p><span class="font-semibold">Status: </span> {{ manga.status }}</p>
+                            <p><span class="font-semibold">Author: </span> {{ manga.author }}</p>
+                            <p><span class="font-semibold">Gender: </span> {{ manga.gender }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </n-card>
+    </main>
+</template>
+
+<script lang="ts" setup>
+import NavbarComponent from '@/components/global/NavbarComponent.vue';
+
+</script>
+
+<style scoped>
+    main {
+        padding: 15px;
+    }
+
+    .n-card {
+        height: 95vh;
+        box-sizing: border-box;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+</style>
