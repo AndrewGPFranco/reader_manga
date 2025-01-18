@@ -40,7 +40,6 @@ public class MangaController {
 
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/read/{id}")
     public ResponseEntity<Manga> getMangaById(@PathVariable Long id) {
         logger.info("*******************Reading manga!*******************");
@@ -48,7 +47,7 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body(manga);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
         logger.info("*******************Creating mangá!*******************");
@@ -56,7 +55,7 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(manga);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteManga(@PathVariable Long id) {
         logger.info("*******************Deleting mangá!*******************");
@@ -74,7 +73,7 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateMangaById(@PathVariable Long id, @RequestBody UpdateMangaDTO dto) {
         service.updateManga(id, dto);

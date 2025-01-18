@@ -30,7 +30,7 @@ public class ChapterController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
         logger.info("*******************Creating mangá!*******************");
@@ -39,7 +39,7 @@ public class ChapterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/readAll")
     public ResponseEntity<List<Chapter>> readAllChapters(
             @RequestParam(defaultValue = "0") int page,
@@ -50,7 +50,7 @@ public class ChapterController {
         return ResponseEntity.status(HttpStatus.OK).body(chapters);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteChapter(@PathVariable Long id) {
         logger.info("*******************Deleting mangá!*******************");
@@ -58,7 +58,7 @@ public class ChapterController {
         return ResponseEntity.status(HttpStatus.OK).body("Chapter deleted successfully!");
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateChapterById(@PathVariable Long id, @RequestBody UpdateChapterDTO dto) {
         service.updateChapter(id, dto);
@@ -73,7 +73,7 @@ public class ChapterController {
         return ResponseEntity.ok().body(chapter);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/register/page")
     public ResponseEntity<String> registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {
         service.pageChapterRegister(pageDTO);
@@ -88,7 +88,7 @@ public class ChapterController {
         return ResponseEntity.ok().body(allPages);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/page/{idPage}/{idChapter}")
     public ResponseEntity<String> deletePage(@PathVariable Long idPage, @PathVariable Long idChapter) {
         logger.info("*******************Deleting page!*******************");
@@ -96,7 +96,7 @@ public class ChapterController {
         return ResponseEntity.status(HttpStatus.OK).body("Page deleted successfully!");
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit/page/{id}")
     public ResponseEntity<String> updatePageById(@PathVariable Long id, @RequestBody UpdatePageDTO dto) {
         service.updatePage(id, dto);
