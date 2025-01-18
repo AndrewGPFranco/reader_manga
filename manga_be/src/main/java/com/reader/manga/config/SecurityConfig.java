@@ -7,11 +7,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,25 +21,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Value("${reader.user.password}")
     private String password;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults());
-        return http.build();
-    }
+    private static final String[] WHITE_LIST = {"/api/v1/login", "/api/v1/register/user"};
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        var admin = User.withUsername("andrew")
-                .password(encoder.encode(password))
-                .roles("ADMIN")
-                .build();
-        var user = User.withUsername("beatriz")
-                .password(encoder.encode(password))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(admin, user);
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST)
+                .permitAll().anyRequest().authenticated()).httpBasic(Customizer.withDefaults()).build();
     }
 
     @Override
