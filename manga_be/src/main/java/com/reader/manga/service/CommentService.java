@@ -1,6 +1,7 @@
 package com.reader.manga.service;
 
 import com.reader.manga.dto.comment.CommentDTO;
+import com.reader.manga.dto.comment.CommentResponseDTO;
 import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.mapper.CommentMapper;
 import com.reader.manga.model.Comment;
@@ -25,11 +26,11 @@ public class CommentService {
         this.mangaService = mangaService;
     }
 
-    public CommentDTO registerComment(CommentDTO commentDTO) {
+    public CommentResponseDTO registerComment(CommentDTO commentDTO, String username) {
         Manga mangaById = mangaService.findById(commentDTO.mangaId());
-        Comment comment = CommentMapper.dtoToEntity(commentDTO, mangaById);
+        Comment comment = CommentMapper.dtoToEntity(commentDTO, mangaById, username);
         Comment commentSaved = commentRepository.save(comment);
-        return CommentMapper.entityToDto(commentSaved);
+        return CommentMapper.entityToResponseDTO(commentSaved);
     }
 
     /**
@@ -37,11 +38,11 @@ public class CommentService {
      * @param idManga do mangá a ser resgatados os comentários.
      * @return lista de comentários do mangá pesquisado.
      */
-    public List<CommentDTO> getComments(Long idManga) {
+    public List<CommentResponseDTO> getComments(Long idManga) {
         Manga mangaById = mangaService.findById(idManga);
         return mangaById.getComments()
                 .stream()
-                .map(CommentMapper::entityToDto)
+                .map(CommentMapper::entityToResponseDTO)
                 .toList();
     }
 
@@ -49,12 +50,12 @@ public class CommentService {
      * Responsável por buscar todos os comentários do sistema.
      * @return todos os comentários do sistema.
      */
-    public List<CommentDTO> getAllComments() {
-        List<CommentDTO> listCommentDto = new ArrayList<>();
+    public List<CommentResponseDTO> getAllComments() {
+        List<CommentResponseDTO> listCommentDto = new ArrayList<>();
         List<Comment> allComments = commentRepository.findAll();
 
         if(!allComments.isEmpty())
-            allComments.forEach(comment -> listCommentDto.add(CommentMapper.entityToDto(comment)));
+            allComments.forEach(comment -> listCommentDto.add(CommentMapper.entityToResponseDTO(comment)));
 
         return listCommentDto;
     }
@@ -92,7 +93,7 @@ public class CommentService {
                 );
     }
 
-    public CommentDTO updateComment(Long id, String commentUser) {
+    public CommentResponseDTO updateComment(Long id, String commentUser) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Nenhum comentário encontrado com o id: " + id));
 
@@ -100,6 +101,6 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return CommentMapper.entityToDto(comment);
+        return CommentMapper.entityToResponseDTO(comment);
     }
 }

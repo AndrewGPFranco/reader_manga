@@ -25,7 +25,6 @@ public class Comment {
     @NotNull
     @NotBlank
     @Column(name = "name_user")
-    // TODO: Improvisado até implementar gerenciamento de login.
     private String nameUser;
 
     @NotNull

@@ -1,11 +1,13 @@
 package com.reader.manga.controller;
 
 import com.reader.manga.dto.comment.CommentDTO;
+import com.reader.manga.dto.comment.CommentResponseDTO;
 import com.reader.manga.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,22 +22,22 @@ public class CommentController {
 
     @PostMapping("/new/manga")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<CommentDTO> registerCommentForManga(@RequestBody CommentDTO dto) {
-        CommentDTO comment = commentService.registerComment(dto);
+    public ResponseEntity<CommentResponseDTO> registerCommentForManga(@RequestBody CommentDTO dto, Principal principal) {
+        CommentResponseDTO comment = commentService.registerComment(dto, principal.getName());
         return ResponseEntity.ok().body(comment);
     }
 
     @GetMapping("/manga/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<List<CommentDTO>> getCommentsByManga(@PathVariable Long id) {
-        List<CommentDTO> comments = commentService.getComments(id);
+    public ResponseEntity<List<CommentResponseDTO>> getCommentsByManga(@PathVariable Long id) {
+        List<CommentResponseDTO> comments = commentService.getComments(id);
         return ResponseEntity.ok().body(comments);
     }
 
     @GetMapping("/manga")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<List<CommentDTO>> getCommentsByManga() {
-        List<CommentDTO> comments = commentService.getAllComments();
+    public ResponseEntity<List<CommentResponseDTO>> getCommentsByManga() {
+        List<CommentResponseDTO> comments = commentService.getAllComments();
         return ResponseEntity.ok().body(comments);
     }
 
@@ -59,8 +61,8 @@ public class CommentController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO comment) {
-        CommentDTO commentDto = commentService.updateComment(id, comment.commentText());
+    public ResponseEntity<CommentResponseDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO comment) {
+        CommentResponseDTO commentDto = commentService.updateComment(id, comment.commentText());
         return ResponseEntity.ok().body(commentDto);
     }
 }
