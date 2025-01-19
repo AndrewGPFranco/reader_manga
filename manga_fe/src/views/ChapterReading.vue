@@ -18,7 +18,7 @@
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import type ChapterData from '@/interface/Chapter';
 import type PageData from '@/interface/Page';
-import { useChapterStore } from '@/store/ChapterStore';
+import { useChapterStore } from '@/store/chapterStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
@@ -26,8 +26,8 @@ import { useRoute } from 'vue-router';
 const chapterStore = useChapterStore();
 const message = useMessage();
 const route = useRoute();
-let chapter = ref<ChapterData>({} as ChapterData);
-let pageList = computed(() => chapter.value.pages);
+let chapterData = ref<ChapterData>({} as ChapterData);
+let pageList = computed(() => chapterData.value.pages);
 let currentPage = ref<PageData>({} as PageData);
 
 const nextPage = () => {
@@ -50,7 +50,7 @@ const previousPage = () => {
 
 onMounted(async () => {
     const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-    chapter.value = await chapterStore.getChapterByID(id);
+    chapterData.value = await chapterStore.getChapterByID(id);
 
     if(pageList.value != undefined) {
         currentPage.value = pageList.value[0];

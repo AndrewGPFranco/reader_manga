@@ -3,16 +3,23 @@ import type MangaDexData from "@/interface/MangaDex";
 import type ResponseRequest from "@/interface/ResponseRequest";
 import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
+import { useAuthStore } from "./AuthStore";
+import type { User } from "@/class/User";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
-        manga: [] as MangaData[]
+        manga: [] as MangaData[],
+        user: useAuthStore().getUserAutenticado() as User
     }),
 
     actions: {
         async getAllManga(): Promise<MangaData[]> {
             try {
-                const response = await api.get("/api/v1/manga/readAll");
+                const response = await api.get("/api/v1/manga/readAll", {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 this.manga = response.data;
                 return this.manga;
             } catch (error: any) {
@@ -21,7 +28,11 @@ export const useMangaStore = defineStore('manga', {
         },
         async getMangaById(id: string): Promise<MangaData> {
             try {
-                const response = await api.get(`/api/v1/manga/read/${id}`);
+                const response = await api.get(`/api/v1/manga/read/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response.data);
@@ -30,7 +41,11 @@ export const useMangaStore = defineStore('manga', {
         // Get 5 manga covers from the MangaDex API
         async getFiveMangaRandomMD(): Promise<MangaDexData[]> {
             try {
-                const response = await api.get("/api/v1/manga/get-covers")
+                const response = await api.get("/api/v1/manga/get-covers", {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response.data);
@@ -39,7 +54,11 @@ export const useMangaStore = defineStore('manga', {
         // Get 5 manga covers from my library
         async getFiveMangaRandom(): Promise<string[]> {
             try {
-                const response = await api.get("/api/v1/manga/my-covers/30")
+                const response = await api.get("/api/v1/manga/my-covers/30", {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response.data);
@@ -47,7 +66,11 @@ export const useMangaStore = defineStore('manga', {
         },
         async deleteMangaById(id: number): Promise<String> {
             try {
-                const response = await api.delete(`/api/v1/manga/delete/${id}`);
+                const response = await api.delete(`/api/v1/manga/delete/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch(error: any) {
                 throw new Error(error.response.data);
@@ -55,7 +78,11 @@ export const useMangaStore = defineStore('manga', {
         },
         async registerManga(data: {}, callback: Function): Promise<string> {
             try {
-                await api.post("/api/v1/manga/create", data);
+                await api.post("/api/v1/manga/create", data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Mangá successfully registered!";
             } catch (error: any) {
@@ -65,7 +92,11 @@ export const useMangaStore = defineStore('manga', {
         },
         async editManga(id: number, data: {}, callback: Function): Promise<string> {
             try {
-                await api.put(`/api/v1/manga/edit/${id}`, data);
+                await api.put(`/api/v1/manga/edit/${id}`, data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Successfully edited manga!";
             } catch (error: any) {
@@ -76,7 +107,11 @@ export const useMangaStore = defineStore('manga', {
         async setFavorite(isFavorite: boolean, id: number): Promise<ResponseRequest> {
             try {
                 const data = { isFavorite: isFavorite }
-                const response = await api.post(`/api/v1/manga/favorite/${id}`, data);
+                const response = await api.post(`/api/v1/manga/favorite/${id}`, data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return { statusCode: response.status, message: response.data };
             } catch (error: any) {
                 console.error(error);
@@ -84,7 +119,11 @@ export const useMangaStore = defineStore('manga', {
             }
         },
         async getAllFavorites(): Promise<MangaData[]> {
-            const response = await api.get("/api/v1/manga/favorites");
+            const response = await api.get("/api/v1/manga/favorites", {
+                headers: {
+                    Authorization: `${this.user.getToken()}`
+                }
+            });
             return response.data;
         }          
     },

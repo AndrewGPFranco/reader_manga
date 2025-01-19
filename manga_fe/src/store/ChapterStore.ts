@@ -2,17 +2,24 @@ import type ChapterData from "@/interface/Chapter";
 import type PageData from "@/interface/Page";
 import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
+import { useAuthStore } from "./AuthStore";
+import type { User } from "@/class/User";
 
 export const useChapterStore = defineStore('chapter', {
     state: () => ({
         chapter: {} as ChapterData,
-        allChapter: [] as ChapterData[]
+        allChapter: [] as ChapterData[],
+        user: useAuthStore().getUserAutenticado() as User
     }),
 
     actions: {
         async getChapterByID(id: string): Promise<ChapterData> {
             try {
-                const response = await api.get(`/api/v1/chapter/read/${id}`);
+                const response = await api.get(`/api/v1/chapter/read/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 this.chapter = response.data;
                 return this.chapter;
             } catch (error: any) {
@@ -21,7 +28,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async getAllChapter(): Promise<ChapterData[]> {
             try {
-                const response = await api.get("/api/v1/chapter/readAll");
+                const response = await api.get("/api/v1/chapter/readAll", {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 this.allChapter = response.data;
                 return this.allChapter;
             } catch (error: any) {
@@ -30,7 +41,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async registerChapter(data: {}, callback: Function): Promise<string> {
             try {
-                await api.post("/api/v1/chapter/create", data);
+                await api.post("/api/v1/chapter/create", data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Chapter successfully registered!";
             } catch (error: any) {
@@ -40,7 +55,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async editChapter(id: number, data: {}, callback: Function): Promise<string> {
             try {
-                await api.put(`/api/v1/chapter/edit/${id}`, data);
+                await api.put(`/api/v1/chapter/edit/${id}`, data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Successfully edited chapter!";
             } catch (error: any) {
@@ -50,7 +69,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async deleteChapterById(id: number): Promise<String> {
             try {
-                const response = await api.delete(`/api/v1/chapter/delete/${id}`);
+                const response = await api.delete(`/api/v1/chapter/delete/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch(error: any) {
                 throw new Error(error.response.data);
@@ -58,7 +81,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async getAllPages(): Promise<PageData[]> {
             try {
-                const response = await api.get("/api/v1/chapter/getAll-pages");
+                const response = await api.get("/api/v1/chapter/getAll-pages", {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch(error: any) {
                 throw new Error(error.response.data);
@@ -66,7 +93,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async deletePageById(id: number, idChapter: number): Promise<String> {
             try {
-                const response = await api.delete(`/api/v1/chapter/delete/page/${id}/${idChapter}`);
+                const response = await api.delete(`/api/v1/chapter/delete/page/${id}/${idChapter}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 return response.data;
             } catch(error: any) {
                 throw new Error(error.response.data);
@@ -74,7 +105,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async editPage(id: number, data: {}, callback: Function): Promise<string> {
             try {
-                await api.put(`/api/v1/chapter/edit/page/${id}`, data);
+                await api.put(`/api/v1/chapter/edit/page/${id}`, data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Successfully edited page!";
             } catch (error: any) {
@@ -84,7 +119,11 @@ export const useChapterStore = defineStore('chapter', {
         },
         async registerPage(data: {}, callback: Function): Promise<string> {
             try {
-                await api.post("/api/v1/chapter/register/page", data);
+                await api.post("/api/v1/chapter/register/page", data, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
                 callback();
                 return "Page successfully registered!";
             } catch (error: any) {
