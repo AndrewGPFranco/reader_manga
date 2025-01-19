@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="My library" size="huge">
+        <n-card title="All Manga" size="huge">
             <section class="container flex gap-5 wrap justify-center">
                 <!-- TODO: popular com dados da API -->
                 <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray" :key="manga.title">
@@ -27,6 +27,23 @@
 
 <script lang="ts" setup>
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
+import type MangaData from '@/interface/Manga';
+import { useMangaStore } from '@/store/MangaStore';
+import { useMessage } from 'naive-ui';
+import { onMounted, ref } from 'vue';
+
+const message = useMessage();
+const mangasArray = ref<MangaData[]>([]);
+const mangaStore = useMangaStore();
+
+onMounted(async () => {
+  try {
+    const mangas = await mangaStore.getAllManga();
+    mangasArray.value = mangas;
+  } catch (error: any) {
+    message.error(error.message || 'Erro ao buscar os mangás');
+  }
+});
 
 </script>
 
