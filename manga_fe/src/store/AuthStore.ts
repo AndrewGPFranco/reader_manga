@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     actions: {
-        async efetuarLogin(email: string, password: string) {
+        async efetuarLogin(email: string, password: string): Promise<boolean> {
             try {
                 const user = new User(email, password);
                 const result = await api.post('/api/v1/user/login', user);
@@ -18,6 +18,8 @@ export const useAuthStore = defineStore('auth', {
                 const token = user.getToken();
                 if (token)
                     this._setTokenLocalStorage(token);
+
+                return true;
             } catch(error: any) {
                 throw new Error(error.response.data);
             }
@@ -33,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('token', token);
         },
         isUserAutenticado(): boolean {
-            return this.user.getToken() !== undefined;
+            return this.user.getToken() !== "" || localStorage.getItem('token') !== null;
         }
     }
 })

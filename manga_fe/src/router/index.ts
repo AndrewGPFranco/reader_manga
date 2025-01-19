@@ -8,6 +8,7 @@ import ManagementAdmin from '@/views/ManagementAdmin.vue'
 import FavoriteManga from '@/views/FavoriteManga.vue'
 import AllMangasList from '@/views/AllMangasList.vue'
 import LoginView from '@/views/LoginView.vue'
+import { useAuthStore } from '@/store/AuthStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,19 @@ const router = createRouter({
       component: AllMangasList
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const isAuthenticated = authStore.isUserAutenticado();
+
+  if (to.name !== 'login' && !isAuthenticated) {
+    next({ name: 'login' });
+  } else if(to.name === 'login' && isAuthenticated) {
+    next({ name: 'home' });
+  } else {
+    next();
+  }
+});
 
 export default router

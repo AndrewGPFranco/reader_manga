@@ -37,19 +37,24 @@
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import router from '@/router';
 import { useAuthStore } from '@/store/AuthStore';
+import { useMessage } from 'naive-ui';
 import { ref } from 'vue';
 
 const useAuth = useAuthStore();
+const message = useMessage();
 
 const email = ref<string>("");
 const password = ref<string>("");
 
-const efetuarLogin = (e: MouseEvent) => {
+const efetuarLogin = async (e: MouseEvent) => {
     e.preventDefault();
-    useAuth.efetuarLogin(email.value, password.value);
+    const result = await useAuth.efetuarLogin(email.value, password.value);
 
-    limparCampos();
-    router.push({ name: 'Home' });
+    if(result) {
+      limparCampos();
+      router.push({ name: 'home' });
+    } else
+      message.error("Erro ao realizar login");
 }
 
 const limparCampos = () => {
