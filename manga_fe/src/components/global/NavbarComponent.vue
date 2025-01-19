@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter, SettingsOutline as Management, Bookmark as Favorites, DocumentOutline } from '@vicons/ionicons5'
+import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter, SettingsOutline as Management, Bookmark as Favorites, DocumentOutline, PersonOutline } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 
 function renderIcon(icon: Component) {
@@ -36,6 +36,12 @@ const menuOptions: MenuOption[] = [
       h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
     icon: renderIcon(NewChapter),
     path: '/register/chapter'
+  },
+  {
+    whateverLabel: () =>
+      h(RouterLink, { to: '/profile' }, { default: () => 'My Profile' }),
+    icon: renderIcon(PersonOutline),
+    path: '/profile'
   },
   {
     whateverLabel: () =>

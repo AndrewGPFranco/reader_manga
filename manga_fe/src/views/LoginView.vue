@@ -1,7 +1,4 @@
 <template>
-     <header>
-        <NavbarComponent />
-    </header>
     <div class="container-form">
         <form class="form">
             <p id="heading">Login</p>
@@ -34,7 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import router from '@/router';
 import { useAuthStore } from '@/store/AuthStore';
 import { useMessage } from 'naive-ui';
@@ -48,13 +44,10 @@ const password = ref<string>("");
 
 const efetuarLogin = async (e: MouseEvent) => {
     e.preventDefault();
-    const result = await useAuth.efetuarLogin(email.value, password.value);
+    await useAuth.efetuarLogin(email.value, password.value);
 
-    if(result) {
-      limparCampos();
-      router.push({ name: 'home' });
-    } else
-      message.error("Erro ao realizar login");
+    limparCampos();
+    router.push({ name: 'home' });
 }
 
 const limparCampos = () => {
@@ -71,7 +64,7 @@ const limparCampos = () => {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #9a9a9a;
+    background-color: #292929;
 }
 
 .form {

@@ -7,6 +7,7 @@ import ChapterReading from '@/views/ChapterReading.vue'
 import ManagementAdmin from '@/views/ManagementAdmin.vue'
 import FavoriteManga from '@/views/FavoriteManga.vue'
 import AllMangasList from '@/views/AllMangasList.vue'
+import ProfileView from '@/views/ProfileView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/store/AuthStore'
 
@@ -57,6 +58,11 @@ const router = createRouter({
       path: '/mangas',
       name: 'mangas',
       component: AllMangasList
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView
     }
   ]
 });
