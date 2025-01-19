@@ -34,7 +34,7 @@
 import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
-import { useChapterStore } from '@/store/chapter';
+import { useChapterStore } from '@/store/chapterStore';
 import type ChapterData from '@/interface/Chapter';
 
 const props = defineProps({

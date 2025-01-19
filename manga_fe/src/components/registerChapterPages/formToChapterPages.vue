@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import type PageData from '@/interface/Page';
 import { api } from '@/network/axiosInstance';
-import { useChapterStore } from '@/store/chapter';
+import { useChapterStore } from '@/store/chapterStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { computed, ref, watch, type PropType } from 'vue';
 
