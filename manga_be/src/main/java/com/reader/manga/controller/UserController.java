@@ -5,7 +5,9 @@ import com.reader.manga.dto.user.RecoverUserDTO;
 import com.reader.manga.dto.user.UserDTO;
 import com.reader.manga.dto.user.UserLoginDTO;
 import com.reader.manga.model.User;
+import com.reader.manga.model.UserManga;
 import com.reader.manga.service.JwtTokenService;
+import com.reader.manga.service.UserMangaService;
 import com.reader.manga.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
+    private final UserMangaService userMangaService;
 
     @PostMapping("/register")
     public ResponseEntity<RecoverUserDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
@@ -47,6 +52,22 @@ public class UserController {
         String token = jwtTokenService.generateToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+    }
+
+    @PostMapping("/add-manga")
+    public ResponseEntity<String> addMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
+        userMangaService.adicionaMangaALista(idManga, idUser);
+        return ResponseEntity.ok().body("Adicionado na lista");
+    }
+
+    @GetMapping("/manga-list")
+    public ResponseEntity<List<UserManga>> getTodosMangasDoUsuario(Long idUser) {
+        return ResponseEntity.ok().body(userMangaService.getTodosMangasDoUsuario(idUser));
+    }
+
+    @GetMapping("/manga-list-quantity")
+    public ResponseEntity<Integer> getQuantidadeTodosMangasDoUsuario(Long idUser) {
+        return ResponseEntity.ok().body(userMangaService.getQuantidadeTodosMangasDoUsuario(idUser));
     }
 
 }

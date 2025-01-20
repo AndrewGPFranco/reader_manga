@@ -7,8 +7,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -45,6 +47,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private LocalDate  dateBirth;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserManga> userMangas = new ArrayList<>();
 
     public User(String username, String fullName, String firstName, LocalDate dateBirth, String roles, String password, String email) {
         this.username = username;
