@@ -5,10 +5,11 @@ import com.reader.manga.dto.user.RecoverUserDTO;
 import com.reader.manga.dto.user.UserDTO;
 import com.reader.manga.dto.user.UserLoginDTO;
 import com.reader.manga.model.User;
-import com.reader.manga.model.UserManga;
 import com.reader.manga.service.JwtTokenService;
 import com.reader.manga.service.UserMangaService;
 import com.reader.manga.service.UserService;
+import com.reader.manga.vo.UserMangaVO;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +51,9 @@ public class UserController {
 
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
         String token = jwtTokenService.generateToken((User) auth.getPrincipal());
+        Long idUser = ((User) auth.getPrincipal()).getId();
 
-        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token, idUser));
     }
 
     @PostMapping("/add-manga")
@@ -60,8 +62,9 @@ public class UserController {
         return ResponseEntity.ok().body("Adicionado na lista");
     }
 
-    @GetMapping("/manga-list")
-    public ResponseEntity<List<UserManga>> getTodosMangasDoUsuario(Long idUser) {
+    @GetMapping("/manga-list/{idUser}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<UserMangaVO> getTodosMangasDoUsuario(@PathVariable Long idUser) {
         return ResponseEntity.ok().body(userMangaService.getTodosMangasDoUsuario(idUser));
     }
 

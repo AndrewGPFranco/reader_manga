@@ -1,6 +1,5 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.UserMangaDTO;
 import com.reader.manga.enums.StatusType;
 import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.model.Manga;
@@ -9,10 +8,13 @@ import com.reader.manga.model.UserManga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.UserMangaRepository;
 import com.reader.manga.repository.UserRepository;
+import com.reader.manga.vo.UserMangaVO;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,11 +53,19 @@ public class UserMangaService {
         }
     }
 
-    public List<UserManga> getTodosMangasDoUsuario(Long idUser) {
+    public UserMangaVO getTodosMangasDoUsuario(Long idUser) {
         User user = userRepository.findById(idUser).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado com o id " + idUser));
 
-        return user.getUserMangas();
+        List<UserManga> mangaList = user.getUserMangas();
+        List<Manga> mangaListVO = new ArrayList<>();
+        
+        mangaList.forEach(manga -> mangaListVO.add(manga.getManga()));
+        
+        UserMangaVO userManga = new UserMangaVO();
+        userManga.setMangaList(mangaListVO);
+
+        return userManga;
     }
 
     public Integer getQuantidadeTodosMangasDoUsuario(Long idUser) {
