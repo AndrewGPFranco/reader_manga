@@ -5,6 +5,7 @@ import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
 import { useAuthStore } from "./AuthStore";
 import type { User } from "@/class/User";
+import type ResponseListManga from "@/interface/ResponseListManga";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
@@ -64,7 +65,7 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
-        async deleteMangaById(id: number): Promise<String> {
+        async deleteMangaById(id: number): Promise<string> {
             try {
                 const response = await api.delete(`/api/v1/manga/delete/${id}`, {
                     headers: {
@@ -125,6 +126,18 @@ export const useMangaStore = defineStore('manga', {
                 }
             });
             return response.data;
-        }          
+        },
+        async getListMangaByUser(id: string): Promise<ResponseListManga> {
+            try {
+                const response = await api.get(`/api/v1/user/manga-list/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response.data);
+            }
+        }
     },
 })

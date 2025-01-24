@@ -1,3 +1,4 @@
+<!-- Essa é a lista individual do usuário -->
 <template>
     <header>
         <NavbarComponent />
@@ -34,10 +35,13 @@ import { useMessage } from 'naive-ui';
 import { useMangaStore } from '@/store/MangaStore';
 import type MangaData from '@/interface/Manga';
 import { HeartOutline, Heart } from '@vicons/ionicons5';
+import { useAuthStore } from '@/store/AuthStore';
+import type ResponseListManga from '@/interface/ResponseListManga';
 
 const message = useMessage();
 const mangasArray = ref<MangaData[]>([]);
 const mangaStore = useMangaStore();
+const userAuth = useAuthStore();
 
 const setFavorite = async (manga: MangaData, id: number) => {
     const response = await mangaStore.setFavorite(!manga.favorite, id);
@@ -48,8 +52,13 @@ const setFavorite = async (manga: MangaData, id: number) => {
 
 onMounted(async () => {
   try {
-    const mangas = await mangaStore.getAllManga();
-    mangasArray.value = mangas;
+    const user = userAuth.getUserAutenticado();
+    let mangas: ResponseListManga = { mangaList: [] };
+    const userId = user.getId();
+    if(userId !== undefined)
+        mangas = await mangaStore.getListMangaByUser(userId);
+    
+    mangasArray.value = mangas.mangaList;
   } catch (error: any) {
     message.error(error.message || 'Erro ao buscar os mangás');
   }
