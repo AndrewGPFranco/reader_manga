@@ -51,6 +51,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserManga> userMangas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteMangaUser> mangaFavorites = new ArrayList<>();
+
     public User(String username, String fullName, String firstName, LocalDate dateBirth, String roles, String password, String email) {
         this.username = username;
         this.fullName = fullName;
