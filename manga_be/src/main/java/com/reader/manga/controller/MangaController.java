@@ -7,6 +7,7 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
 import com.reader.manga.vo.MangaCoverVO;
+import com.reader.manga.vo.MangaUserVO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/manga")
@@ -62,13 +64,12 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
-    @GetMapping("/readAll")
-    public ResponseEntity<List<Manga>> readAllMangas(
+    @GetMapping("/readAll/{idUser}")
+    public ResponseEntity<Set<MangaUserVO>> readAllMangas(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size, @PathVariable Long idUser) {
         logger.info("*******************Reading all mangas!*******************");
-        Pageable pageable = PageRequest.of(page, size);
-        List<Manga> mangas = service.readAllMangas(pageable);
+        Set<MangaUserVO> mangas = service.readAllMangas(idUser);
         return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
 

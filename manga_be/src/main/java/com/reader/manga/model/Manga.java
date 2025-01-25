@@ -1,5 +1,6 @@
 package com.reader.manga.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.reader.manga.enums.StatusType;
 import jakarta.persistence.*;
@@ -73,9 +74,11 @@ public class Manga {
     @Length(min = 10, max = 255)
     private String image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Chapter> chapters;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Comment> comments;
 

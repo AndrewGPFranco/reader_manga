@@ -1,5 +1,6 @@
 package com.reader.manga.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
 import jakarta.persistence.*;
 import lombok.*;

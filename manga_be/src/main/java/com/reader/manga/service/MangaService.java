@@ -6,13 +6,14 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
+import com.reader.manga.mapper.MangaMapper;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.vo.MangaCoverVO;
+import com.reader.manga.vo.MangaUserVO;
+import com.reader.manga.vo.UserMangaVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -24,6 +25,8 @@ import java.util.*;
 public class MangaService {
 
     private final MangaRepository repository;
+    private final UserMangaService userMangaService;
+    private final MangaMapper mangaMapper;
 
     static Map<String, String> coversManga = new HashMap<>();
 
@@ -63,13 +66,29 @@ public class MangaService {
         repository.deleteById(id);
     }
 
-    public List<Manga> readAllMangas(Pageable pageable) {
-        if (pageable == null) {
-            return repository.findAll();
+    public Set<MangaUserVO> readAllMangas(Long idUser) {
+        UserMangaVO todosMangasDoUsuario = userMangaService.getTodosMangasDoUsuario(idUser);
+        List<Manga> todosMangasDoSistema = repository.findAll();
+
+        Set<MangaUserVO> listaParaRetornar = new HashSet<>();
+
+        for (Manga manga : todosMangasDoSistema) {
+            MangaUserVO mangaAtualizado = null;
+            for (MangaUserVO mangaUserVO : todosMangasDoUsuario.getMangaList()) {
+                if (mangaUserVO.title().equals(manga.getTitle())) {
+                    mangaAtualizado = mangaMapper.mangaToMangaUserVO(manga, true);
+                    break;
+                }
+            }
+
+            if (mangaAtualizado != null) {
+                listaParaRetornar.add(mangaAtualizado);
+            } else {
+                listaParaRetornar.add(mangaMapper.mangaToMangaUserVO(manga, false));
+            }
         }
 
-        Page<Manga> pageResult = repository.findAll(pageable);
-        return pageResult.getContent();
+        return listaParaRetornar;
     }
 
     public void updateManga(Long id, UpdateMangaDTO dto) {
