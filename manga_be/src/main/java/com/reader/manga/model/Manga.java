@@ -73,9 +73,6 @@ public class Manga {
     @Length(min = 10, max = 255)
     private String image;
 
-    @Column(name = "favorite")
-    private boolean isFavorite = false;
-
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Chapter> chapters;
 

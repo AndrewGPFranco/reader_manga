@@ -19,8 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -60,6 +58,18 @@ public class UserController {
     public ResponseEntity<String> addMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.adicionaMangaALista(idManga, idUser);
         return ResponseEntity.ok().body("Adicionado na lista");
+    }
+
+    @PostMapping("/favorite-manga")
+    public ResponseEntity<String> addMangaToFavoriteList(@RequestParam Long idManga, @RequestParam Long idUser) {
+        userMangaService.adicionaMangaAListaDeFavoritos(idManga, idUser);
+        return ResponseEntity.ok().body("Adicionado na lista de favoritos.");
+    }
+
+    @GetMapping("/manga-favorite-list/{idUser}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<UserMangaVO> getMangasFavoritosDoUsuario(@PathVariable Long idUser) {
+        return ResponseEntity.ok().body(userMangaService.getMangasFavoritosDoUsuario(idUser));
     }
 
     @GetMapping("/manga-list/{idUser}")

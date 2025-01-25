@@ -1,18 +1,16 @@
 package com.reader.manga.model;
 
+import com.reader.manga.vo.ListaMangasPorUsuarioInterface;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "favorite_manga_user")
 @Table(name = "manga_favorite_user")
-public class FavoriteMangaUser {
+@Entity(name = "favorite_manga_user")
+public class FavoriteMangaUser implements ListaMangasPorUsuarioInterface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +23,7 @@ public class FavoriteMangaUser {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 
 }

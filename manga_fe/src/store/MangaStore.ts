@@ -120,12 +120,13 @@ export const useMangaStore = defineStore('manga', {
             }
         },
         async getAllFavorites(): Promise<MangaData[]> {
-            const response = await api.get("/api/v1/manga/favorites", {
+
+            const response = await api.get(`/api/v1/user/manga-favorite-list/${this.user.getId()}`, {
                 headers: {
                     Authorization: `${this.user.getToken()}`
                 }
             });
-            return response.data;
+            return response.data.mangaList;
         },
         async getListMangaByUser(id: string): Promise<ResponseListManga> {
             try {
