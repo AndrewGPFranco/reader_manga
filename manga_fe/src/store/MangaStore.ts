@@ -16,7 +16,7 @@ export const useMangaStore = defineStore('manga', {
     actions: {
         async getAllManga(): Promise<MangaData[]> {
             try {
-                const response = await api.get("/api/v1/manga/readAll", {
+                const response = await api.get(`/api/v1/manga/readAll/${this.user.getId()}`, {
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }
