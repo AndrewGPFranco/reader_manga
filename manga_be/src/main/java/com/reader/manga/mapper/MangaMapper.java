@@ -20,7 +20,6 @@ public class MangaMapper {
                 .creationDate(manga.getCreationDate())
                 .description(manga.getDescription())
                 .gender(manga.getGender())
-                .isFavorite(manga.isFavorite())
                 .status(manga.getStatus())
                 .build();
     }

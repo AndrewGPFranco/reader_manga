@@ -83,4 +83,10 @@ public class UserController {
         return ResponseEntity.ok().body(userMangaService.getQuantidadeTodosMangasDoUsuario(idUser));
     }
 
+    @PostMapping("/favorite-manga/{idUser}/{idManga}")
+    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long idUser, @PathVariable Long idManga) {
+        userMangaService.changeMangaFavoriteStatus(idManga, idUser);
+        return ResponseEntity.ok().body("Change made");
+    }
+
 }

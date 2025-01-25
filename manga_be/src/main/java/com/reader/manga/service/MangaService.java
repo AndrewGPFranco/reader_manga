@@ -6,11 +6,11 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
-import com.reader.manga.mapper.MangaMapper;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.vo.MangaCoverVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,18 +20,12 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class MangaService {
 
     private final MangaRepository repository;
 
-    private final MangaMapper mangaMapper;
-
     static Map<String, String> coversManga = new HashMap<>();
-
-    public MangaService(MangaRepository repository, MangaMapper mangaMapper) {
-        this.repository = repository;
-        this.mangaMapper = mangaMapper;
-    }
 
     static {
         // Manga Covers
@@ -147,16 +141,6 @@ public class MangaService {
                     }
                     return null;
                 });
-    }
-
-    public void changeMangaFavoriteStatus(boolean isFavorite, Long idManga) {
-        Manga manga = repository.findById(idManga).orElseThrow(() -> new NotFoundException("Mangá not found."));
-        manga.setFavorite(isFavorite);
-        updateManga(idManga, mangaMapper.mangaToUpdateMangaDTO(manga));
-    }
-
-    public List<Manga> getFavoriteManga() {
-        return repository.getAllFavoriteManga();
     }
 
     public List<Map.Entry<String, String>> getRandomCovers(int max) {

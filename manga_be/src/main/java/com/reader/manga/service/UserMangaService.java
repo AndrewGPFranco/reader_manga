@@ -121,4 +121,27 @@ public class UserMangaService {
         }
     }
 
+    public void changeMangaFavoriteStatus(Long idManga, Long idUser) {
+        Manga manga = mangaRepository.findById(idManga).orElseThrow(() -> new NotFoundException("Mangá not found."));
+        User user = userRepository.findById(idUser).orElseThrow(() -> new NotFoundException("User not found."));
+
+        if(user != null && manga != null) {
+            FavoriteMangaUser isFavorite = favoriteMangaRepository.favoriteIsTrue(idManga, idUser);
+
+            if(isFavorite == null) {
+                FavoriteMangaUser favoriteManga = FavoriteMangaUser
+                        .builder().manga(manga).user(user).build();
+
+                favoriteMangaRepository.save(favoriteManga);
+
+                user.getMangaFavorites().add(favoriteManga);
+                userRepository.save(user);
+            } else {
+                favoriteMangaRepository.removerMangaDaListaDeFavoritos(idManga, idUser);
+                user.getMangaFavorites().removeIf(favoriteManga -> favoriteManga.getManga().getId().equals(idManga));
+                userRepository.save(user);
+            }
+        }
+    }
+
 }

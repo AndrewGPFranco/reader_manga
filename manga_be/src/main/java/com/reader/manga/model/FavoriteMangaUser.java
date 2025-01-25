@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "manga_favorite_user")
-@Entity(name = "favorite_manga_user")
+@Entity(name = "manga_favorite_user")
 public class FavoriteMangaUser implements ListaMangasPorUsuarioInterface {
 
     @Id

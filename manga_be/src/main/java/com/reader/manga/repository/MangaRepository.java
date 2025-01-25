@@ -8,8 +8,4 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MangaRepository extends JpaRepository<Manga, Long> {
-
-    @Query("SELECT m FROM Manga m WHERE m.isFavorite = true")
-    List<Manga> getAllFavoriteManga();
-}
+public interface MangaRepository extends JpaRepository<Manga, Long> {}

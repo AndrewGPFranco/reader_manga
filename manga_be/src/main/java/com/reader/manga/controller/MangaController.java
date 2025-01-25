@@ -2,7 +2,6 @@ package com.reader.manga.controller;
 
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
-import com.reader.manga.dto.manga.UpdateFavoriteDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
@@ -101,18 +100,6 @@ public class MangaController {
                 .flatMap(t -> service.fetchCoverForTitle(t, webClient))
                 .take(5)
                 .collectList();
-    }
-
-    @PostMapping("/favorite/{id}")
-    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long id, @RequestBody UpdateFavoriteDTO favoriteDTO) {
-        service.changeMangaFavoriteStatus(favoriteDTO.isFavorite(), id);
-        return ResponseEntity.ok().body("Change made");
-    }
-
-    @GetMapping("/favorites")
-    public ResponseEntity<List<Manga>> getAllFavoriteManga() {
-        List<Manga> favoriteManga = service.getFavoriteManga();
-        return ResponseEntity.ok().body(favoriteManga);
     }
 
     @GetMapping("/my-covers/{max}")
