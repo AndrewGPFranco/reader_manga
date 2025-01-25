@@ -45,6 +45,7 @@ export const useAuthStore = defineStore('auth', {
             return this.user.getToken() !== "" || localStorage.getItem('token') !== null;
         },
         async efetuarLogout() {
+            localStorage.removeItem('id');
             localStorage.removeItem('token');
             this.user = new User("", "", "");
         }
