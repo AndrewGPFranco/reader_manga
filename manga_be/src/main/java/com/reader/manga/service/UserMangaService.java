@@ -10,7 +10,8 @@ import com.reader.manga.repository.FavoriteMangaRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.UserMangaRepository;
 import com.reader.manga.repository.UserRepository;
-import com.reader.manga.vo.ListaMangasPorUsuarioInterface;
+import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
+import com.reader.manga.vo.MangaUserVO;
 import com.reader.manga.vo.UserMangaVO;
 
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class UserMangaService {
 
         List<UserManga> mangaList = user.getUserMangas();
 
-        return getMangasDoUsuario(mangaList);
+        return getMangasDoUsuario(mangaList, idUser);
     }
 
     public UserMangaVO getMangasFavoritosDoUsuario(Long idUser) {
@@ -76,13 +77,19 @@ public class UserMangaService {
 
         List<FavoriteMangaUser> mangaList = user.getMangaFavorites();
 
-        return getMangasDoUsuario(mangaList);
+        return getMangasDoUsuario(mangaList, idUser);
     }
 
-    private static @NotNull UserMangaVO getMangasDoUsuario(List<? extends ListaMangasPorUsuarioInterface> mangaList) {
-        List<Manga> mangaListVO = new ArrayList<>();
+    private @NotNull UserMangaVO getMangasDoUsuario(List<? extends ListaMangasPorUsuarioInterface> mangaList, Long idUser) {
+        List<MangaUserVO> mangaListVO = new ArrayList<>();
 
-        mangaList.forEach(manga -> mangaListVO.add(manga.getManga()));
+        mangaList.forEach(m -> {
+            Manga manga = m.getManga();
+            FavoriteMangaUser favoriteMangaUser = favoriteMangaRepository.favoriteIsTrue(manga.getId(), idUser);
+            MangaUserVO mangaUserVO = MangaUserVO.builder().id(manga.getId()).title(manga.getTitle()).image(manga.getImage())
+                    .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender()).size(manga.getSize()).build();
+            mangaListVO.add(mangaUserVO);
+        });
 
         UserMangaVO userManga = new UserMangaVO();
         userManga.setMangaList(mangaListVO);

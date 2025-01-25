@@ -1,7 +1,7 @@
 package com.reader.manga.model;
 
 import com.reader.manga.enums.StatusType;
-import com.reader.manga.vo.ListaMangasPorUsuarioInterface;
+import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
 import jakarta.persistence.*;
 import lombok.*;
 

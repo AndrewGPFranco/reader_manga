@@ -1,4 +1,4 @@
-package com.reader.manga.vo;
+package com.reader.manga.interfaces;
 
 import com.reader.manga.model.Manga;
 
