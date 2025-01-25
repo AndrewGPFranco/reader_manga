@@ -60,6 +60,12 @@ public class UserController {
         return ResponseEntity.ok().body("Adicionado na lista");
     }
 
+    @PostMapping("/remove-manga")
+    public ResponseEntity<String> removeMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
+        userMangaService.removeMangaDaLista(idManga, idUser);
+        return ResponseEntity.ok().body("Removido da lista");
+    }
+
     @PostMapping("/favorite-manga")
     public ResponseEntity<String> addMangaToFavoriteList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.adicionaMangaAListaDeFavoritos(idManga, idUser);

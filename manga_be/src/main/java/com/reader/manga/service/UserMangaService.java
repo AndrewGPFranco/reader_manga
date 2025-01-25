@@ -62,6 +62,25 @@ public class UserMangaService {
         }
     }
 
+    public void removeMangaDaLista(Long idManga, Long idUser) {
+        try {
+            Manga manga = mangaRepository.findById(idManga).orElseThrow(
+                    () -> new NotFoundException(MANGA_NOT_FOUND + idManga));
+
+            User user = userRepository.findById(idUser).orElseThrow(
+                    () -> new NotFoundException(USER_NOT_FOUND + idUser));
+
+            if(manga != null && user != null) {
+                userMangaRepository.deletaAssociacao(idUser, idManga);
+                // Adiciona o manga na lista
+                user.getUserMangas().removeIf(m -> m.getManga().getId().equals(idManga));
+                userRepository.save(user);
+            }
+        } catch (NotFoundException e) {
+            throw new NotFoundException("Manga ou Usuário inexistente.");
+        }
+    }
+
     public UserMangaVO getTodosMangasDoUsuario(Long idUser) {
         User user = userRepository.findById(idUser).orElseThrow(
                 () -> new NotFoundException(USER_NOT_FOUND + idUser));

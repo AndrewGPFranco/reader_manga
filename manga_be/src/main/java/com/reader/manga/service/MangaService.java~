@@ -67,11 +67,17 @@ public class MangaService {
     }
 
     public Set<MangaUserVO> readAllMangas(Long idUser) {
-        UserMangaVO todosMangasDoUsuario = userMangaService.getTodosMangasDoUsuario(idUser);
+        UserMangaVO todosMangasDoUsuario = userMangaService.getTodosMangasDoUsuario(idUser, false);
         List<Manga> todosMangasDoSistema = repository.findAll();
 
         Set<MangaUserVO> listaParaRetornar = new HashSet<>();
 
+        ajustaAtributoDeFavoritoParaCadaManga(todosMangasDoSistema, todosMangasDoUsuario, listaParaRetornar);
+
+        return listaParaRetornar;
+    }
+
+    private void ajustaAtributoDeFavoritoParaCadaManga(List<Manga> todosMangasDoSistema, UserMangaVO todosMangasDoUsuario, Set<MangaUserVO> listaParaRetornar) {
         for (Manga manga : todosMangasDoSistema) {
             MangaUserVO mangaAtualizado = null;
             for (MangaUserVO mangaUserVO : todosMangasDoUsuario.getMangaList()) {
@@ -86,8 +92,6 @@ public class MangaService {
             else
                 listaParaRetornar.add(mangaMapper.mangaToMangaUserVO(manga, false));
         }
-
-        return listaParaRetornar;
     }
 
     public void updateManga(Long id, UpdateMangaDTO dto) {
