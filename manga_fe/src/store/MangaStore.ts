@@ -151,6 +151,19 @@ export const useMangaStore = defineStore('manga', {
             } catch (error: any) {
                 throw new Error(error.response?.data || 'Erro ao adicionar manga');
             }
+        },
+        async removeDaLista(idManga: number) {
+            try {
+                const idUser = this.user.getId();
+                const response = await api.post(`/api/v1/user/remove-manga?idManga=${idManga}&idUser=${idUser}`, {}, {
+                    headers: {
+                        Authorization: this.user.getToken()
+                    }
+                });
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response?.data || 'Erro ao remover manga');
+            }
         }
     },
 })

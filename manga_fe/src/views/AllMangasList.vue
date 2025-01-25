@@ -17,6 +17,7 @@
                             <p><span class="font-semibold">Author: </span> {{ manga.author }}</p>
                             <p><span class="font-semibold">Gender: </span> {{ manga.gender }}</p>
                             <n-button v-if="!manga.favorite" id="btnAddLista" @click="adicionaMangaNaListaDoUsuario(manga.id)" type="primary">Adicionar na lista</n-button>
+                            <n-button v-if="manga.favorite" id="btnAddLista" @click="removerMangaDaLista(manga.id)" type="error">Remover da lista</n-button>
                         </div>
                     </div>
                 </div>
@@ -39,6 +40,16 @@ const mangaStore = useMangaStore();
 const adicionaMangaNaListaDoUsuario = async (idManga: number) => {
     try {
         const result = await mangaStore.adicionaMangaNaListaDoUsuario(idManga);
+        mangasArray.value = await mangaStore.getAllManga();
+        message.success(result);
+    } catch (error: any) {
+        message.error(error.message || 'Erro ao adicionar mangá na lista.');
+    }
+}
+
+const removerMangaDaLista = async (idManga: number) => {
+    try {
+        const result = await mangaStore.removeDaLista(idManga);
         mangasArray.value = await mangaStore.getAllManga();
         message.success(result);
     } catch (error: any) {
