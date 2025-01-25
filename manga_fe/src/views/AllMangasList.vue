@@ -5,7 +5,6 @@
     <main>
         <n-card title="All Manga" size="huge">
             <section class="container flex gap-5 wrap justify-center">
-                <!-- TODO: popular com dados da API -->
                 <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray" :key="manga.title">
                     <div class="relative">
                         <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
@@ -17,6 +16,7 @@
                             <p><span class="font-semibold">Status: </span> {{ manga.status }}</p>
                             <p><span class="font-semibold">Author: </span> {{ manga.author }}</p>
                             <p><span class="font-semibold">Gender: </span> {{ manga.gender }}</p>
+                            <n-button id="btnAddLista" @click="adicionaMangaNaListaDoUsuario(manga.id)" type="primary">Adicionar na lista</n-button>
                         </div>
                     </div>
                 </div>
@@ -35,6 +35,15 @@ import { onMounted, ref } from 'vue';
 const message = useMessage();
 const mangasArray = ref<MangaData[]>([]);
 const mangaStore = useMangaStore();
+
+const adicionaMangaNaListaDoUsuario = async (idManga: number) => {
+    try {
+        const mangas = await mangaStore.adicionaMangaNaListaDoUsuario(idManga);
+        mangasArray.value = mangas;
+    } catch (error: any) {
+        message.error(error.message || 'Erro ao adicionar mangá na lista.');
+    }
+}
 
 onMounted(async () => {
   try {
@@ -57,5 +66,9 @@ onMounted(async () => {
         box-sizing: border-box;
         overflow: scroll;
         overflow-x: hidden;
+    }
+
+    #btnAddLista {
+        margin-top: 10px;
     }
 </style>
