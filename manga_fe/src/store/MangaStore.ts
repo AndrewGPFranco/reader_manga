@@ -105,10 +105,9 @@ export const useMangaStore = defineStore('manga', {
                 return "An error occurred while editing, please check the data.";
             }
         },
-        async setFavorite(isFavorite: boolean, id: number): Promise<ResponseRequest> {
+        async setFavorite(idManga: number): Promise<ResponseRequest> {
             try {
-                const data = { isFavorite: isFavorite }
-                const response = await api.post(`/api/v1/manga/favorite/${id}`, data, {
+                const response = await api.post(`/api/v1/user/favorite-manga/${this.user.getId()}/${idManga}`, null, {
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }
