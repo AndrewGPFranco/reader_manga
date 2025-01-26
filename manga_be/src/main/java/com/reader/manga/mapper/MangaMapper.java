@@ -3,6 +3,7 @@ package com.reader.manga.mapper;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
+import com.reader.manga.vo.MangaUserVO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,7 +11,7 @@ public class MangaMapper {
 
     private MangaMapper() {}
 
-    public static UpdateMangaDTO mangaToUpdateMangaDTO(Manga manga) {
+    public UpdateMangaDTO mangaToUpdateMangaDTO(Manga manga) {
         return UpdateMangaDTO.builder()
                 .title(manga.getTitle())
                 .image(manga.getImage())
@@ -20,12 +21,11 @@ public class MangaMapper {
                 .creationDate(manga.getCreationDate())
                 .description(manga.getDescription())
                 .gender(manga.getGender())
-                .isFavorite(manga.isFavorite())
                 .status(manga.getStatus())
                 .build();
     }
 
-    public static MangaDTO entityToDto(Manga manga) {
+    public MangaDTO entityToDto(Manga manga) {
         return MangaDTO.builder()
                 .title(manga.getTitle())
                 .author(manga.getAuthor())
@@ -35,6 +35,19 @@ public class MangaMapper {
                 .description(manga.getDescription())
                 .gender(manga.getGender())
                 .status(manga.getStatus())
+                .size(manga.getSize())
+                .build();
+    }
+
+    public MangaUserVO mangaToMangaUserVO(Manga manga, boolean isFavorite) {
+        return MangaUserVO.builder()
+                .id(manga.getId())
+                .title(manga.getTitle())
+                .image(manga.getImage())
+                .status(manga.getStatus())
+                .author(manga.getAuthor())
+                .gender(manga.getGender())
+                .favorite(isFavorite)
                 .size(manga.getSize())
                 .build();
     }

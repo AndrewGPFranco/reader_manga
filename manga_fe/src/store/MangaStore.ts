@@ -5,6 +5,7 @@ import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
 import { useAuthStore } from "./AuthStore";
 import type { User } from "@/class/User";
+import type ResponseListManga from "@/interface/ResponseListManga";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
@@ -15,7 +16,7 @@ export const useMangaStore = defineStore('manga', {
     actions: {
         async getAllManga(): Promise<MangaData[]> {
             try {
-                const response = await api.get("/api/v1/manga/readAll", {
+                const response = await api.get(`/api/v1/manga/readAll/${this.user.getId()}`, {
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }
@@ -64,7 +65,7 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
-        async deleteMangaById(id: number): Promise<String> {
+        async deleteMangaById(id: number): Promise<string> {
             try {
                 const response = await api.delete(`/api/v1/manga/delete/${id}`, {
                     headers: {
@@ -104,10 +105,9 @@ export const useMangaStore = defineStore('manga', {
                 return "An error occurred while editing, please check the data.";
             }
         },
-        async setFavorite(isFavorite: boolean, id: number): Promise<ResponseRequest> {
+        async setFavorite(idManga: number): Promise<ResponseRequest> {
             try {
-                const data = { isFavorite: isFavorite }
-                const response = await api.post(`/api/v1/manga/favorite/${id}`, data, {
+                const response = await api.post(`/api/v1/user/favorite-manga/${this.user.getId()}/${idManga}`, null, {
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }
@@ -119,12 +119,51 @@ export const useMangaStore = defineStore('manga', {
             }
         },
         async getAllFavorites(): Promise<MangaData[]> {
-            const response = await api.get("/api/v1/manga/favorites", {
+
+            const response = await api.get(`/api/v1/user/manga-favorite-list/${this.user.getId()}`, {
                 headers: {
                     Authorization: `${this.user.getToken()}`
                 }
             });
-            return response.data;
-        }          
+            return response.data.mangaList;
+        },
+        async getListMangaByUser(id: string): Promise<ResponseListManga> {
+            try {
+                const response = await api.get(`/api/v1/user/manga-list/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response.data);
+            }
+        },
+        async adicionaMangaNaListaDoUsuario(idManga: number) {
+            try {
+                const idUser = this.user.getId();
+                const response = await api.post(`/api/v1/user/add-manga?idManga=${idManga}&idUser=${idUser}`, {}, {
+                    headers: {
+                        Authorization: this.user.getToken()
+                    }
+                });
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response?.data || 'Erro ao adicionar manga');
+            }
+        },
+        async removeDaLista(idManga: number) {
+            try {
+                const idUser = this.user.getId();
+                const response = await api.post(`/api/v1/user/remove-manga?idManga=${idManga}&idUser=${idUser}`, {}, {
+                    headers: {
+                        Authorization: this.user.getToken()
+                    }
+                });
+                return response.data;
+            } catch (error: any) {
+                throw new Error(error.response?.data || 'Erro ao remover manga');
+            }
+        }
     },
 })

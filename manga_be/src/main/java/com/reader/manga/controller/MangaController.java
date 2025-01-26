@@ -2,17 +2,16 @@ package com.reader.manga.controller;
 
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
-import com.reader.manga.dto.manga.UpdateFavoriteDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
 import com.reader.manga.vo.MangaCoverVO;
+import com.reader.manga.vo.MangaUserVO;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,20 +23,15 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/manga")
+@RequiredArgsConstructor
 public class MangaController {
 
     private final MangaService service;
-
     private final WebClient webClient;
-
-    public MangaController(MangaService service, WebClient webClient) {
-        this.service = service;
-        this.webClient = webClient;
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -63,13 +57,10 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
-    @GetMapping("/readAll")
-    public ResponseEntity<List<Manga>> readAllMangas(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    @GetMapping("/readAll/{idUser}")
+    public ResponseEntity<Set<MangaUserVO>> readAllMangas(@PathVariable Long idUser) {
         logger.info("*******************Reading all mangas!*******************");
-        Pageable pageable = PageRequest.of(page, size);
-        List<Manga> mangas = service.readAllMangas(pageable);
+        Set<MangaUserVO> mangas = service.readAllMangas(idUser);
         return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
 
@@ -101,18 +92,6 @@ public class MangaController {
                 .flatMap(t -> service.fetchCoverForTitle(t, webClient))
                 .take(5)
                 .collectList();
-    }
-
-    @PostMapping("/favorite/{id}")
-    public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long id, @RequestBody UpdateFavoriteDTO favoriteDTO) {
-        service.changeMangaFavoriteStatus(favoriteDTO.isFavorite(), id);
-        return ResponseEntity.ok().body("Change made");
-    }
-
-    @GetMapping("/favorites")
-    public ResponseEntity<List<Manga>> getAllFavoriteManga() {
-        List<Manga> favoriteManga = service.getFavoriteManga();
-        return ResponseEntity.ok().body(favoriteManga);
     }
 
     @GetMapping("/my-covers/{max}")

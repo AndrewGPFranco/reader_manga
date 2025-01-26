@@ -1,13 +1,15 @@
 export class User {
 
-    private email: string;
-    private password: string;
+    private id?: string;
+    private readonly email: string;
+    private readonly password: string;
     private token?: string;
 
-    constructor(email: string, password: string, token?: string) {
+    constructor(email: string, password: string, token?: string, id?: string) {
         this.email = email;
         this.password = password;
         this.token = token;
+        this.id = id;
     }
 
     getEmail(): string {
@@ -24,6 +26,14 @@ export class User {
 
     setToken(token: string): void {
         this.token = token;
+    }
+
+    setId(id: string): void {     
+        this.id = id;
+    }
+
+    getId(): string | undefined {
+        return this.id;
     }
     
 }

@@ -1,3 +1,4 @@
+<!-- Essa é a lista individual do usuário -->
 <template>
     <header>
         <NavbarComponent />
@@ -8,8 +9,8 @@
                 <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray" :key="manga.title">
                     <div class="relative">
                         <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
-                        <span class="isFavorite" v-if="manga.favorite"><Heart @click="setFavorite(manga, manga.id)" /></span>
-                        <span class="isFavorite" v-else><HeartOutline @click="setFavorite(manga, manga.id)" /></span>
+                        <span class="isFavorite" v-if="manga.favorite"><Heart @click="setFavorite(manga.id)" /></span>
+                        <span class="isFavorite" v-else><HeartOutline @click="setFavorite(manga.id)" /></span>
                     </div>
                     <div class="p-4">
                         <router-link :to="`/manga/${manga.id}`" class="text-xl font-bold mb-2 text-gray-800">{{ manga.title }}</router-link>
@@ -32,24 +33,38 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import { onMounted, ref } from 'vue';
 import { useMessage } from 'naive-ui';
 import { useMangaStore } from '@/store/MangaStore';
-import type MangaData from '@/interface/Manga';
 import { HeartOutline, Heart } from '@vicons/ionicons5';
+import { useAuthStore } from '@/store/AuthStore';
+import type ResponseListManga from '@/interface/ResponseListManga';
+import type MangaData from '@/interface/Manga';
 
 const message = useMessage();
-const mangasArray = ref<MangaData[]>([]);
+const mangasArray = ref<MangaData[]>();
 const mangaStore = useMangaStore();
+const userAuth = useAuthStore();
 
-const setFavorite = async (manga: MangaData, id: number) => {
-    const response = await mangaStore.setFavorite(!manga.favorite, id);
+const setFavorite = async (idManga: number) => {
+    const response = await mangaStore.setFavorite(idManga);
     message.info(String(response.message));
-    if(response.statusCode == 200)
-        mangasArray.value = await mangaStore.getAllManga();
+    if(response.statusCode == 200) {
+        const user = userAuth.getUserAutenticado();
+        const userId = user.getId();
+        if(userId !== undefined) {
+            const mangasDoUsuario = await mangaStore.getListMangaByUser(userId);
+            mangasArray.value = mangasDoUsuario.mangaList;
+        }
+    }
 }
 
 onMounted(async () => {
   try {
-    const mangas = await mangaStore.getAllManga();
-    mangasArray.value = mangas;
+    const user = userAuth.getUserAutenticado();
+    let mangas: ResponseListManga = { mangaList: [] };
+    const userId = user.getId();
+    if(userId !== undefined)
+        mangas = await mangaStore.getListMangaByUser(userId);
+    
+    mangasArray.value = mangas.mangaList;
   } catch (error: any) {
     message.error(error.message || 'Erro ao buscar os mangás');
   }
