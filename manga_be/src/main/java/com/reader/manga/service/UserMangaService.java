@@ -72,8 +72,10 @@ public class UserMangaService {
 
             if(manga != null && user != null) {
                 userMangaRepository.deletaAssociacao(idUser, idManga);
+                favoriteMangaRepository.removerMangaDaListaDeFavoritos(idManga, idUser);
                 // Adiciona o manga na lista
                 user.getUserMangas().removeIf(m -> m.getManga().getId().equals(idManga));
+                user.getMangaFavorites().removeIf(m -> m.getManga().getId().equals(idManga));
                 userRepository.save(user);
             }
         } catch (NotFoundException e) {
