@@ -4,7 +4,6 @@ import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Manga;
 import com.reader.manga.vo.MangaUserVO;
-import com.reader.manga.vo.UserMangaVO;
 import org.springframework.stereotype.Component;
 
 @Component

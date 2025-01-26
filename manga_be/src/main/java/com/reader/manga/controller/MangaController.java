@@ -9,10 +9,9 @@ import com.reader.manga.service.MangaService;
 import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,17 +27,11 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/manga")
+@RequiredArgsConstructor
 public class MangaController {
 
     private final MangaService service;
-
     private final WebClient webClient;
-
-    public MangaController(MangaService service, WebClient webClient) {
-        this.service = service;
-        this.webClient = webClient;
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -65,9 +58,7 @@ public class MangaController {
     }
 
     @GetMapping("/readAll/{idUser}")
-    public ResponseEntity<Set<MangaUserVO>> readAllMangas(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size, @PathVariable Long idUser) {
+    public ResponseEntity<Set<MangaUserVO>> readAllMangas(@PathVariable Long idUser) {
         logger.info("*******************Reading all mangas!*******************");
         Set<MangaUserVO> mangas = service.readAllMangas(idUser);
         return ResponseEntity.status(HttpStatus.OK).body(mangas);

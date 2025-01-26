@@ -36,11 +36,8 @@ public class UserMangaService {
 
     public void adicionaMangaALista(Long idManga, Long idUser) {
         try {
-            Manga manga = mangaRepository.findById(idManga).orElseThrow(
-                    () -> new NotFoundException(MANGA_NOT_FOUND + idManga));
-
-            User user = userRepository.findById(idUser).orElseThrow(
-                    () -> new NotFoundException(USER_NOT_FOUND + idUser));
+            Manga manga = getManga(idManga);
+            User user = getUser(idUser);
 
             if(manga != null && user != null) {
                 UserManga userManga = UserManga.builder()
@@ -62,13 +59,20 @@ public class UserMangaService {
         }
     }
 
+    private User getUser(Long idUser) {
+        return userRepository.findById(idUser).orElseThrow(
+                () -> new NotFoundException(USER_NOT_FOUND + idUser));
+    }
+
+    private Manga getManga(Long idManga) {
+        return mangaRepository.findById(idManga).orElseThrow(
+                () -> new NotFoundException(MANGA_NOT_FOUND + idManga));
+    }
+
     public void removeMangaDaLista(Long idManga, Long idUser) {
         try {
-            Manga manga = mangaRepository.findById(idManga).orElseThrow(
-                    () -> new NotFoundException(MANGA_NOT_FOUND + idManga));
-
-            User user = userRepository.findById(idUser).orElseThrow(
-                    () -> new NotFoundException(USER_NOT_FOUND + idUser));
+            Manga manga = getManga(idManga);
+            User user = getUser(idUser);
 
             if(manga != null && user != null) {
                 userMangaRepository.deletaAssociacao(idUser, idManga);
@@ -84,8 +88,7 @@ public class UserMangaService {
     }
 
     public UserMangaVO getTodosMangasDoUsuario(Long idUser) {
-        User user = userRepository.findById(idUser).orElseThrow(
-                () -> new NotFoundException(USER_NOT_FOUND + idUser));
+        User user = getUser(idUser);
 
         List<UserManga> mangaList = user.getUserMangas();
 
@@ -93,8 +96,7 @@ public class UserMangaService {
     }
 
     public UserMangaVO getMangasFavoritosDoUsuario(Long idUser) {
-        User user = userRepository.findById(idUser).orElseThrow(
-                () -> new NotFoundException(USER_NOT_FOUND + idUser));
+        User user = getUser(idUser);
 
         List<FavoriteMangaUser> mangaList = user.getMangaFavorites();
 
@@ -118,19 +120,15 @@ public class UserMangaService {
     }
 
     public Integer getQuantidadeTodosMangasDoUsuario(Long idUser) {
-        User user = userRepository.findById(idUser).orElseThrow(
-                () -> new NotFoundException(USER_NOT_FOUND + idUser));
+        User user = getUser(idUser);
 
         return user.getUserMangas().size();
     }
 
     public void adicionaMangaAListaDeFavoritos(Long idManga, Long idUser) {
         try {
-            Manga manga = mangaRepository.findById(idManga).orElseThrow(
-                    () -> new NotFoundException(MANGA_NOT_FOUND + idManga));
-
-            User user = userRepository.findById(idUser).orElseThrow(
-                    () -> new NotFoundException(USER_NOT_FOUND + idUser));
+            Manga manga = getManga(idManga);
+            User user = getUser(idUser);
 
             if(manga != null && user != null) {
                 FavoriteMangaUser favoritarManga = FavoriteMangaUser.builder()
