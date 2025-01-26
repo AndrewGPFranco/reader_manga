@@ -18,7 +18,7 @@
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import type ChapterData from '@/interface/Chapter';
 import type PageData from '@/interface/Page';
-import { useChapterStore } from '@/store/chapterStore';
+import { useChapterStore } from '@/store/ChapterStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
