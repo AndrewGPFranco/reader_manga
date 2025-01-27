@@ -67,7 +67,7 @@ export const useChapterStore = defineStore('chapter', {
                 return "An error occurred while editing, please check the data.";
             }
         },
-        async deleteChapterById(id: number): Promise<String> {
+        async deleteChapterById(id: number): Promise<string> {
             try {
                 const response = await api.delete(`/api/v1/chapter/delete/${id}`, {
                     headers: {
@@ -91,7 +91,7 @@ export const useChapterStore = defineStore('chapter', {
                 throw new Error(error.response.data);
             }
         },
-        async deletePageById(id: number, idChapter: number): Promise<String> {
+        async deletePageById(id: number, idChapter: number): Promise<string> {
             try {
                 const response = await api.delete(`/api/v1/chapter/delete/page/${id}/${idChapter}`, {
                     headers: {
