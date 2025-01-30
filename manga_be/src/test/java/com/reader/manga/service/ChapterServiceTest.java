@@ -70,27 +70,26 @@ class ChapterServiceTest {
     }
 
     @Test
-    @DisplayName("Deve criar um capítulo com sucesso")
+    @DisplayName("Deve criar um capítulo com sucesso.")
     void testeCreateChapter() {
-        // Arrange
         Manga manga = getEntityManga();
         Mockito.when(mangaRepository.findById(1L)).thenReturn(Optional.of(manga));
 
-        // Act
         Assertions.assertDoesNotThrow(() -> spyService.createChapter(getChapterDto()));
 
-        // Assert
         Mockito.verify(chapterRepository, Mockito.times(1)).save(Mockito.any(Chapter.class));
     }
 
-    @Test
-    @DisplayName("Lança uma exception por não encontrar nenhum mangá com o id informado")
-    void testeCreateChapterComErro() {
-        // Act & Assert
-        CreationErrorException exception = Assertions
-                .assertThrows(CreationErrorException.class, () -> spyService.createChapter(getChapterDto()));
+    private void chamadaDoMetodoDeCriacaoELancaException() throws CreationErrorException {
+        spyService.createChapter(getChapterDto());
+    }
 
-        // Assert
+    @Test
+    @DisplayName("Lança uma exception por não encontrar nenhum mangá com o id informado.")
+    void testeCreateChapterComErro() {
+        CreationErrorException exception = Assertions
+                .assertThrows(CreationErrorException.class, this::chamadaDoMetodoDeCriacaoELancaException);
+
         String expected = "Erro ao salvar capítulo. Por favor, tente novamente...";
         String result = exception.getMessage();
 
