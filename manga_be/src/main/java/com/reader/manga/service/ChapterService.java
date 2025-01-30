@@ -12,6 +12,8 @@ import com.reader.manga.model.PageChapter;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PageRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,20 +22,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class ChapterService {
 
     private final ChapterRepository repository;
-
     private final MangaRepository mangaRepository;
-
     private final PageRepository pageRepository;
-
-    public ChapterService(ChapterRepository repository, MangaRepository mangaRepository, PageRepository pageRepository) {
-        this.repository = repository;
-        this.mangaRepository = mangaRepository;
-        this.pageRepository = pageRepository;
-    }
 
     public void createChapter(ChapterDTO dto) {
         try {
@@ -41,11 +37,14 @@ public class ChapterService {
             if (mangaById.isPresent()) {
                 Chapter chapter = new Chapter(dto.title(), dto.description(), 0, mangaById.get());
                 repository.save(chapter);
+                log.info("Capítulo salvo.");
             } else {
-                throw new NotFoundException("manga with ID " + dto.mangaId() + " not found");
+                log.error("manga com id {} não encontrado", dto.mangaId());
+                throw new NotFoundException("manga com id " + dto.mangaId() + " não encontrado");
             }
         } catch (Exception e) {
-            throw new CreationErrorException("Error creating Chapter. Please try again... " + e.getMessage());
+            log.error("Erro ao salvar capítulo. Por favor, tente novamente...");
+            throw new CreationErrorException("Erro ao salvar capítulo. Por favor, tente novamente... " + e.getMessage());
         }
     }
 
