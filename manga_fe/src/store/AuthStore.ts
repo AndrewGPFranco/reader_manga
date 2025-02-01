@@ -1,6 +1,8 @@
 import { User } from "@/class/User";
 import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
+import { jwtDecode } from "jwt-decode";
+import type DecodedToken from "@/interface/iDecodedToken";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -12,8 +14,9 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const user = new User(email, password);
                 const result = await api.post('/api/v1/user/login', user);
+                const decode = jwtDecode<DecodedToken>(result.data.token);
                 user.setToken(result.data.token);
-                user.setId(result.data.id);
+                user.setId(decode.id);
                 this.user = user;
 
                 const token = user.getToken();
@@ -48,6 +51,14 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('id');
             localStorage.removeItem('token');
             this.user = new User("", "", "");
+        },
+        getRoleUser(): string {
+            const token = localStorage.getItem('token');
+            if(token != undefined) {
+                const tokenDecode = jwtDecode<DecodedToken>(token);
+                return tokenDecode.role;
+            }
+            return "USER";
         }
     }
 })

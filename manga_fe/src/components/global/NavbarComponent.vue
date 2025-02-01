@@ -13,58 +13,64 @@ import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/store/AuthStore'
 
-function renderIcon(icon: Component) {
+const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-const menuOptions: MenuOption[] = [
-{
-    whateverLabel: () =>
-      h(RouterLink, { to: '/' }, { default: () => 'Home' }),
-    icon: renderIcon(ScanCircle),
-    path: '/'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/mangas' }, { default: () => 'Mangas' }),
-    icon: renderIcon(NewspaperOutline),
-    path: '/mangas'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
-    icon: renderIcon(NewChapter),
-    path: '/register/chapter'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/profile' }, { default: () => 'My Profile' }),
-    icon: renderIcon(PersonOutline),
-    path: '/profile'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/manga/all' }, { default: () => 'My Library' }),
-    icon: renderIcon(Library),
-    path: '/manga/all'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
-    icon: renderIcon(Management),
-    path: '/management/admin'
-  },
-  {
-    whateverLabel: () =>
-      h(RouterLink, { to: '/manga/favorites' }, { default: () => 'Favorite Manga' }),
-    icon: renderIcon(Favorites),
-    path: '/manga/favorites'
-  }
-]
-
 export default defineComponent({
   setup() {
+    const auth = useAuthStore();
+    const role = auth.getRoleUser();
+
+    const menuOptions: MenuOption[] = [
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/' }, { default: () => 'Home' }),
+        icon: renderIcon(ScanCircle),
+        path: '/'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/mangas' }, { default: () => 'Mangas' }),
+        icon: renderIcon(NewspaperOutline),
+        path: '/mangas'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
+        icon: renderIcon(NewChapter),
+        path: '/register/chapter'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/profile' }, { default: () => 'My Profile' }),
+        icon: renderIcon(PersonOutline),
+        path: '/profile'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/manga/all' }, { default: () => 'My Library' }),
+        icon: renderIcon(Library),
+        path: '/manga/all'
+      },
+      ...(role.includes("ADMIN")
+        ? [{
+            whateverLabel: () =>
+              h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
+            icon: renderIcon(Management),
+            path: '/management/admin'
+          }]
+        : []),
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/manga/favorites' }, { default: () => 'Favorite Manga' }),
+        icon: renderIcon(Favorites),
+        path: '/manga/favorites'
+      }
+    ]
+
     return {
       menuOptions
     }
