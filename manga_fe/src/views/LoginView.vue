@@ -21,9 +21,10 @@
                 <input v-model="password" placeholder="Password" class="input-field" type="password">
             </div>
             <div class="btn">
-                <button
-                    class="button1" @click="efetuarLogin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                <button class="button2">Sign Up</button>
+                <button class="button1" @click="efetuarLogin">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <router-link to="/register/user" class="button2">Sign Up</router-link>
             </div>
             <button class="button3">Forgot Password</button>
         </form>
