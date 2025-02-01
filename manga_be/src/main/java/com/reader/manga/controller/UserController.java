@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -43,14 +44,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid UserLoginDTO userDTO) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
-                userDTO.email(), userDTO.password());
+    public ResponseEntity<Object> login(@RequestBody @Valid UserLoginDTO userDTO) {
+        try {
+            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                    userDTO.email(), userDTO.password());
 
-        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
-        String token = jwtTokenService.generateToken((User) auth.getPrincipal());
+            Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+            String token = jwtTokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/add-manga")

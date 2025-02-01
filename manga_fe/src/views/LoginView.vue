@@ -43,11 +43,15 @@ const email = ref<string>("");
 const password = ref<string>("");
 
 const efetuarLogin = async (e: MouseEvent) => {
+  try {
     e.preventDefault();
     await useAuth.efetuarLogin(email.value, password.value);
 
     limparCampos();
     router.push({ name: 'home' });
+  } catch (error: any) {
+    message.error(error.message);
+  }
 }
 
 const limparCampos = () => {
