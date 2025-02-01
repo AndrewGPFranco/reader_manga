@@ -49,9 +49,8 @@ public class UserController {
 
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
         String token = jwtTokenService.generateToken((User) auth.getPrincipal());
-        Long idUser = ((User) auth.getPrincipal()).getId();
 
-        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token, idUser));
+        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
     }
 
     @PostMapping("/add-manga")

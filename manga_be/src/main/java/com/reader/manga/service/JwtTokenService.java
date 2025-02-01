@@ -29,6 +29,8 @@ public class JwtTokenService {
 
             return JWT.create()
                     .withIssuer("reader-manga")
+                    .withClaim("id", user.getId())
+                    .withClaim("role", user.getRoles())
                     .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
