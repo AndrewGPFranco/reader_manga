@@ -2,23 +2,22 @@
     <header>
         <NavbarComponent />
     </header>
-    <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
+    <main>
         <n-card>
-            <section class="max-w-md mx-auto p-6 bg-white shadow-md rounded-2xl">
-                <div class="flex flex-col items-center mb-6">
-                    <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="w-32 h-32 object-cover rounded-full shadow-lg" />
-                    <h2 class="text-2xl font-semibold mt-4">{{ name }}</h2>
-                    <p class="text-gray-300">{{ email }}</p>
-                    <p class="text-gray-300">Nickname: {{ username }}</p>
-                    <p class="text-gray-300">Data de Nascimento: {{ dateBirth }}</p>
+            <section class="card-content">
+                <div class="profile-container">
+                    <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="profile-image" />
+                    <h2 class="profile-name">{{ name }}</h2>
+                    <p class="profile-info">{{ email }}</p>
+                    <p class="profile-info">Nickname: {{ username }}</p>
+                    <p class="profile-info">Data de Nascimento: {{ dateBirth }}</p>
                 </div>
 
-                <div class="flex justify-between mt-4">
-                    <button @click="efetuarLogout" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                <div class="button-group">
+                    <button @click="efetuarLogout" class="logout-button">
                         Logout
                     </button>
-                    <button @click="changePassword"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                    <button @click="changePassword" class="change-password-button">
                         Alterar Senha
                     </button>
                 </div>
@@ -62,24 +61,81 @@ onMounted(async () => {
 <style scoped>
 main {
     padding: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .n-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 95vh;
     box-sizing: border-box;
     overflow: scroll;
     overflow-x: hidden;
 }
 
-section {
+.card-content {
+    max-width: 600px;
+    padding: 20px;
     background-color: #010024;
     color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.profile-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.profile-info {
+    color: #d0d0d0;
+    margin: 5px 0;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
 button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.logout-button {
+    background-color: #e74c3c;
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+}
+
+.change-password-button {
+    background-color: #3498db;
+}
+
+.change-password-button:hover {
+    background-color: #2980b9;
 }
 </style>
