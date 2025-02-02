@@ -74,7 +74,7 @@ main {
 }
 
 .card-content {
-    max-width: 600px;
+    width: 75vw;
     padding: 20px;
     background-color: #010024;
     color: #ffffff;
