@@ -1,3 +1,4 @@
+import type iLogin from "@/interface/iLogin";
 import type MangaData from "@/interface/Manga";
 
 export function validationFields(data: MangaData): string | boolean{
@@ -35,6 +36,18 @@ export function validationFields(data: MangaData): string | boolean{
 
     if(data.image === "") {
         return "Field image is required";
+    }
+
+    return true;
+}
+
+export function validationFieldsLogin(data: iLogin): string | boolean {
+    if(data.email === null || data.email === "") {
+        return "Email é obrigatório!"
+    }
+
+    if(data.password === null || data.password === "") {
+        return "Senha é obrigatório!"
     }
 
     return true;

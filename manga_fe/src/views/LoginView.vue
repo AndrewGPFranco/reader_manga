@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { useAuthStore } from '@/store/AuthStore';
+import { validationFieldsLogin } from '@/utils/validation';
 import { useMessage } from 'naive-ui';
 import { ref } from 'vue';
 
@@ -46,12 +47,20 @@ const password = ref<string>("");
 const efetuarLogin = async (e: MouseEvent) => {
   try {
     e.preventDefault();
-    await useAuth.efetuarLogin(email.value, password.value);
-
-    limparCampos();
-    router.push({ name: 'home' });
+    const validation = validationFieldsLogin({email: email.value, password: password.value});
+    if(validation === true) {
+      await useAuth.efetuarLogin(email.value, password.value);
+  
+      limparCampos();
+      router.push({ name: 'home' });
+    } else {
+      message.error(validation);
+    }
   } catch (error: any) {
-    message.error(error.message);
+    if(error.message === "Cannot read properties of undefined (reading 'data')")
+      message.error("Não há conexão com o servidor no momento!")
+    else
+      message.error(error.message);
   }
 }
 
