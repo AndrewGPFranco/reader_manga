@@ -47,8 +47,7 @@ const setFavorite = async (idManga: number) => {
     const response = await mangaStore.setFavorite(idManga);
     message.info(String(response.message));
     if(response.statusCode == 200) {
-        const user = userAuth.getUserAutenticado();
-        const userId = user.getId();
+        const userId = userAuth.getIdUsuario();
         if(userId !== undefined) {
             const mangasDoUsuario = await mangaStore.getListMangaByUser(userId);
             mangasArray.value = mangasDoUsuario.mangaList;

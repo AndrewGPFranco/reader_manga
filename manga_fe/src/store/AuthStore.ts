@@ -99,6 +99,14 @@ export const useAuthStore = defineStore('auth', {
             } catch(error: any) {
                 throw new Error(error.response?.data || 'Erro ao encontrar usuário');
             }
+        },
+        getIdUsuario() {
+            const token = localStorage.getItem('token');
+            if(token != undefined) {
+                const decode = jwtDecode<DecodedToken>(token);
+                const id = decode.id;
+                return id;
+            }
         }
     }
 })

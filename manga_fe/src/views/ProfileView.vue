@@ -8,9 +8,9 @@
                 <div class="flex flex-col items-center mb-6">
                     <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="w-32 h-32 object-cover rounded-full shadow-lg" />
                     <h2 class="text-2xl font-semibold mt-4">{{ name }}</h2>
-                    <p class="text-gray-500">{{ email }}</p>
-                    <p class="text-gray-500">Nickname: {{ username }}</p>
-                    <p class="text-gray-500">Data de Nascimento: {{ dateBirth }}</p>
+                    <p class="text-gray-300">{{ email }}</p>
+                    <p class="text-gray-300">Nickname: {{ username }}</p>
+                    <p class="text-gray-300">Data de Nascimento: {{ dateBirth }}</p>
                 </div>
 
                 <div class="flex justify-between mt-4">
@@ -75,8 +75,8 @@ main {
 }
 
 section {
-    background-color: #f9fafb;
-    color: #333;
+    background-color: #010024;
+    color: #ffffff;
 }
 
 button {
