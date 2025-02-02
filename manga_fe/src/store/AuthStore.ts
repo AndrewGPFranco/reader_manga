@@ -4,10 +4,12 @@ import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
 import type DecodedToken from "@/interface/iDecodedToken";
 import type { UserRegister } from "@/class/UserRegister";
+import { UserSession } from "@/class/UserSession";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: new User("", "", "")
+        user: new User("", "", ""),
+        usuarioLogado: null as UserSession | null
     }),
 
     actions: {
@@ -52,6 +54,7 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('id');
             localStorage.removeItem('token');
             this.user = new User("", "", "");
+            this.usuarioLogado = null;
         },
         getRoleUser(): string {
             const token = localStorage.getItem('token');
@@ -70,6 +73,31 @@ export const useAuthStore = defineStore('auth', {
                 throw new Error('Falha ao cadastrar usuário');
             } catch(error: any) {
                 throw new Error(error.response?.data || 'Erro ao cadastrar usuário');
+            }
+        },
+        async getUser() {
+            try {
+                if(this.usuarioLogado !== null)
+                    return this.usuarioLogado;
+
+                const token = localStorage.getItem('token');
+                if(token != undefined) {
+                    const tokenDecode = jwtDecode<DecodedToken>(token);
+                    const email = tokenDecode.sub;
+                    const result = await api.get(`/api/v1/user?email=${email}`, {
+                        headers: {
+                            Authorization: `${token}`
+                        }
+                    });
+                    const userData = result.data;
+                    this.usuarioLogado = new UserSession(
+                        userData.firstName, userData.fullName, userData.username,
+                        userData.email, userData.dateBirth);
+                    return this.usuarioLogado;
+                }
+                throw new Error('Falha ao encontrar usuário');
+            } catch(error: any) {
+                throw new Error(error.response?.data || 'Erro ao encontrar usuário');
             }
         }
     }

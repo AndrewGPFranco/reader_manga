@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<RecoverUserDTO> getUserByEmail(@RequestParam(name = "email") String email) {
         return ResponseEntity.ok().body(userService.getUserByEmail(email));
     }

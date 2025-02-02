@@ -5,7 +5,7 @@
     <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
         <n-card>
             <div class="flex items-center space-x-4 mb-6">
-                <img :src="manga.image" alt="Imagem do Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg">
+                <img :src="manga.image" alt="Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg">
                 <div>
                     <h1 class="text-2xl font-bold">{{ manga.title }}</h1>
                     <p class="text-black text-sm">{{ manga.author }}</p>
