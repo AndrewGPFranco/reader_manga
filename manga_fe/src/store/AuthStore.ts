@@ -3,6 +3,7 @@ import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
 import type DecodedToken from "@/interface/iDecodedToken";
+import type { UserRegister } from "@/class/UserRegister";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -59,6 +60,17 @@ export const useAuthStore = defineStore('auth', {
                 return tokenDecode.role;
             }
             return "USER";
+        },
+        async register(user: UserRegister): Promise<string> {
+            try {
+                const result = await api.post('/api/v1/user/register', user);
+                if(result.status === 200)
+                    return "Usuário cadastrado com sucesso!"
+
+                throw new Error('Falha ao cadastrar usuário');
+            } catch(error: any) {
+                throw new Error(error.response?.data || 'Erro ao cadastrar usuário');
+            }
         }
     }
 })

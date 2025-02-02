@@ -3,48 +3,100 @@
         <form class="form">
             <p class="title">Registrar-se</p>
             <p class="message">Registre-se para ter acesso a plataforma!</p>
-                <div class="flex">
+            <div class="flex">
                 <label>
-                    <input class="input" type="text" placeholder="" required="true">
+                    <input class="input" v-model="nome" type="text" required="true">
                     <span>Nome</span>
                 </label>
 
                 <label>
-                    <input class="input" type="text" placeholder="" required=true>
+                    <input class="input" v-model="apelido" type="text" required=true>
                     <span>Apelido</span>
                 </label>
             </div>
 
             <label>
-                <input class="input" type="text" placeholder="" required=true>
+                <input class="input" v-model="nomeCompleto" type="text" required=true>
                 <span>Nome completo</span>
             </label>
             
             <label>
-                <input class="input" type="date" placeholder="" required=true>
+                <input class="input" v-maska data-maska="##/##/####" v-model="dataNascimento" type="text" required=true>
                 <span>Data de nascimento</span>
             </label> 
                     
             <label>
-                <input class="input" type="email" placeholder="" required=true>
+                <input class="input" v-model="email" type="email" required=true>
                 <span>Email</span>
             </label> 
                 
             <label>
-                <input class="input" type="password" placeholder="" required=true>
+                <input class="input" v-model="senha" type="password" required=true>
                 <span>Senha</span>
             </label>
             <label>
-                <input class="input" type="password" placeholder="" required=true>
+                <input class="input" v-model="confirmarSenha" type="password" required=true>
                 <span>Confirmar senha</span>
             </label>
-            <button class="submit">Enviar</button>
+            <button class="submit" @click="registrar">Enviar</button>
             <p class="signin">Já possui uma conta? <router-link :to="{ name: 'login'}">Entrar</router-link></p>
         </form>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { vMaska } from 'maska/vue';
+import { useAuthStore } from '@/store/AuthStore';
+import { UserRegister } from '@/class/UserRegister';
+import { useMessage } from 'naive-ui';
+import router from '@/router';
+import { validationFieldsRegister } from '@/utils/validation';
+
+const nome = ref<string>("");
+const apelido = ref<string>("");
+const nomeCompleto = ref<string>("");
+const dataNascimento = ref<string>("");
+const email = ref<string>("");
+const senha = ref<string>("");
+const confirmarSenha = ref<string>("");
+
+const auth = useAuthStore();
+const message = useMessage();
+
+const registrar = async (e: MouseEvent) => {
+    e.preventDefault();
+
+    try {
+        const validacao = validationFieldsRegister({
+            nome: nome.value,
+            apelido: apelido.value,
+            nomeCompleto: nomeCompleto.value,
+            dataNascimento: dataNascimento.value,
+            email: email.value,
+            senha: senha.value,
+            confirmarSenha: confirmarSenha.value
+        });
+
+        if (typeof validacao === 'string') {
+            message.error(validacao);
+        } else {
+            const [dia, mes, ano] = dataNascimento.value.split('/');
+            const data = new Date(parseInt(ano), parseInt(mes) - 1, parseInt(dia));
+            const userRegister = new UserRegister(
+                nome.value, apelido.value, nomeCompleto.value,
+                data, email.value,
+                senha.value);
+
+            const result = await auth.register(userRegister);
+            message.success(result);
+            router.push({ name: 'login' });
+        }
+    } catch(error: any) {
+        message.error(error.message);
+    }
+}
+
 </script>
 
 <style scoped>
