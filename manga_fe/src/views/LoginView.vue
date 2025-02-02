@@ -24,7 +24,7 @@
                 <button class="button1" @click="efetuarLogin">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>
-                <router-link to="/register/user" class="button2">Sign Up</router-link>
+                <router-link :to="{ name: 'registerUser'}" class="button2">Sign Up</router-link>
             </div>
             <button class="button3">Forgot Password</button>
         </form>
@@ -74,11 +74,11 @@ const limparCampos = () => {
 <style scoped>
 
 .container-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #292929;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #292929;
 }
 
 .form {
