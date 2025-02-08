@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import type ChapterData from '@/interface/Chapter';
-import { useChapterStore } from '@/store/ChapterStore';
+import { useChapterStore } from '@/store/chapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
