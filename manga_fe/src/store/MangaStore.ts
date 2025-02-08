@@ -44,9 +44,10 @@ export const useMangaStore = defineStore('manga', {
         // Get 5 manga covers from the MangaDex API
         async getFiveMangaRandomMD(): Promise<MangaDexData[]> {
             try {
+                const token = localStorage.getItem('token');
                 const response = await api.get("/api/v1/manga/get-covers", {
                     headers: {
-                        Authorization: `${this.user.getToken()}`
+                        Authorization: `${token}`
                     }
                 });
                 return response.data;
