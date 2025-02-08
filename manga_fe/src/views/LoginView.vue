@@ -26,7 +26,6 @@
                 </button>
                 <router-link :to="{ name: 'registerUser'}" class="button2">Sign Up</router-link>
             </div>
-            <button class="button3">Forgot Password</button>
         </form>
     </div>
 </template>
@@ -54,7 +53,7 @@ const efetuarLogin = async (e: MouseEvent) => {
       limparCampos();
       router.push({ name: 'home' });
     } else {
-      message.error(validation);
+      message.error(validation as string);
     }
   } catch (error: any) {
     if(error.message === "Cannot read properties of undefined (reading 'data')")
@@ -137,7 +136,7 @@ const limparCampos = () => {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  margin-top: 2.5em;
+  margin-top: 1.8em;
 }
 
 .button1 {
@@ -151,6 +150,7 @@ const limparCampos = () => {
   transition: .4s ease-in-out;
   background-color: #252525;
   color: white;
+  margin-bottom: 1.8em;
 }
 
 .button1:hover {
@@ -168,26 +168,11 @@ const limparCampos = () => {
   transition: .4s ease-in-out;
   background-color: #252525;
   color: white;
+  margin-bottom: 1.8em;
 }
 
 .button2:hover {
   background-color: black;
-  color: white;
-}
-
-.button3 {
-  margin-bottom: 3em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  transition: .4s ease-in-out;
-  background-color: #252525;
-  color: white;
-}
-
-.button3:hover {
-  background-color: red;
   color: white;
 }
 
