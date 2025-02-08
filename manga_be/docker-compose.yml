@@ -32,4 +32,4 @@ services:
     command: ./mvnw spring-boot:run
 
 volumes:
-  mysql_data:
+  postgres_data:
