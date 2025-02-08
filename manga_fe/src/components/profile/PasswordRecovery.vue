@@ -1,7 +1,8 @@
 <template>
-    <section class="formContainer">
+    // TODO: implementar funcionalidade de visualizar as senhas que estão sendo digitadas
+    <section class="form-container">
         <form class="form">
-            <p id="heading">Alteração de senha:</p>
+            <h2 id="heading">Alteração de Senha</h2>
             <div class="field">
                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     viewBox="0 0 16 16">
@@ -9,7 +10,7 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input autocomplete="off" placeholder="Senha anterior" class="input-field" type="password">
+                <input autocomplete="off" placeholder="Senha anterior" class="input-field" type="password" />
             </div>
             <div class="field">
                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -18,7 +19,7 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input placeholder="Nova senha" class="input-field" type="password">
+                <input placeholder="Nova senha" class="input-field" type="password" />
             </div>
             <div class="field">
                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -27,100 +28,112 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input placeholder="Repita a nova senha" class="input-field" type="password">
+                <input placeholder="Repita a nova senha" class="input-field" type="password" />
             </div>
             <div class="btn">
-                <button class="button2">Alterar</button>
+                <button class="button2" @click.prevent="efetuarTrocaSenha">Alterar</button>
             </div>
         </form>
     </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const senhaAntiga = ref<string>("");
+const novaSenha = ref<string>("");
+const novaSenhaRepetida = ref<string>("");
+
+const efetuarTrocaSenha = (e: MouseEvent) => {
+    e.preventDefault();
+
+    // TODO: implementar lógica
+};
+
+</script>
 
 <style lang="css" scoped>
-
-.formContainer {
+.form-container {
     display: flex;
     justify-content: center;
-    margin: 10px;
+    margin: 20px;
+    padding: 2em;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding-left: 2em;
-    padding-right: 2em;
-    padding-bottom: 0.4em;
-    background-color: #171717;
-    border-radius: 25px;
-    transition: .4s ease-in-out;
+    gap: 15px;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border-radius: 16px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
     width: 40vw;
+    max-width: 500px;
+    transition: transform 0.3s ease;
 }
 
 .form:hover {
-    transform: scale(1.05);
-    border: 1px solid black;
+    transform: translateY(-5px);
 }
 
 #heading {
     text-align: center;
-    margin: 2em;
-    color: rgb(255, 255, 255);
-    font-size: 1.2em;
+    font-size: 1.8rem;
+    color: #1f2937;
+    font-weight: bold;
+    margin-bottom: 1em;
 }
 
 .field {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    border-radius: 25px;
-    padding: 0.6em;
-    border: none;
-    outline: none;
-    color: white;
-    background-color: #171717;
-    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: inset 2px 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .input-icon {
-    height: 1.3em;
-    width: 1.3em;
-    fill: white;
+    height: 20px;
+    width: 20px;
+    fill: #6b7280;
+    margin-right: 10px;
 }
 
 .input-field {
-    background: none;
+    background: transparent;
     border: none;
     outline: none;
     width: 100%;
-    color: #d3d3d3;
+    color: #374151;
+    font-size: 1rem;
 }
 
-.form .btn {
+.field:focus-within {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.btn {
     display: flex;
     justify-content: center;
-    flex-direction: row;
-    margin-top: 1.8em;
+    margin-top: 1.5em;
 }
 
 .button2 {
-    padding: 0.5em;
-    padding-left: 2.3em;
-    padding-right: 2.3em;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    transition: .4s ease-in-out;
-    background-color: #252525;
+    background-color: #2563eb;
     color: white;
-    margin-bottom: 1.8em;
+    padding: 0.8em 2em;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
 .button2:hover {
-    background-color: black;
-    color: white;
+    background-color: #1d4ed8;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
 }
 </style>
