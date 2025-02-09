@@ -52,16 +52,37 @@ const efetuarTrocaSenha = async (e: MouseEvent) => {
     e.preventDefault();
 
     if(novaSenha.value === novaSenhaRepetida.value) {
-        const result = await auth.changePassword(senhaAntiga.value, novaSenha.value);
-        if(result.keys().next().value) {
-            message.success(result.values().next().value ?? 'Success');
-            clearForm();
-            emit('atualizaForm', true);
+        const validatePassword = validationPassword(novaSenha.value);
+        if(typeof validatePassword != 'string') {
+            const result = await auth.changePassword(senhaAntiga.value, novaSenha.value);
+            if(result.keys().next().value) {
+                message.success(result.values().next().value ?? 'Success');
+                clearForm();
+                emit('atualizaForm', true);
+            } else
+                message.error(result.values().next().value ?? 'An error occurred');
         } else
-            message.error(result.values().next().value ?? 'An error occurred');
+            return message.error(validatePassword);
     } else
         message.info("As senhas precisam ser iguais.");
 };
+
+const validationPassword = (password: string): string | boolean => {
+    if (!password.trim()) {
+        return "Senha é obrigatória!";
+    }
+
+    if (password.length < 8) {
+        return "Senha deve ter no mínimo 8 caracteres!";
+    }
+
+    const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+    if (!senhaRegex.test(password)) {
+        return "Senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial!";
+    }
+
+    return true;
+}
 
 const clearForm = () => {
     senhaAntiga.value = "";
