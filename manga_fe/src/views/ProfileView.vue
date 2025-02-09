@@ -24,7 +24,7 @@
             </section>
 
             <section class="containerPasswordRecovery" v-if="isPasswordRecovery">
-                <PasswordRecovery />
+                <PasswordRecovery @atualiza-form="atualizaForm" />
             </section>
         </n-card>
     </main>
@@ -44,6 +44,13 @@ const email = ref<string>("");
 const username = ref<string>("");
 const dateBirth = ref<Date | null>(null);
 let isPasswordRecovery = ref<boolean>(false);
+
+/**
+ * Emit recuperado pelo componente PasswordRecovery para esconder novamente o formulário.
+ */
+const atualizaForm = () => {
+    isPasswordRecovery.value = false;
+}
 
 const efetuarLogout = () => {
     auth.efetuarLogout();

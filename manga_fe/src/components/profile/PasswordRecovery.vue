@@ -1,5 +1,4 @@
 <template>
-    // TODO: implementar funcionalidade de visualizar as senhas que estão sendo digitadas
     <section class="form-container">
         <form class="form">
             <h2 id="heading">Alteração de Senha</h2>
@@ -10,7 +9,7 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input autocomplete="off" placeholder="Senha anterior" class="input-field" type="password" />
+                <input autocomplete="off" placeholder="Senha anterior" v-model="senhaAntiga" class="input-field" type="password" />
             </div>
             <div class="field">
                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -19,7 +18,7 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input placeholder="Nova senha" class="input-field" type="password" />
+                <input autocomplete="off" placeholder="Nova senha" v-model="novaSenha" class="input-field" type="password" />
             </div>
             <div class="field">
                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -28,7 +27,7 @@
                         d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                     </path>
                 </svg>
-                <input placeholder="Repita a nova senha" class="input-field" type="password" />
+                <input autocomplete="off" placeholder="Repita a nova senha" v-model="novaSenhaRepetida" class="input-field" type="password" />
             </div>
             <div class="btn">
                 <button class="button2" @click.prevent="efetuarTrocaSenha">Alterar</button>
@@ -38,17 +37,37 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/store/AuthStore';
+import { useMessage } from 'naive-ui';
 import { ref } from 'vue';
 
+const auth = useAuthStore();
+const message = useMessage();
 const senhaAntiga = ref<string>("");
 const novaSenha = ref<string>("");
 const novaSenhaRepetida = ref<string>("");
+const emit = defineEmits(['atualizaForm']);
 
-const efetuarTrocaSenha = (e: MouseEvent) => {
+const efetuarTrocaSenha = async (e: MouseEvent) => {
     e.preventDefault();
 
-    // TODO: implementar lógica
+    if(novaSenha.value === novaSenhaRepetida.value) {
+        const result = await auth.changePassword(senhaAntiga.value, novaSenha.value);
+        if(result.keys().next().value) {
+            message.success(result.values().next().value ?? 'Success');
+            clearForm();
+            emit('atualizaForm', true);
+        } else
+            message.error(result.values().next().value ?? 'An error occurred');
+    } else
+        message.info("As senhas precisam ser iguais.");
 };
+
+const clearForm = () => {
+    senhaAntiga.value = "";
+    novaSenha.value = "";
+    novaSenhaRepetida.value = "";
+}
 
 </script>
 

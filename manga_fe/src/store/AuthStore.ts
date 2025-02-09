@@ -107,6 +107,24 @@ export const useAuthStore = defineStore('auth', {
                 const id = decode.id;
                 return id;
             }
+        },
+        async changePassword(oldPassword: string, newPassword: String): Promise<Map<boolean, string>> {
+            const token = localStorage.getItem('token');
+            if(token != undefined) {
+                try {
+                    const idUser = this.getIdUsuario();
+                    const data = {oldPassword, newPassword, idUser};
+                    const result = await api.post("/api/v1/user/change-password", data, {
+                        headers: {
+                            Authorization: `${token}`
+                        }
+                    });
+                    return new Map([[true, result.data]]);
+                } catch(error: any) {
+                    return new Map([[false, error.response.data]]);
+                }
+            }
+            return new Map([[false, "Token inválido!"]]);
         }
     }
 })
