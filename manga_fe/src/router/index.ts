@@ -78,9 +78,8 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = authStore.isUserAutenticado();
 
   const publicRoutes = ['login', 'registerUser'];
-
-  if(!import.meta.env.PROD) {
-    if (to.name && publicRoutes.includes(to.name.toString())) {
+  
+  if (to.name && publicRoutes.includes(to.name.toString())) {
     if (isAuthenticated) {
       next({ name: 'home' });
     } else {
@@ -91,7 +90,6 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
-  }
 });
 
 export default router;
