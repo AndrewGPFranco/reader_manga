@@ -6,7 +6,3 @@ export function formatDate(date: Date): string {
         day: '2-digit',
     });
 }
-
-const flagProd = import.meta.env.VITE_isProd === 'true';
-
-export default flagProd;

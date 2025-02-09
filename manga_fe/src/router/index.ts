@@ -11,7 +11,6 @@ import ProfileView from '@/views/ProfileView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/store/AuthStore'
 import RegisterUser from '@/views/RegisterUser.vue'
-import flagProd from '@/utils/utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,18 +79,18 @@ router.beforeEach((to, from, next) => {
 
   const publicRoutes = ['login', 'registerUser'];
 
-  if(!flagProd) {
+  if(!import.meta.env.PROD) {
     if (to.name && publicRoutes.includes(to.name.toString())) {
-      if (isAuthenticated) {
-        next({ name: 'home' });
-      } else {
-        next();
-      }
-    } else if (!isAuthenticated) {
-        next({ name: 'login' });
-      } else {
-        next();
-      }
+    if (isAuthenticated) {
+      next({ name: 'home' });
+    } else {
+      next();
+    }
+  } else if (!isAuthenticated) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
   }
 });
 
