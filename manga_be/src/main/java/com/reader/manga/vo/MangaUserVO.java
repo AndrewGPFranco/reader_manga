@@ -4,6 +4,8 @@ import com.reader.manga.enums.StatusType;
 import lombok.Builder;
 import lombok.Setter;
 
+import java.util.Date;
+
 /**
  * VO auxiliar para transmitir os mangas do usuário, a fim de evitar mandar a entidade.
  * @author andrewgpf
@@ -13,6 +15,9 @@ public record MangaUserVO(
         Long id,
         String title,
         String image,
+        String description,
+        Date creationDate,
+        Date closingDate,
         @Setter boolean favorite,
         int size,
         StatusType status,
