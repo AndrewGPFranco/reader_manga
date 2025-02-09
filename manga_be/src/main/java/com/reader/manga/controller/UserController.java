@@ -4,10 +4,12 @@ import com.reader.manga.dto.user.LoginResponseDTO;
 import com.reader.manga.dto.user.RecoverUserDTO;
 import com.reader.manga.dto.user.UserDTO;
 import com.reader.manga.dto.user.UserLoginDTO;
+import com.reader.manga.exception.PasswordException;
 import com.reader.manga.model.User;
 import com.reader.manga.service.JwtTokenService;
 import com.reader.manga.service.UserMangaService;
 import com.reader.manga.service.UserService;
+import com.reader.manga.vo.ChangePasswordVO;
 import com.reader.manga.vo.UserMangaVO;
 
 import jakarta.validation.Valid;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -37,20 +40,24 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<RecoverUserDTO> getUserByEmail(@RequestParam(name = "email") String email) {
         return ResponseEntity.ok().body(userService.getUserByEmail(email));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid UserLoginDTO userDTO) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
-                userDTO.email(), userDTO.password());
+    public ResponseEntity<Object> login(@RequestBody @Valid UserLoginDTO userDTO) {
+        try {
+            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                    userDTO.email(), userDTO.password());
 
-        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
-        String token = jwtTokenService.generateToken((User) auth.getPrincipal());
+            Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+            String token = jwtTokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/add-manga")
@@ -92,6 +99,16 @@ public class UserController {
     public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long idUser, @PathVariable Long idManga) {
         userMangaService.changeMangaFavoriteStatus(idManga, idUser);
         return ResponseEntity.ok().body("Change made");
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordVO userVO) {
+        try {
+            userService.changePassword(userVO);
+            return ResponseEntity.ok().body("Senha alterada com sucesso!");
+        } catch (PasswordException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
 }

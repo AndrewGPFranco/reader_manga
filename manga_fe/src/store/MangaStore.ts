@@ -6,6 +6,8 @@ import { defineStore } from "pinia";
 import { useAuthStore } from "./AuthStore";
 import type { User } from "@/class/User";
 import type ResponseListManga from "@/interface/ResponseListManga";
+import { jwtDecode } from "jwt-decode";
+import type DecodedToken from "@/interface/iDecodedToken";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
@@ -42,9 +44,10 @@ export const useMangaStore = defineStore('manga', {
         // Get 5 manga covers from the MangaDex API
         async getFiveMangaRandomMD(): Promise<MangaDexData[]> {
             try {
+                const token = localStorage.getItem('token');
                 const response = await api.get("/api/v1/manga/get-covers", {
                     headers: {
-                        Authorization: `${this.user.getToken()}`
+                        Authorization: `${token}`
                     }
                 });
                 return response.data;
@@ -118,14 +121,18 @@ export const useMangaStore = defineStore('manga', {
                 return { statusCode: error, message: "An error occurred while editing, please check the data." };
             }
         },
-        async getAllFavorites(): Promise<MangaData[]> {
-
-            const response = await api.get(`/api/v1/user/manga-favorite-list/${this.user.getId()}`, {
-                headers: {
-                    Authorization: `${this.user.getToken()}`
-                }
-            });
-            return response.data.mangaList;
+        async getAllFavorites() {
+            const token = localStorage.getItem('token');
+            if(token != undefined) {
+                const id = this.getIdUsuario();
+                const response = await api.get(`/api/v1/user/manga-favorite-list/${id}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
+                return response.data.mangaList;
+            }
+            
         },
         async getListMangaByUser(id: string): Promise<ResponseListManga> {
             try {
@@ -154,7 +161,7 @@ export const useMangaStore = defineStore('manga', {
         },
         async removeDaLista(idManga: number) {
             try {
-                const idUser = this.user.getId();
+                const idUser = this.getIdUsuario();
                 const response = await api.post(`/api/v1/user/remove-manga?idManga=${idManga}&idUser=${idUser}`, {}, {
                     headers: {
                         Authorization: this.user.getToken()
@@ -163,6 +170,14 @@ export const useMangaStore = defineStore('manga', {
                 return response.data;
             } catch (error: any) {
                 throw new Error(error.response?.data || 'Erro ao remover manga');
+            }
+        },
+        getIdUsuario() {
+            const token = localStorage.getItem('token');
+            if(token != undefined) {
+                const decode = jwtDecode<DecodedToken>(token);
+                const id = decode.id;
+                return id;
             }
         }
     },

@@ -18,7 +18,7 @@
           </n-card>
         </div>
         <div v-else class="containerWithoutManga">
-          <h1>You don't have favorite manga</h1>
+          <h1>Não há nenhum mangá em sua lista de favoritos.</h1>
         </div>
       </n-card>
     </section>

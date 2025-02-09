@@ -21,11 +21,11 @@
                 <input v-model="password" placeholder="Password" class="input-field" type="password">
             </div>
             <div class="btn">
-                <button
-                    class="button1" @click="efetuarLogin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                <button class="button2">Sign Up</button>
+                <button class="button1" @click="efetuarLogin">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <router-link :to="{ name: 'registerUser'}" class="button2">Sign Up</router-link>
             </div>
-            <button class="button3">Forgot Password</button>
         </form>
     </div>
 </template>
@@ -33,6 +33,7 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { useAuthStore } from '@/store/AuthStore';
+import { validationFieldsLogin } from '@/utils/validation';
 import { useMessage } from 'naive-ui';
 import { ref } from 'vue';
 
@@ -43,11 +44,23 @@ const email = ref<string>("");
 const password = ref<string>("");
 
 const efetuarLogin = async (e: MouseEvent) => {
+  try {
     e.preventDefault();
-    await useAuth.efetuarLogin(email.value, password.value);
-
-    limparCampos();
-    router.push({ name: 'home' });
+    const validation = validationFieldsLogin({email: email.value, password: password.value});
+    if(validation === true) {
+      await useAuth.efetuarLogin(email.value, password.value);
+  
+      limparCampos();
+      router.push({ name: 'home' });
+    } else {
+      message.error(validation as string);
+    }
+  } catch (error: any) {
+    if(error.message === "Cannot read properties of undefined (reading 'data')")
+      message.error("Não há conexão com o servidor no momento!")
+    else
+      message.error(error.message);
+  }
 }
 
 const limparCampos = () => {
@@ -60,11 +73,11 @@ const limparCampos = () => {
 <style scoped>
 
 .container-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #292929;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #292929;
 }
 
 .form {
@@ -123,7 +136,7 @@ const limparCampos = () => {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  margin-top: 2.5em;
+  margin-top: 1.8em;
 }
 
 .button1 {
@@ -137,6 +150,7 @@ const limparCampos = () => {
   transition: .4s ease-in-out;
   background-color: #252525;
   color: white;
+  margin-bottom: 1.8em;
 }
 
 .button1:hover {
@@ -154,26 +168,11 @@ const limparCampos = () => {
   transition: .4s ease-in-out;
   background-color: #252525;
   color: white;
+  margin-bottom: 1.8em;
 }
 
 .button2:hover {
   background-color: black;
-  color: white;
-}
-
-.button3 {
-  margin-bottom: 3em;
-  padding: 0.5em;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  transition: .4s ease-in-out;
-  background-color: #252525;
-  color: white;
-}
-
-.button3:hover {
-  background-color: red;
   color: white;
 }
 

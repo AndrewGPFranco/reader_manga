@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as NewChapter, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline } from '@vicons/ionicons5'
+import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as New, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline, Newspaper } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/store/AuthStore'
 
@@ -37,12 +37,14 @@ export default defineComponent({
         icon: renderIcon(NewspaperOutline),
         path: '/mangas'
       },
-      {
-        whateverLabel: () =>
-          h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
-        icon: renderIcon(NewChapter),
-        path: '/register/chapter'
-      },
+      ...(role.includes("ADMIN")
+        ? [{
+            whateverLabel: () =>
+              h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
+            icon: renderIcon(New),
+            path: '/register'
+          }]
+        : []),
       {
         whateverLabel: () =>
           h(RouterLink, { to: '/profile' }, { default: () => 'My Profile' }),

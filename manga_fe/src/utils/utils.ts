@@ -1,7 +1,5 @@
-import type MangaData from "@/interface/Manga";
-
-export function formatDate(date: MangaData): string {
-    const creationDate = new Date(date.creationDate);
+export function formatDate(date: Date): string {
+    const creationDate = new Date(date);
     return creationDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: '2-digit',

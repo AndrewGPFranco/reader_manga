@@ -14,4 +14,8 @@ public class PasswordEncoderMapper {
         return passwordEncoder.encode(rawPassword);
     }
 
+    public boolean matches(String oldPassword, String newPassword) {
+        return passwordEncoder.matches(oldPassword, newPassword);
+    }
+
 }

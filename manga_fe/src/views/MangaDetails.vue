@@ -5,7 +5,7 @@
     <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
         <n-card>
             <div class="flex items-center space-x-4 mb-6">
-                <img :src="manga.image" alt="Imagem do Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg">
+                <img :src="manga.image" alt="Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg">
                 <div>
                     <h1 class="text-2xl font-bold">{{ manga.title }}</h1>
                     <p class="text-black text-sm">{{ manga.author }}</p>
@@ -16,8 +16,8 @@
                 <p><span class="font-semibold">Size:</span> {{ manga.size }}</p>
                 <p><span class="font-semibold">Gender:</span> {{ manga.gender }}</p>
                 <p><span class="font-semibold">Status:</span> {{ manga.status }}</p>
+                <p><span class="font-semibold">Creation date:</span> {{ formatDate(manga.creationDate) }}</p>
                 <p><span class="font-semibold">End date:</span> {{ verifyEndDate(manga) }}</p>
-                <p><span class="font-semibold">Creation date:</span> {{ formatDate(manga) }}</p>
                 <p><span class="font-semibold">Description:</span> {{ manga.description }}</p>
             </div>
 
@@ -54,7 +54,7 @@ onMounted(async () => {
 })
 
 function verifyEndDate(str: MangaData): any {
-    return str.closingDate != undefined ? str.closingDate : "Still on display.";
+    return str.closingDate != undefined ? formatDate(str.closingDate) : "Still on display.";
 }
 
 </script>
