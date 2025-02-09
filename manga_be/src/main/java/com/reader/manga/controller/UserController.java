@@ -4,10 +4,12 @@ import com.reader.manga.dto.user.LoginResponseDTO;
 import com.reader.manga.dto.user.RecoverUserDTO;
 import com.reader.manga.dto.user.UserDTO;
 import com.reader.manga.dto.user.UserLoginDTO;
+import com.reader.manga.exception.PasswordException;
 import com.reader.manga.model.User;
 import com.reader.manga.service.JwtTokenService;
 import com.reader.manga.service.UserMangaService;
 import com.reader.manga.service.UserService;
+import com.reader.manga.vo.ChangePasswordVO;
 import com.reader.manga.vo.UserMangaVO;
 
 import jakarta.validation.Valid;
@@ -97,6 +99,16 @@ public class UserController {
     public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long idUser, @PathVariable Long idManga) {
         userMangaService.changeMangaFavoriteStatus(idManga, idUser);
         return ResponseEntity.ok().body("Change made");
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordVO userVO) {
+        try {
+            userService.changePassword(userVO);
+            return ResponseEntity.ok().body("Senha alterada com sucesso!");
+        } catch (PasswordException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
 }
