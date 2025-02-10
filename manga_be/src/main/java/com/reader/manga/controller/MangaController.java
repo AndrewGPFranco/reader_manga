@@ -6,6 +6,7 @@ import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
+import com.reader.manga.vo.CoversMangaVO;
 import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
 import jakarta.validation.Valid;
@@ -95,9 +96,9 @@ public class MangaController {
     }
 
     @GetMapping("/my-covers/{max}")
-    public ResponseEntity<List<String>> getMyCovers(@PathVariable int max) {
-        List<Map.Entry<String, String>> randomCovers = service.getRandomCovers(max);
-        List<String> finalList = new ArrayList<>();
+    public ResponseEntity<List<CoversMangaVO>> getMyCovers(@PathVariable int max) {
+        List<Map.Entry<String, CoversMangaVO>> randomCovers = service.getRandomCovers(max);
+        List<CoversMangaVO> finalList = new ArrayList<>();
         randomCovers.forEach(r -> finalList.add(r.getValue()));
         return ResponseEntity.ok().body(finalList);
     }
