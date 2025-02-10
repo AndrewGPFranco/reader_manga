@@ -2,7 +2,7 @@
     <div class="home">
       <n-card>
         <div class="banner">
-          <img src="../../assets/home/bannerHome.jpeg" alt="Banner do site">
+          <img src="../../assets/home/banner.jpeg" alt="Banner do site">
         </div>
         <h2 class="section-title">Famous Mangá</h2>
 
