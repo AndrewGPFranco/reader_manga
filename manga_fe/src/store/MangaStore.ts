@@ -9,6 +9,7 @@ import type ResponseListManga from "@/interface/ResponseListManga";
 import { jwtDecode } from "jwt-decode";
 import type DecodedToken from "@/interface/iDecodedToken";
 import type iCoversManga from "@/interface/iCoversManga";
+import { UserData } from "@/class/UserData";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
@@ -69,9 +70,12 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
-        async deleteMangaById(id: number): Promise<string> {
+        async deleteMangaById(idManga: number): Promise<string> {
             try {
-                const response = await api.delete(`/api/v1/manga/delete/${id}`, {
+                const idUser = this.getIdUsuario() ?? '0';
+                const dadosBack = new UserData(idUser, idManga, 0, 0);
+                const response = await api.delete(`/api/v1/manga/delete`, {
+                    data: dadosBack,
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }

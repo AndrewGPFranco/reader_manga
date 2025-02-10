@@ -170,4 +170,22 @@ public class UserMangaService {
         }
     }
 
+    /**
+     * TODO: ajustar
+     * @param idUser
+     * @param idManga
+     */
+    public void deleteAssociacaoUserMangaFavorite(Long idUser, Long idManga) {
+        favoriteMangaRepository.removerMangaDaListaDeFavoritos(idManga, idUser);
+    }
+
+    /**
+     * TODO: ajustar
+     * @param idUser
+     * @param idManga
+     */
+    public void deleteAssociacaoUserManga(Long idUser, Long idManga) {
+        userMangaRepository.deletaAssociacao(idUser, idManga);
+    }
+
 }

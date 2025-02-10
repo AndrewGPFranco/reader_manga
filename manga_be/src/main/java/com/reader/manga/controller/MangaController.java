@@ -3,6 +3,7 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
+import com.reader.manga.dto.utils.UserData;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
@@ -51,10 +52,10 @@ public class MangaController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteManga(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteManga(@RequestBody UserData userDto) {
         logger.info("*******************Deleting mangá!*******************");
-        service.deleteManga(id);
+        service.deleteManga(userDto);
         return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
