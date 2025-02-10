@@ -8,7 +8,7 @@
 
         <div class="favorites-grid" v-if="mangas.length != 0">
             <div v-for="(item, index) in mangas" :key="index" class="item-card">
-              <img :src="item" alt="Capa de mangá">
+              <a :href="item.urlReader" target="_blank"><img :src="item.urlImage" alt="Capa de mangá"></a>
             </div>
         </div>
       </n-card>
@@ -16,11 +16,12 @@
 </template>
   
 <script setup lang="ts">
+import type iCoversManga from '@/interface/iCoversManga';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
   
-const mangas = ref<string[]>([]);
+const mangas = ref<iCoversManga[]>([]);
 const message = useMessage();
 const mangaStore = useMangaStore();
 

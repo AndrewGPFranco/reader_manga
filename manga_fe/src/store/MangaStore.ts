@@ -8,6 +8,7 @@ import type { User } from "@/class/User";
 import type ResponseListManga from "@/interface/ResponseListManga";
 import { jwtDecode } from "jwt-decode";
 import type DecodedToken from "@/interface/iDecodedToken";
+import type iCoversManga from "@/interface/iCoversManga";
 
 export const useMangaStore = defineStore('manga', {
     state: () => ({
@@ -56,7 +57,7 @@ export const useMangaStore = defineStore('manga', {
             }
         },
         // Get 5 manga covers from my library
-        async getFiveMangaRandom(): Promise<string[]> {
+        async getFiveMangaRandom(): Promise<iCoversManga[]> {
             try {
                 const response = await api.get("/api/v1/manga/my-covers/30", {
                     headers: {
