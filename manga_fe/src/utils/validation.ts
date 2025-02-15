@@ -19,7 +19,7 @@ export function validationFields(data: MangaData): string | boolean{
         return "Field creationDate is required";
     }
 
-    if(data.closingDate === null) {
+    if(data.endDate === null) {
         return "Field closingDate is required";
     }
 
