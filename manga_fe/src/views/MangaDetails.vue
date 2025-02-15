@@ -54,7 +54,7 @@ onMounted(async () => {
 })
 
 function verifyEndDate(str: MangaData): any {
-    return str.closingDate != undefined ? formatDate(str.closingDate) : "Still on display.";
+    return str.endDate != undefined ? formatDate(str.endDate) : "Still on display.";
 }
 
 </script>

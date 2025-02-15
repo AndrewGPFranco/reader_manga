@@ -10,7 +10,7 @@ import com.reader.manga.repository.FavoriteMangaRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.UserMangaRepository;
 import com.reader.manga.repository.UserRepository;
-import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
+import com.reader.manga.interfaces.iListaMangasPorUsuario;
 import com.reader.manga.vo.MangaUserVO;
 import com.reader.manga.vo.UserMangaVO;
 
@@ -103,7 +103,7 @@ public class UserMangaService {
         return getMangasDoUsuario(mangaList, idUser);
     }
 
-    private @NotNull UserMangaVO getMangasDoUsuario(List<? extends ListaMangasPorUsuarioInterface> mangaList, Long idUser) {
+    private @NotNull UserMangaVO getMangasDoUsuario(List<? extends iListaMangasPorUsuario> mangaList, Long idUser) {
         List<MangaUserVO> mangaListVO = new ArrayList<>();
 
         mangaList.forEach(m -> {

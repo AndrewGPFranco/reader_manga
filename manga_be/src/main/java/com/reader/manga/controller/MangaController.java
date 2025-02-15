@@ -4,6 +4,7 @@ import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.dto.utils.UserData;
+import com.reader.manga.job.manga.ColetorManga;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
@@ -11,6 +12,7 @@ import com.reader.manga.vo.CoversMangaVO;
 import com.reader.manga.vo.InfoMangaVO;
 import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
+import com.reader.manga.vo.job.manga.MangaJobVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ public class MangaController {
 
     private final MangaService service;
     private final WebClient webClient;
+    private final ColetorManga coletorManga;
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -121,5 +124,10 @@ public class MangaController {
                         .status(manga.getStatus())
                         .image(manga.getImage())
                 .build());
+    }
+
+    @GetMapping("/executa-job/{manga}")
+    public Mono<MangaJobVO> executaJob(@PathVariable String manga) {
+        return coletorManga.executa(manga);
     }
 }
