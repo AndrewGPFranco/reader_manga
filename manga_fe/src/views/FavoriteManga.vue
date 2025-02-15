@@ -5,16 +5,17 @@
   <main>
     <section>
       <n-card class="containerCard" title="My favorite mangas" size="huge">
-        <div class="container" v-if="favoriteManga.length > 0">
-          <n-card class="mangaCard" :title="manga.title" v-for="manga in favoriteManga" :key="manga.id" bordered>
+        <div class="card-container" v-if="favoriteManga.length > 0">
+          <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
             <template #cover>
-              <img class="w-full h-48 object-cover" :src="manga.image" :alt="manga.title">
+              <img class="card-image" :src="manga.image" :alt="manga.title">
             </template>
-            <router-link :to="`/manga/${manga.id}`" class="text-xl font-bold mb-2 text-gray-800">
-              <n-button type="info">
-                Access
-              </n-button>
-            </router-link>
+            <div class="card-content">
+              <h3 class="card-title">{{ manga.title }}</h3>
+              <router-link :to="`/manga/${manga.id}`">
+                <n-button type="info">Access</n-button>
+              </router-link>
+            </div>
           </n-card>
         </div>
         <div v-else class="containerWithoutManga">
@@ -41,31 +42,61 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+main {
+  padding: 15px;
+}
 
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+.containerCard {
+  height: 95vh;
+  box-sizing: border-box;
+  overflow: scroll;
+  overflow-x: hidden;
+}
 
-  main {
-      padding: 15px;
-  }
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
 
-  .mangaCard {
-    max-width: 300px;
-  }
+.mangaCard {
+  width: 300px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-  .containerWithoutManga {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
 
-  .containerCard {
-    height: 95vh;
-    box-sizing: border-box;
-    overflow: scroll;
-    overflow-x: hidden;
-  }
+.card-content {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.containerWithoutManga {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 </style>
