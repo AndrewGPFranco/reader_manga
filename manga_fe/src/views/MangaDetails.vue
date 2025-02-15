@@ -24,7 +24,7 @@
             <div>
                 <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Chapters</h2>
                 <ul class="space-y-4">
-                    <li v-for="chapter in manga.listChapters" :key="chapter.title" class="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+                    <li v-for="chapter in manga.chapters" :key="chapter.title" class="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
                         <router-link :to="`/manga/${manga.id}/chapter/${chapter.id}`" class="font-semibold text-lg">{{ chapter.title }}</router-link>
                         <p class="text-black">{{ chapter.description }}</p>
                         <p><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
