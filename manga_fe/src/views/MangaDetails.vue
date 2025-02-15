@@ -50,7 +50,7 @@ let manga = ref<MangaData>({} as MangaData);
 
 onMounted(async () => {
     const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-    manga.value = await mangaStore.getMangaById(id);
+    manga.value = await mangaStore.getInfoManga(id);
 })
 
 function verifyEndDate(str: MangaData): any {

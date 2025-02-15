@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
+import com.reader.manga.dto.utils.UserData;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
 import com.reader.manga.mapper.MangaMapper;
@@ -114,12 +115,14 @@ public class MangaService {
         }
     }
 
-    public void deleteManga(Long id) {
-        Optional<Manga> mangaById = repository.findById(id);
+    public void deleteManga(UserData userData) {
+        Optional<Manga> mangaById = repository.findById(userData.idManga());
         if(mangaById.isEmpty()){
-            throw new NotFoundException("No manga found with the id: " + id + ".");
+            throw new NotFoundException("No manga found with the id: " + userData.idManga() + ".");
         }
-        repository.deleteById(id);
+        userMangaService.deleteAssociacaoUserMangaFavorite(userData.idUser(), userData.idManga());
+        userMangaService.deleteAssociacaoUserManga(userData.idUser(), userData.idManga());
+        repository.deleteById(userData.idManga());
     }
 
     public Set<MangaUserVO> readAllMangas(Long idUser) {

@@ -3,10 +3,12 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.manga.GetMangaDTO;
 import com.reader.manga.dto.manga.MangaDTO;
 import com.reader.manga.dto.manga.UpdateMangaDTO;
+import com.reader.manga.dto.utils.UserData;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.service.MangaService;
 import com.reader.manga.vo.CoversMangaVO;
+import com.reader.manga.vo.InfoMangaVO;
 import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
 import jakarta.validation.Valid;
@@ -51,10 +53,10 @@ public class MangaController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteManga(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteManga(@RequestBody UserData userDto) {
         logger.info("*******************Deleting mangá!*******************");
-        service.deleteManga(id);
+        service.deleteManga(userDto);
         return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
@@ -101,5 +103,22 @@ public class MangaController {
         List<CoversMangaVO> finalList = new ArrayList<>();
         randomCovers.forEach(r -> finalList.add(r.getValue()));
         return ResponseEntity.ok().body(finalList);
+    }
+
+    @GetMapping("/get-info-manga/{idManga}")
+    public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable Long idManga) {
+        Manga manga = service.findById(idManga);
+
+        return ResponseEntity.ok().body(InfoMangaVO.builder()
+                        .title(manga.getTitle())
+                        .size(manga.getSize())
+                        .creationDate(manga.getCreationDate())
+                        .description(manga.getDescription())
+                        .listChapters(manga.getChapters())
+                        .gender(manga.getGender())
+                        .endDate(manga.getClosingDate())
+                        .author(manga.getAuthor())
+                        .status(manga.getStatus())
+                .build());
     }
 }
