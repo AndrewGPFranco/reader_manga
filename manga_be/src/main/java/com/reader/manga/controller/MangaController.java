@@ -37,7 +37,6 @@ public class MangaController {
 
     private final MangaService service;
     private final WebClient webClient;
-    private final ColetorManga coletorManga;
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -127,7 +126,7 @@ public class MangaController {
     }
 
     @GetMapping("/executa-job/{manga}")
-    public Mono<MangaJobVO> executaJob(@PathVariable String manga) {
-        return coletorManga.executa(manga);
+    public ResponseEntity<MangaJobVO> executaJob(@PathVariable String manga) {
+        return ResponseEntity.ok().body(service.executaJobManga(manga));
     }
 }

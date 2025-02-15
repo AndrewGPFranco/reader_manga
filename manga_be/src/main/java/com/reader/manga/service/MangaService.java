@@ -7,6 +7,7 @@ import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.dto.utils.UserData;
 import com.reader.manga.exception.CreationErrorException;
 import com.reader.manga.exception.NotFoundException;
+import com.reader.manga.job.manga.ColetorManga;
 import com.reader.manga.mapper.MangaMapper;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
@@ -15,6 +16,7 @@ import com.reader.manga.vo.CoversMangaVO;
 import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
 import com.reader.manga.vo.UserMangaVO;
+import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,9 +28,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MangaService {
 
+    private final MangaMapper mangaMapper;
+    private final ColetorManga coletorManga;
     private final MangaRepository repository;
     private final UserMangaService userMangaService;
-    private final MangaMapper mangaMapper;
 
     static Map<String, CoversMangaVO> coversManga = new HashMap<>();
 
@@ -224,5 +227,10 @@ public class MangaService {
         List<Map.Entry<String, CoversMangaVO>> covers = new ArrayList<>(coversManga.entrySet());
         Collections.shuffle(covers);
         return covers.stream().limit(max).toList();
+    }
+
+    public MangaJobVO executaJobManga(String manga) {
+        Mono<MangaJobVO> executa = coletorManga.executa(manga);
+        return executa.block();
     }
 }
