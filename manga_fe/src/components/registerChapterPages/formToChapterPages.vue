@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import type PageData from '@/interface/Page';
 import { api } from '@/network/axiosInstance';
+import { useAuthStore } from '@/store/AuthStore';
 import { useChapterStore } from '@/store/chapterStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { computed, ref, watch, type PropType } from 'vue';
@@ -131,8 +132,13 @@ const clearFields = () => {
 
 watch(model.value, () => {
     if(model.value.manga == '') return;
-    if(model.value.manga != null || model.value.manga != undefined) {        
-        api.get(`/api/v1/manga/chapter_id/by-id/${model.value.manga}`)
+    if(model.value.manga != null || model.value.manga != undefined) {
+        const token = localStorage.getItem('token');
+        api.get(`/api/v1/manga/chapter_id/by-id/${model.value.manga}`, {
+                    headers: {
+                        Authorization: `${token}`
+                    }
+                })
             .then((response) => {
                 mangaSelected.value = response.data
                 if(mangaSelected.value == undefined || mangaSelected.value == "")
