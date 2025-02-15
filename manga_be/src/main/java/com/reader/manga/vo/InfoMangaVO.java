@@ -17,7 +17,7 @@ import java.util.List;
  * @param creationDate
  * @param endDate
  * @param description
- * @param listChapters
+ * @param chapters
  */
 @Builder
 public record InfoMangaVO(
@@ -29,5 +29,5 @@ public record InfoMangaVO(
         Date creationDate,
         Date endDate,
         String description,
-        List<Chapter> listChapters
+        List<Chapter> chapters
 ) {}
