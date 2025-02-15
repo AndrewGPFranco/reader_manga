@@ -114,11 +114,12 @@ public class MangaController {
                         .size(manga.getSize())
                         .creationDate(manga.getCreationDate())
                         .description(manga.getDescription())
-                        .listChapters(manga.getChapters())
+                        .chapters(manga.getChapters())
                         .gender(manga.getGender())
                         .endDate(manga.getClosingDate())
                         .author(manga.getAuthor())
                         .status(manga.getStatus())
+                        .image(manga.getImage())
                 .build());
     }
 }

@@ -29,5 +29,6 @@ public record InfoMangaVO(
         Date creationDate,
         Date endDate,
         String description,
-        List<Chapter> chapters
+        List<Chapter> chapters,
+        String image
 ) {}
