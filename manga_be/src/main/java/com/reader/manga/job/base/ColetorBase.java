@@ -26,7 +26,7 @@ public abstract class ColetorBase <T> implements DadosManga {
 
     protected Date formataData(String data) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-dd-MM");
             return sdf.parse(data);
         } catch (ParseException e) {
             log.error("Houve um erro ao realizar o parse da data: {}", data);

@@ -66,7 +66,8 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     public MangaJobVO deseralizarObjeto(JsonNode atributos) {
         String statusStr = atributos.get("status").asText().toUpperCase();
 
-        String title = atributos.get("titles").get("en").asText();
+        String title = atributos.get("titles").get("en") != null ? atributos.get("titles").get("en").asText()
+                : atributos.get("titles").get("en_us").asText();
         String description = atributos.get("description").asText();
         String creationDate = atributos.get("startDate").asText();
         String cloasingDate = atributos.get("endDate").asText();
