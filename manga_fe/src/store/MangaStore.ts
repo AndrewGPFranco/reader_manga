@@ -43,6 +43,14 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
+        async getInfoManga(idManga: string): Promise<any> {
+            const response = await api.get(`/api/v1/manga/get-info-manga/${idManga}`, {
+                headers: {
+                    Authorization: `${this.user.getToken()}`
+                }
+            });
+            return response.data;
+        },
         // Get 5 manga covers from the MangaDex API
         async getFiveMangaRandomMD(): Promise<MangaDexData[]> {
             try {
