@@ -66,9 +66,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     public MangaJobVO deseralizarObjeto(JsonNode atributos) {
         String statusStr = atributos.get("status").asText().toUpperCase();
 
-        String title = atributos.get("titles").get("en") != null ? atributos.get("titles").get("en").asText()
-                : atributos.get("titles").get("en_us").asText();
-        title = title.equals("null") ? atributos.get("titles").get("en_jp").asText() : title;
+        String title = getTituloDoManga(atributos);
         String description = atributos.get("description").asText();
         String creationDate = atributos.get("startDate").asText();
         String cloasingDate = atributos.get("endDate").asText();
@@ -80,6 +78,19 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
                 .creationDate(formataData(creationDate)).closingDate(
                         !cloasingDate.equals("null") ? formataData(cloasingDate) : null)
                 .image(image).size(size).build();
+    }
+
+    private String getTituloDoManga(JsonNode atributos) {
+        JsonNode titles = atributos.get("titles");
+
+        if(titles.get("en") != null)
+            return titles.get("en").asText();
+        else if(titles.get("en_us") != null)
+            return titles.get("en_us").asText();
+        else if(titles.get("en_jp") != null)
+            return titles.get("en_jp").asText();
+
+        return "Título indisponível";
     }
 
 }
