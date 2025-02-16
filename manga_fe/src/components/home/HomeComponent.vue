@@ -4,7 +4,7 @@
         <div class="banner">
           <img src="../../assets/home/banner.jpeg" alt="Banner do site">
         </div>
-        <h2 class="section-title">Famous Mangá</h2>
+        <h2 class="section-title">Mangás famosos</h2>
 
         <div class="favorites-grid" v-if="mangas.length != 0">
             <div v-for="(item, index) in mangas" :key="index" class="item-card">

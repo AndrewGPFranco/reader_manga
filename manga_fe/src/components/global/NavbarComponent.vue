@@ -27,7 +27,7 @@ export default defineComponent({
     const menuOptions: MenuOption[] = [
       {
         whateverLabel: () =>
-          h(RouterLink, { to: '/' }, { default: () => 'Home' }),
+          h(RouterLink, { to: '/' }, { default: () => 'Inicio' }),
         icon: renderIcon(ScanCircle),
         path: '/'
       },
@@ -41,41 +41,41 @@ export default defineComponent({
         : []),
       {
         whateverLabel: () =>
-          h(RouterLink, { to: '/mangas' }, { default: () => 'Mangas' }),
+          h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),
         icon: renderIcon(NewspaperOutline),
         path: '/mangas'
       },
       ...(role.includes("ADMIN")
         ? [{
           whateverLabel: () =>
-            h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
+            h(RouterLink, { to: '/register' }, { default: () => 'Registros' }),
           icon: renderIcon(New),
           path: '/register'
         }]
         : []),
       {
         whateverLabel: () =>
-          h(RouterLink, { to: '/profile' }, { default: () => 'My Profile' }),
+          h(RouterLink, { to: '/profile' }, { default: () => 'Meu perfil' }),
         icon: renderIcon(PersonOutline),
         path: '/profile'
-      },
-      {
-        whateverLabel: () =>
-          h(RouterLink, { to: '/manga/all' }, { default: () => 'My Library' }),
-        icon: renderIcon(Library),
-        path: '/manga/all'
       },
       ...(role.includes("ADMIN")
         ? [{
           whateverLabel: () =>
-            h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
+            h(RouterLink, { to: '/management/admin' }, { default: () => 'Gerenciamento' }),
           icon: renderIcon(Management),
           path: '/management/admin'
         }]
         : []),
       {
         whateverLabel: () =>
-          h(RouterLink, { to: '/manga/favorites' }, { default: () => 'Favorite Manga' }),
+          h(RouterLink, { to: '/manga/all' }, { default: () => 'Minha biblioteca' }),
+        icon: renderIcon(Library),
+        path: '/manga/all'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/manga/favorites' }, { default: () => 'Mangás favoritos' }),
         icon: renderIcon(Favorites),
         path: '/manga/favorites'
       }

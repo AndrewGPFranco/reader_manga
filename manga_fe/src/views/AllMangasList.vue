@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="All Manga" size="huge">
+        <n-card title="Mangás" size="huge">
             <section class="container flex flex-wrap gap-5 justify-center">
                 <div class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
                     v-for="manga in mangasArray" :key="manga.title">

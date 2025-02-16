@@ -4,7 +4,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="My library" size="huge">
+        <n-card title="Biblioteca" size="huge">
             <section class="card-container" v-if="mangasArray != undefined && mangasArray.length > 0">
                 <div class="card" v-for="manga in mangasArray" :key="manga.title">
                     <div class="relative">
