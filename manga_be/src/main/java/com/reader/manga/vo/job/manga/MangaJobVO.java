@@ -1,6 +1,7 @@
 package com.reader.manga.vo.job.manga;
 
 import com.reader.manga.enums.StatusType;
+import com.reader.manga.interfaces.DadosManga;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import java.util.Date;
 
 @Builder
 @Getter
-public class MangaJobVO {
+public class MangaJobVO implements DadosManga {
 
     private String title;
     private String description;

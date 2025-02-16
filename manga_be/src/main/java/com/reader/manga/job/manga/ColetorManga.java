@@ -68,6 +68,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
 
         String title = atributos.get("titles").get("en") != null ? atributos.get("titles").get("en").asText()
                 : atributos.get("titles").get("en_us").asText();
+        title = title.equals("null") ? atributos.get("titles").get("en_jp").asText() : title;
         String description = atributos.get("description").asText();
         String creationDate = atributos.get("startDate").asText();
         String cloasingDate = atributos.get("endDate").asText();

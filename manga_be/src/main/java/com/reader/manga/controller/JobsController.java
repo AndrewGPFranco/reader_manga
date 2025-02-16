@@ -1,28 +1,32 @@
 package com.reader.manga.controller;
 
 import com.reader.manga.enums.JobsType;
+import com.reader.manga.interfaces.DadosManga;
 import com.reader.manga.service.JobsService;
-import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/jobs")
-public class JobsController {
+@RequestMapping("/api/v1/job")
+public class JobsController <T> implements DadosManga {
 
     private final JobsService jobsService;
 
-    @GetMapping("/manga-job/{manga}")
-    public ResponseEntity<MangaJobVO> executaJob(@PathVariable String manga) {
-        return ResponseEntity.ok().body(jobsService.executaJobManga(manga));
+    @PostMapping("/{name}/{parametros}")
+    public ResponseEntity<T> executaJob(@PathVariable JobsType name, @PathVariable String parametros) {
+        T responseJobVO;
+        switch(name) {
+            case MANGA:
+                responseJobVO = (T) jobsService.executaJobManga(parametros);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de job inválido: " + name);
+        }
+        return ResponseEntity.ok().body(responseJobVO);
     }
 
     @GetMapping("/get-jobs")
