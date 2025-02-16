@@ -1,8 +1,8 @@
 <template>
-  <n-layout-sider bordered collapse-mode="width" :collapsed-width="250" width="17vw"
-    position="absolute" top="0" left="0" height="100%" :aria-expanded="true">
-    <n-menu :collapsed-width="64" :collapsed-icon-size="30" :options="menuOptions"
-      key-field="whateverKey" label-field="whateverLabel" children-field="whateverChildren" />
+  <n-layout-sider bordered collapse-mode="width" :collapsed-width="250" width="17vw" position="absolute" top="0"
+    left="0" height="100%" :aria-expanded="true">
+    <n-menu :collapsed-width="64" :collapsed-icon-size="30" :options="menuOptions" key-field="whateverKey"
+      label-field="whateverLabel" children-field="whateverChildren" />
   </n-layout-sider>
 </template>
 
@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as New, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline, Newspaper } from '@vicons/ionicons5'
+import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as New, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline, CodeWorkingOutline } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/store/AuthStore'
 
@@ -31,6 +31,14 @@ export default defineComponent({
         icon: renderIcon(ScanCircle),
         path: '/'
       },
+      ...(role.includes("ADMIN")
+        ? [{
+          whateverLabel: () =>
+            h(RouterLink, { to: '/admin/jobs' }, { default: () => 'Jobs' }),
+          icon: renderIcon(CodeWorkingOutline),
+          path: '/admin/jobs'
+        }]
+        : []),
       {
         whateverLabel: () =>
           h(RouterLink, { to: '/mangas' }, { default: () => 'Mangas' }),
@@ -39,11 +47,11 @@ export default defineComponent({
       },
       ...(role.includes("ADMIN")
         ? [{
-            whateverLabel: () =>
-              h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
-            icon: renderIcon(New),
-            path: '/register'
-          }]
+          whateverLabel: () =>
+            h(RouterLink, { to: '/register' }, { default: () => 'Records' }),
+          icon: renderIcon(New),
+          path: '/register'
+        }]
         : []),
       {
         whateverLabel: () =>
@@ -59,11 +67,11 @@ export default defineComponent({
       },
       ...(role.includes("ADMIN")
         ? [{
-            whateverLabel: () =>
-              h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
-            icon: renderIcon(Management),
-            path: '/management/admin'
-          }]
+          whateverLabel: () =>
+            h(RouterLink, { to: '/management/admin' }, { default: () => 'Management' }),
+          icon: renderIcon(Management),
+          path: '/management/admin'
+        }]
         : []),
       {
         whateverLabel: () =>
