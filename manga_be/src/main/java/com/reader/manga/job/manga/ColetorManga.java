@@ -83,11 +83,11 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     private String getTituloDoManga(JsonNode atributos) {
         JsonNode titles = atributos.get("titles");
 
-        if(titles.get("en") != null)
+        if(titles.get("en") != null && !titles.get("en").asText().equals("null"))
             return titles.get("en").asText();
-        else if(titles.get("en_us") != null)
+        else if(titles.get("en_us") != null && !titles.get("en_us").asText().equals("null"))
             return titles.get("en_us").asText();
-        else if(titles.get("en_jp") != null)
+        else if(titles.get("en_jp") != null && !titles.get("en_jp").asText().equals("null"))
             return titles.get("en_jp").asText();
 
         return "Título indisponível";
