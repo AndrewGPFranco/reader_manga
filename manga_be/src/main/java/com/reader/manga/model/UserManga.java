@@ -1,7 +1,7 @@
 package com.reader.manga.model;
 
 import com.reader.manga.enums.StatusType;
-import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
+import com.reader.manga.interfaces.iListaMangasPorUsuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "user_manga")
 @Entity(name = "user_manga")
-public class UserManga implements ListaMangasPorUsuarioInterface {
+public class UserManga implements iListaMangasPorUsuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

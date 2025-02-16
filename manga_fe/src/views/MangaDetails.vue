@@ -13,12 +13,12 @@
             </div>
 
             <div class="space-y-2 mb-6">
-                <p><span class="font-semibold">Size:</span> {{ manga.size }}</p>
-                <p><span class="font-semibold">Gender:</span> {{ manga.gender }}</p>
+                <p><span class="font-semibold">Qtde. Capítulos:</span> {{ manga.size }}</p>
+                <p><span class="font-semibold">Gênero:</span> {{ manga.gender }}</p>
                 <p><span class="font-semibold">Status:</span> {{ manga.status }}</p>
-                <p><span class="font-semibold">Creation date:</span> {{ formatDate(manga.creationDate) }}</p>
-                <p><span class="font-semibold">End date:</span> {{ verifyEndDate(manga) }}</p>
-                <p><span class="font-semibold">Description:</span> {{ manga.description }}</p>
+                <p><span class="font-semibold">Data de criação:</span> {{ formatDate(manga.creationDate) }}</p>
+                <p><span class="font-semibold">Finalizado em:</span> {{ verifyEndDate(manga) }}</p>
+                <p><span class="font-semibold">Descrição:</span> {{ manga.description }}</p>
             </div>
 
             <div>
@@ -54,7 +54,7 @@ onMounted(async () => {
 })
 
 function verifyEndDate(str: MangaData): any {
-    return str.closingDate != undefined ? formatDate(str.closingDate) : "Still on display.";
+    return str.endDate != undefined ? formatDate(str.endDate) : "Still on display.";
 }
 
 </script>

@@ -7,7 +7,7 @@ export default interface MangaData {
     description: string;
     size: number;
     creationDate: Date;
-    closingDate: Date;
+    endDate: Date;
     status: StatusType;
     author: string;
     gender: string;

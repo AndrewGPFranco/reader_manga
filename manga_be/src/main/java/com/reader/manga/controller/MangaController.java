@@ -122,4 +122,5 @@ public class MangaController {
                         .image(manga.getImage())
                 .build());
     }
+
 }

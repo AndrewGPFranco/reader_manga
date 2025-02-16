@@ -84,7 +84,7 @@ const model = ref({
     gender: props.manga != undefined && props.isEdit ? props.manga.gender : '' as string,
     image: props.manga != undefined && props.isEdit ? props.manga.image : '' as string,
     creationDate: props.manga != undefined && props.isEdit ? props.manga.creationDate : null as Date | null,
-    closingDate: props.manga != undefined && props.isEdit ? props.manga.closingDate : null as Date | null,
+    closingDate: props.manga != undefined && props.isEdit ? props.manga.endDate : null as Date | null,
 });
 
 const status = [StatusType.ONGOING, StatusType.FINISHED].map(

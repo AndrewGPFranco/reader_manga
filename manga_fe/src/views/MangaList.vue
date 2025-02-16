@@ -4,13 +4,11 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="My library" size="huge">
-            <section class="container flex gap-5 wrap justify-center"
-                v-if="mangasArray != undefined && mangasArray.length > 0">
-                <div class="max-w-xs rounded overflow-hidden shadow-lg bg-white" v-for="manga in mangasArray"
-                    :key="manga.title">
+        <n-card title="Biblioteca" size="huge">
+            <section class="card-container" v-if="mangasArray != undefined && mangasArray.length > 0">
+                <div class="card" v-for="manga in mangasArray" :key="manga.title">
                     <div class="relative">
-                        <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga">
+                        <img class="card-image" :src="manga.image" alt="Capa do Manga">
                         <span class="isFavorite" v-if="manga.favorite">
                             <Heart @click="setFavorite(manga.id)" />
                         </span>
@@ -18,10 +16,9 @@
                             <HeartOutline @click="setFavorite(manga.id)" />
                         </span>
                     </div>
-                    <div class="p-4">
-                        <router-link :to="`/manga/${manga.id}`" class="text-xl font-bold mb-2 text-gray-800">{{
-                            manga.title }}</router-link>
-                        <div class="text-gray-700 text-sm mt-2">
+                    <div class="card-content">
+                        <router-link :to="`/manga/${manga.id}`" class="card-title">{{ manga.title }}</router-link>
+                        <div class="card-details">
                             <p><span class="font-semibold">Number of chapters: </span>{{ manga.size }}</p>
                             <p><span class="font-semibold">Status: </span> {{ manga.status }}</p>
                             <p><span class="font-semibold">Author: </span> {{ manga.author }}</p>
@@ -93,6 +90,51 @@ main {
     overflow-x: hidden;
 }
 
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    width: 300px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+.card-details {
+    font-size: 0.875rem;
+    color: #666;
+    flex-grow: 1;
+}
+
 .relative {
     position: relative;
 }
@@ -123,5 +165,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 </style>

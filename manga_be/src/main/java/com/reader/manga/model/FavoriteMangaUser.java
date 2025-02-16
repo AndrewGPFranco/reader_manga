@@ -1,6 +1,6 @@
 package com.reader.manga.model;
 
-import com.reader.manga.interfaces.ListaMangasPorUsuarioInterface;
+import com.reader.manga.interfaces.iListaMangasPorUsuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "manga_favorite_user")
 @Entity(name = "manga_favorite_user")
-public class FavoriteMangaUser implements ListaMangasPorUsuarioInterface {
+public class FavoriteMangaUser implements iListaMangasPorUsuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

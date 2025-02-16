@@ -11,6 +11,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/store/AuthStore'
 import RegisterUser from '@/views/RegisterUser.vue'
+import JobExecutor from '@/views/JobExecutor.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,6 +70,11 @@ const router = createRouter({
       path: '/register/user',
       name: 'registerUser',
       component: RegisterUser
+    },
+    {
+      path: '/admin/jobs',
+      name: 'jobs',
+      component: JobExecutor
     }
   ]
 });

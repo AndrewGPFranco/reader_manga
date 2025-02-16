@@ -26,9 +26,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MangaService {
 
+    private final MangaMapper mangaMapper;
     private final MangaRepository repository;
     private final UserMangaService userMangaService;
-    private final MangaMapper mangaMapper;
 
     static Map<String, CoversMangaVO> coversManga = new HashMap<>();
 
@@ -225,4 +225,5 @@ public class MangaService {
         Collections.shuffle(covers);
         return covers.stream().limit(max).toList();
     }
+
 }

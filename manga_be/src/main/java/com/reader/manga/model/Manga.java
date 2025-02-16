@@ -32,7 +32,7 @@ public class Manga {
     @NotNull
     @NotBlank
     @Column(name = "title")
-    @Length(min = 2, max = 30)
+    @Length(min = 2, max = 100)
     private String title;
 
     @NotNull

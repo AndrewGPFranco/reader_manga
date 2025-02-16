@@ -50,7 +50,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public WebClient webClient(WebClient.Builder builder) {
-        return builder.baseUrl("https://api.mangadex.org").build();
+        return builder.baseUrl("https://kitsu.io").build();
     }
 
     @Bean
