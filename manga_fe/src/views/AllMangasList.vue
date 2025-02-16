@@ -17,8 +17,6 @@
                         <div class="text-gray-700 text-sm mt-2 flex-grow overflow-y-auto">
                             <p><span class="font-semibold">Chapters: </span>{{ manga.size }}</p>
                             <p><span class="font-semibold">Status: </span>{{ manga.status }}</p>
-                            <p><span class="font-semibold">Author: </span>{{ manga.author }}</p>
-                            <p><span class="font-semibold">Genre: </span>{{ manga.gender }}</p>
                         </div>
                         <div class="mt-auto">
                             <n-button v-if="!manga.favorite" @click="adicionaMangaNaListaDoUsuario(manga.id)"

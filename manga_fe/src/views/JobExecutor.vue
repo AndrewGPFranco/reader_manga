@@ -42,21 +42,34 @@ const executeJob = async (e: MouseEvent) => {
     e.preventDefault();
     try {
         const job = selectedJob.value;
-        const result = await api.post(`/api/v1/job/${job}/${parametros.value}`, null, {
-            headers: {
-                Authorization: `${token}`
-            }
-        });
-        if(result.status === 200)
-            message.success("Job executado com sucesso!");
-        else
-            message.info("Houve um erro ao executar o Job.")
+
+        const validation = validaInput();
+
+        if(validation) {
+            const result = await api.post(`/api/v1/job/${job}/${parametros.value}`, null, {
+                headers: {
+                    Authorization: `${token}`
+                }
+            });
+            if(result.status === 200)
+                message.success("Job executado com sucesso!");
+            else
+                message.info("Houve um erro ao executar o Job.")
+        } else
+            message.error("Digite os parâmetros para executar o Job.")
     } catch (error: any) {
         message.error(error);
         throw new Error(error.response.data);
     } finally {
         limpaDados();
     }
+}
+
+const validaInput = () => {
+    if(parametros.value.length === 0)
+        return false;
+
+    return true;
 }
 
 const limpaDados = () => {
