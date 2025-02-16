@@ -1,8 +1,4 @@
-export function formatDate(date: Date): string {
+export function formatDate(date: string) {
     const creationDate = new Date(date);
-    return creationDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    });
+    return creationDate.toLocaleDateString('pt-BR');
 }
