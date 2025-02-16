@@ -51,7 +51,7 @@ const executeJob = async (e: MouseEvent) => {
                     Authorization: `${token}`
                 }
             });
-            if(result.status === 200)
+            if(result.status === 200 && result.data != '')
                 message.success("Job executado com sucesso!");
             else
                 message.info("Houve um erro ao executar o Job.")
