@@ -3,7 +3,7 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="Mangás" size="huge">
+        <n-card title="Mangás" class="flex flex-col justify-center" size="huge">
             <section class="container flex flex-wrap gap-5 justify-center">
                 <div class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
                     v-for="manga in mangasArray" :key="manga.title">
@@ -31,6 +31,7 @@
                     </div>
                 </div>
             </section>
+            <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
         </n-card>
     </main>
 </template>
@@ -40,11 +41,22 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import type MangaData from '@/interface/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage } from 'naive-ui';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const message = useMessage();
 const mangasArray = ref<MangaData[]>([]);
 const mangaStore = useMangaStore();
+const page = ref<number>(1);
+const pageTotal = ref<number>(0);
+const mangaQuantity = ref<number>(0);
+
+const findPage = async () => {
+    const data = await mangaStore.getAllMangaPaginado(page.value, 10);
+    mangasArray.value = data.content;
+    page.value = data.number;
+    pageTotal.value = data.totalPages;
+    mangaQuantity.value = data.totalElements;
+}
 
 const adicionaMangaNaListaDoUsuario = async (idManga: number) => {
     try {
@@ -68,12 +80,16 @@ const removerMangaDaLista = async (idManga: number) => {
 
 onMounted(async () => {
     try {
-        const mangas = await mangaStore.getAllManga();
-        mangasArray.value = mangas;
+        findPage();
     } catch (error: any) {
         message.error(error.message || 'Erro ao buscar os mangás');
     }
 });
+
+watch(page, () => {
+    findPage();
+})
+
 </script>
 
 <style scoped>

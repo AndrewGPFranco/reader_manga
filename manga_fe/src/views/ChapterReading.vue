@@ -27,34 +27,38 @@ const chapterStore = useChapterStore();
 const message = useMessage();
 const route = useRoute();
 let chapterData = ref<ChapterData>({} as ChapterData);
-let pageList = computed(() => chapterData.value.pages);
+let pageList = computed(() => chapterData.value);
 let currentPage = ref<PageData>({} as PageData);
+const menorIndex = ref<number>(0);
+const maiorIndex = ref<number>(0);
 
 const nextPage = () => {
-    let nextIndex = (currentPage.value.id + 1) - 1;
-    if(nextIndex == undefined || pageList.value[nextIndex] == undefined) {
+    let nextIndex = currentPage.value.id + 1;
+    if(nextIndex == undefined || nextIndex > maiorIndex.value) {
         message.error("No more pages");
         return;
     } 
-    currentPage.value = pageList.value[nextIndex];
+    currentPage.value = pageList.value.find(element => element.id === nextIndex);
 }
 
 const previousPage = () => {
-    let nextIndex = (currentPage.value.id - 1) - 1;
-    if(nextIndex == undefined || pageList.value[nextIndex] == undefined) {
+    let previousIndex =currentPage.value.id - 1;
+    if(previousIndex == undefined || previousIndex < menorIndex.value) {
         message.error("No more pages");
         return;
     } 
-    currentPage.value = pageList.value[nextIndex];
+    currentPage.value = pageList.value.find(element => element.id === previousIndex);
 }
 
 onMounted(async () => {
     const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
     chapterData.value = await chapterStore.getChapterByID(id);
+    currentPage.value = chapterData.value[0];
 
-    if(pageList.value != undefined) {
-        currentPage.value = pageList.value[0];
-    }
+    const quantity = chapterData.value.length - 1; 
+
+    menorIndex.value = chapterData.value[0].id;
+    maiorIndex.value =  chapterData.value[quantity].id;
 })
 </script>
 

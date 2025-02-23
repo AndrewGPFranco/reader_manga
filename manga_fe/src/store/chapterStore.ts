@@ -7,13 +7,13 @@ import type { User } from "@/class/User";
 
 export const useChapterStore = defineStore('chapter', {
     state: () => ({
-        chapter: {} as ChapterData,
+        chapter: {} as ChapterData[],
         allChapter: [] as ChapterData[],
         user: useAuthStore().getUserAutenticado() as User
     }),
 
     actions: {
-        async getChapterByID(id: string): Promise<ChapterData> {
+        async getChapterByID(id: string): Promise<ChapterData[]> {
             try {
                 const response = await api.get(`/api/v1/chapter/read/${id}`, {
                     headers: {

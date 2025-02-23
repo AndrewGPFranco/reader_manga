@@ -6,6 +6,7 @@ import com.reader.manga.dto.manga.UpdateMangaDTO;
 import com.reader.manga.dto.utils.UserData;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
+import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.service.MangaService;
 import com.reader.manga.vo.CoversMangaVO;
 import com.reader.manga.vo.InfoMangaVO;
@@ -15,6 +16,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +39,7 @@ public class MangaController {
 
     private final MangaService service;
     private final WebClient webClient;
+    private final MangaRepository repository;
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -121,6 +126,12 @@ public class MangaController {
                         .status(manga.getStatus())
                         .image(manga.getImage())
                 .build());
+    }
+
+    @GetMapping("/get-pageable")
+    public Page<Manga> getMangasPaginados(@RequestParam(defaultValue = "1") int pageNumber, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return repository.findAll(pageable);
     }
 
 }

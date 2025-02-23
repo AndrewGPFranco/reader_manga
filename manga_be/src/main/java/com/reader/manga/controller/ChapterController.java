@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -70,7 +71,9 @@ public class ChapterController {
     public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
         Chapter chapter = service.getChapterByID(id);
         logger.info("*******************Searching chapter!*******************");
-        return ResponseEntity.ok().body(chapter);
+        List<PageChapter> pages = chapter.getPages();
+        pages.sort(Comparator.comparing(PageChapter::getId));
+        return ResponseEntity.ok().body(pages);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -31,6 +31,19 @@ export const useMangaStore = defineStore('manga', {
                 throw new Error(error.response.data);
             }
         },
+        async getAllMangaPaginado(pageNumber: number, size: number): Promise<any> {
+            try {
+                const response = await api.get(`/api/v1/manga/get-pageable?pageNumber=${pageNumber}&size=${size}`, {
+                    headers: {
+                        Authorization: `${this.user.getToken()}`
+                    }
+                });
+                this.manga = response.data;
+                return this.manga;
+            } catch (error: any) {
+                throw new Error(error.response.data);
+            }
+        },
         async getMangaById(id: string): Promise<MangaData> {
             try {
                 const response = await api.get(`/api/v1/manga/read/${id}`, {
