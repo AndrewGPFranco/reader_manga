@@ -8,10 +8,8 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.service.MangaService;
-import com.reader.manga.vo.CoversMangaVO;
-import com.reader.manga.vo.InfoMangaVO;
-import com.reader.manga.vo.MangaCoverVO;
-import com.reader.manga.vo.MangaUserVO;
+import com.reader.manga.service.UserMangaService;
+import com.reader.manga.vo.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -40,6 +38,7 @@ public class MangaController {
     private final MangaService service;
     private final WebClient webClient;
     private final MangaRepository repository;
+    private final UserMangaService userMangaService;
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -129,10 +128,25 @@ public class MangaController {
     }
 
     @GetMapping("/get-pageable")
-    public Page<Manga> getMangasPaginados(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int size) {
+    public Page<Manga> getMangasPaginados(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam Long idUser
+    ) {
         int numeroDaPagina = --pageNumber;
         Pageable pageable = PageRequest.of(numeroDaPagina, size);
-        return repository.findAll(pageable);
+        Page<Manga> mangasPaginados = repository.findAll(pageable);
+        List<MangaUserVO> todosMangasDoUsuario = userMangaService.getTodosMangasDoUsuario(idUser).getMangaList();
+
+        mangasPaginados.forEach(mp -> {
+            List<MangaUserVO> list = todosMangasDoUsuario.stream().filter(tm ->
+                    tm.title().equals(mp.getTitle())).toList();
+
+            if(!list.isEmpty())
+                mp.setFavorite(true);
+        });
+
+        return mangasPaginados;
     }
 
 }

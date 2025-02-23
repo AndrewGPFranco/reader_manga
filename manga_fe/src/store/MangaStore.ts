@@ -33,7 +33,8 @@ export const useMangaStore = defineStore('manga', {
         },
         async getAllMangaPaginado(pageNumber: number, size: number): Promise<any> {
             try {
-                const response = await api.get(`/api/v1/manga/get-pageable?pageNumber=${pageNumber}&size=${size}`, {
+                const idUser = this.getIdUsuario();
+                const response = await api.get(`/api/v1/manga/get-pageable?pageNumber=${pageNumber}&size=${size}&idUser=${idUser}`, {
                     headers: {
                         Authorization: `${this.user.getToken()}`
                     }
