@@ -24,6 +24,8 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     private final WebClient webClient;
     private final MangaRepository repository;
     private static final String PATH = "/api/edge/manga";
+    private static final String EN_US = "en_us";
+    private static final String EN_JP = "en_jp";
 
     @Override
     public Mono<MangaJobVO> executa(String manga) {
@@ -85,10 +87,10 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
 
         if(titles.get("en") != null && !titles.get("en").asText().equals("null"))
             return titles.get("en").asText();
-        else if(titles.get("en_us") != null && !titles.get("en_us").asText().equals("null"))
-            return titles.get("en_us").asText();
-        else if(titles.get("en_jp") != null && !titles.get("en_jp").asText().equals("null"))
-            return titles.get("en_jp").asText();
+        else if(titles.get(EN_US) != null && !titles.get(EN_US).asText().equals("null"))
+            return titles.get(EN_US).asText();
+        else if(titles.get(EN_JP) != null && !titles.get(EN_JP).asText().equals("null"))
+            return titles.get(EN_JP).asText();
 
         return "Título indisponível";
     }

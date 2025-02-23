@@ -2,7 +2,7 @@ package com.reader.manga.controller;
 
 import com.reader.manga.enums.JobsType;
 import com.reader.manga.interfaces.DadosManga;
-import com.reader.manga.service.JobsService;
+import com.reader.manga.service.jobs.JobsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
