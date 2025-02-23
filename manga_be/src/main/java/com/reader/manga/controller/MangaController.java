@@ -129,8 +129,9 @@ public class MangaController {
     }
 
     @GetMapping("/get-pageable")
-    public Page<Manga> getMangasPaginados(@RequestParam(defaultValue = "1") int pageNumber, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(pageNumber, size);
+    public Page<Manga> getMangasPaginados(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int size) {
+        int numeroDaPagina = --pageNumber;
+        Pageable pageable = PageRequest.of(numeroDaPagina, size);
         return repository.findAll(pageable);
     }
 

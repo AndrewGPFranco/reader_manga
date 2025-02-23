@@ -3,8 +3,8 @@
         <NavbarComponent />
     </header>
     <main>
-        <n-card title="Mangás" class="flex flex-col justify-center" size="huge">
-            <section class="container flex flex-wrap gap-5 justify-center">
+        <n-card ref="mangaCard" title="Mangás" class="flex flex-col" size="huge">
+            <section class="container mt-5 flex flex-wrap gap-5 justify-center">
                 <div class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
                     v-for="manga in mangasArray" :key="manga.title">
                     <div class="relative">
@@ -31,7 +31,9 @@
                     </div>
                 </div>
             </section>
-            <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
+            <div class="pagination">
+                <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
+            </div>
         </n-card>
     </main>
 </template>
@@ -40,7 +42,7 @@
 import NavbarComponent from '@/components/global/NavbarComponent.vue';
 import type MangaData from '@/interface/Manga';
 import { useMangaStore } from '@/store/MangaStore';
-import { useMessage } from 'naive-ui';
+import { NCard, useMessage } from 'naive-ui';
 import { onMounted, ref, watch } from 'vue';
 
 const message = useMessage();
@@ -49,13 +51,17 @@ const mangaStore = useMangaStore();
 const page = ref<number>(1);
 const pageTotal = ref<number>(0);
 const mangaQuantity = ref<number>(0);
+const mangaCard = ref<InstanceType<typeof NCard> | null>(null);
 
 const findPage = async () => {
     const data = await mangaStore.getAllMangaPaginado(page.value, 10);
     mangasArray.value = data.content;
-    page.value = data.number;
+    page.value = data.number + 1;
     pageTotal.value = data.totalPages;
     mangaQuantity.value = data.totalElements;
+    
+    if (mangaCard.value)
+        mangaCard.value.$el.scrollTop = 0;
 }
 
 const adicionaMangaNaListaDoUsuario = async (idManga: number) => {
@@ -121,5 +127,10 @@ main {
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
 }
 </style>
