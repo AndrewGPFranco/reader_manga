@@ -2,78 +2,225 @@
     <header>
         <NavbarComponent />
     </header>
-    <main>
-        <n-card class="flex flex-col items-center">
-            <img v-if="currentPage" :src="currentPage.chapterPage" alt="Página do mangá" :style="{ maxHeight: '85vh', objectFit: 'cover' }"  />
-            <h1 v-if="!currentPage">No pages for this chapter yet</h1>
-            <aside class="flex justify-between" v-if="currentPage">
-                <n-button @click="previousPage" class="mt-2">Previous page</n-button>
-                <n-button @click="nextPage" class="mt-2">Next page</n-button>
-            </aside>
+
+    <main class="manga-viewer__main">
+        <n-card v-if="!isLoading" class="manga-viewer__card" size="huge">
+            <template v-if="error">
+                <div class="manga-viewer__error">
+                    <n-alert type="error" :title="error" />
+                </div>
+            </template>
+
+            <template v-else>
+                <div class="manga-viewer__content">
+                    <img v-if="currentPage?.chapterPage" :src="currentPage.chapterPage"
+                        :alt="`Manga page ${currentPage.id}`" class="manga-viewer__image" @load="handleImageLoad"
+                        @error="handleImageError" />
+
+                    <n-empty v-else description="No pages available for this chapter" />
+                </div>
+
+                <div v-if="currentPage" class="manga-viewer__controls">
+                    <div class="manga-viewer__info">
+                        <span>Página {{ currentPageNumber }} de {{ totalPages }}</span>
+                    </div>
+
+                    <div class="manga-viewer__navigation">
+                        <n-button :disabled="!canNavigatePrevious" @click="previousPage"
+                            class="manga-viewer__nav-button">
+                            Anterior
+                        </n-button>
+
+                        <n-slider v-model:value="currentPageNumber" :min="1" :max="totalPages" :step="1"
+                            class="manga-viewer__slider" @update:value="handleSliderChange" />
+
+                        <n-button :disabled="!canNavigateNext" @click="nextPage" class="manga-viewer__nav-button">
+                            Próximo
+                        </n-button>
+                    </div>
+                </div>
+            </template>
         </n-card>
+
+        <n-spin v-else size="large" />
     </main>
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue';
-import type ChapterData from '@/interface/Chapter';
-import type PageData from '@/interface/Page';
-import { useChapterStore } from '@/store/chapterStore';
-import { useMessage } from 'naive-ui';
-import { onMounted, ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useMessage } from 'naive-ui';
+import NavbarComponent from '@/components/global/NavbarComponent.vue';
+import { useChapterStore } from '@/store/chapterStore';
 
-const chapterStore = useChapterStore();
-const message = useMessage();
+const isLoading = ref(true);
+const error = ref<string | null>(null);
+const chapterData = ref<any[]>([]);
+const currentPageIndex = ref(0);
+const imageLoaded = ref(false);
+
 const route = useRoute();
-let chapterData = ref<ChapterData>({} as ChapterData);
-let pageList = computed(() => chapterData.value);
-let currentPage = ref<PageData>({} as PageData);
-const menorIndex = ref<number>(0);
-const maiorIndex = ref<number>(0);
+const message = useMessage();
+const chapterStore = useChapterStore();
+
+const currentPage = computed<any | null>(() =>
+    chapterData.value[currentPageIndex.value] || null
+);
+
+const totalPages = computed(() => chapterData.value.length);
+
+const currentPageNumber = computed({
+    get: () => currentPageIndex.value + 1,
+    set: (value: number) => {
+        currentPageIndex.value = value - 1;
+    }
+});
+
+const canNavigateNext = computed(() =>
+    currentPageIndex.value < chapterData.value.length - 1
+);
+
+const canNavigatePrevious = computed(() =>
+    currentPageIndex.value > 0
+);
+
+const loadChapter = async (id: string) => {
+    try {
+        isLoading.value = true;
+        error.value = null;
+
+        const data = await chapterStore.getChapterByID(id);
+
+        if (!data || !data.length) {
+            throw new Error('No chapter data available');
+        }
+
+        chapterData.value = data;
+        currentPageIndex.value = 0;
+    } catch (err) {
+        error.value = err instanceof Error ? err.message : 'Failed to load chapter';
+        message.error(error.value);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 const nextPage = () => {
-    let nextIndex = currentPage.value.id + 1;
-    if(nextIndex == undefined || nextIndex > maiorIndex.value) {
-        message.error("No more pages");
-        return;
-    } 
-    currentPage.value = pageList.value.find(element => element.id === nextIndex);
-}
+    if (canNavigateNext.value) {
+        currentPageIndex.value++;
+        imageLoaded.value = false;
+    }
+};
 
 const previousPage = () => {
-    let previousIndex =currentPage.value.id - 1;
-    if(previousIndex == undefined || previousIndex < menorIndex.value) {
-        message.error("No more pages");
-        return;
-    } 
-    currentPage.value = pageList.value.find(element => element.id === previousIndex);
-}
+    if (canNavigatePrevious.value) {
+        currentPageIndex.value--;
+        imageLoaded.value = false;
+    }
+};
+
+const handleSliderChange = (value: number) => {
+    currentPageNumber.value = value;
+    imageLoaded.value = false;
+};
+
+const handleImageLoad = () => {
+    imageLoaded.value = true;
+};
+
+const handleImageError = () => {
+    error.value = 'Failed to load image';
+    message.error(error.value);
+};
+
+const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowRight' || event.key === 'd') {
+        nextPage();
+    } else if (event.key === 'ArrowLeft' || event.key === 'a') {
+        previousPage();
+    }
+};
 
 onMounted(async () => {
-    const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-    chapterData.value = await chapterStore.getChapterByID(id);
-    currentPage.value = chapterData.value[0];
+    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 
-    const quantity = chapterData.value.length - 1; 
+    if (!id) {
+        error.value = 'Invalid chapter ID';
+        return;
+    }
 
-    menorIndex.value = chapterData.value[0].id;
-    maiorIndex.value =  chapterData.value[quantity].id;
-})
+    await loadChapter(id);
+    window.addEventListener('keydown', handleKeyPress);
+});
+
+watch(
+    () => route.params.id,
+    async (newId) => {
+        if (newId && typeof newId === 'string') {
+            await loadChapter(newId);
+        }
+    }
+);
 </script>
 
 <style scoped>
-    main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 15px;
-    }
+.manga-viewer__main {
+    flex: 1;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
 
-    .n-card {
-        height: 95vh;
-        box-sizing: border-box;
-        overflow: scroll;
-        overflow-x: hidden;
-    }
+.manga-viewer__card {
+    width: 100%;
+    max-width: none;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.manga-viewer__content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 1rem;
+}
+
+.manga-viewer__image {
+    max-height: 83vh;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.manga-viewer__controls {
+    margin-top: auto;
+    padding: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.manga-viewer__info {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.manga-viewer__navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 0.5rem;
+}
+
+.manga-viewer__slider {
+    flex: 1;
+}
+
+.manga-viewer__nav-button {
+    min-width: 100px;
+}
+
+.manga-viewer__error {
+    padding: 2rem;
+}
 </style>
