@@ -8,7 +8,7 @@
         <div class="card-container" v-if="favoriteManga.length > 0">
           <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
             <template #cover>
-              <img class="card-image" :src="manga.image" :alt="manga.title">
+              <img class="card-image" :src="manga.image" :alt="manga.title" />
             </template>
             <div class="card-content">
               <h3 class="card-title">{{ manga.title }}</h3>
@@ -27,18 +27,17 @@
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue';
-import type MangaData from '@/interface/Manga';
-import { useMangaStore } from '@/store/MangaStore';
-import { onMounted, ref } from 'vue';
+import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import type iMangaData from '@/interface/Manga'
+import { useMangaStore } from '@/store/MangaStore'
+import { onMounted, ref } from 'vue'
 
-const favoriteManga = ref([] as MangaData[]);
-const mangaStore = useMangaStore();
+const favoriteManga = ref([] as iMangaData[])
+const mangaStore = useMangaStore()
 
 onMounted(async () => {
-  favoriteManga.value = await mangaStore.getAllFavorites();
+  favoriteManga.value = await mangaStore.getAllFavorites()
 })
-
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
-import type MangaData from "./Manga";
+import type iMangaData from "./Manga";
 
-export default interface ResponseListManga {
-    mangaList: MangaData[];
+export default interface responseListManga {
+    mangaList: iMangaData[];
 }

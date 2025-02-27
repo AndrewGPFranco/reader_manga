@@ -1,5 +1,5 @@
-import type ChapterData from "@/interface/Chapter";
-import type PageData from "@/interface/Page";
+import type iChapterData from "@/interface/iChapter";
+import type iPageData from "@/interface/Pagee";
 import { api } from "@/network/axiosInstance";
 import { defineStore } from "pinia";
 import { useAuthStore } from "./AuthStore";
@@ -7,13 +7,13 @@ import type { User } from "@/class/User";
 
 export const useChapterStore = defineStore('chapter', {
     state: () => ({
-        chapter: {} as ChapterData[],
-        allChapter: [] as ChapterData[],
+        chapter: {} as iChapterData[],
+        allChapter: [] as iChapterData[],
         user: useAuthStore().getUserAutenticado() as User
     }),
 
     actions: {
-        async getChapterByID(id: string): Promise<ChapterData[]> {
+        async getChapterByID(id: string): Promise<iChapterData[]> {
             try {
                 const response = await api.get(`/api/v1/chapter/read/${id}`, {
                     headers: {
@@ -26,7 +26,7 @@ export const useChapterStore = defineStore('chapter', {
                 throw new Error(error.response.data);
             }
         },
-        async getAllChapter(): Promise<ChapterData[]> {
+        async getAllChapter(): Promise<iChapterData[]> {
             try {
                 const response = await api.get("/api/v1/chapter/readAll", {
                     headers: {
@@ -79,7 +79,7 @@ export const useChapterStore = defineStore('chapter', {
                 throw new Error(error.response.data);
             }
         },
-        async getAllPages(): Promise<PageData[]> {
+        async getAllPages(): Promise<iPageData[]> {
             try {
                 const response = await api.get("/api/v1/chapter/getAll-pages", {
                     headers: {

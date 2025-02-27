@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type MangaData from '@/interface/Manga';
+import type iMangaData from '@/interface/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { onMounted, ref } from 'vue';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
@@ -36,8 +36,8 @@ import FormToMangaRegister from '../registerManga/formToMangaRegister.vue';
 const isEdit = ref(false);
 const message = useMessage();
 const mangaStore = useMangaStore();
-const allManga = ref<MangaData[]>([]);
-const mangaToBeEdited = ref({} as MangaData);
+const allManga = ref<iMangaData[]>([]);
+const mangaToBeEdited = ref({} as iMangaData);
 
 let finishedEdition = ref(false);
 
@@ -49,7 +49,7 @@ const deleteManga = async (id: number) => {
     message.success(String(response));
 }
 
-const editManga = (manga: MangaData) => {
+const editManga = (manga: iMangaData) => {
     isEdit.value = true;
     mangaToBeEdited.value = manga;
 }

@@ -1,8 +1,8 @@
-import type iLogin from "@/interface/iLogin";
-import type iRegisterUser from "@/interface/iRegisterUser";
-import type MangaData from "@/interface/Manga";
+import type ILogin from "@/interface/iLogin";
+import type IRegisterUser from "@/interface/iRegisterUser";
+import type iMangaData from "@/interface/Manga";
 
-export function validationFields(data: MangaData): string | boolean{
+export function validationFields(data: iMangaData): string | boolean{
     if(data.title === "") {
         return "Field title is required";
     }
@@ -42,7 +42,7 @@ export function validationFields(data: MangaData): string | boolean{
     return true;
 }
 
-export function validationFieldsLogin(data: iLogin): string | boolean {
+export function validationFieldsLogin(data: ILogin): string | boolean {
     if(data.email === null || data.email === "") {
         return "Email é obrigatório!"
     }
@@ -54,7 +54,7 @@ export function validationFieldsLogin(data: iLogin): string | boolean {
     return true;
 }
 
-export function validationFieldsRegister(data: iRegisterUser): string | boolean {
+export function validationFieldsRegister(data: IRegisterUser): string | boolean {
     if (!data.nome?.trim()) {
         return "Nome é obrigatório!";
     }
@@ -80,39 +80,28 @@ export function validationFieldsRegister(data: iRegisterUser): string | boolean 
         return "Data de nascimento inválida! Use o formato DD/MM/AAAA";
     }
 
-    const [dia, mes, ano] = data.dataNascimento.split('/');
-    const dataNasc = new Date(Number(ano), Number(mes) - 1, Number(dia));
-    const hoje = new Date();
-    
-    if (!data.email?.trim()) {
+    if (!data.email?.trim())
         return "Email é obrigatório!";
-    }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
+    const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email))
         return "Email inválido!";
-    }
 
-    if (!data.senha?.trim()) {
+    if (!data.senha?.trim())
         return "Senha é obrigatória!";
-    }
 
-    if (data.senha.length < 8) {
+    if (data.senha.length < 8)
         return "Senha deve ter no mínimo 8 caracteres!";
-    }
 
     const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
-    if (!senhaRegex.test(data.senha)) {
+    if (!senhaRegex.test(data.senha))
         return "Senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial!";
-    }
 
-    if (!data.confirmarSenha?.trim()) {
+    if (!data.confirmarSenha?.trim())
         return "Confirmação de senha é obrigatória!";
-    }
 
-    if (data.senha !== data.confirmarSenha) {
+    if (data.senha !== data.confirmarSenha)
         return "As senhas não coincidem!";
-    }
 
     return true;
 }

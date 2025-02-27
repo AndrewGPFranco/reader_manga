@@ -29,19 +29,19 @@ import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import { useMangaStore } from '@/store/MangaStore';
-import type PageData from '@/interface/Page';
-import type MangaData from '@/interface/Manga';
-import type ChapterData from '@/interface/Chapter';
+import type iPageData from '@/interface/Pagee';
+import type iMangaData from '@/interface/Manga';
+import type iChapterData from '@/interface/iChapter';
 import FormToChapterPages from '../registerChapterPages/formToChapterPages.vue';
 
 const isEdit = ref(false);
 const message = useMessage();
-const allManga = ref([] as MangaData[])
-const allPages = ref([] as PageData[]);
-const allChapter = ref([] as ChapterData[]);
+const allManga = ref([] as iMangaData[])
+const allPages = ref([] as iPageData[]);
+const allChapter = ref([] as iChapterData[]);
 const chapterStore = useChapterStore();
 const mangaStore = useMangaStore();
-const pageToBeEdited = ref({} as PageData);
+const pageToBeEdited = ref({} as iPageData);
 
 let finishedEdition = ref(false);
 
@@ -59,7 +59,7 @@ const deletePage = async (idPage: number, idChapter: number) => {
     message.success(String(response));
 }
 
-const editPage = (page: PageData) => {
+const editPage = (page: iPageData) => {
     isEdit.value = true;
     pageToBeEdited.value = page;
 }

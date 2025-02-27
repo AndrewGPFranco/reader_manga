@@ -1,7 +1,7 @@
-import { StatusType } from '../enum/StatusType';
-import type ChapterData from './Chapter';
+import { StatusType } from '@/enum/StatusType';
+import type iChapterData from './iChapter';
 
-export default interface MangaData {
+export default interface iMangaData {
     id: number;
     title: string;
     description: string;
@@ -12,6 +12,6 @@ export default interface MangaData {
     author: string;
     gender: string;
     image: string;
-    chapters: ChapterData[];
+    chapters: iChapterData[];
     favorite: boolean;
 }
