@@ -1,22 +1,19 @@
 package com.reader.manga.job.chapter;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.exception.NotFoundException;
-import com.reader.manga.job.base.ColetorBase;
+import com.reader.manga.job.base.ColetorBaseUpload;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.PageRepository;
 import com.reader.manga.service.MangaService;
-import com.reader.manga.vo.job.chapter.ChapterJobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,16 +25,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JobChapter extends ColetorBase<ChapterJobVO> {
+public class JobChapter extends ColetorBaseUpload {
 
     private final ChapterRepository capituloRepository;
     private final PageRepository pageRepository;
     private final MangaService mangaService;
-
-    @Override
-    protected Mono<ChapterJobVO> executa(Object obj) {
-        return null;
-    }
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -95,13 +87,4 @@ public class JobChapter extends ColetorBase<ChapterJobVO> {
         }
     }
 
-    @Override
-    protected void salvaDadosNoBanco(ChapterJobVO dados) {
-        log.info("Implementar");
-    }
-
-    @Override
-    protected ChapterJobVO deseralizarObjeto(JsonNode atributos) {
-        return null;
-    }
 }

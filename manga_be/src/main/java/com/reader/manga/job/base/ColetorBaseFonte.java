@@ -3,25 +3,22 @@ package com.reader.manga.job.base;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.interfaces.DadosManga;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Classe base para padronizar todos os coletores no sistema.
+ * Coletor do tipo que busca dados na fonte e salva no banco.
  * @author andrewgo
  * @param <T> classe que implementa DadosManga.
  */
 @Log4j2
-public abstract class ColetorBase <T> implements DadosManga {
+public abstract class ColetorBaseFonte<T> implements DadosManga {
 
     protected abstract Mono<T> executa(Object obj);
-
-    protected abstract void executa(MultipartFile file, String... varargs) throws IOException;
 
     protected abstract void salvaDadosNoBanco(T dados);
 

@@ -2,7 +2,7 @@ package com.reader.manga.service.jobs;
 
 import com.reader.manga.enums.JobsType;
 import com.reader.manga.job.chapter.JobChapter;
-import com.reader.manga.job.manga.ColetorManga;
+import com.reader.manga.job.manga.ColetorMangaFonte;
 import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobsService {
 
-    private final ColetorManga coletorManga;
+    private final ColetorMangaFonte coletorManga;
     private final JobChapter jobChapter;
 
     /**

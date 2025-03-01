@@ -2,7 +2,7 @@ package com.reader.manga.job.manga;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.enums.StatusType;
-import com.reader.manga.job.base.ColetorBase;
+import com.reader.manga.job.base.ColetorBaseFonte;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.vo.job.manga.MangaJobVO;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class ColetorManga extends ColetorBase<MangaJobVO> {
+public class ColetorMangaFonte extends ColetorBaseFonte<MangaJobVO> {
 
     private final WebClient webClient;
     private final MangaRepository repository;
@@ -55,10 +55,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
                     return Mono.empty();
                 });
     }
-
-    @Override
-    protected void executa(MultipartFile file, String... varargs) {}
-
+    
     @Override
     public void salvaDadosNoBanco(MangaJobVO vo) {
         Manga manga = new Manga(vo.getTitle(), vo.getDescription(), vo.getSize(), vo.getCreationDate(),
