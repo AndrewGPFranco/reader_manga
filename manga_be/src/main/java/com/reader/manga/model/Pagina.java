@@ -21,7 +21,7 @@ public class Pagina {
 
     @NotNull
     @NotBlank
-    @Column(name = "path_page")
+    @Column(name = "path_page", unique = true)
     private String pathPage;
 
     @JsonIgnore

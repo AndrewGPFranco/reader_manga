@@ -26,7 +26,7 @@ public class Chapter {
 
     @NotNull
     @NotBlank
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     @Length(min = 3, max = 30)
     private String title;
 
