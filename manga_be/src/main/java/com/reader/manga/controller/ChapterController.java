@@ -4,7 +4,7 @@ import com.reader.manga.dto.chapter.*;
 import com.reader.manga.dto.page.PageDTO;
 import com.reader.manga.dto.page.UpdatePageDTO;
 import com.reader.manga.model.Chapter;
-import com.reader.manga.model.PageChapter;
+import com.reader.manga.model.Pagina;
 import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -71,8 +71,8 @@ public class ChapterController {
     public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
         Chapter chapter = service.getChapterByID(id);
         logger.info("*******************Searching chapter!*******************");
-        List<PageChapter> pages = chapter.getPages();
-        pages.sort(Comparator.comparing(PageChapter::getId));
+        List<Pagina> pages = chapter.getPages();
+        pages.sort(Comparator.comparing(Pagina::getId));
         return ResponseEntity.ok().body(pages);
     }
 
@@ -85,8 +85,8 @@ public class ChapterController {
     }
 
     @GetMapping("/getAll-pages")
-    public ResponseEntity<List<PageChapter>> getAllPages() {
-        List<PageChapter> allPages = service.getAllPages();
+    public ResponseEntity<List<Pagina>> getAllPages() {
+        List<Pagina> allPages = service.getAllPages();
         logger.info("Searching all pages");
         return ResponseEntity.ok().body(allPages);
     }

@@ -28,7 +28,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     private static final String EN_JP = "en_jp";
 
     @Override
-    public Mono<MangaJobVO> executa(String manga) {
+    public Mono<MangaJobVO> executa(Object manga) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
@@ -54,6 +54,9 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
                     return Mono.empty();
                 });
     }
+
+    @Override
+    protected void executa(String... varargs) {}
 
     @Override
     public void salvaDadosNoBanco(MangaJobVO vo) {

@@ -8,7 +8,7 @@ import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
-import com.reader.manga.model.PageChapter;
+import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PageRepository;
@@ -35,7 +35,7 @@ public class ChapterService {
         try {
             Optional<Manga> mangaById = mangaRepository.findById(dto.mangaId());
             if (mangaById.isPresent()) {
-                Chapter chapter = new Chapter(dto.title(), dto.description(), 0, mangaById.get());
+                Chapter chapter = new Chapter(dto.title(), 0, mangaById.get());
                 repository.save(chapter);
                 log.info("Capítulo salvo.");
             } else {
@@ -67,7 +67,6 @@ public class ChapterService {
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
         UtilsService.updateField(dto.title(), chapter::setTitle);
-        UtilsService.updateField(dto.description(), chapter::setDescription);
 
         repository.save(chapter);
     }
@@ -79,13 +78,13 @@ public class ChapterService {
 
     public void pageChapterRegister(PageDTO pageDTO) {
         Chapter chapter = repository.findById(pageDTO.chapter_id()).orElseThrow(() -> new NotFoundException("Chapter not found."));
-        PageChapter page = new PageChapter(pageDTO.page(), chapter, pageDTO.idChapter());
+        Pagina page = new Pagina(pageDTO.page(), chapter);
         chapter.setNumberPages(chapter.getNumberPages() + 1);
         repository.save(chapter);
         pageRepository.save(page);
     }
 
-    public List<PageChapter> getAllPages() {
+    public List<Pagina> getAllPages() {
         return pageRepository.findAll();
     }
 
@@ -104,10 +103,10 @@ public class ChapterService {
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {
-        PageChapter page = pageRepository.findById(id)
+        Pagina page = pageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Page not found"));
 
-        UtilsService.updateField(dto.page(), page::setChapterPage);
+        UtilsService.updateField(dto.page(), page::setPathPage);
 
         pageRepository.save(page);
     }
