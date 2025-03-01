@@ -9,7 +9,6 @@ import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +23,6 @@ public class ColetorMangaFonte extends ColetorBaseFonte<MangaJobVO> {
 
     private final WebClient webClient;
     private final MangaRepository repository;
-    private static final String PATH = "/api/edge/manga";
     private static final String EN_US = "en_us";
     private static final String EN_JP = "en_jp";
 
@@ -32,7 +30,7 @@ public class ColetorMangaFonte extends ColetorBaseFonte<MangaJobVO> {
     public Mono<MangaJobVO> executa(Object manga) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(PATH)
+                        .path("/api/edge/manga")
                         .queryParam("filter[text]", manga)
                         .build())
                 .retrieve()
