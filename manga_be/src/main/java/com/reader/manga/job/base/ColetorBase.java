@@ -3,6 +3,7 @@ package com.reader.manga.job.base;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.interfaces.DadosManga;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public abstract class ColetorBase <T> implements DadosManga {
 
     protected abstract Mono<T> executa(Object obj);
 
-    protected abstract void executa(String... varargs) throws IOException;
+    protected abstract void executa(MultipartFile file, String... varargs) throws IOException;
 
     protected abstract void salvaDadosNoBanco(T dados);
 

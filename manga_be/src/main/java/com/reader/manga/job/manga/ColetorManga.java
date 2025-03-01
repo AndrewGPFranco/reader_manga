@@ -9,6 +9,7 @@ import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -56,7 +57,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
     }
 
     @Override
-    protected void executa(String... varargs) {}
+    protected void executa(MultipartFile file, String... varargs) {}
 
     @Override
     public void salvaDadosNoBanco(MangaJobVO vo) {

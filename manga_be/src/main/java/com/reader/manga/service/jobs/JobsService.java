@@ -7,6 +7,7 @@ import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class JobsService {
         return Arrays.asList(JobsType.values());
     }
 
-    public void executaJobChapter(String path, String manga, String titleChapter) throws IOException {
+    public void executaJobChapter(MultipartFile path, String manga, String titleChapter) throws IOException {
         jobChapter.executa(path, manga, titleChapter);
     }
 

@@ -3,10 +3,10 @@ package com.reader.manga.controller;
 import com.reader.manga.enums.JobsType;
 import com.reader.manga.interfaces.DadosManga;
 import com.reader.manga.service.jobs.JobsService;
-import com.reader.manga.vo.job.chapter.UploadChapterVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +38,12 @@ public class JobsController <T> implements DadosManga {
     }
 
     @PostMapping("/upload-chapter")
-    public ResponseEntity<Object> uploadChapter(@RequestBody UploadChapterVO vo) {
+    public ResponseEntity<Object> uploadChapter(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("titleManga") String titleManga,
+            @RequestParam("titleChapter") String titleChapter) {
         try {
-            jobsService.executaJobChapter(vo.path(), vo.titleManga(), vo.titleChapter());
+            jobsService.executaJobChapter(file, titleManga, titleChapter);
 
             return ResponseEntity.ok(new Object());
         } catch (Exception e) {
