@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
@@ -75,13 +75,13 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const currentPageIndex = ref(0)
 const imageLoaded = ref(false)
-const image = ref<string>("");
+const image = ref<string>('')
 
 const route = useRoute()
 const message = useMessage()
 const chapterStore = useChapterStore()
 
-const totalPages = ref<number | undefined>(0);
+const totalPages = ref<number | undefined>(0)
 
 const currentPageNumber = computed({
   get: () => currentPageIndex.value + 1,
@@ -90,42 +90,68 @@ const currentPageNumber = computed({
   }
 })
 
-const canNavigateNext = currentPageIndex.value < totalPages.value - 1;
+const canNavigateNext = computed(() => currentPageIndex.value < (totalPages.value || 0) - 1)
 
 const canNavigatePrevious = computed(() => currentPageIndex.value > 0)
+
+const loadPage = async (chapterId: string, pageIndex: number) => {
+  try {
+    imageLoaded.value = false
+    error.value = null
+
+    const response = await chapterStore.getPaginaDoCapitulo(chapterId, pageIndex)
+    image.value = URL.createObjectURL(response)
+  } catch (err) {
+    console.error(err)
+    error.value = 'Erro ao carregar a imagem'
+    message.error(error.value)
+  }
+}
 
 const loadChapter = async (id: string) => {
   try {
     isLoading.value = true
     error.value = null
 
-    const data = await chapterStore.getPaginaDoCapitulo(id, currentPageIndex.value)
-
-    if (!data) throw new Error('No chapter data available')
+    totalPages.value = await chapterStore.getQuantidade(id)
 
     currentPageIndex.value = 0
+    await loadPage(id, currentPageIndex.value)
+  } catch (err) {
+    console.error(err)
+    error.value = err instanceof Error ? err.message : 'Erro ao carregar capítulo'
+    message.error(error.value)
   } finally {
     isLoading.value = false
   }
 }
 
-const nextPage = () => {
+const nextPage = async () => {
   if (canNavigateNext.value) {
     currentPageIndex.value++
-    imageLoaded.value = false;
+    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+    if (id) {
+      await loadPage(id, currentPageIndex.value)
+    }
   }
 }
 
-const previousPage = () => {
+const previousPage = async () => {
   if (canNavigatePrevious.value) {
     currentPageIndex.value--
-    imageLoaded.value = false
+    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+    if (id) {
+      await loadPage(id, currentPageIndex.value)
+    }
   }
 }
 
-const handleSliderChange = (value: number) => {
+const handleSliderChange = async (value: number) => {
   currentPageNumber.value = value
-  imageLoaded.value = false
+  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+  if (id) {
+    await loadPage(id, currentPageIndex.value)
+  }
 }
 
 const handleImageLoad = () => {
@@ -146,37 +172,41 @@ const handleKeyPress = (event: KeyboardEvent) => {
 }
 
 onMounted(async () => {
-  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-  totalPages.value = await chapterStore.getQuantidade(id);
+  window.addEventListener('keydown', handleKeyPress)
+
+  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
 
   if (!id) {
     error.value = 'Invalid chapter ID'
+    isLoading.value = false
     return
   }
 
-  try {
-    const response = await chapterStore.getPaginaDoCapitulo(id, currentPageIndex.value);
-    isLoading.value = true
-    error.value = null
-    image.value = URL.createObjectURL(response);
-  } catch (err) {
-    console.error(err);
-    error.value = "Erro ao carregar a imagem inicial";
-    message.error(error.value);
-  } finally {
-    isLoading.value = false;
+  await loadChapter(id)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyPress)
+
+  if (image.value) {
+    URL.revokeObjectURL(image.value)
   }
-});
+})
 
 watch(
   () => route.params.id,
   async (newId) => {
     if (newId && typeof newId === 'string') {
-      try {
-        await loadChapter(newId)
-      } catch (error: any) {
-        message.error(error.message)
-      }
+      await loadChapter(newId)
+    }
+  }
+)
+
+watch(
+  () => image.value,
+  (newImage, oldImage) => {
+    if (oldImage && oldImage !== newImage) {
+      URL.revokeObjectURL(oldImage)
     }
   }
 )
