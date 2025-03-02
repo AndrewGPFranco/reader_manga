@@ -115,6 +115,8 @@ public class ChapterController {
     @GetMapping("/image/{idChapter}/{pageNumber}")
     public ResponseEntity<UrlResource> getPages(@PathVariable Long idChapter, @PathVariable Integer pageNumber) throws MalformedURLException {
         List<Pagina> paginas = service.getCapituloPorId(idChapter);
+        paginas.sort(Comparator.comparingLong(Pagina::getId));
+
         Pagina paginaDaVez = paginas.get(pageNumber);
 
         Path path = Paths.get("uploads").resolve(paginaDaVez.getPathPage());

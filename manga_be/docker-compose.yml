@@ -27,7 +27,7 @@ services:
     volumes:
       - ./src:/app/src
       - ~/.m2:/root/.m2
-      - /home/andrewgo/Documentos/projetosP/reader_manga/manga_fe/src/assets/app/uploads:/app/uploads:rw,Z
+      - /home/andrewgo/Documentos/Capitulos_salvos:/app/uploads:rw,Z
     depends_on:
       - postgres
     command: ./mvnw spring-boot:run

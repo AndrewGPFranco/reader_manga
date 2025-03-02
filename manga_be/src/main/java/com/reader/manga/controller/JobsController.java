@@ -51,9 +51,4 @@ public class JobsController <T> implements DadosManga {
         }
     }
 
-    @GetMapping("/get-pages")
-    public List<String> getPages() {
-        return new ArrayList<>();
-    }
-
 }

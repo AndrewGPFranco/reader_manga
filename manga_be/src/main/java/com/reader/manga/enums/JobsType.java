@@ -7,7 +7,8 @@ import lombok.Getter;
  */
 @Getter
 public enum JobsType {
-    MANGA("Manga", "15/02/2025", true, false);
+    MANGA("Manga", "15/02/2025", true, false),
+    CHAPTER("Chapter", "02/03/2025", true, false);
 
     private final String nomeJob;
     private final String dataIn;
