@@ -11,7 +11,7 @@ import com.reader.manga.model.Manga;
 import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
-import com.reader.manga.repository.PageRepository;
+import com.reader.manga.repository.PaginaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class ChapterService {
 
     private final ChapterRepository repository;
     private final MangaRepository mangaRepository;
-    private final PageRepository pageRepository;
+    private final PaginaRepository paginaRepository;
 
     public void createChapter(ChapterDTO dto) {
         try {
@@ -81,11 +81,11 @@ public class ChapterService {
         Pagina page = new Pagina(pageDTO.page(), chapter);
         chapter.setNumberPages(chapter.getNumberPages() + 1);
         repository.save(chapter);
-        pageRepository.save(page);
+        paginaRepository.save(page);
     }
 
     public List<Pagina> getAllPages() {
-        return pageRepository.findAll();
+        return paginaRepository.findAll();
     }
 
     public void deletePage(Long idPage, Long idChapter) {
@@ -103,12 +103,16 @@ public class ChapterService {
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {
-        Pagina page = pageRepository.findById(id)
+        Pagina page = paginaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Page not found"));
 
         UtilsService.updateField(dto.page(), page::setPathPage);
 
-        pageRepository.save(page);
+        paginaRepository.save(page);
     }
 
+
+    public List<Pagina> getCapituloPorId(Long idChapter) {
+        return paginaRepository.findByIdChapter(idChapter);
+    }
 }

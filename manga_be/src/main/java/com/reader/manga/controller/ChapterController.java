@@ -9,13 +9,18 @@ import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 
@@ -105,6 +110,17 @@ public class ChapterController {
         service.updatePage(id, dto);
         logger.info("*******************Updating page!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Page updated successfully!");
+    }
+
+    @GetMapping("/image/{idChapter}/{pageNumber}")
+    public ResponseEntity<UrlResource> getPages(@PathVariable Long idChapter, @PathVariable Integer pageNumber) throws MalformedURLException {
+        List<Pagina> paginas = service.getCapituloPorId(idChapter);
+        Pagina paginaDaVez = paginas.get(pageNumber);
+
+        Path path = Paths.get("uploads").resolve(paginaDaVez.getPathPage());
+        UrlResource resource = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
 
 }

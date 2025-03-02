@@ -38,7 +38,7 @@ public class JobsController <T> implements DadosManga {
     }
 
     @PostMapping("/upload-chapter")
-    public ResponseEntity<Object> uploadChapter(
+    public ResponseEntity<Object> executaJobChapter(
             @RequestParam("file") MultipartFile file,
             @RequestParam("titleManga") String titleManga,
             @RequestParam("titleChapter") String titleChapter) {

@@ -6,7 +6,7 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
-import com.reader.manga.repository.PageRepository;
+import com.reader.manga.repository.PaginaRepository;
 import com.reader.manga.service.MangaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.List;
 public class JobChapter extends ColetorBaseUpload {
 
     private final ChapterRepository capituloRepository;
-    private final PageRepository pageRepository;
+    private final PaginaRepository paginaRepository;
     private final MangaService mangaService;
 
     @Override
@@ -63,11 +63,14 @@ public class JobChapter extends ColetorBaseUpload {
             capitulo.setNumberPages(document.getNumberOfPages());
             capituloRepository.save(capitulo);
 
+            String[] s = manga.getTitle().split(" ");
+            String pathBase = String.join(s[0], s[1]);
+
             List<Pagina> paginas = new ArrayList<>();
             for (int i = 0; i < document.getNumberOfPages(); i++) {
                 BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300);
 
-                String outputPath = "uploads/" + varargs[1] + "/pagina_" + i + ".png";
+                String outputPath = "/app/uploads/" + pathBase + varargs[1] + "/pagina_" + i + ".png";
                 File outputFile = new File(outputPath);
 
                 outputFile.getParentFile().mkdirs();
@@ -76,7 +79,7 @@ public class JobChapter extends ColetorBaseUpload {
                 Pagina pagina = new Pagina();
                 pagina.setPathPage(outputFile.getAbsolutePath());
                 pagina.setChapter(capitulo);
-                pageRepository.save(pagina);
+                paginaRepository.save(pagina);
                 log.info("Página {} salva com sucesso!", i);
                 paginas.add(pagina);
             }
