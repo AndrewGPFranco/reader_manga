@@ -64,7 +64,12 @@ public class JobChapter extends ColetorBaseUpload {
             capituloRepository.save(capitulo);
 
             String[] s = manga.getTitle().split(" ");
-            String pathBase = String.join(s[0], s[1]);
+            int quantidadeNomes = s.length - 1;
+            StringBuilder pathBase = new StringBuilder();
+
+            for (int i = 0; i <= quantidadeNomes; i++) {
+                pathBase.append(s[i]);
+            }
 
             List<Pagina> paginas = new ArrayList<>();
             for (int i = 0; i < document.getNumberOfPages(); i++) {

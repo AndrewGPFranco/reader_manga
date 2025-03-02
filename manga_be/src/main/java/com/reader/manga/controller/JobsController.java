@@ -40,10 +40,10 @@ public class JobsController <T> implements DadosManga {
     @PostMapping("/upload-chapter")
     public ResponseEntity<Object> executaJobChapter(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("titleManga") String titleManga,
-            @RequestParam("titleChapter") String titleChapter) {
+            @RequestParam("titleChapter") String titleChapter,
+            @RequestParam("idManga") String idManga) {
         try {
-            jobsService.executaJobChapter(file, titleManga, titleChapter);
+            jobsService.executaJobChapter(file, idManga, titleChapter);
 
             return ResponseEntity.ok(new Object());
         } catch (Exception e) {
