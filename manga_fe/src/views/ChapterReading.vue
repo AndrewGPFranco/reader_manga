@@ -14,9 +14,9 @@
       <template v-else>
         <div class="manga-viewer__content">
           <img
-            v-if="currentPage?.chapterPage"
-            :src="currentPage.chapterPage"
-            :alt="`Manga page ${currentPage.id}`"
+            v-if="image"
+            :src="image"
+            :alt="`Manga page `"
             class="manga-viewer__image"
             @load="handleImageLoad"
             @error="handleImageError"
@@ -25,7 +25,7 @@
           <n-empty v-else description="No pages available for this chapter" />
         </div>
 
-        <div v-if="currentPage" class="manga-viewer__controls">
+        <div v-if="image" class="manga-viewer__controls">
           <div class="manga-viewer__info">
             <span>Página {{ currentPageNumber }} de {{ totalPages }}</span>
           </div>
@@ -73,17 +73,15 @@ import { useChapterStore } from '@/store/chapterStore'
 
 const isLoading = ref(true)
 const error = ref<string | null>(null)
-const chapterData = ref<any[]>([])
 const currentPageIndex = ref(0)
 const imageLoaded = ref(false)
+const image = ref<string>("");
 
 const route = useRoute()
 const message = useMessage()
 const chapterStore = useChapterStore()
 
-const currentPage = computed<any | null>(() => chapterData.value[currentPageIndex.value] || null)
-
-const totalPages = computed(() => chapterData.value.length)
+const totalPages = ref<number | undefined>(0);
 
 const currentPageNumber = computed({
   get: () => currentPageIndex.value + 1,
@@ -92,7 +90,7 @@ const currentPageNumber = computed({
   }
 })
 
-const canNavigateNext = computed(() => currentPageIndex.value < chapterData.value.length - 1)
+const canNavigateNext = currentPageIndex.value < totalPages.value - 1;
 
 const canNavigatePrevious = computed(() => currentPageIndex.value > 0)
 
@@ -101,11 +99,10 @@ const loadChapter = async (id: string) => {
     isLoading.value = true
     error.value = null
 
-    const data = await chapterStore.getChapterByID(id)
+    const data = await chapterStore.getPaginaDoCapitulo(id, currentPageIndex.value)
 
-    if (!data || !data.length) throw new Error('No chapter data available')
+    if (!data) throw new Error('No chapter data available')
 
-    chapterData.value = data
     currentPageIndex.value = 0
   } finally {
     isLoading.value = false
@@ -115,7 +112,7 @@ const loadChapter = async (id: string) => {
 const nextPage = () => {
   if (canNavigateNext.value) {
     currentPageIndex.value++
-    imageLoaded.value = false
+    imageLoaded.value = false;
   }
 }
 
@@ -149,7 +146,8 @@ const handleKeyPress = (event: KeyboardEvent) => {
 }
 
 onMounted(async () => {
-  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
+  totalPages.value = await chapterStore.getQuantidade(id);
 
   if (!id) {
     error.value = 'Invalid chapter ID'
@@ -157,13 +155,18 @@ onMounted(async () => {
   }
 
   try {
-    await loadChapter(id)
-  } catch (error: any) {
-    message.error(error.message)
+    const response = await chapterStore.getPaginaDoCapitulo(id, currentPageIndex.value);
+    isLoading.value = true
+    error.value = null
+    image.value = URL.createObjectURL(response);
+  } catch (err) {
+    console.error(err);
+    error.value = "Erro ao carregar a imagem inicial";
+    message.error(error.value);
+  } finally {
+    isLoading.value = false;
   }
-
-  window.addEventListener('keydown', handleKeyPress)
-})
+});
 
 watch(
   () => route.params.id,
