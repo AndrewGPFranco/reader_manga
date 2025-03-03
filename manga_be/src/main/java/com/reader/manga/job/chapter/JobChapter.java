@@ -68,6 +68,7 @@ public class JobChapter extends ColetorBaseUpload {
             }
 
             List<Pagina> paginas = new ArrayList<>();
+            log.info("Iniciando gravação de {} páginas...", document.getNumberOfPages());
             for (int i = 0; i < document.getNumberOfPages(); i++) {
                 BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300);
 
