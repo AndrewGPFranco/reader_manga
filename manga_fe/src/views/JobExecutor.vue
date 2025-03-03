@@ -74,55 +74,53 @@ import { api } from '@/network/axiosInstance'
 import type IJobType from '@/@types/IJobType'
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
 
-const jobs = ref<IJobType[]>([]);
-const message = useMessage();
-const token = localStorage.getItem('token');
-const selectedJob = ref<string>('');
+const message = useMessage()
+const jobs = ref<IJobType[]>([])
+const selectedJob = ref<string>('')
+const token = localStorage.getItem('token')
 
-let parametros = ref<string>('');
-let tipoJob = ref<string>('');
-let selectedFile = ref<File>();
-let titleChapter = ref<string>();
-let titleManga = ref<string>();
+let selectedFile = ref<File>()
+let titleManga = ref<string>()
+let titleChapter = ref<string>()
+let tipoJob = ref<string>('')
+let parametros = ref<string>('')
 
 const handleFileChange = (fileList: any) => {
   if (fileList.fileList.length > 0) {
-    selectedFile.value = fileList.fileList[0].file;
+    selectedFile.value = fileList.fileList[0].file
   }
-};
+}
 
 const executeJob = async (e: MouseEvent) => {
   e.preventDefault()
   try {
-    const isTipoParametros = tipoJob.value === "Parâmetros";
-    const job = selectedJob.value.toUpperCase();
+    const isTipoParametros = tipoJob.value === 'Parâmetros'
+    const job = selectedJob.value.toUpperCase()
 
-    let validation;
+    let validation
 
-    if(isTipoParametros)
-      validation = validaInput();
-    else
-      validation = true;
+    if (isTipoParametros) validation = validaInput()
+    else validation = true
 
     if (validation) {
-      let result;
-      if(isTipoParametros) {
+      let result
+      if (isTipoParametros) {
         result = await api.post(`/api/v1/job/${job}/${parametros.value}`, null, {
           headers: {
             Authorization: `${token}`
           }
         })
       } else {
-        const dados = new FormData();
-        if(selectedFile.value != null) dados.append("file", selectedFile.value);
-        if(titleChapter.value != null) dados.append("titleChapter", titleChapter.value);
-        if(titleManga.value != null) dados.append("titleManga", titleManga.value);
+        const dados = new FormData()
+        if (selectedFile.value != null) dados.append('file', selectedFile.value)
+        if (titleChapter.value != null) dados.append('titleChapter', titleChapter.value)
+        if (titleManga.value != null) dados.append('titleManga', titleManga.value)
 
         result = await api.post(`/api/v1/job/upload-chapter`, dados, {
           headers: {
             Authorization: `${token}`
           }
-        });
+        })
       }
 
       if (result.status === 200 && result.data != '') message.success('Job executado com sucesso!')

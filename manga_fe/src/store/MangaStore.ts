@@ -222,6 +222,14 @@ export const useMangaStore = defineStore('manga', {
         const decode = jwtDecode<iDecodedToken>(token)
           return decode.id
       }
+    },
+    async getApenasNomeDosMangas(): Promise<string[]> {
+      const result = await api.get("/api/v1/manga/nome-mangas", {
+        headers: {
+          Authorization: this.user.getToken()
+        }
+      });
+      return result.data;
     }
   }
 })
