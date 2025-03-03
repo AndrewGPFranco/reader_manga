@@ -226,4 +226,13 @@ public class MangaService {
         return covers.stream().limit(max).toList();
     }
 
+    public List<String> getApenasNomeDosMangas() {
+        List<Manga> todosMangas = repository.findAll();
+        List<String> nomeDosMangas = new ArrayList<>(todosMangas.size());
+
+        todosMangas.forEach(manga -> nomeDosMangas.add(manga.getTitle()));
+
+        return nomeDosMangas;
+    }
+
 }

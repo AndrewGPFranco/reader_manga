@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "page")
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageChapter {
+@Table(name = "page")
+public class Pagina {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,20 +21,16 @@ public class PageChapter {
 
     @NotNull
     @NotBlank
-    @Column(name = "page")
-    private String chapterPage;
+    @Column(name = "path_page", unique = true)
+    private String pathPage;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
-    @Column(name = "id_chapter")
-    private Long idChapter;
-
-    public PageChapter(String chapterPage, Chapter chapter, Long idChapter) {
-        this.chapterPage = chapterPage;
+    public Pagina(String pathPage, Chapter chapter) {
+        this.pathPage = pathPage;
         this.chapter = chapter;
-        this.idChapter = idChapter;
     }
 }

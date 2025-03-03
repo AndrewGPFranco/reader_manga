@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { StatusType } from '@/enum/StatusType';
-import type MangaData from '@/interface/Manga';
+import type iMangaData from '@/@types/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { ref } from 'vue';
@@ -64,7 +64,7 @@ const message = useMessage();
 const size = ref('medium');
 
 const props = defineProps<{
-  manga: MangaData;
+  manga: iMangaData;
   isEdit: boolean;
 }>();
 

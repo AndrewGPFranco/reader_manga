@@ -2,7 +2,7 @@ package com.reader.manga.job.manga;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.enums.StatusType;
-import com.reader.manga.job.base.ColetorBase;
+import com.reader.manga.job.base.ColetorBaseFonte;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.vo.job.manga.MangaJobVO;
@@ -19,17 +19,18 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class ColetorManga extends ColetorBase<MangaJobVO> {
+public class ColetorMangaFonte extends ColetorBaseFonte<MangaJobVO> {
 
     private final WebClient webClient;
     private final MangaRepository repository;
-    private static final String PATH = "/api/edge/manga";
+    private static final String EN_US = "en_us";
+    private static final String EN_JP = "en_jp";
 
     @Override
-    public Mono<MangaJobVO> executa(String manga) {
+    public Mono<MangaJobVO> executa(Object manga) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(PATH)
+                        .path("/api/edge/manga")
                         .queryParam("filter[text]", manga)
                         .build())
                 .retrieve()
@@ -52,7 +53,7 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
                     return Mono.empty();
                 });
     }
-
+    
     @Override
     public void salvaDadosNoBanco(MangaJobVO vo) {
         Manga manga = new Manga(vo.getTitle(), vo.getDescription(), vo.getSize(), vo.getCreationDate(),
@@ -85,10 +86,10 @@ public class ColetorManga extends ColetorBase<MangaJobVO> {
 
         if(titles.get("en") != null && !titles.get("en").asText().equals("null"))
             return titles.get("en").asText();
-        else if(titles.get("en_us") != null && !titles.get("en_us").asText().equals("null"))
-            return titles.get("en_us").asText();
-        else if(titles.get("en_jp") != null && !titles.get("en_jp").asText().equals("null"))
-            return titles.get("en_jp").asText();
+        else if(titles.get(EN_US) != null && !titles.get(EN_US).asText().equals("null"))
+            return titles.get(EN_US).asText();
+        else if(titles.get(EN_JP) != null && !titles.get(EN_JP).asText().equals("null"))
+            return titles.get(EN_JP).asText();
 
         return "Título indisponível";
     }

@@ -149,4 +149,11 @@ public class MangaController {
         return mangasPaginados;
     }
 
+    @GetMapping("/nome-mangas")
+    public ResponseEntity<List<String>> getNomeDosMangas() {
+        List<String> apenasNomeDosMangas = service.getApenasNomeDosMangas();
+
+        return ResponseEntity.ok().body(apenasNomeDosMangas);
+    }
+
 }
