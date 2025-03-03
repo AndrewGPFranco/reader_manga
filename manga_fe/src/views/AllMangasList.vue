@@ -54,7 +54,7 @@
 
 <script lang="ts" setup>
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import type iMangaData from '@/interface/Manga'
+import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
 import { NCard, useMessage } from 'naive-ui'
 import { onMounted, ref, watch } from 'vue'

@@ -1,4 +1,4 @@
-import type iPageData from "@/interface/Pagee";
+import type iPageData from "@/@types/Pagee";
 
 export class Chapter {
 

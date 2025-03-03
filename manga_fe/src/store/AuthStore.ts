@@ -2,7 +2,7 @@ import { User } from '@/class/User'
 import { api } from '@/network/axiosInstance'
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
-import type iDecodedToken from '@/interface/iDecodedToken'
+import type iDecodedToken from '@/@types/iDecodedToken'
 import type { UserRegister } from '@/class/UserRegister'
 import { UserSession } from '@/class/UserSession'
 

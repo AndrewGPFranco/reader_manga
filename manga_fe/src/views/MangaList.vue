@@ -43,8 +43,8 @@ import { useMessage } from 'naive-ui'
 import { useMangaStore } from '@/store/MangaStore'
 import { HeartOutline, Heart } from '@vicons/ionicons5'
 import { useAuthStore } from '@/store/AuthStore'
-import type responseListManga from '@/interface/ResponseListManga'
-import type iMangaData from '@/interface/Manga'
+import type responseListManga from '@/@types/ResponseListManga'
+import type iMangaData from '@/@types/Manga'
 
 const message = useMessage()
 const mangasArray = ref<iMangaData[]>()

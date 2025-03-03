@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import type iPageData from '@/interface/Pagee';
+import type iPageData from '@/@types/Pagee';
 import { api } from '@/network/axiosInstance';
 import { useAuthStore } from '@/store/AuthStore';
 import { useChapterStore } from '@/store/chapterStore';

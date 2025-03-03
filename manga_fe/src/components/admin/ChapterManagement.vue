@@ -26,13 +26,13 @@
 </template>
 
 <script setup lang="ts">
-import type iChapterData from '@/interface/iChapter';
+import type iChapterData from '@/@types/iChapter';
 import { useChapterStore } from '@/store/chapterStore';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import FormToChapterRegister from '../registerChapter/formToChapterRegister.vue';
-import type iMangaData from '@/interface/Manga';
+import type iMangaData from '@/@types/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 
 const isEdit = ref(false);

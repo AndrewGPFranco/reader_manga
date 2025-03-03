@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type iMangaData from '@/interface/Manga';
+import type iMangaData from '@/@types/Manga';
 import { useMangaStore } from '@/store/MangaStore';
 import { onMounted, ref } from 'vue';
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'

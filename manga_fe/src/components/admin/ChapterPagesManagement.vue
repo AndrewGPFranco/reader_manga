@@ -29,9 +29,9 @@ import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import { useMangaStore } from '@/store/MangaStore';
-import type iPageData from '@/interface/Pagee';
-import type iMangaData from '@/interface/Manga';
-import type iChapterData from '@/interface/iChapter';
+import type iPageData from '@/@types/Pagee';
+import type iMangaData from '@/@types/Manga';
+import type iChapterData from '@/@types/iChapter';
 import FormToChapterPages from '../registerChapterPages/formToChapterPages.vue';
 
 const isEdit = ref(false);

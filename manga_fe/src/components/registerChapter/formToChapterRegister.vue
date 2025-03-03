@@ -35,7 +35,7 @@ import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 import { useChapterStore } from '@/store/chapterStore';
-import type iChapterData from '@/interface/iChapter';
+import type iChapterData from '@/@types/iChapter';
 
 const props = defineProps({
     mangas: {

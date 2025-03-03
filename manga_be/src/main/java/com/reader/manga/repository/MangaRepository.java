@@ -7,8 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface MangaRepository extends JpaRepository<Manga, Long> {
 
     @NotNull Page<Manga> findAll(@NotNull Pageable pageable);
+
+    Optional<Manga> findByTitle(String title);
 }

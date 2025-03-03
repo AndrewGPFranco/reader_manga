@@ -1,5 +1,5 @@
-import type iChapterData from '@/interface/iChapter'
-import type iPageData from '@/interface/Pagee'
+import type iChapterData from '@/@types/iChapter'
+import type iPageData from '@/@types/Pagee'
 import { api } from '@/network/axiosInstance'
 import { defineStore } from 'pinia'
 import { useAuthStore } from './AuthStore'

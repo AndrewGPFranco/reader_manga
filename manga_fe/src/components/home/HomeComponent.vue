@@ -16,7 +16,7 @@
 </template>
   
 <script setup lang="ts">
-import type iCoversManga from '@/interface/iCoversManga';
+import type iCoversManga from '@/@types/iCoversManga';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';

@@ -1,6 +1,6 @@
-import type ILogin from "@/interface/iLogin";
-import type IRegisterUser from "@/interface/iRegisterUser";
-import type iMangaData from "@/interface/Manga";
+import type ILogin from "@/@types/iLogin";
+import type IRegisterUser from "@/@types/iRegisterUser";
+import type iMangaData from "@/@types/Manga";
 
 export function validationFields(data: iMangaData): string | boolean{
     if(data.title === "") {

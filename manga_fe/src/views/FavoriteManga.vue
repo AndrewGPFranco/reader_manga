@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import type iMangaData from '@/interface/Manga'
+import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
 import { onMounted, ref } from 'vue'
 
