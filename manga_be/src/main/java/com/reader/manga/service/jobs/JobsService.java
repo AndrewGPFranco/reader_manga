@@ -40,8 +40,8 @@ public class JobsService {
         return Arrays.asList(JobsType.values());
     }
 
-    public void executaJobChapter(MultipartFile path, String manga, String titleChapter) throws IOException {
-        jobChapter.executa(path, manga, titleChapter);
+    public void executaJobChapter(MultipartFile path, String titleManga, String titleChapter) throws IOException {
+        jobChapter.executa(path, titleManga, titleChapter);
     }
 
 }

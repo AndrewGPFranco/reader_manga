@@ -6,6 +6,7 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
+import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PaginaRepository;
 import com.reader.manga.service.MangaService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,7 +31,7 @@ public class JobChapter extends ColetorBaseUpload {
 
     private final ChapterRepository capituloRepository;
     private final PaginaRepository paginaRepository;
-    private final MangaService mangaService;
+    private final MangaRepository mangaRepository;
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -40,19 +42,13 @@ public class JobChapter extends ColetorBaseUpload {
             throw new IllegalArgumentException("Arquivo não fornecido!");
         }
 
-        Long mangaId;
-        try {
-            mangaId = Long.parseLong(varargs[0]);
-        } catch (NumberFormatException e) {
-            log.error("ID de mangá inválido: {}", varargs[0]);
-            throw new IllegalArgumentException("ID de mangá inválido");
-        }
-
-        Manga manga = mangaService.findById(mangaId);
-        if (manga == null) {
-            log.error("Mangá com ID: {} não encontrado!", mangaId);
+        Optional<Manga> mangaOptional = mangaRepository.findByTitle(varargs[0]);
+        if (mangaOptional.isEmpty()) {
+            log.error("Mangá com título: {} não encontrado!", varargs[0]);
             throw new NotFoundException("Mangá não encontrado!");
         }
+
+        Manga manga = mangaOptional.get();
 
         try (PDDocument document = PDDocument.load(file.getInputStream())) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);

@@ -1,5 +1,6 @@
 package com.reader.manga.controller;
 
+import com.reader.manga.dto.jobs.JobDTO;
 import com.reader.manga.enums.JobsType;
 import com.reader.manga.interfaces.DadosManga;
 import com.reader.manga.service.jobs.JobsService;
@@ -32,20 +33,31 @@ public class JobsController <T> implements DadosManga {
     }
 
     @GetMapping("/get-jobs")
-    public ResponseEntity<List<JobsType>> getJobs() {
+    public ResponseEntity<List<JobDTO>> getJobs() {
         List<JobsType> jobs = jobsService.getJobs();
-        return ResponseEntity.ok().body(jobs);
+        List<JobDTO> jobDtoList = new ArrayList<>(jobs.size());
+        jobs.forEach(job -> {
+            jobDtoList.add(JobDTO.builder()
+                    .nomeJob(job.getNomeJob())
+                    .isPossuiVersaoAntiga(job.isPossuiVersaoAntiga())
+                    .tipoDoJob(job.getTipoDoJob())
+                    .isAtivo(job.isAtivo())
+                    .dataIn(job.getDataIn())
+                    .build());
+        });
+
+        return ResponseEntity.ok().body(jobDtoList);
     }
 
     @PostMapping("/upload-chapter")
     public ResponseEntity<Object> executaJobChapter(
             @RequestParam("file") MultipartFile file,
             @RequestParam("titleChapter") String titleChapter,
-            @RequestParam("idManga") String idManga) {
+            @RequestParam("titleManga") String titleManga) {
         try {
-            jobsService.executaJobChapter(file, idManga, titleChapter);
+            jobsService.executaJobChapter(file, titleManga, titleChapter);
 
-            return ResponseEntity.ok(new Object());
+            return ResponseEntity.ok("Job finalizado com sucesso");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao processar o capítulo: " + e.getMessage());
         }
