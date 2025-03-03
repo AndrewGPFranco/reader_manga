@@ -22,19 +22,23 @@
                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </n-form-item>
-            <n-form-item label="Parâmetros" path="parametros" v-else>
+            <n-form-item label="Título do Capítulo" path="parametros" v-if="tipoJob === 'Uploads'">
               <input
                 v-model="titleChapter"
                 placeholder="Digite o título do capítulo"
                 type="text"
                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
+            </n-form-item>
+            <n-form-item label="Título do Mangá" path="parametros" v-if="tipoJob === 'Uploads'">
               <input
                 v-model="titleManga"
                 placeholder="Digite o nome do mangá"
                 type="text"
                 class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
+            </n-form-item>
+            <n-form-item label="PDF do capítulo" path="parametros" v-if="tipoJob === 'Uploads'">
               <n-upload
                 multiple
                 directory-dnd
