@@ -57,8 +57,7 @@
                 </n-upload-dragger>
               </n-upload>
             </n-form-item>
-<!--            <div id="events" v-if="progressoEmTempoReal > 0">-->
-            <div id="events">
+            <div id="events" v-if="progressoEmTempoReal > 0">
               <h3>Progresso do Job:</h3>
               <n-progress
                 type="line"
