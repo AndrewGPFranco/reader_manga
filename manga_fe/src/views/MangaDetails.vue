@@ -27,7 +27,7 @@
         <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Chapters</h2>
         <ul class="space-y-4">
           <li
-            v-for="chapter in manga.chapters"
+            v-for="chapter in chapterOrdenados"
             :key="chapter.title"
             class="bg-white p-4 rounded-lg shadow-lg border border-gray-200"
           >
@@ -52,14 +52,18 @@ import { useMangaStore } from '@/store/MangaStore'
 import { formatDate } from '@/utils/utils'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import type iChapterData from '@/@types/iChapter'
 
 const mangaStore = useMangaStore()
 const route = useRoute()
 let manga = ref<iMangaData>({} as iMangaData)
+let chapterOrdenados = ref<iChapterData[]>([])
 
 onMounted(async () => {
   const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   manga.value = await mangaStore.getInfoManga(id)
+  chapterOrdenados.value = manga.value.chapters
+    .sort((a: iChapterData, b: iChapterData) => a.title.localeCompare(b.title))
 })
 
 function verifyEndDate(str: iMangaData): any {
