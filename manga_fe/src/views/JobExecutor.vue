@@ -42,7 +42,6 @@
               <n-upload
                 multiple
                 directory-dnd
-                action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
                 :max="5"
                 @change="handleFileChange"
               >
@@ -58,6 +57,16 @@
                 </n-upload-dragger>
               </n-upload>
             </n-form-item>
+<!--            <div id="events" v-if="progressoEmTempoReal > 0">-->
+            <div id="events">
+              <h3>Progresso do Job:</h3>
+              <n-progress
+                type="line"
+                :percentage="progressoEmTempoReal"
+                indicator-placement="inside"
+                processing
+              />
+            </div>
             <n-button type="primary" @click="executeJob">Executar Job</n-button>
           </n-form>
         </div>
@@ -67,12 +76,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { NCard, NList, NListItem, NButton, NForm, NFormItem, useMessage } from 'naive-ui'
 import { api } from '@/network/axiosInstance'
 import type IJobType from '@/@types/IJobType'
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
+import { URL_SSE } from '@/utils/utils'
 
 const message = useMessage()
 const jobs = ref<IJobType[]>([])
@@ -84,6 +94,8 @@ let titleManga = ref<string>()
 let titleChapter = ref<string>()
 let tipoJob = ref<string>('')
 let parametros = ref<string>('')
+let eventSource: EventSource | null = null;
+let progressoEmTempoReal = ref<number>(0);
 
 const handleFileChange = (fileList: any) => {
   if (fileList.fileList.length > 0) {
@@ -111,6 +123,7 @@ const executeJob = async (e: MouseEvent) => {
           }
         })
       } else {
+        executaProgressoJob();
         const dados = new FormData()
         if (selectedFile.value != null) dados.append('file', selectedFile.value)
         if (titleChapter.value != null) dados.append('titleChapter', titleChapter.value)
@@ -123,14 +136,49 @@ const executeJob = async (e: MouseEvent) => {
         })
       }
 
-      if (result.status === 200 && result.data != '') message.success('Job executado com sucesso!')
+      if (result.status === 200 && result.data != '') {
+        progressoEmTempoReal.value = 100;
+        message.success('Job executado com sucesso!')
+        fechaEventSource();
+      }
       else message.info('Houve um erro ao executar o Job.')
     } else message.error('Digite os parâmetros para executar o Job.')
   } catch (error: any) {
     message.error(error)
     throw new Error(error.response.data)
   } finally {
-    limpaDados()
+    limpaDados();
+    progressoEmTempoReal.value = 0;
+  }
+}
+
+const executaProgressoJob = () => {
+  eventSource = new EventSource(URL_SSE);
+
+  eventSource.onmessage = (event) => {
+    const data = event.data;
+    if (data === "Job concluído com sucesso!") {
+      progressoEmTempoReal.value = 100;
+      fechaEventSource();
+    } else {
+      progressoEmTempoReal.value = parseInt(data);
+    }
+  };
+
+  eventSource.onerror = (error) => {
+    console.error("Error occurred:", error);
+    if(eventSource != null) {
+      eventSource.close();
+      progressoEmTempoReal.value = 0;
+    }
+  };
+}
+
+const fechaEventSource = () => {
+  if (eventSource) {
+    eventSource.close()
+    eventSource = null
+    progressoEmTempoReal.value = 0;
   }
 }
 
@@ -162,9 +210,8 @@ const getJobsDisponiveis = async () => {
   }
 }
 
-onMounted(() => {
-  getJobsDisponiveis()
-})
+onMounted(() => getJobsDisponiveis());
+onUnmounted(() => fechaEventSource());
 </script>
 
 <style lang="css" scoped>
@@ -189,5 +236,9 @@ main {
 
 .n-card {
   height: 95vh;
+}
+
+#events {
+  margin: 30px;
 }
 </style>
