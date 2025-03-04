@@ -8,13 +8,13 @@ import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PaginaRepository;
-import com.reader.manga.service.MangaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -23,28 +23,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class JobChapter extends ColetorBaseUpload {
 
-    private final ChapterRepository capituloRepository;
-    private final PaginaRepository paginaRepository;
     private final MangaRepository mangaRepository;
+    private final PaginaRepository paginaRepository;
+    private final ChapterRepository capituloRepository;
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void executa(MultipartFile file, String... varargs) throws IOException {
+
+        String nomeManga = varargs[0];
+        String nomeCapitulo = varargs[1];
 
         if (file == null || file.isEmpty()) {
             log.error("Arquivo MultipartFile é nulo ou vazio!");
             throw new IllegalArgumentException("Arquivo não fornecido!");
         }
 
-        Optional<Manga> mangaOptional = mangaRepository.findByTitle(varargs[0]);
+        Optional<Manga> mangaOptional = mangaRepository.findByTitle(nomeManga);
         if (mangaOptional.isEmpty()) {
-            log.error("Mangá com título: {} não encontrado!", varargs[0]);
+            log.error("Mangá com título: {} não encontrado!", nomeManga);
             throw new NotFoundException("Mangá não encontrado!");
         }
 
@@ -52,11 +57,12 @@ public class JobChapter extends ColetorBaseUpload {
 
         try (PDDocument document = PDDocument.load(file.getInputStream())) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
+            int numeroTotalDePaginas = document.getNumberOfPages();
 
             Chapter capitulo = new Chapter();
-            capitulo.setTitle(varargs[1]);
+            capitulo.setTitle(nomeCapitulo);
             capitulo.setManga(manga);
-            capitulo.setNumberPages(document.getNumberOfPages());
+            capitulo.setNumberPages(numeroTotalDePaginas);
             capituloRepository.save(capitulo);
 
             String[] s = manga.getTitle().split(" ");
@@ -68,11 +74,22 @@ public class JobChapter extends ColetorBaseUpload {
             }
 
             List<Pagina> paginas = new ArrayList<>();
-            log.info("Iniciando gravação de {} páginas...", document.getNumberOfPages());
-            for (int i = 0; i < document.getNumberOfPages(); i++) {
+            log.info("Iniciando gravação de {} páginas...", numeroTotalDePaginas);
+            for (int i = 0; i < numeroTotalDePaginas; i++) {
                 BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300);
 
-                String outputPath = "/app/uploads/" + pathBase + varargs[1] + "/pagina_" + i + ".png";
+                int progresso = (int) ((i / (double) numeroTotalDePaginas) * 100);
+                log.info("Progresso atual: {}", progresso);
+                for (SseEmitter emitter : emitters) {
+                    try {
+                        emitter.send(progresso);
+                    } catch (IOException e) {
+                        emitter.complete();
+                        emitters.remove(emitter);
+                    }
+                }
+
+                String outputPath = "/app/uploads/" + pathBase + nomeCapitulo + "/pagina_" + i + ".png";
                 File outputFile = new File(outputPath);
 
                 outputFile.getParentFile().mkdirs();
@@ -88,8 +105,19 @@ public class JobChapter extends ColetorBaseUpload {
 
             capitulo.setPages(paginas);
             capituloRepository.save(capitulo);
-            log.info("Cápitulo {} salvo com sucesso!", varargs[1]);
+            log.info("Cápitulo {} salvo com sucesso!", nomeCapitulo);
+            for (SseEmitter emitter : emitters) {
+                emitter.send("Job executado com sucesso!");
+                emitter.complete();
+            }
+            emitters.clear();
         }
+    }
+
+    public void addEmitter(SseEmitter emitter) {
+        emitters.add(emitter);
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
     }
 
 }

@@ -3,11 +3,14 @@ package com.reader.manga.controller;
 import com.reader.manga.dto.jobs.JobDTO;
 import com.reader.manga.enums.JobsType;
 import com.reader.manga.interfaces.DadosManga;
+import com.reader.manga.job.chapter.JobChapter;
 import com.reader.manga.service.jobs.JobsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/v1/job")
 public class JobsController <T> implements DadosManga {
 
+    private final JobChapter jobChapter;
     private final JobsService jobsService;
 
     @PostMapping("/{name}/{parametros}")
@@ -61,6 +65,13 @@ public class JobsController <T> implements DadosManga {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao processar o capítulo: " + e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe() {
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        jobChapter.addEmitter(emitter);
+        return emitter;
     }
 
 }
