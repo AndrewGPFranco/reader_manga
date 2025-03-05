@@ -57,7 +57,7 @@
                 </n-upload-dragger>
               </n-upload>
             </n-form-item>
-            <div id="events" v-if="progressoEmTempoReal > 0">
+            <div id="events" v-if="isExibirProgresso">
               <h3>Progresso do Job:</h3>
               <n-progress
                 type="line"
@@ -95,6 +95,7 @@ let tipoJob = ref<string>('')
 let parametros = ref<string>('')
 let eventSource: EventSource | null = null;
 let progressoEmTempoReal = ref<number>(0);
+let isExibirProgresso = ref<boolean>(false);
 
 const handleFileChange = (fileList: any) => {
   if (fileList.fileList.length > 0) {
@@ -115,6 +116,7 @@ const executeJob = async (e: MouseEvent) => {
 
     if (validation) {
       let result
+      isExibirProgresso.value = true
       if (isTipoParametros) {
         result = await api.post(`/api/v1/job/${job}/${parametros.value}`, null, {
           headers: {
@@ -148,6 +150,7 @@ const executeJob = async (e: MouseEvent) => {
   } finally {
     limpaDados();
     progressoEmTempoReal.value = 0;
+    isExibirProgresso.value = false;
   }
 }
 
