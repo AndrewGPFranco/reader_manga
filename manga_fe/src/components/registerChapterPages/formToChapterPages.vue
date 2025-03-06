@@ -62,7 +62,7 @@ const emit = defineEmits<{
 }>();
 
 const model = ref({
-    page: props.page != undefined && props.isEdit ? props.page.chapterPage : '',
+    page: props.page != undefined && props.isEdit ? props.page.pathPage : '',
     chapter: null as string | null,
     manga: null as string | null
 })

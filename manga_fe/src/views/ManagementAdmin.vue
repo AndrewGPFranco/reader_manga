@@ -5,17 +5,17 @@
   <main>
     <n-card title="Centro de Gerenciamento" size="huge" style="height: 95vh; overflow-y: auto;">
       <n-tabs style="height: 100%" type="card">
-        <n-tab-pane name="Mangá Management" tab="Mangá Management" style="height: 95%">
+        <n-tab-pane name="Gerenciar mangás" tab="Gerenciar mangás" style="height: 95%">
           <section class="container">
             <MangaManagement />
           </section>
         </n-tab-pane>
-        <n-tab-pane name="Chapter Management" tab="Chapter Management" style="height: 95%">
+        <n-tab-pane name="Gerenciar capítulos" tab="Gerenciar capítulos" style="height: 95%">
           <section class="container">
             <ChapterManagement />
           </section>
         </n-tab-pane>
-        <n-tab-pane name="Pages Management" tab="Pages Management" style="height: 95%">
+        <n-tab-pane name="Gerenciar páginas" tab="Gerenciar páginas" style="height: 95%">
           <section class="container">
             <ChapterPagesManagement />
           </section>

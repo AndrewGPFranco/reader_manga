@@ -10,7 +10,7 @@
         <tbody>
             <tr v-for="page in allPages" :key="page.id">
                 <td>{{ page.id }}</td>
-                <td>{{ page.chapterPage }}</td>
+                <td>{{ page.pathPage }}</td>
                 <td class="tdButtons">
                     <Delete class="buttonDelete" @click="deletePage(page.id, page.idChapter)" />
                     <Edit class="buttonEdit" @click="editPage(page)" />
