@@ -4,7 +4,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card title="Biblioteca" size="huge">
+    <n-card title="Biblioteca" size="huge" style="height: 95vh; overflow-y: auto;">
       <section class="card-container" v-if="mangasArray != undefined && mangasArray.length > 0">
         <div class="card" v-for="manga in mangasArray" :key="manga.title">
           <div class="relative">

@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card>
+    <n-card style="height: 95vh; overflow-y: auto;">
       <section class="card-content">
         <div class="profile-container">
           <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="profile-image" />

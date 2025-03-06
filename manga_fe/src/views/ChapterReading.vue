@@ -4,7 +4,7 @@
   </header>
 
   <main class="manga-viewer__main">
-    <n-card v-if="!isLoading" class="manga-viewer__card" size="huge">
+    <n-card v-if="!isLoading" class="manga-viewer__card" size="huge" style="height: 95vh; overflow-y: auto;">
       <template v-if="error">
         <div class="manga-viewer__error">
           <n-alert type="error" :title="error" />

@@ -4,7 +4,7 @@
   </header>
   <main>
     <section>
-      <n-card class="containerCard" title="Mangás favoritos" size="huge">
+      <n-card class="containerCard" title="Mangás favoritos" size="huge" style="height: 95vh; overflow-y: auto;">
         <div class="card-container" v-if="favoriteManga.length > 0">
           <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
             <template #cover>

@@ -3,7 +3,8 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card ref="mangaCard" title="Mangás" class="flex flex-col" size="huge">
+    <n-card ref="mangaCard" title="Mangás" class="flex flex-col"
+            size="huge" style="height: 95vh; overflow-y: auto;">
       <section class="container mt-5 flex flex-wrap gap-5 justify-center">
         <div
           class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"

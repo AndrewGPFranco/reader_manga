@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card title="Gerenciamento de Registros" size="huge">
+    <n-card title="Gerenciamento de Registros" size="huge" style="height: 95vh; overflow-y: auto;">
       <n-tabs style="height: 100%" type="card">
         <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
           <section class="container">

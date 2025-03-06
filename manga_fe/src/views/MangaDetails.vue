@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
-    <n-card>
+    <n-card style="height: 95vh; overflow-y: auto;">
       <div class="flex items-center space-x-4 mb-6">
         <img :src="manga.image" alt="Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg" />
         <div>

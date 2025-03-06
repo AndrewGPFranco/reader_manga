@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card title="Centro de Gerenciamento" size="huge">
+    <n-card title="Centro de Gerenciamento" size="huge" style="height: 95vh; overflow-y: auto;">
       <n-tabs style="height: 100%" type="card">
         <n-tab-pane name="Mangá Management" tab="Mangá Management" style="height: 95%">
           <section class="container">

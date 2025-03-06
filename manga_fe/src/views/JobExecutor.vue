@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card title="Jobs" size="huge">
+    <n-card title="Jobs" size="huge" style="height: 95vh; overflow-y: auto;">
       <div class="job-container">
         <div class="job-list">
           <n-list bordered>
