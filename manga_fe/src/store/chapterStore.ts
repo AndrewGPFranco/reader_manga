@@ -92,9 +92,9 @@ export const useChapterStore = defineStore('chapter', {
         throw new Error(error.response.data)
       }
     },
-    async deletePageById(id: number, idChapter: number): Promise<string> {
+    async deletePageById(id: number): Promise<string> {
       try {
-        const response = await api.delete(`/api/v1/chapter/delete/page/${id}/${idChapter}`, {
+        const response = await api.delete(`/api/v1/chapter/delete/page/${id}`, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }
