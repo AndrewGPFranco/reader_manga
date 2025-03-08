@@ -52,7 +52,7 @@ const pageToBeEdited = ref({} as iPageData)
 let finishedEdition = ref(false)
 
 onMounted(async () => {
-  allChapter.value = await chapterStore.getAllChapter()
+  allChapter.value = await chapterStore.getAllChapter(100)
   allManga.value = await mangaStore.getAllManga()
   allPages.value = await chapterStore.getAllPages()
 })

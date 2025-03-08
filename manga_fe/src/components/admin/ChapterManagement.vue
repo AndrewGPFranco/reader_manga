@@ -46,7 +46,7 @@ const chapterToBeEdited = ref({} as iChapterData);
 let finishedEdition = ref(false);
 
 onMounted(async () => {
-    const responseChapter = await chapterStore.getAllChapter();
+    const responseChapter = await chapterStore.getAllChapter(100);
     const responseManga = await mangaStore.getAllManga();
     allChapter.value = responseChapter;
     allManga.value = responseManga;
@@ -68,7 +68,7 @@ const editChapter = (chapter: iChapterData) => {
 const handleRequestResult = async (result: boolean) => {
     finishedEdition.value = result;
     if (result)
-        allChapter.value = await chapterStore.getAllChapter();
+        allChapter.value = await chapterStore.getAllChapter(100);
 };
 
 const cancelEdit = () => {
