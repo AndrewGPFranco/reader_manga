@@ -13,10 +13,18 @@
 
       <template v-else>
         <div class="manga-viewer__content">
-          <ExpandOutline v-if="!isTelaCheia"
-                         class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
-          <ChevronUpOutline v-if="isTelaCheia"
-                            class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
+          <n-tooltip trigger="hover" v-if="!isTelaCheia">
+            <template #trigger>
+              <ExpandOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
+            </template>
+            Expanda as imagens para melhor experiência de leitura.
+          </n-tooltip>
+          <n-tooltip trigger="hover" v-if="isTelaCheia">
+            <template #trigger>
+              <ChevronUpOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
+            </template>
+            Minimize as imagens para mais controle da leitura.
+          </n-tooltip>
 
           <img
             v-if="image"
