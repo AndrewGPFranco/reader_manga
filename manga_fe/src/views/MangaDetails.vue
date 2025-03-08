@@ -32,7 +32,7 @@
             class="bg-white p-4 rounded-lg shadow-lg border border-gray-200"
           >
             <router-link
-              :to="`/manga/${manga.id}/chapter/${chapter.id}`"
+              :to="`/manga/${manga.title}/chapter/${chapter.id}`"
               class="font-semibold text-lg"
               >{{ chapter.title }}</router-link
             >

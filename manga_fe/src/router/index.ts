@@ -42,7 +42,7 @@ const router = createRouter({
       component: MangaDetails
     },
     {
-      path: '/manga/:id/chapter/:id',
+      path: '/manga/:title/chapter/:id',
       name: 'chapterReading',
       component: ChapterReading
     },
