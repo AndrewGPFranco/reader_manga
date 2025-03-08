@@ -88,13 +88,14 @@ public class ChapterService {
         return paginaRepository.findAll();
     }
 
-    public void deletePage(Long idPage, Long idChapter) {
-        Chapter chapter = repository.findById(idChapter).orElseThrow(() -> new NotFoundException("Chapter not found."));
+    public void deletePage(Long idPage) {
+        Pagina pagina = paginaRepository.findById(idPage).orElseThrow(() -> new NotFoundException("Pagina não encontrada."));
+        Chapter chapter = repository.findById(pagina.getChapter().getId()).orElseThrow(() -> new NotFoundException("Capítulo não encontrado."));
 
         boolean removed = chapter.getPages().removeIf(page -> page.getId().equals(idPage));
 
         if (!removed)
-            throw new NotFoundException("Page not found in chapter.");
+            throw new NotFoundException("Pagina não encontrada.");
 
         if (chapter.getNumberPages() > 0)
             chapter.setNumberPages(chapter.getNumberPages() - 1);
