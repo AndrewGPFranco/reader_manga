@@ -13,11 +13,16 @@
 
       <template v-else>
         <div class="manga-viewer__content">
+          <ExpandOutline v-if="!isTelaCheia"
+            class="btnExpandir" @click="isTelaCheia = !isTelaCheia"> /></ExpandOutline>
+          <ChevronUpOutline v-if="isTelaCheia"
+            class="btnExpandir" @click="isTelaCheia = !isTelaCheia"> /></ChevronUpOutline>
+
           <img
             v-if="image"
             :src="image"
             :alt="`Manga page `"
-            class="manga-viewer__image"
+            :class="{ 'manga-viewer__image': !isTelaCheia, 'manga-viewer__image_expand': isTelaCheia }"
             @load="handleImageLoad"
             @error="handleImageError"
           />
@@ -25,7 +30,7 @@
           <n-empty v-else description="No pages available for this chapter" />
         </div>
 
-        <div v-if="image" class="manga-viewer__controls">
+        <div v-if="image && !isTelaCheia" class="manga-viewer__controls">
           <div class="manga-viewer__info">
             <span>Página {{ currentPageNumber }} de {{ totalPages }}</span>
           </div>
@@ -70,12 +75,14 @@ import { useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { useChapterStore } from '@/store/chapterStore'
+import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
 
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 const currentPageIndex = ref(0)
 const imageLoaded = ref(false)
 const image = ref<string>('')
+const isTelaCheia = ref<boolean>(false)
 
 const route = useRoute()
 const message = useMessage()
@@ -231,6 +238,7 @@ watch(
 .manga-viewer__content {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -239,6 +247,12 @@ watch(
 
 .manga-viewer__image {
   max-height: 83vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.manga-viewer__image_expand {
+  max-height: 100vh;
   max-width: 100%;
   object-fit: contain;
 }
@@ -272,4 +286,13 @@ watch(
 .manga-viewer__error {
   padding: 2rem;
 }
+
+.btnExpandir {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  height: 1.5rem;
+}
+
 </style>
