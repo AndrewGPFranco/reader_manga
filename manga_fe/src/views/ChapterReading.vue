@@ -257,20 +257,35 @@ watch(
   align-items: center;
   position: relative;
   overflow: hidden;
-  /* Adicionado padding-bottom para garantir espaço para os controles */
   padding: 0 1rem 70px;
 }
 
 .manga-viewer__image {
-  max-height: 72vh;
+  max-height: 79vh;
   max-width: 100%;
   object-fit: contain;
 }
 
 .manga-viewer__image_expand {
-  max-height: 90vh;
+  max-height: 93vh;
   max-width: 100%;
   object-fit: contain;
+}
+
+@media(min-width:768px) and (max-width:1024px) {
+  .manga-viewer__image {
+    max-height: 72vh;
+  }
+}
+
+@media(min-width:1400px) {
+  .manga-viewer__image {
+    max-height: 85vh;
+  }
+
+  .manga-viewer__image_expand {
+    max-height: 95vh;
+  }
 }
 
 .manga-viewer__controls {
