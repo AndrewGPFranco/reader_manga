@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,8 +14,9 @@ import java.util.List;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @Table(name = "chapter")
 public class Chapter {
 
@@ -24,15 +26,9 @@ public class Chapter {
 
     @NotNull
     @NotBlank
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     @Length(min = 3, max = 30)
     private String title;
-
-    @NotNull
-    @NotBlank
-    @Column(name = "description")
-    @Length(min = 10, max = 255)
-    private String description;
 
     @NotNull
     @Column(name = "number_pages")
@@ -44,11 +40,10 @@ public class Chapter {
     private Manga manga;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<PageChapter> pages;
+    private List<Pagina> pages;
 
-    public Chapter(String title, String description, Integer numberPages, Manga manga) {
+    public Chapter(String title, Integer numberPages, Manga manga) {
         this.title = title;
-        this.description = description;
         this.numberPages = numberPages;
         this.manga = manga;
     }

@@ -2,7 +2,6 @@ package com.reader.manga.job.base;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.interfaces.DadosManga;
-import com.reader.manga.vo.job.manga.MangaJobVO;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 
@@ -12,13 +11,14 @@ import java.util.Date;
 
 /**
  * Classe base para padronizar todos os coletores no sistema.
+ * Coletor do tipo que busca dados na fonte e salva no banco.
  * @author andrewgo
  * @param <T> classe que implementa DadosManga.
  */
 @Log4j2
-public abstract class ColetorBase <T> implements DadosManga {
+public abstract class ColetorBaseFonte<T> implements DadosManga {
 
-    protected abstract Mono<MangaJobVO> executa(String manga);
+    protected abstract Mono<T> executa(Object obj);
 
     protected abstract void salvaDadosNoBanco(T dados);
 

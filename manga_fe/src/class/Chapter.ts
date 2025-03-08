@@ -1,4 +1,4 @@
-import type PageData from "@/interface/Page";
+import type iPageData from "@/@types/Pagee";
 
 export class Chapter {
 
@@ -6,9 +6,9 @@ export class Chapter {
     readonly title: string;
     readonly description: string;
     readonly numberPages: number;
-    readonly pages: PageData[];
+    readonly pages: iPageData[];
 
-    constructor(id: number, title: string, description: string, numberPages: number, pages: PageData[]) {
+    constructor(id: number, title: string, description: string, numberPages: number, pages: iPageData[]) {
         this.id = id;
         this.title = title;
         this.description = description;

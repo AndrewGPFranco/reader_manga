@@ -4,18 +4,23 @@ import com.reader.manga.dto.chapter.*;
 import com.reader.manga.dto.page.PageDTO;
 import com.reader.manga.dto.page.UpdatePageDTO;
 import com.reader.manga.model.Chapter;
-import com.reader.manga.model.PageChapter;
+import com.reader.manga.model.Pagina;
 import com.reader.manga.service.ChapterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 
@@ -71,8 +76,8 @@ public class ChapterController {
     public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
         Chapter chapter = service.getChapterByID(id);
         logger.info("*******************Searching chapter!*******************");
-        List<PageChapter> pages = chapter.getPages();
-        pages.sort(Comparator.comparing(PageChapter::getId));
+        List<Pagina> pages = chapter.getPages();
+        pages.sort(Comparator.comparing(Pagina::getId));
         return ResponseEntity.ok().body(pages);
     }
 
@@ -85,8 +90,8 @@ public class ChapterController {
     }
 
     @GetMapping("/getAll-pages")
-    public ResponseEntity<List<PageChapter>> getAllPages() {
-        List<PageChapter> allPages = service.getAllPages();
+    public ResponseEntity<List<Pagina>> getAllPages() {
+        List<Pagina> allPages = service.getAllPages();
         logger.info("Searching all pages");
         return ResponseEntity.ok().body(allPages);
     }
@@ -105,6 +110,19 @@ public class ChapterController {
         service.updatePage(id, dto);
         logger.info("*******************Updating page!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Page updated successfully!");
+    }
+
+    @GetMapping("/image/{idChapter}/{pageNumber}")
+    public ResponseEntity<UrlResource> getPages(@PathVariable Long idChapter, @PathVariable Integer pageNumber) throws MalformedURLException {
+        List<Pagina> paginas = service.getCapituloPorId(idChapter);
+        paginas.sort(Comparator.comparingLong(Pagina::getId));
+
+        Pagina paginaDaVez = paginas.get(pageNumber);
+
+        Path path = Paths.get("uploads").resolve(paginaDaVez.getPathPage());
+        UrlResource resource = new UrlResource(path.toUri());
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
 
 }

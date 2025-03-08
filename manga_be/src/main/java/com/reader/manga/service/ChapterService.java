@@ -8,10 +8,10 @@ import com.reader.manga.dto.chapter.ChapterDTO;
 import com.reader.manga.dto.chapter.UpdateChapterDTO;
 import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
-import com.reader.manga.model.PageChapter;
+import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
-import com.reader.manga.repository.PageRepository;
+import com.reader.manga.repository.PaginaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,13 +29,13 @@ public class ChapterService {
 
     private final ChapterRepository repository;
     private final MangaRepository mangaRepository;
-    private final PageRepository pageRepository;
+    private final PaginaRepository paginaRepository;
 
     public void createChapter(ChapterDTO dto) {
         try {
             Optional<Manga> mangaById = mangaRepository.findById(dto.mangaId());
             if (mangaById.isPresent()) {
-                Chapter chapter = new Chapter(dto.title(), dto.description(), 0, mangaById.get());
+                Chapter chapter = new Chapter(dto.title(), 0, mangaById.get());
                 repository.save(chapter);
                 log.info("Capítulo salvo.");
             } else {
@@ -67,7 +67,6 @@ public class ChapterService {
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
         UtilsService.updateField(dto.title(), chapter::setTitle);
-        UtilsService.updateField(dto.description(), chapter::setDescription);
 
         repository.save(chapter);
     }
@@ -79,14 +78,14 @@ public class ChapterService {
 
     public void pageChapterRegister(PageDTO pageDTO) {
         Chapter chapter = repository.findById(pageDTO.chapter_id()).orElseThrow(() -> new NotFoundException("Chapter not found."));
-        PageChapter page = new PageChapter(pageDTO.page(), chapter, pageDTO.idChapter());
+        Pagina page = new Pagina(pageDTO.page(), chapter);
         chapter.setNumberPages(chapter.getNumberPages() + 1);
         repository.save(chapter);
-        pageRepository.save(page);
+        paginaRepository.save(page);
     }
 
-    public List<PageChapter> getAllPages() {
-        return pageRepository.findAll();
+    public List<Pagina> getAllPages() {
+        return paginaRepository.findAll();
     }
 
     public void deletePage(Long idPage, Long idChapter) {
@@ -104,12 +103,16 @@ public class ChapterService {
     }
 
     public void updatePage(Long id, UpdatePageDTO dto) {
-        PageChapter page = pageRepository.findById(id)
+        Pagina page = paginaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Page not found"));
 
-        UtilsService.updateField(dto.page(), page::setChapterPage);
+        UtilsService.updateField(dto.page(), page::setPathPage);
 
-        pageRepository.save(page);
+        paginaRepository.save(page);
     }
 
+
+    public List<Pagina> getCapituloPorId(Long idChapter) {
+        return paginaRepository.findByIdChapter(idChapter);
+    }
 }

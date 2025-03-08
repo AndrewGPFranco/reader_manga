@@ -10,7 +10,7 @@
         <tbody>
             <tr v-for="page in allPages" :key="page.id">
                 <td>{{ page.id }}</td>
-                <td>{{ page.chapterPage }}</td>
+                <td>{{ page.pathPage }}</td>
                 <td class="tdButtons">
                     <Delete class="buttonDelete" @click="deletePage(page.id, page.idChapter)" />
                     <Edit class="buttonEdit" @click="editPage(page)" />
@@ -29,19 +29,19 @@ import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';
 import { useMangaStore } from '@/store/MangaStore';
-import type PageData from '@/interface/Page';
-import type MangaData from '@/interface/Manga';
-import type ChapterData from '@/interface/Chapter';
+import type iPageData from '@/@types/Pagee';
+import type iMangaData from '@/@types/Manga';
+import type iChapterData from '@/@types/iChapter';
 import FormToChapterPages from '../registerChapterPages/formToChapterPages.vue';
 
 const isEdit = ref(false);
 const message = useMessage();
-const allManga = ref([] as MangaData[])
-const allPages = ref([] as PageData[]);
-const allChapter = ref([] as ChapterData[]);
+const allManga = ref([] as iMangaData[])
+const allPages = ref([] as iPageData[]);
+const allChapter = ref([] as iChapterData[]);
 const chapterStore = useChapterStore();
 const mangaStore = useMangaStore();
-const pageToBeEdited = ref({} as PageData);
+const pageToBeEdited = ref({} as iPageData);
 
 let finishedEdition = ref(false);
 
@@ -59,7 +59,7 @@ const deletePage = async (idPage: number, idChapter: number) => {
     message.success(String(response));
 }
 
-const editPage = (page: PageData) => {
+const editPage = (page: iPageData) => {
     isEdit.value = true;
     pageToBeEdited.value = page;
 }

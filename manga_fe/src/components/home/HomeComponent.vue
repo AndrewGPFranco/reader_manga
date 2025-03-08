@@ -2,7 +2,7 @@
     <div class="home">
       <n-card>
         <div class="banner">
-          <img src="../../assets/home/banner.jpeg" alt="Banner do site">
+          <img src="../../assets/home/banner.jpg" alt="Banner do site">
         </div>
         <h2 class="section-title">Mangás famosos</h2>
 
@@ -16,7 +16,7 @@
 </template>
   
 <script setup lang="ts">
-import type iCoversManga from '@/interface/iCoversManga';
+import type iCoversManga from '@/@types/iCoversManga';
 import { useMangaStore } from '@/store/MangaStore';
 import { useMessage } from 'naive-ui';
 import { onMounted, ref } from 'vue';

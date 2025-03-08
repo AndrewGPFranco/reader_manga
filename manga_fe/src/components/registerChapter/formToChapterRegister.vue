@@ -35,7 +35,7 @@ import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 import { useChapterStore } from '@/store/chapterStore';
-import type ChapterData from '@/interface/Chapter';
+import type iChapterData from '@/@types/iChapter';
 
 const props = defineProps({
     mangas: {
@@ -43,7 +43,7 @@ const props = defineProps({
         required: true
     },
     chapter: {
-        type: Object as PropType<ChapterData>,
+        type: Object as PropType<iChapterData>,
         required: true
     },
     isEdit: {

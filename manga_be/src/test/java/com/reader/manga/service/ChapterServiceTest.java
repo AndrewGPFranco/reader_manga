@@ -7,7 +7,7 @@ import com.reader.manga.model.Chapter;
 import com.reader.manga.model.Manga;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
-import com.reader.manga.repository.PageRepository;
+import com.reader.manga.repository.PaginaRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
@@ -28,7 +28,7 @@ class ChapterServiceTest {
     private MangaRepository mangaRepository;
 
     @Mock
-    private PageRepository pageRepository;
+    private PaginaRepository paginaRepository;
 
     private static AutoCloseable closeable;
 

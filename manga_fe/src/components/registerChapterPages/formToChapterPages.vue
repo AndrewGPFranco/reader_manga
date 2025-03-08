@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import type PageData from '@/interface/Page';
+import type iPageData from '@/@types/Pagee';
 import { api } from '@/network/axiosInstance';
 import { useAuthStore } from '@/store/AuthStore';
 import { useChapterStore } from '@/store/chapterStore';
@@ -40,7 +40,7 @@ const props = defineProps({
         required: true
     },
     page: {
-        type: Object as PropType<PageData>,
+        type: Object as PropType<iPageData>,
         required: true
     },
     isEdit: {
@@ -62,7 +62,7 @@ const emit = defineEmits<{
 }>();
 
 const model = ref({
-    page: props.page != undefined && props.isEdit ? props.page.chapterPage : '',
+    page: props.page != undefined && props.isEdit ? props.page.pathPage : '',
     chapter: null as string | null,
     manga: null as string | null
 })
