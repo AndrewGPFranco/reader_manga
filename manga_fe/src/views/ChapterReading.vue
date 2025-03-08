@@ -4,7 +4,7 @@
   </header>
 
   <main class="manga-viewer__main">
-    <n-card ref="chapterCard" v-if="!isLoading" class="manga-viewer__card" size="huge" style="height: 95vh; overflow-y: auto;">
+    <n-card ref="chapterCard" v-if="!isLoading" class="manga-viewer__card">
       <template v-if="error">
         <div class="manga-viewer__error">
           <n-alert type="error" :title="error" />
@@ -14,9 +14,9 @@
       <template v-else>
         <div class="manga-viewer__content">
           <ExpandOutline v-if="!isTelaCheia"
-            class="btnExpandir" @click="isTelaCheia = !isTelaCheia"> /></ExpandOutline>
+                         class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
           <ChevronUpOutline v-if="isTelaCheia"
-            class="btnExpandir" @click="isTelaCheia = !isTelaCheia"> /></ChevronUpOutline>
+                            class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
 
           <img
             v-if="image"
@@ -223,18 +223,22 @@ watch(
 
 <style scoped>
 .manga-viewer__main {
-  flex: 1;
-  padding: 0.5rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0.5rem;
+  overflow: hidden;
 }
 
 .manga-viewer__card {
   width: 100%;
-  max-width: none;
-  min-height: 90vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
 
 .manga-viewer__content {
@@ -243,26 +247,34 @@ watch(
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
   overflow: hidden;
   padding: 0 1rem;
+  /* Adicionado padding-bottom para garantir espaço para os controles */
+  padding-bottom: 70px;
 }
 
 .manga-viewer__image {
-  max-height: 83vh;
+  max-height: 72vh;
   max-width: 100%;
   object-fit: contain;
 }
 
 .manga-viewer__image_expand {
-  max-height: 100vh;
+  max-height: 90vh;
   max-width: 100%;
   object-fit: contain;
 }
 
 .manga-viewer__controls {
-  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 0.75rem;
   border-top: 1px solid;
+  background-color: inherit;
+  z-index: 5;
 }
 
 .manga-viewer__info {
@@ -295,6 +307,6 @@ watch(
   right: 10px;
   cursor: pointer;
   height: 1.5rem;
+  z-index: 10;
 }
-
 </style>
