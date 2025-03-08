@@ -249,9 +249,8 @@ watch(
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 0 1rem;
   /* Adicionado padding-bottom para garantir espaço para os controles */
-  padding-bottom: 70px;
+  padding: 0 1rem 70px;
 }
 
 .manga-viewer__image {
