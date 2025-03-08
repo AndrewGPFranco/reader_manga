@@ -4,7 +4,7 @@
   </header>
 
   <main class="manga-viewer__main">
-    <n-card v-if="!isLoading" class="manga-viewer__card" size="huge" style="height: 95vh; overflow-y: auto;">
+    <n-card ref="chapterCard" v-if="!isLoading" class="manga-viewer__card" size="huge" style="height: 95vh; overflow-y: auto;">
       <template v-if="error">
         <div class="manga-viewer__error">
           <n-alert type="error" :title="error" />
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useMessage } from 'naive-ui'
+import { NCard, useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { useChapterStore } from '@/store/chapterStore'
 import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
@@ -83,6 +83,7 @@ const currentPageIndex = ref(0)
 const imageLoaded = ref(false)
 const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
+const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
 
 const route = useRoute()
 const message = useMessage()
@@ -108,6 +109,7 @@ const loadPage = async (chapterId: string, pageIndex: number) => {
 
     const response = await chapterStore.getPaginaDoCapitulo(chapterId, pageIndex)
     image.value = URL.createObjectURL(response)
+    if(chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   } catch (err) {
     console.error(err)
     error.value = 'Erro ao carregar a imagem'

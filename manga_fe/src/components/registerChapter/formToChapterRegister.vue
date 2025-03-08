@@ -5,13 +5,6 @@
                 <n-form-item-gi :span="12" label="Title" path="title">
                     <n-input v-model:value="model.title" placeholder="Enter the title" />
                 </n-form-item-gi>
-                <n-form-item-gi :span="12" label="Description" path="description">
-                    <n-input v-model:value="model.description" placeholder="Enter description" type="textarea"
-                        :autosize="{
-                            minRows: 1,
-                            maxRows: 5,
-                        }" />
-                </n-form-item-gi>
                 <n-form-item-gi :span="12" label="Mangá" path="manga">
                     <n-select v-model:value="model.manga" placeholder="Choose the mangá" :options="generalOptions" />
                 </n-form-item-gi>
@@ -66,7 +59,6 @@ const size = ref('medium')
 
 const model = ref({
     title: props.chapter.title != undefined && props.isEdit ? props.chapter.title : '',
-    description: props.chapter.description != undefined && props.isEdit ? props.chapter.description : '',
     manga: null as string | null
 })
 
@@ -79,10 +71,6 @@ const rules = {
     title: {
         required: true,
         message: 'Please enter the title...'
-    },
-    description: {
-        required: true,
-        message: 'Please enter description...'
     },
     manga: {
         required: true,
@@ -104,7 +92,6 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 const clearFields = () => {
     model.value = {
         title: '',
-        description: '',
         manga: null as string | null
     }
 
@@ -112,14 +99,13 @@ const clearFields = () => {
 }
 
 const chapterRegister = async () => {
-    const { title, description, manga } = model.value;
+    const { title, manga } = model.value;
     const data = {
         title: title,
-        description: description,
         mangaId: manga
     }
 
-    let response = "";
+    let response;
     
     if(!props.isEdit)
         response = await chapterStore.registerChapter(data, clearFields);
