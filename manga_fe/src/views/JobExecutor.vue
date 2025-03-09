@@ -85,13 +85,13 @@ import { URL_SSE } from '@/utils/utils'
 
 const message = useMessage()
 const jobs = ref<IJobType[]>([])
-const selectedJob = ref<string>('Uploads')
+const selectedJob = ref<string>('')
 const token = localStorage.getItem('token')
 
 let selectedFile = ref<File>()
 let titleManga = ref<string>()
 let titleChapter = ref<string>()
-let tipoJob = ref<string>('Uploads')
+let tipoJob = ref<string>('')
 let parametros = ref<string>('')
 let eventSource: EventSource | null = null;
 let progressoEmTempoReal = ref<number>(0);
@@ -189,7 +189,7 @@ const validaInput = () => {
 }
 
 const limpaDados = () => {
-  selectedJob.value = 'Chapter'
+  selectedJob.value = ''
   parametros.value = ''
 }
 

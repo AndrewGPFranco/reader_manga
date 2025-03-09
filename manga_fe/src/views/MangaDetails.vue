@@ -16,6 +16,7 @@
         <p><span class="font-semibold">Qtde. Capítulos:</span> {{ manga.size }}</p>
         <p><span class="font-semibold">Gênero:</span> {{ manga.gender }}</p>
         <p><span class="font-semibold">Status:</span> {{ manga.status }}</p>
+        <p><span class="font-semibold">Autor:</span> {{ manga.author }}</p>
         <p>
           <span class="font-semibold">Data de criação:</span> {{ formatDate(manga.creationDate) }}
         </p>
