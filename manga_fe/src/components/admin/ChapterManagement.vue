@@ -1,107 +1,125 @@
 <template>
-    <n-table :single-line="false">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Number of Pages</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="chapter in allChapter" :key="chapter.id">
-                <td>{{ chapter.id }}</td>
-                <td>{{ chapter.title }}</td>
-                <td>{{ chapter.numberPages }}</td>
-                <td class="tdButtons">
-                    <Delete class="buttonDelete" @click="deleteChapter(chapter.id)" />
-                    <Edit class="buttonEdit" @click="editChapter(chapter)" />
-                </td>
-            </tr>
-        </tbody>
-    </n-table>
-    <div v-if="isEdit && !finishedEdition" class="containerForm">
-        <FormToChapterRegister :mangas="allManga" :chapter="chapterToBeEdited" :isEdit="isEdit" @requestResult="handleRequestResult" @cancelEdit="cancelEdit"/>
-    </div>
+  <n-table :single-line="false">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Number of Pages</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="chapter in allChapter" :key="chapter.id">
+        <td>{{ chapter.id }}</td>
+        <td>{{ chapter.title }}</td>
+        <td>{{ chapter.numberPages }}</td>
+        <td class="tdButtons">
+          <Delete class="buttonDelete" @click="deleteChapter(chapter.id)" />
+          <Edit class="buttonEdit" @click="editChapter(chapter)" />
+        </td>
+      </tr>
+    </tbody>
+  </n-table>
+  <div v-if="isEdit && !finishedEdition" class="containerForm" ref="formEdicao">
+    <FormToChapterRegister
+      :mangas="allManga"
+      :chapter="chapterToBeEdited"
+      :isEdit="isEdit"
+      @requestResult="handleRequestResult"
+      @cancelEdit="cancelEdit"
+      @editFinalizada="resetaDados"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import type iChapterData from '@/@types/iChapter';
-import { useChapterStore } from '@/store/chapterStore';
+import type iChapterData from '@/@types/iChapter'
+import { useChapterStore } from '@/store/chapterStore'
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
-import { useMessage } from 'naive-ui';
-import { onMounted, ref } from 'vue';
-import FormToChapterRegister from '../registerChapter/formToChapterRegister.vue';
-import type iMangaData from '@/@types/Manga';
-import { useMangaStore } from '@/store/MangaStore';
+import { useMessage } from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import FormToChapterRegister from '../registerChapter/formToChapterRegister.vue'
+import type iMangaData from '@/@types/Manga'
+import { useMangaStore } from '@/store/MangaStore'
 
-const isEdit = ref(false);
-const message = useMessage();
+const isEdit = ref(false)
+const message = useMessage()
 const allManga = ref([] as iMangaData[])
-const chapterStore = useChapterStore();
-const mangaStore = useMangaStore();
-const allChapter = ref([] as iChapterData[]);
-const chapterToBeEdited = ref({} as iChapterData);
+const chapterStore = useChapterStore()
+const mangaStore = useMangaStore()
+const allChapter = ref([] as iChapterData[])
+const chapterToBeEdited = ref({} as iChapterData)
+const formEdicao = ref(null)
 
-let finishedEdition = ref(false);
+let finishedEdition = ref(false)
+
+const resetaDados = () => {
+  isEdit.value = false
+  chapterToBeEdited.value = {} as iChapterData;
+  finishedEdition.value = false;
+}
 
 onMounted(async () => {
-    const responseChapter = await chapterStore.getAllChapter(100);
-    const responseManga = await mangaStore.getAllManga();
-    allChapter.value = responseChapter;
-    allManga.value = responseManga;
+  const responseChapter = await chapterStore.getAllChapter(100)
+  const responseManga = await mangaStore.getAllManga()
+  allChapter.value = responseChapter
+  allManga.value = responseManga
 })
 
 const deleteChapter = async (id: number) => {
-    const response = await chapterStore.deleteChapterById(id);
-    if(response)
-        allChapter.value = allChapter.value.filter(chapter => chapter.id !== id);
+  const response = await chapterStore.deleteChapterById(id)
+  if (response) allChapter.value = allChapter.value.filter((chapter) => chapter.id !== id)
 
-    message.success(String(response));
+  message.success(String(response))
 }
 
 const editChapter = (chapter: iChapterData) => {
-    isEdit.value = true;
-    chapterToBeEdited.value = chapter;
+  isEdit.value = true
+  chapterToBeEdited.value = chapter
 }
 
 const handleRequestResult = async (result: boolean) => {
-    finishedEdition.value = result;
-    if (result)
-        allChapter.value = await chapterStore.getAllChapter(100);
-};
+  finishedEdition.value = result
+  if (result) allChapter.value = await chapterStore.getAllChapter(100)
+}
 
 const cancelEdit = () => {
-    isEdit.value = false;
+  isEdit.value = false
+  chapterToBeEdited.value = {} as iChapterData
 }
 </script>
 
 <style scoped>
-
 .actions {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
 }
 
 .tdButtons {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .tdButtons svg {
-    width: 25px;
-    height: 25px;
+  width: 25px;
+  height: 25px;
 }
 
-.buttonDelete, .buttonEdit { cursor: pointer; }
+.buttonDelete,
+.buttonEdit {
+  cursor: pointer;
+}
 
-.buttonDelete { color: rgba(255, 0, 0, 0.678); }
-.buttonEdit { color: rgb(0, 109, 0); }
+.buttonDelete {
+  color: rgba(255, 0, 0, 0.678);
+}
+.buttonEdit {
+  color: rgb(0, 109, 0);
+}
 
 .containerForm {
-    margin-top: 40px;
+  margin-top: 40px;
 }
-
 </style>
