@@ -109,9 +109,9 @@ public class MangaController {
         return ResponseEntity.ok().body(finalList);
     }
 
-    @GetMapping("/get-info-manga/{idManga}")
-    public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable Long idManga) {
-        Manga manga = service.findById(idManga);
+    @GetMapping("/get-info-manga/{titulo}")
+    public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable String titulo) {
+        Manga manga = service.findByTitle(titulo);
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
                         .title(manga.getTitle())
