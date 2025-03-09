@@ -16,6 +16,7 @@
         <p><span class="font-semibold">Qtde. Capítulos:</span> {{ manga.size }}</p>
         <p><span class="font-semibold">Gênero:</span> {{ manga.gender }}</p>
         <p><span class="font-semibold">Status:</span> {{ manga.status }}</p>
+        <p><span class="font-semibold">Autor:</span> {{ manga.author }}</p>
         <p>
           <span class="font-semibold">Data de criação:</span> {{ formatDate(manga.creationDate) }}
         </p>
@@ -60,8 +61,8 @@ let manga = ref<iMangaData>({} as iMangaData)
 let chapterOrdenados = ref<iChapterData[]>([])
 
 onMounted(async () => {
-  const id: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  manga.value = await mangaStore.getInfoManga(id)
+  const title: string = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
+  manga.value = await mangaStore.getInfoManga(title)
   chapterOrdenados.value = manga.value.chapters
     .sort((a: iChapterData, b: iChapterData) => a.title.localeCompare(b.title))
 })

@@ -37,8 +37,8 @@ const router = createRouter({
       component: MangaList
     },
     {
-      path: '/manga/:id',
-      name: 'mangaId',
+      path: '/manga/:title',
+      name: 'mangaDetails',
       component: MangaDetails
     },
     {
