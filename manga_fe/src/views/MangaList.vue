@@ -17,7 +17,7 @@
             </span>
           </div>
           <div class="card-content">
-            <router-link :to="`/manga/${manga.id}`" class="card-title">{{
+            <router-link :to="`/manga/${manga.title}`" class="card-title">{{
               manga.title
             }}</router-link>
             <div class="card-details">

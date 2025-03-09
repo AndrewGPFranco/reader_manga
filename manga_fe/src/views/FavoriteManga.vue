@@ -12,7 +12,7 @@
             </template>
             <div class="card-content">
               <h3 class="card-title">{{ manga.title }}</h3>
-              <router-link :to="`/manga/${manga.id}`">
+              <router-link :to="`/manga/${manga.title}`">
                 <n-button type="info">Access</n-button>
               </router-link>
             </div>

@@ -16,7 +16,7 @@
           </div>
           <div class="p-4 flex flex-col flex-grow overflow-y-auto">
             <router-link
-              :to="`/manga/${manga.id}`"
+              :to="`/manga/${manga.title}`"
               class="text-xl font-bold text-gray-800 truncate"
             >
               {{ manga.title }}
