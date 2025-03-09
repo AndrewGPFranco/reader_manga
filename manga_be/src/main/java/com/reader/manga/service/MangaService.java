@@ -31,6 +31,8 @@ public class MangaService {
     private final MangaRepository repository;
     private final UserMangaService userMangaService;
 
+    private static final String MANGA_NAO_ENCONTRADO = "Mangá não encontrado.";
+
     public Map<String, CoversMangaVO> obtemMangasFamosos() {
         List<Manga> todosMangas = repository.findAll();
         Set<String> nomeDosMangasRegistrados = todosMangas.stream()
@@ -55,13 +57,11 @@ public class MangaService {
         coversManga.put("Noragami", new CoversMangaVO("Noragami", "https://m.media-amazon.com/images/I/91f63co2jKL._AC_UF1000,1000_QL80_.jpg", "https://slimeread.com/manga/3759/noragami"));
         coversManga.put("The Rising of the Shield Hero", new CoversMangaVO("The Rising of the Shield Hero", "https://m.media-amazon.com/images/I/71szZSLOYGL._AC_UF894,1000_QL80_.jpg", "https://slimeread.com/manga/8417/the-rising-of-the-shield-hero"));
 
-        coversManga.forEach((title, cover) -> {
-            coversMangaVOMap.put(title, CoversMangaVO.builder()
-                    .titulo(title)
-                    .urlImage(cover.getUrlImage())
-                    .urlReader(nomeDosMangasRegistrados.contains(title.toLowerCase()) ? null : cover.getUrlReader())
-                    .build());
-        });
+        coversManga.forEach((title, cover) -> coversMangaVOMap.put(title, CoversMangaVO.builder()
+                .titulo(title)
+                .urlImage(cover.getUrlImage())
+                .urlReader(nomeDosMangasRegistrados.contains(title.toLowerCase()) ? null : cover.getUrlReader())
+                .build()));
 
         return coversMangaVOMap;
     }
@@ -133,15 +133,15 @@ public class MangaService {
     }
 
     public Manga findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Mangá not found"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
     }
 
     public Manga findByTitle(String titulo) {
-        return repository.findByTitle(titulo).orElseThrow(() -> new NotFoundException("Mangá not found"));
+        return repository.findByTitle(titulo).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
     }
 
     public List<Chapter> getChaptersByManga(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Mangá not found")).getChapters();
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO)).getChapters();
     }
 
     public Mono<MangaCoverVO> fetchCoverForTitle(String title, WebClient webClient) {
