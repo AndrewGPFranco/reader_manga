@@ -34,20 +34,20 @@ public class MangaService {
     public Map<String, CoversMangaVO> obtemMangasFamosos() {
         List<Manga> todosMangas = repository.findAll();
         Set<String> nomeDosMangasRegistrados = todosMangas.stream()
-                .map(Manga::getTitle)
+                .map(m -> m.getTitle().toLowerCase())
                 .collect(Collectors.toSet());
 
         Map<String, CoversMangaVO> coversMangaVOMap = new HashMap<>();
 
         Map<String, CoversMangaVO> coversManga = new HashMap<>();
         coversManga.put("Naruto", new CoversMangaVO("Naruto", "https://m.media-amazon.com/images/I/91xUwI2UEVL._AC_UF894,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100018"));
-        coversManga.put("Demon Slayer", new CoversMangaVO("Demon Slayer","https://http2.mlstatic.com/D_NQ_NP_942681-MLU50423106087_062022-O.webp", "https://mangaplus.shueisha.co.jp/titles/100009"));
-        coversManga.put("Jojo's", new CoversMangaVO("Jojo's", "https://m.media-amazon.com/images/I/91XRYa+4cHL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100016"));
+        coversManga.put("Demon Slayer: Kimetsu no Yaiba", new CoversMangaVO("Demon Slayer","https://http2.mlstatic.com/D_NQ_NP_942681-MLU50423106087_062022-O.webp", "https://mangaplus.shueisha.co.jp/titles/100009"));
+        coversManga.put("JoJo's Bizarre Adventure Parte 1", new CoversMangaVO("Jojo's", "https://m.media-amazon.com/images/I/91XRYa+4cHL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100016"));
         coversManga.put("My Hero Academia", new CoversMangaVO("My Hero Academia", "https://m.media-amazon.com/images/I/71bELfIWTDL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/500005"));
         coversManga.put("One Piece", new CoversMangaVO("One Piece", "https://m.media-amazon.com/images/I/716EGgqzyOL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100149"));
         coversManga.put("Hunter x Hunter", new CoversMangaVO("Hunter x Hunter", "https://www.jbchost.com.br/editorajbc/wp-content/uploads/2008/01/hunterxhunter-01-capaaz.jpg", "https://mangaplus.shueisha.co.jp/titles/100015"));
         coversManga.put("Bungo Stray Dogs", new CoversMangaVO("Bungo Stray Dogs", "https://m.media-amazon.com/images/I/81zJTGwXrtL._AC_UF1000,1000_QL80_.jpg", "https://slimeread.com/manga/370/bungou-stray-dogs"));
-        coversManga.put("Boruto", new CoversMangaVO("Boruto", "https://m.media-amazon.com/images/I/81HpeSpReJL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100006"));
+        coversManga.put("Boruto: Two Blue Vortex", new CoversMangaVO("Boruto", "https://m.media-amazon.com/images/I/81HpeSpReJL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100006"));
         coversManga.put("Tokyo Revengers", new CoversMangaVO("Tokyo Revengers", "https://m.media-amazon.com/images/I/711RqaljbIL.jpg", "https://mangaonline.biz/manga/tokyo-revengers/"));
         coversManga.put("Record of Ragnarok", new CoversMangaVO("Record of Ragnarok", "https://m.media-amazon.com/images/I/91ifr0L+XrL.jpg", "https://mangaonline.biz/manga/shuumatsu-no-walkure/"));
         coversManga.put("Dragon Ball", new CoversMangaVO("Dragon Ball", "https://m.media-amazon.com/images/I/81fHfEpEHTL._AC_UF1000,1000_QL80_.jpg", "https://mangaplus.shueisha.co.jp/titles/100011"));
@@ -59,7 +59,7 @@ public class MangaService {
             coversMangaVOMap.put(title, CoversMangaVO.builder()
                     .titulo(title)
                     .urlImage(cover.getUrlImage())
-                    .urlReader(nomeDosMangasRegistrados.contains(title) ? null : cover.getUrlReader())
+                    .urlReader(nomeDosMangasRegistrados.contains(title.toLowerCase()) ? null : cover.getUrlReader())
                     .build());
         });
 
