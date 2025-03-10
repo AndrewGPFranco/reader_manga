@@ -156,4 +156,10 @@ public class MangaController {
         return ResponseEntity.ok().body(apenasNomeDosMangas);
     }
 
+    @GetMapping
+    public Page<Manga> getMangaPesquisado(@RequestParam String pesquisado,
+                                          @RequestParam(defaultValue = "0") int pageNumber) {
+        return service.getMangaPesquisado(pesquisado, pageNumber);
+    }
+
 }

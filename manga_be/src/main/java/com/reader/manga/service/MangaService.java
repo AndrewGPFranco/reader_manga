@@ -16,6 +16,9 @@ import com.reader.manga.vo.MangaCoverVO;
 import com.reader.manga.vo.MangaUserVO;
 import com.reader.manga.vo.UserMangaVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -201,4 +204,8 @@ public class MangaService {
         return nomeDosMangas;
     }
 
+    public Page<Manga> getMangaPesquisado(String pesquisado, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return repository.findByTitle(pageable, pesquisado);
+    }
 }

@@ -15,4 +15,6 @@ public interface MangaRepository extends JpaRepository<Manga, Long> {
     @NotNull Page<Manga> findAll(@NotNull Pageable pageable);
 
     Optional<Manga> findByTitle(String title);
+
+    @NotNull Page<Manga> findByTitle(@NotNull Pageable pageable, String title);
 }
