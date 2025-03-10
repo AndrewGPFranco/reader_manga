@@ -59,8 +59,16 @@ public class JobChapter extends ColetorBaseUpload {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             int numeroTotalDePaginas = document.getNumberOfPages();
 
+            StringBuilder prefixoCap = new StringBuilder();
+            String[] nomeCapituloSeparado = nomeManga.split(" ");
+
+            for (int i = 0; i <= nomeCapituloSeparado.length - 1; i++) {
+                char primeiroCaractere = nomeCapituloSeparado[i].charAt(0);
+                prefixoCap.append(String.valueOf(primeiroCaractere).toLowerCase());
+            }
+
             Chapter capitulo = new Chapter();
-            capitulo.setTitle(nomeCapitulo);
+            capitulo.setTitle(prefixoCap + nomeCapitulo);
             capitulo.setManga(manga);
             capitulo.setNumberPages(numeroTotalDePaginas);
             capituloRepository.save(capitulo);
