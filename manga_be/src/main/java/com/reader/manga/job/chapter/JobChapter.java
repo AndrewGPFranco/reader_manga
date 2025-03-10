@@ -8,6 +8,7 @@ import com.reader.manga.model.Pagina;
 import com.reader.manga.repository.ChapterRepository;
 import com.reader.manga.repository.MangaRepository;
 import com.reader.manga.repository.PaginaRepository;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,22 +34,32 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobChapter extends ColetorBaseUpload {
 
+    private static final String BASE_PATH = "/app/uploads/";
+    private static final String IMAGE_FORMAT = "PNG";
+    private static final int BATCH_SIZE = 100;
+    private static final int DPI = 300;
+    private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+
     private final MangaRepository mangaRepository;
     private final PaginaRepository paginaRepository;
     private final ChapterRepository capituloRepository;
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
+    private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+
+    /**
+     * Executa o job de processamento do capítulo
+     * @param file Arquivo PDF do capítulo
+     * @param varargs Argumentos variáveis (nome do mangá, nome do capítulo)
+     * @throws IOException se ocorrer erro no processamento do arquivo
+     */
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void executa(MultipartFile file, String... varargs) throws IOException {
-
         String nomeManga = varargs[0];
         String nomeCapitulo = varargs[1];
 
-        if (file == null || file.isEmpty()) {
-            log.error("Arquivo MultipartFile é nulo ou vazio!");
-            throw new IllegalArgumentException("Arquivo não fornecido!");
-        }
+        validateInput(file, nomeManga);
 
         Manga manga = mangaRepository.findByTitle(nomeManga)
                 .orElseThrow(() -> {
@@ -58,62 +71,111 @@ public class JobChapter extends ColetorBaseUpload {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             int numeroTotalDePaginas = document.getNumberOfPages();
 
-            String prefixoCap = Arrays.stream(nomeManga.split(" "))
-                    .map(s -> String.valueOf(s.charAt(0)).toLowerCase()).collect(Collectors.joining());
+            Chapter capitulo = createChapter(nomeManga, nomeCapitulo, manga, numeroTotalDePaginas);
+            String basePath = prepareBasePath(manga.getTitle(), nomeCapitulo);
 
-            Chapter capitulo = new Chapter();
-            capitulo.setTitle(prefixoCap + nomeCapitulo);
-            capitulo.setManga(manga);
-            capitulo.setNumberPages(numeroTotalDePaginas);
-
-            capituloRepository.save(capitulo);
-            String pathBase = String.join("", manga.getTitle().split(" "));
-
-            List<Pagina> paginas = new ArrayList<>();
-            log.info("Iniciando gravação de {} páginas...", numeroTotalDePaginas);
-            for (int i = 0; i < numeroTotalDePaginas; i++) {
-                BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300);
-
-                int progresso = (int) ((i / (double) numeroTotalDePaginas) * 100);
-                log.info("Progresso atual: {}", progresso);
-                for (SseEmitter emitter : emitters) {
-                    try {
-                        emitter.send(progresso);
-                    } catch (IOException e) {
-                        emitter.complete();
-                        emitters.remove(emitter);
-                    }
-                }
-
-                String outputPath = "/app/uploads/" + pathBase + nomeCapitulo + "/pagina_" + i + ".png";
-                File outputFile = new File(outputPath);
-
-                outputFile.getParentFile().mkdirs();
-                ImageIO.write(image, "PNG", outputFile);
-
-                Pagina pagina = new Pagina();
-                pagina.setPathPage(outputFile.getAbsolutePath());
-                pagina.setChapter(capitulo);
-                paginaRepository.save(pagina);
-                log.info("Página {} salva com sucesso!", i);
-                paginas.add(pagina);
-            }
+            List<Pagina> paginas = processPages(pdfRenderer, numeroTotalDePaginas, basePath, capitulo);
 
             capitulo.setPages(paginas);
             capituloRepository.save(capitulo);
-            log.info("Cápitulo {} salvo com sucesso!", nomeCapitulo);
+
             for (SseEmitter emitter : emitters) {
                 emitter.send("Job executado com sucesso!");
                 emitter.complete();
             }
             emitters.clear();
+        } finally {
+            cleanup();
         }
+    }
+
+    private void validateInput(MultipartFile file, String nomeManga) {
+        if (file == null || file.isEmpty()) {
+            log.error("Arquivo MultipartFile é nulo ou vazio!");
+            throw new IllegalArgumentException("Arquivo não fornecido!");
+        }
+        if (nomeManga == null || nomeManga.trim().isEmpty()) {
+            log.error("Nome do mangá não fornecido!");
+            throw new IllegalArgumentException("Nome do mangá é obrigatório!");
+        }
+    }
+
+    private Chapter createChapter(String nomeManga, String nomeCapitulo, Manga manga, int totalPages) {
+        String prefixoCap = Arrays.stream(nomeManga.split(" "))
+                .map(s -> String.valueOf(s.charAt(0)).toLowerCase())
+                .collect(Collectors.joining());
+
+        Chapter capitulo = new Chapter();
+        capitulo.setTitle(prefixoCap + nomeCapitulo);
+        capitulo.setManga(manga);
+        capitulo.setNumberPages(totalPages);
+        return capituloRepository.save(capitulo);
+    }
+
+    private String prepareBasePath(String mangaTitle, String nomeCapitulo) {
+        String pathBase = BASE_PATH + String.join("", mangaTitle.split(" ")) + nomeCapitulo;
+        File directory = new File(pathBase);
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new RuntimeException("Falha ao criar diretório: " + pathBase);
+        }
+        return pathBase;
+    }
+
+    private List<Pagina> processPages(PDFRenderer pdfRenderer, int totalPages,
+                                      String basePath, Chapter capitulo) throws IOException {
+        List<Pagina> paginas = new ArrayList<>();
+
+        for (int i = 0; i < totalPages; i++) {
+            final int pageIndex = i;
+            BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, DPI);
+            String outputPath = basePath + "/pagina_" + pageIndex + ".png";
+
+            executorService.submit(() -> {
+                try {
+                    ImageIO.write(image, IMAGE_FORMAT, new File(outputPath));
+                } catch (IOException e) {
+                    log.error("Erro ao escrever imagem da página {}: {}", pageIndex, e.getMessage());
+                }
+            });
+
+            Pagina pagina = new Pagina();
+            pagina.setPathPage(outputPath);
+            pagina.setChapter(capitulo);
+            paginas.add(pagina);
+
+            if (paginas.size() >= BATCH_SIZE || pageIndex == totalPages - 1) {
+                paginaRepository.saveAll(new ArrayList<>(paginas));
+                paginas.clear();
+            }
+
+            int progresso = (int) ((i / (double) totalPages) * 100);
+            for (SseEmitter emitter : emitters) {
+                try {
+                    emitter.send(progresso);
+                } catch (IOException e) {
+                    emitter.complete();
+                    emitters.remove(emitter);
+                }
+            }
+        }
+        return paginas;
     }
 
     public void addEmitter(SseEmitter emitter) {
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
+    }
+
+    private void cleanup() {
+        if (!executorService.isShutdown()) {
+            executorService.shutdown();
+        }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        executorService.shutdown();
     }
 
 }

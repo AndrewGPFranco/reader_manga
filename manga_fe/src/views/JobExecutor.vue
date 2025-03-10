@@ -103,7 +103,6 @@ const handleFileChange = (fileList: any) => {
 
 const generalOptionsChapter = computed(() => {
   if(mangasNomes.value) {
-    console.log(mangasNomes.value)
     return mangasNomes.value.map(manga => ({
       label: manga,
       value: manga
@@ -200,6 +199,8 @@ const validaInput = () => {
 const limpaDados = () => {
   selectedJob.value = ''
   parametros.value = ''
+  titleChapter.value = ''
+  titleManga.value = ''
 }
 
 const selectJob = (job: string, tipoDoJob: string) => {
