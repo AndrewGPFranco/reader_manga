@@ -3,9 +3,19 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card ref="mangaCard" title="Mangás" class="flex flex-col"
-            size="huge" style="height: 95vh; overflow-y: auto;">
+    <n-card
+      ref="mangaCard"
+      title="Mangás"
+      class="flex flex-col"
+      size="huge"
+      style="height: 95vh; overflow-y: auto"
+    >
       <section class="container mt-5 flex flex-wrap gap-5 justify-center">
+        <n-input-group class="flex justify-end -mt-7 mb-5">
+          <n-button type="info" @click="findPage">Exibir todos</n-button>
+          <n-input :style="{ width: '30%' }" v-model:value="mangaPesquisado" />
+          <n-button type="primary" @click="procurarInput">Procurar</n-button>
+        </n-input-group>
         <div
           class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
           v-for="manga in mangasArray"
@@ -68,6 +78,8 @@ const pageTotal = ref<number>(0)
 const mangaQuantity = ref<number>(0)
 const mangaCard = ref<InstanceType<typeof NCard> | null>(null)
 
+let mangaPesquisado = ref<string>('')
+
 const findPage = async () => {
   const data = await mangaStore.getAllMangaPaginado(page.value, 10)
   mangasArray.value = data.content
@@ -96,6 +108,23 @@ const removerMangaDaLista = async (idManga: number) => {
   } catch (error: any) {
     message.error(error.message || 'Erro ao remover mangá da lista.')
   }
+}
+
+const procurarInput = async () => {
+  try {
+    if(mangaPesquisado.value === "") {
+      await findPage();
+    } else {
+      const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value);
+      if(data != undefined) {
+        mangasArray.value = [];
+        mangasArray.value = data.content
+        page.value = data.number + 1
+        pageTotal.value = data.totalPages
+        mangaQuantity.value = data.totalElements
+      }
+    }
+  } catch (error: any) { message.error('Erro ao buscar os mangá') }
 }
 
 onMounted(async () => {

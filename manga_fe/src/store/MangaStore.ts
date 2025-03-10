@@ -230,6 +230,15 @@ export const useMangaStore = defineStore('manga', {
         }
       });
       return result.data;
+    },
+    async getMangaPesquisado(mangaPesquisado: string): Promise<any> {
+      const result = await api
+        .get(`/api/v1/manga?pesquisado=${mangaPesquisado}`, {
+        headers: {
+          Authorization: this.user.getToken()
+        }
+      });
+      return result.data;
     }
   }
 })
