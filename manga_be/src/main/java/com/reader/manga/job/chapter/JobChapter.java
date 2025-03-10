@@ -21,9 +21,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -47,39 +48,26 @@ public class JobChapter extends ColetorBaseUpload {
             throw new IllegalArgumentException("Arquivo não fornecido!");
         }
 
-        Optional<Manga> mangaOptional = mangaRepository.findByTitle(nomeManga);
-        if (mangaOptional.isEmpty()) {
-            log.error("Mangá com título: {} não encontrado!", nomeManga);
-            throw new NotFoundException("Mangá não encontrado!");
-        }
-
-        Manga manga = mangaOptional.get();
+        Manga manga = mangaRepository.findByTitle(nomeManga)
+                .orElseThrow(() -> {
+                    log.error("Mangá com título: {} não encontrado!", nomeManga);
+                    return new NotFoundException("Mangá não encontrado!");
+                });
 
         try (PDDocument document = PDDocument.load(file.getInputStream())) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             int numeroTotalDePaginas = document.getNumberOfPages();
 
-            StringBuilder prefixoCap = new StringBuilder();
-            String[] nomeCapituloSeparado = nomeManga.split(" ");
-
-            for (int i = 0; i <= nomeCapituloSeparado.length - 1; i++) {
-                char primeiroCaractere = nomeCapituloSeparado[i].charAt(0);
-                prefixoCap.append(String.valueOf(primeiroCaractere).toLowerCase());
-            }
+            String prefixoCap = Arrays.stream(nomeManga.split(" "))
+                    .map(s -> String.valueOf(s.charAt(0)).toLowerCase()).collect(Collectors.joining());
 
             Chapter capitulo = new Chapter();
             capitulo.setTitle(prefixoCap + nomeCapitulo);
             capitulo.setManga(manga);
             capitulo.setNumberPages(numeroTotalDePaginas);
+
             capituloRepository.save(capitulo);
-
-            String[] s = manga.getTitle().split(" ");
-            int quantidadeNomes = s.length - 1;
-            StringBuilder pathBase = new StringBuilder();
-
-            for (int i = 0; i <= quantidadeNomes; i++) {
-                pathBase.append(s[i]);
-            }
+            String pathBase = String.join("", manga.getTitle().split(" "));
 
             List<Pagina> paginas = new ArrayList<>();
             log.info("Iniciando gravação de {} páginas...", numeroTotalDePaginas);
