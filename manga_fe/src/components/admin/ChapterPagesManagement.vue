@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { useChapterStore } from '@/store/chapterStore'
+import { useChapterStore } from '@/store/ChapterStore'
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
 import { onMounted, ref } from 'vue'

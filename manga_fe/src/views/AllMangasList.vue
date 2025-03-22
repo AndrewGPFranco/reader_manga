@@ -112,19 +112,21 @@ const removerMangaDaLista = async (idManga: number) => {
 
 const procurarInput = async () => {
   try {
-    if(mangaPesquisado.value === "") {
-      await findPage();
+    if (mangaPesquisado.value === '') {
+      await findPage()
     } else {
-      const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value);
-      if(data != undefined) {
-        mangasArray.value = [];
+      const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value)
+      if (data != undefined) {
+        mangasArray.value = []
         mangasArray.value = data.content
         page.value = data.number + 1
         pageTotal.value = data.totalPages
         mangaQuantity.value = data.totalElements
       }
     }
-  } catch (error: any) { message.error('Erro ao buscar os mangá') }
+  } catch (error: any) {
+    message.error('Erro ao buscar os mangá')
+  }
 }
 
 onMounted(async () => {

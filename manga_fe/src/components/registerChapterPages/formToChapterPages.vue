@@ -30,7 +30,7 @@
 import type iPageData from '@/@types/Pagee';
 import { api } from '@/network/axiosInstance';
 import { useAuthStore } from '@/store/AuthStore';
-import { useChapterStore } from '@/store/chapterStore';
+import { useChapterStore } from '@/store/ChapterStore';
 import { useMessage, type FormInst } from 'naive-ui';
 import { computed, ref, watch, type PropType } from 'vue';
 
