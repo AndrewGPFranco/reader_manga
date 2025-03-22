@@ -84,7 +84,10 @@ const editPage = (page: iPageData) => {
 const handleRequestResult = async (result: boolean) => {
   finishedEdition.value = result
 
-  if (result) allPages.value = await chapterStore.getAllPages(page.value - 1, 10)
+  if (result) {
+    await chapterStore.getAllPages(0, 10)
+      .then(data => allPages.value = data.content)
+  }
 }
 
 const cancelEdit = () => {

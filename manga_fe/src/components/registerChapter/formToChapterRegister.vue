@@ -14,7 +14,7 @@
         </n-form-item-gi>
         <n-gi :span="24">
           <div style="display: flex; justify-content: flex-end; gap: 10px">
-            <n-button round type="info" @click="cancel"> Cancel </n-button>
+            <n-button round type="info" @click="cancel"> Cancel</n-button>
             <n-button round type="primary" @click="handleValidateButtonClick">
               {{ action }}
             </n-button>

@@ -29,6 +29,7 @@
       :isEdit="isEdit"
       @requestResult="handleRequestResult"
       @cancelEdit="cancelEdit"
+      @editFinalizada="resetaDados"
     />
   </div>
 </template>
@@ -51,6 +52,12 @@ let page = ref<number>(1)
 let pageTotal = ref<number>(0)
 
 let finishedEdition = ref(false)
+
+const resetaDados = () => {
+  isEdit.value = false
+  mangaToBeEdited.value = {} as iMangaData
+  finishedEdition.value = false
+}
 
 const deleteManga = async (id: number) => {
   const response = await mangaStore.deleteMangaById(id)
@@ -77,11 +84,15 @@ onMounted(async () => {
 
 const handleRequestResult = async (result: boolean) => {
   finishedEdition.value = result
-  if (result) allManga.value = await mangaStore.getAllManga()
+  if (result) {
+    await mangaStore.getAllMangaPaginado(0, 10)
+      .then(data => allManga.value = data.content);
+  }
 }
 
 const cancelEdit = () => {
   isEdit.value = false
+  mangaToBeEdited.value = {} as iMangaData
 }
 
 watch(page, async () => {
