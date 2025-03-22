@@ -14,7 +14,7 @@
         </n-form-item-gi>
         <n-gi :span="24">
           <div style="display: flex; justify-content: flex-end; gap: 10px">
-            <n-button round type="info" @click="cancel"> Cancel </n-button>
+            <n-button round type="info" @click="cancel"> Cancel</n-button>
             <n-button round type="primary" @click="handleValidateButtonClick">
               {{ action }}
             </n-button>
@@ -29,7 +29,7 @@
 import { defineProps, ref, type PropType } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
-import { useChapterStore } from '@/store/chapterStore'
+import { useChapterStore } from '@/store/ChapterStore'
 import type iChapterData from '@/@types/iChapter'
 
 const props = defineProps({

@@ -1,13 +1,14 @@
 package com.reader.manga.service;
 
-import com.reader.manga.dto.chapter.ChapterDTO;
-import com.reader.manga.enums.StatusType;
-import com.reader.manga.exception.CreationErrorException;
-import com.reader.manga.model.Chapter;
-import com.reader.manga.model.Manga;
-import com.reader.manga.repository.ChapterRepository;
-import com.reader.manga.repository.MangaRepository;
-import com.reader.manga.repository.PaginaRepository;
+import com.reader.manga.adapters.input.dtos.chapter.ChapterDTO;
+import com.reader.manga.domain.services.ChapterService;
+import com.reader.manga.domain.enums.StatusType;
+import com.reader.manga.domain.exceptions.CreationErrorException;
+import com.reader.manga.domain.entities.mangas.Chapter;
+import com.reader.manga.domain.entities.mangas.Manga;
+import com.reader.manga.ports.repositories.ChapterRepository;
+import com.reader.manga.ports.repositories.MangaRepository;
+import com.reader.manga.ports.repositories.PaginaRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
@@ -22,13 +23,13 @@ class ChapterServiceTest {
     private ChapterService spyService;
 
     @Mock
-    private ChapterRepository chapterRepository;
+    private ChapterRepository jpaChapterRepository;
 
     @Mock
-    private MangaRepository mangaRepository;
+    private MangaRepository jpaMangaRepository;
 
     @Mock
-    private PaginaRepository paginaRepository;
+    private PaginaRepository jpaPaginaRepository;
 
     private static AutoCloseable closeable;
 
@@ -73,11 +74,11 @@ class ChapterServiceTest {
     @DisplayName("Deve criar um capítulo com sucesso.")
     void testeCreateChapter() {
         Manga manga = getEntityManga();
-        Mockito.when(mangaRepository.findById(1L)).thenReturn(Optional.of(manga));
+        Mockito.when(jpaMangaRepository.findById(1L)).thenReturn(Optional.of(manga));
 
         Assertions.assertDoesNotThrow(() -> spyService.createChapter(getChapterDto()));
 
-        Mockito.verify(chapterRepository, Mockito.times(1)).save(Mockito.any(Chapter.class));
+        Mockito.verify(jpaChapterRepository, Mockito.times(1)).save(Mockito.any(Chapter.class));
     }
 
     private void chamadaDoMetodoDeCriacaoELancaException() throws CreationErrorException {

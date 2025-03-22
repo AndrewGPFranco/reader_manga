@@ -20,6 +20,9 @@
       </tr>
     </tbody>
   </n-table>
+  <div class="pagination">
+    <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
+  </div>
   <div v-if="isEdit && !finishedEdition" class="containerForm" ref="formEdicao">
     <FormToChapterRegister
       :mangas="allManga"
@@ -34,10 +37,10 @@
 
 <script setup lang="ts">
 import type iChapterData from '@/@types/iChapter'
-import { useChapterStore } from '@/store/chapterStore'
-import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
+import { useChapterStore } from '@/store/ChapterStore'
+import { CreateOutline as Edit, TrashOutline as Delete } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import FormToChapterRegister from '../registerChapter/formToChapterRegister.vue'
 import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
@@ -52,18 +55,24 @@ const chapterToBeEdited = ref({} as iChapterData)
 const formEdicao = ref(null)
 
 let finishedEdition = ref(false)
+let page = ref<number>(1)
+let pageTotal = ref<number>(0)
 
 const resetaDados = () => {
   isEdit.value = false
-  chapterToBeEdited.value = {} as iChapterData;
-  finishedEdition.value = false;
+  chapterToBeEdited.value = {} as iChapterData
+  finishedEdition.value = false
+}
+
+const chaptersPageable = async () => {
+  const data = await chapterStore.getAllChapter(page.value - 1, 10)
+  allChapter.value = data.content
+  pageTotal.value = data.totalPages
 }
 
 onMounted(async () => {
-  const responseChapter = await chapterStore.getAllChapter(100)
-  const responseManga = await mangaStore.getAllManga()
-  allChapter.value = responseChapter
-  allManga.value = responseManga
+  await chaptersPageable()
+  allManga.value = await mangaStore.getAllManga()
 })
 
 const deleteChapter = async (id: number) => {
@@ -80,23 +89,23 @@ const editChapter = (chapter: iChapterData) => {
 
 const handleRequestResult = async (result: boolean) => {
   finishedEdition.value = result
-  if (result) allChapter.value = await chapterStore.getAllChapter(100)
+  if (result) {
+    await chapterStore.getAllChapter(0, 10)
+      .then(data => allChapter.value = data.content)
+  }
 }
 
 const cancelEdit = () => {
   isEdit.value = false
   chapterToBeEdited.value = {} as iChapterData
 }
+
+watch(page, async () => {
+  await chaptersPageable()
+})
 </script>
 
 <style scoped>
-.actions {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-}
-
 .tdButtons {
   display: flex;
   justify-content: space-around;
@@ -115,6 +124,7 @@ const cancelEdit = () => {
 .buttonDelete {
   color: rgba(255, 0, 0, 0.678);
 }
+
 .buttonEdit {
   color: rgb(0, 109, 0);
 }

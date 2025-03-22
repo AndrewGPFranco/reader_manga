@@ -31,12 +31,7 @@
               />
             </n-form-item>
             <n-form-item label="Título do Mangá" path="parametros" v-if="tipoJob === 'Uploads'">
-              <input
-                v-model="titleManga"
-                placeholder="Digite o nome do mangá"
-                type="text"
-                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
+              <n-select v-model:value="titleManga" placeholder="Escolha o nome do mangá" :options="generalOptionsChapter" />
             </n-form-item>
             <n-form-item label="PDF do capítulo" path="parametros" v-if="tipoJob === 'Uploads'">
               <n-upload
@@ -75,18 +70,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { NCard, NList, NListItem, NButton, NForm, NFormItem, useMessage } from 'naive-ui'
 import { api } from '@/network/axiosInstance'
 import type IJobType from '@/@types/IJobType'
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
 import { URL_SSE } from '@/utils/utils'
+import { useMangaStore } from '@/store/MangaStore'
 
 const message = useMessage()
+const mangaStore = useMangaStore()
 const jobs = ref<IJobType[]>([])
 const selectedJob = ref<string>('')
 const token = localStorage.getItem('token')
+const mangasNomes = ref<string[]>([]);
 
 let selectedFile = ref<File>()
 let titleManga = ref<string>()
@@ -102,6 +100,16 @@ const handleFileChange = (fileList: any) => {
     selectedFile.value = fileList.fileList[0].file
   }
 }
+
+const generalOptionsChapter = computed(() => {
+  if(mangasNomes.value) {
+    return mangasNomes.value.map(manga => ({
+      label: manga,
+      value: manga
+    }));
+  }
+  return [];
+});
 
 const executeJob = async (e: MouseEvent) => {
   e.preventDefault()
@@ -191,6 +199,8 @@ const validaInput = () => {
 const limpaDados = () => {
   selectedJob.value = ''
   parametros.value = ''
+  titleChapter.value = ''
+  titleManga.value = ''
 }
 
 const selectJob = (job: string, tipoDoJob: string) => {
@@ -212,7 +222,14 @@ const getJobsDisponiveis = async () => {
   }
 }
 
-onMounted(() => getJobsDisponiveis());
+const getNomeDosMangasDisponiveis = async () => {
+  mangasNomes.value = await mangaStore.getApenasNomeDosMangas();
+}
+
+onMounted(() => {
+  getJobsDisponiveis();
+  getNomeDosMangasDisponiveis();
+});
 onUnmounted(() => fechaEventSource());
 </script>
 

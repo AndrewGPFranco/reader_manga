@@ -82,7 +82,7 @@ import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { NCard, useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import { useChapterStore } from '@/store/chapterStore'
+import { useChapterStore } from '@/store/ChapterStore'
 import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
 
 const isLoading = ref(true)

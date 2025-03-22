@@ -30,6 +30,7 @@ services:
       - /home/andrewgo/Documentos/Capitulos_salvos:/app/uploads:rw,Z
     depends_on:
       - postgres
+    container_name: manga-back
     command: ./mvnw spring-boot:run
 
 volumes:

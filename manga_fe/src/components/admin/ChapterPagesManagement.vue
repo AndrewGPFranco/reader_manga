@@ -18,6 +18,9 @@
       </tr>
     </tbody>
   </n-table>
+  <div class="pagination">
+    <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
+  </div>
   <div v-if="isEdit && !finishedEdition" class="containerForm">
     <FormToChapterPages
       :mangas="allManga"
@@ -30,10 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { useChapterStore } from '@/store/chapterStore'
+import { useChapterStore } from '@/store/ChapterStore'
 import { TrashOutline as Delete, CreateOutline as Edit } from '@vicons/ionicons5'
 import { useMessage } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useMangaStore } from '@/store/MangaStore'
 import type iPageData from '@/@types/Pagee'
 import type iMangaData from '@/@types/Manga'
@@ -49,12 +52,21 @@ const chapterStore = useChapterStore()
 const mangaStore = useMangaStore()
 const pageToBeEdited = ref({} as iPageData)
 
+let page = ref<number>(1)
+let pageTotal = ref<number>(0)
+
 let finishedEdition = ref(false)
 
+const pagesPageable = async () => {
+  const data = await chapterStore.getAllPages(page.value - 1, 10);
+  allPages.value = data.content
+  pageTotal.value = data.totalPages
+}
+
 onMounted(async () => {
-  allChapter.value = await chapterStore.getAllChapter(100)
+  allChapter.value = await chapterStore.getAllChapter(1, 100)
   allManga.value = await mangaStore.getAllManga()
-  allPages.value = await chapterStore.getAllPages()
+  await pagesPageable();
 })
 
 const deletePage = async (idPage: number) => {
@@ -72,22 +84,22 @@ const editPage = (page: iPageData) => {
 const handleRequestResult = async (result: boolean) => {
   finishedEdition.value = result
 
-  if (result) allPages.value = await chapterStore.getAllPages()
+  if (result) {
+    await chapterStore.getAllPages(0, 10)
+      .then(data => allPages.value = data.content)
+  }
 }
 
 const cancelEdit = () => {
   isEdit.value = false
 }
+
+watch(page, async () => {
+  await pagesPageable()
+})
 </script>
 
 <style scoped>
-.actions {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
-}
-
 .tdButtons {
   display: flex;
   justify-content: space-around;
