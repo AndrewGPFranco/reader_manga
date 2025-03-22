@@ -2,11 +2,11 @@
 //
 //import com.reader.manga.enums.FeedbackType;
 //import com.reader.manga.enums.StatusType;
-//import com.reader.manga.mapper.CommentMapper;
-//import com.reader.manga.mapper.MangaMapper;
-//import com.reader.manga.model.Comment;
-//import com.reader.manga.model.Manga;
-//import com.reader.manga.repository.CommentRepository;
+//import com.reader.manga.adapters.input.mappers.CommentMapper;
+//import com.reader.manga.adapters.input.mappers.MangaMapper;
+//import com.reader.manga.domain.entities.mangas.Comment;
+//import com.reader.manga.domain.entities.mangas.Manga;
+//import com.reader.manga.adapters.output.CommentRepository;
 //import com.reader.manga.utils.AbstractTests;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.DisplayName;
