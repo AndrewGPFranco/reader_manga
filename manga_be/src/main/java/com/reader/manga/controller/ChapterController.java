@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -47,13 +48,13 @@ public class ChapterController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/readAll")
-    public ResponseEntity<List<Chapter>> readAllChapters(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public Page<Chapter> readAllChapters(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         logger.info("*******************Reading all chapters!*******************");
-        Pageable pageable = PageRequest.of(page, size);
-        List<Chapter> chapters = service.readAllChapters(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(chapters);
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return service.readAllChapters(pageable);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -90,10 +91,12 @@ public class ChapterController {
     }
 
     @GetMapping("/getAll-pages")
-    public ResponseEntity<List<Pagina>> getAllPages() {
-        List<Pagina> allPages = service.getAllPages();
-        logger.info("Searching all pages");
-        return ResponseEntity.ok().body(allPages);
+    public Page<Pagina> getAllPages(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return service.getAllPages(pageable);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

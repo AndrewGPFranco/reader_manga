@@ -1,5 +1,4 @@
 import type iChapterData from '@/@types/iChapter'
-import type iPageData from '@/@types/Pagee'
 import { api } from '@/network/axiosInstance'
 import { defineStore } from 'pinia'
 import { useAuthStore } from './AuthStore'
@@ -80,9 +79,9 @@ export const useChapterStore = defineStore('chapter', {
         throw new Error(error.response.data)
       }
     },
-    async getAllPages(): Promise<iPageData[]> {
+    async getAllPages(pageNumber: number, size: number): Promise<any> {
       try {
-        const response = await api.get('/api/v1/chapter/getAll-pages', {
+        const response = await api.get(`/api/v1/chapter/getAll-pages?size=${size}&pageNumber=${pageNumber}`, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }

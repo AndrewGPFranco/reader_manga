@@ -48,13 +48,8 @@ public class ChapterService {
         }
     }
 
-    public List<Chapter> readAllChapters(Pageable pageable) {
-        if (pageable == null) {
-            return repository.findAll();
-        }
-
-        Page<Chapter> pageResult = repository.findAll(pageable);
-        return pageResult.getContent();
+    public Page<Chapter> readAllChapters(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public void deleteChapter(Long id) {
@@ -84,8 +79,8 @@ public class ChapterService {
         paginaRepository.save(page);
     }
 
-    public List<Pagina> getAllPages() {
-        return paginaRepository.findAll();
+    public Page<Pagina> getAllPages(Pageable pageable) {
+        return paginaRepository.findAll(pageable);
     }
 
     public void deletePage(Long idPage) {
