@@ -27,9 +27,9 @@ export const useChapterStore = defineStore('chapter', {
         throw new Error(error.response.data)
       }
     },
-    async getAllChapter(size: number): Promise<iChapterData[]> {
+    async getAllChapter(pageNumber: number, size: number): Promise<any> {
       try {
-        const response = await api.get(`/api/v1/chapter/readAll?size=${size}`, {
+        const response = await api.get(`/api/v1/chapter/readAll?size=${size}&pageNumber=${pageNumber}`, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }
