@@ -206,6 +206,7 @@ public class MangaService {
 
     public Page<Manga> getMangaPesquisado(String pesquisado, int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        return repository.findByTitle(pageable, pesquisado);
+        return repository.findByTitleLike(pesquisado, pageable);
     }
+
 }
