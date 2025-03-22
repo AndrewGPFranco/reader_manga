@@ -12,9 +12,9 @@
     >
       <section class="container mt-5 flex flex-wrap gap-5 justify-center">
         <n-input-group class="flex justify-end -mt-7 mb-5">
-          <n-button type="info" @click="findPage">Exibir todos</n-button>
+          <n-button v-if="!isExibindoTodosMangas" type="info" @click="findPage">Exibir todos</n-button>
           <n-input :style="{ width: '30%' }" v-model:value="mangaPesquisado" />
-          <n-button type="primary" @click="procurarInput">Procurar</n-button>
+          <n-button type="primary" @click="procuraMangaEspecifico">Procurar</n-button>
         </n-input-group>
         <div
           class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
@@ -79,8 +79,11 @@ const mangaQuantity = ref<number>(0)
 const mangaCard = ref<InstanceType<typeof NCard> | null>(null)
 
 let mangaPesquisado = ref<string>('')
+let isExibindoTodosMangas = ref<boolean>(true);
 
 const findPage = async () => {
+  isExibindoTodosMangas.value = true;
+  mangaPesquisado.value = "";
   const data = await mangaStore.getAllMangaPaginado(page.value, 10)
   mangasArray.value = data.content
   page.value = data.number + 1
@@ -110,13 +113,15 @@ const removerMangaDaLista = async (idManga: number) => {
   }
 }
 
-const procurarInput = async () => {
+const procuraMangaEspecifico = async () => {
   try {
     if (mangaPesquisado.value === '') {
+      isExibindoTodosMangas.value = true;
       await findPage()
     } else {
       const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value)
       if (data != undefined) {
+        isExibindoTodosMangas.value = false;
         mangasArray.value = []
         mangasArray.value = data.content
         page.value = data.number + 1
