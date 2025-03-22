@@ -84,8 +84,6 @@ public class JobChapter extends ColetorBaseUpload {
                 emitter.complete();
             }
             emitters.clear();
-        } finally {
-            cleanup();
         }
     }
 
@@ -144,7 +142,7 @@ public class JobChapter extends ColetorBaseUpload {
             paginas.add(pagina);
 
             if (paginas.size() >= BATCH_SIZE || pageIndex == totalPages - 1) {
-                paginaRepository.saveAll(new ArrayList<>(paginas));
+                paginas.forEach(paginaRepository::save);
                 paginas.clear();
             }
 
@@ -165,12 +163,6 @@ public class JobChapter extends ColetorBaseUpload {
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
-    }
-
-    private void cleanup() {
-        if (!executorService.isShutdown()) {
-            executorService.shutdown();
-        }
     }
 
     @PreDestroy

@@ -13,8 +13,6 @@ public interface PaginaRepository {
 
     Optional<Pagina> findById(Long id);
 
-    void saveAll(List<Pagina> paginas);
-
     List<Pagina> findByIdChapter(Long id);
 
     Page<Pagina> findAll(Pageable pageable);
