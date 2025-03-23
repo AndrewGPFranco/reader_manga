@@ -2,6 +2,7 @@ package com.reader.manga.domain.services;
 
 import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
+import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.exceptions.CreationErrorException;
 import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.adapters.input.dtos.chapter.ChapterDTO;
@@ -112,5 +113,21 @@ public class ChapterService {
 
     public List<Pagina> getCapituloPorId(Long idChapter) {
         return paginaRepository.findByIdChapter(idChapter);
+    }
+
+    /**
+     * A idéia é que o progresso só seja atualizado caso seja maior do que esta no banco.
+     */
+    public void updateReadingProgress(UpdateChapterDTO dto) {
+        Chapter chapter = getChapterByID(dto.idChapter());
+
+        if(dto.readingProgress() > chapter.getReadingProgress()) {
+            chapter.setReadingProgress(dto.readingProgress());
+
+            if(dto.readingProgress().equals(chapter.getNumberPages()))
+                chapter.setStatus(StatusType.FINISHED);
+
+            chapterRepository.save(chapter);
+        }
     }
 }

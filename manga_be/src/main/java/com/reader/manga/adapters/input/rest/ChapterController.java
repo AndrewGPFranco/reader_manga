@@ -130,4 +130,9 @@ public class ChapterController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
 
+    @PutMapping("/update-progress")
+    public void updateReadingProgress(@RequestBody UpdateChapterDTO updateChapterDTO) {
+        service.updateReadingProgress(updateChapterDTO);
+    }
+
 }
