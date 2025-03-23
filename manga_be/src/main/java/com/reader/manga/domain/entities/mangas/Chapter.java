@@ -1,6 +1,7 @@
 package com.reader.manga.domain.entities.mangas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reader.manga.domain.enums.StatusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +42,13 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Pagina> pages;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
+
+    @NotNull
+    private Integer readingProgress = 0;
 
     public Chapter(String title, Integer numberPages, Manga manga) {
         this.title = title;
