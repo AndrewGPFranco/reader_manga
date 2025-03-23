@@ -11,7 +11,17 @@ import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-import { ScanCircleOutline as ScanCircle, BookOutline as Library, GridOutline as New, SettingsOutline as Management, Bookmark as Favorites, PersonOutline, NewspaperOutline, CodeWorkingOutline } from '@vicons/ionicons5'
+import {
+  ScanCircleOutline as ScanCircle,
+  BookOutline as Library,
+  GridOutline as New,
+  SettingsOutline as Management,
+  Bookmark as Favorites,
+  PersonOutline as Profile,
+  NewspaperOutline as Mangas,
+  CodeWorkingOutline as Jobs,
+  HourglassOutline as ProgressReadings,
+} from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/store/AuthStore'
 
@@ -35,14 +45,14 @@ export default defineComponent({
         ? [{
           whateverLabel: () =>
             h(RouterLink, { to: '/admin/jobs' }, { default: () => 'Jobs' }),
-          icon: renderIcon(CodeWorkingOutline),
+          icon: renderIcon(Jobs),
           path: '/admin/jobs'
         }]
         : []),
       {
         whateverLabel: () =>
           h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),
-        icon: renderIcon(NewspaperOutline),
+        icon: renderIcon(Mangas),
         path: '/mangas'
       },
       ...(role.includes("ADMIN")
@@ -56,7 +66,7 @@ export default defineComponent({
       {
         whateverLabel: () =>
           h(RouterLink, { to: '/profile' }, { default: () => 'Meu perfil' }),
-        icon: renderIcon(PersonOutline),
+        icon: renderIcon(Profile),
         path: '/profile'
       },
       ...(role.includes("ADMIN")
@@ -78,6 +88,12 @@ export default defineComponent({
           h(RouterLink, { to: '/manga/favorites' }, { default: () => 'Mangás favoritos' }),
         icon: renderIcon(Favorites),
         path: '/manga/favorites'
+      },
+      {
+        whateverLabel: () =>
+          h(RouterLink, { to: '/progress-readings' }, { default: () => 'Leituras em andamento' }),
+        icon: renderIcon(ProgressReadings),
+        path: '/progress-readings'
       }
     ]
 

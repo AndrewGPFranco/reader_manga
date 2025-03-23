@@ -12,6 +12,7 @@ import LoginView from '@/views/LoginView.vue'
 import { useAuthStore } from '@/store/AuthStore'
 import RegisterUser from '@/views/RegisterUser.vue'
 import JobExecutor from '@/views/JobExecutor.vue'
+import ProgressReadings from '@/views/ProgressReadings.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,6 +76,11 @@ const router = createRouter({
       path: '/admin/jobs',
       name: 'jobs',
       component: JobExecutor
+    },
+    {
+      path: '/progress-readings',
+      name: 'progress-readings',
+      component: ProgressReadings
     }
   ]
 });
