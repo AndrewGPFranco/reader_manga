@@ -5,6 +5,7 @@ import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
 import com.reader.manga.domain.entities.mangas.Chapter;
 import com.reader.manga.domain.entities.mangas.Pagina;
+import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.services.ChapterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class ChapterController {
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
         logger.info("*******************Creating mangá!*******************");
         service.createChapter(dto);
-        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), dto.description(), 0);
+        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), 0,
+                StatusType.ONGOING, 0);
         return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
     }
 

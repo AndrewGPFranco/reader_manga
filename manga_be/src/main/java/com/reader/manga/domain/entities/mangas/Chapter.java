@@ -45,7 +45,7 @@ public class Chapter {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private StatusType status;
+    private StatusType status = StatusType.ONGOING;
 
     @NotNull
     private Integer readingProgress = 0;

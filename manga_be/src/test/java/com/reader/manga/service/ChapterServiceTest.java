@@ -48,7 +48,6 @@ class ChapterServiceTest {
     private ChapterDTO getChapterDto() {
         return ChapterDTO.builder()
                 .title("Capítulo 1")
-                .description("Primeiro capítulo de One Piece.")
                 .mangaId(1L)
                 .build();
     }

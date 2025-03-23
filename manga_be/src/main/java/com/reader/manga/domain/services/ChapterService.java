@@ -62,6 +62,8 @@ public class ChapterService {
                 .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
         UtilsService.updateField(dto.title(), chapter::setTitle);
+        UtilsService.updateField(dto.status(), chapter::setStatus);
+        UtilsService.updateField(dto.readingProgress(), chapter::setReadingProgress);
 
         chapterRepository.save(chapter);
     }
