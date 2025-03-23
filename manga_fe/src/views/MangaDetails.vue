@@ -82,7 +82,7 @@ onMounted(async () => {
   )
 })
 
-function verifyEndDate(str: iMangaData): any {
+const verifyEndDate = (str: iMangaData): any => {
   return str.endDate != undefined ? formatDate(str.endDate) : 'Still on display.'
 }
 </script>

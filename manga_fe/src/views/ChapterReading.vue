@@ -201,15 +201,16 @@ onMounted(async () => {
     return
   }
 
+  await chapterStore.updateReadingProgress(idChapter.value, 1);
+
   await loadChapter(id)
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress)
 
-  if (image.value) {
+  if (image.value)
     URL.revokeObjectURL(image.value)
-  }
 })
 
 watch(
