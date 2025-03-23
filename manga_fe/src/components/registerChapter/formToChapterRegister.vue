@@ -26,11 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, type PropType } from 'vue'
+import { defineProps, type PropType, ref } from 'vue'
 import type { FormInst } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 import { useChapterStore } from '@/store/ChapterStore'
 import type iChapterData from '@/@types/iChapter'
+import { StatusType } from '@/enum/StatusType'
 
 const props = defineProps({
   mangas: {
@@ -62,6 +63,10 @@ const size = ref('medium')
 
 const model = ref({
   title: props.chapter.title != undefined && props.isEdit ? props.chapter.title : '',
+  progress:
+    props.chapter.readingProgress != undefined && props.isEdit ? props.chapter.readingProgress : '',
+  status:
+    props.chapter.status != undefined && props.isEdit ? props.chapter.status : StatusType.ONGOING,
   manga: null as string | null
 })
 
@@ -95,6 +100,8 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 const clearFields = () => {
   model.value = {
     title: '',
+    status: StatusType.ONGOING,
+    progress: 0,
     manga: null as string | null
   }
 
@@ -102,9 +109,11 @@ const clearFields = () => {
 }
 
 const chapterRegister = async () => {
-  const { title, manga } = model.value
+  const { title, manga, status, progress } = model.value
   const data = {
     title: title,
+    status: status,
+    readingProgress: progress,
     mangaId: manga
   }
 

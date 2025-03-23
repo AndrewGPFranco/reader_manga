@@ -1,9 +1,11 @@
 import type iPageData from "./Pagee"
+import { StatusType } from '@/enum/StatusType'
 
 export default interface iChapterData {
     id: number;
     title: string;
-    description: string;
-    numberPages: number;
     pages: iPageData[];
+    status: StatusType;
+    numberPages: number;
+    readingProgress: number;
 }

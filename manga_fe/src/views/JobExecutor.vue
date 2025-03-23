@@ -149,6 +149,7 @@ const executeJob = async (e: MouseEvent) => {
         progressoEmTempoReal.value = 100;
         message.success('Job executado com sucesso!')
         fechaEventSource();
+        limpaDados();
       }
       else message.info('Houve um erro ao executar o Job.')
     } else message.error('Digite os parâmetros para executar o Job.')
@@ -156,7 +157,6 @@ const executeJob = async (e: MouseEvent) => {
     message.error(error)
     throw new Error(error.response.data)
   } finally {
-    limpaDados();
     progressoEmTempoReal.value = 0;
     isExibirProgresso.value = false;
   }
