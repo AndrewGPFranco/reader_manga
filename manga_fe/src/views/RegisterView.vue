@@ -3,7 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card title="Gerenciamento de Registros" size="huge" style="height: 95vh; overflow-y: auto;">
+    <n-card title="Gerenciamento de Registros" size="huge" style="height: 95vh; overflow-y: auto">
       <n-tabs style="height: 100%" type="card">
         <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
           <section class="container">
@@ -35,9 +35,10 @@ import type iMangaData from '@/@types/Manga'
 import type iPageData from '@/@types/Pagee'
 import { useMangaStore } from '@/store/MangaStore'
 import { onMounted, ref } from 'vue'
+import { StatusType } from '@/enum/StatusType'
 
 let mangasArray = ref([] as iMangaData[])
-const chapter = new Chapter(0, '', '', 0, [])
+const chapter = new Chapter(0, '', 0, [], StatusType.ONGOING, 0)
 const page = {} as iPageData
 const mangaStore = useMangaStore()
 

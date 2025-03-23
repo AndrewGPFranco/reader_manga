@@ -3,12 +3,11 @@
     <NavbarComponent />
   </header>
   <main class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
-    <n-card style="height: 95vh; overflow-y: auto;">
+    <n-card style="height: 95vh; overflow-y: auto">
       <div class="flex items-center space-x-4 mb-6">
         <img :src="manga.image" alt="Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg" />
         <div>
           <h1 class="text-2xl font-bold">{{ manga.title }}</h1>
-          <p class="text-black text-sm">{{ manga.author }}</p>
         </div>
       </div>
 
@@ -30,15 +29,27 @@
           <li
             v-for="chapter in chapterOrdenados"
             :key="chapter.title"
-            class="bg-white p-4 rounded-lg shadow-lg border border-gray-200"
+            :class="{
+              'bg-white p-4 rounded-lg shadow-lg border border-gray-200': true,
+              'bg-green-100': chapter.status === StatusType.FINISHED
+            }"
           >
             <router-link
               :to="`/manga/${manga.title}/chapter/${chapter.id}`"
               class="font-semibold text-lg"
-              >{{ chapter.title }}</router-link
-            >
-            <p class="text-black">{{ chapter.description }}</p>
-            <p><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
+              >{{ chapter.title }}
+            </router-link>
+            <p class="mt-2"><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
+            <p>
+              <span class="text-black">Progresso:</span>
+              {{
+                chapter.status === StatusType.FINISHED
+                  ? 'Leitura finalizada'
+                  : chapter.readingProgress === 0
+                    ? 'Leitura não iniciada'
+                    : chapter.readingProgress
+              }}
+            </p>
           </li>
         </ul>
       </div>
@@ -54,6 +65,7 @@ import { formatDate } from '@/utils/utils'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type iChapterData from '@/@types/iChapter'
+import { StatusType } from '../enum/StatusType'
 
 const mangaStore = useMangaStore()
 const route = useRoute()
@@ -61,10 +73,13 @@ let manga = ref<iMangaData>({} as iMangaData)
 let chapterOrdenados = ref<iChapterData[]>([])
 
 onMounted(async () => {
-  const title: string = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
+  const title: string = Array.isArray(route.params.title)
+    ? route.params.title[0]
+    : route.params.title
   manga.value = await mangaStore.getInfoManga(title)
-  chapterOrdenados.value = manga.value.chapters
-    .sort((a: iChapterData, b: iChapterData) => a.title.localeCompare(b.title))
+  chapterOrdenados.value = manga.value.chapters.sort((a: iChapterData, b: iChapterData) =>
+    a.title.localeCompare(b.title)
+  )
 })
 
 function verifyEndDate(str: iMangaData): any {

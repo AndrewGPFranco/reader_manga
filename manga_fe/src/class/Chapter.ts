@@ -1,19 +1,27 @@
-import type iPageData from "@/@types/Pagee";
+import type iPageData from '@/@types/Pagee'
+import type { StatusType } from '@/enum/StatusType'
 
 export class Chapter {
+  readonly id: number
+  readonly title: string
+  readonly pages: iPageData[]
+  readonly status: StatusType
+  readonly numberPages: number
+  readonly readingProgress: number
 
-    readonly id: number;
-    readonly title: string;
-    readonly description: string;
-    readonly numberPages: number;
-    readonly pages: iPageData[];
-
-    constructor(id: number, title: string, description: string, numberPages: number, pages: iPageData[]) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.numberPages = numberPages;
-        this.pages = pages;
-    }
-
+  constructor(
+    id: number,
+    title: string,
+    numberPages: number,
+    pages: iPageData[],
+    status: StatusType,
+    readingProgress: number
+  ) {
+    this.id = id
+    this.title = title
+    this.numberPages = numberPages
+    this.pages = pages
+    this.readingProgress = readingProgress
+    this.status = status
+  }
 }
