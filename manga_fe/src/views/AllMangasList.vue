@@ -13,7 +13,7 @@
       <section class="container mt-5 flex flex-wrap gap-5 justify-center">
         <n-input-group class="flex justify-end -mt-7 mb-5">
           <n-button v-if="!isExibindoTodosMangas" type="info" @click="findPage">Exibir todos</n-button>
-          <n-input :style="{ width: '30%' }" v-model:value="mangaPesquisado" />
+          <n-input :style="{ width: '30%' }" v-model:value="mangaPesquisado" @keydown.enter="procuraMangaEspecifico" />
           <n-button type="primary" @click="procuraMangaEspecifico">Procurar</n-button>
         </n-input-group>
         <div
@@ -121,12 +121,16 @@ const procuraMangaEspecifico = async () => {
     } else {
       const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value)
       if (data != undefined) {
-        isExibindoTodosMangas.value = false;
-        mangasArray.value = []
-        mangasArray.value = data.content
-        page.value = data.number + 1
-        pageTotal.value = data.totalPages
-        mangaQuantity.value = data.totalElements
+        if(data.content.length === 0) {
+          message.info("Nenhum mangá encontrado...")
+        } else {
+          isExibindoTodosMangas.value = false;
+          mangasArray.value = []
+          mangasArray.value = data.content
+          page.value = data.number + 1
+          pageTotal.value = data.totalPages
+          mangaQuantity.value = data.totalElements
+        }
       }
     }
   } catch (error: any) {
