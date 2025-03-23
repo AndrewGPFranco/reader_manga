@@ -87,11 +87,12 @@ import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
 
 const isLoading = ref(true)
 const error = ref<string | null>(null)
-const currentPageIndex = ref(0)
-const imageLoaded = ref(false)
+const currentPageIndex = ref<number>(0)
+const imageLoaded = ref<boolean>(false)
 const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
+const idChapter = ref<string>();
 
 const route = useRoute()
 const message = useMessage()
@@ -192,6 +193,7 @@ onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress)
 
   const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+  idChapter.value = id;
 
   if (!id) {
     error.value = 'Invalid chapter ID'
@@ -227,6 +229,13 @@ watch(
     }
   }
 )
+
+watch(() => currentPageIndex.value, async (newVal) => {
+  // Feito dessa maneira pois o currentPageIndex inicia com 0...
+  let progressoAtual = newVal + 1;
+  if (idChapter.value != undefined)
+    await chapterStore.updateReadingProgress(idChapter.value, progressoAtual);
+})
 </script>
 
 <style scoped>

@@ -151,6 +151,22 @@ export const useChapterStore = defineStore('chapter', {
         return this.sizePaginaCapitulo
       }
       return this.getQuantidadePaginasDoCapitulo(id);
+    },
+    async updateReadingProgress(idChapter: string, currentProgress: number) {
+      try {
+        const data = {
+          idChapter: idChapter,
+          readingProgress: currentProgress
+        };
+
+        await api.put(`/api/v1/chapter/update-progress`, data, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 })

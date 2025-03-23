@@ -47,7 +47,7 @@
                   ? 'Leitura finalizada'
                   : chapter.readingProgress === 0
                     ? 'Leitura não iniciada'
-                    : chapter.readingProgress
+                    : `Pág: ${chapter.readingProgress}`
               }}
             </p>
           </li>
@@ -65,7 +65,7 @@ import { formatDate } from '@/utils/utils'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type iChapterData from '@/@types/iChapter'
-import { StatusType } from '../enum/StatusType'
+import { StatusType } from '@/enum/StatusType'
 
 const mangaStore = useMangaStore()
 const route = useRoute()
