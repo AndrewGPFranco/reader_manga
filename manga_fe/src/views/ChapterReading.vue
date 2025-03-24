@@ -12,6 +12,20 @@
       </template>
 
       <template v-else>
+        <n-modal v-model:show="showModalResetReading">
+          <n-card
+            style="width: 600px"
+            title="Capítulo finalizado"
+            :bordered="false"
+            size="huge"
+            role="dialog"
+            aria-modal="true"
+          >
+            <template #header-extra> Parabéns! </template>
+            XP coletado com sucesso!
+          </n-card>
+        </n-modal>
+
         <div class="manga-viewer__content">
           <n-tooltip trigger="hover" v-if="!isTelaCheia">
             <template #trigger>
@@ -90,6 +104,7 @@ import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
 import { StatusType } from '@/enum/StatusType'
 
 let progressoAtual = ref<number>(1)
+let showModalResetReading = ref<boolean>(false)
 
 const currentChapter = ref<any>({})
 const isLoading = ref(true)
@@ -99,7 +114,8 @@ const imageLoaded = ref<boolean>(false)
 const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
-const idChapter = ref<string>()
+const idChapter = ref<string>("")
+const qntdExibicaoModal = ref<number>(0);
 
 const route = useRoute()
 const message = useMessage()
@@ -155,9 +171,7 @@ const nextPage = async () => {
   if (canNavigateNext.value) {
     currentPageIndex.value++
     const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-    if (id) {
-      await loadPage(id, currentPageIndex.value)
-    }
+    if (id) await loadPage(id, currentPageIndex.value)
   }
 }
 
@@ -199,10 +213,9 @@ const handleKeyPress = (event: KeyboardEvent) => {
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress)
 
-  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  idChapter.value = id
+  idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
 
-  if (!id) {
+  if (idChapter.value === "") {
     error.value = 'Invalid chapter ID'
     isLoading.value = false
     return
@@ -212,7 +225,7 @@ onMounted(async () => {
 
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
 
-  await loadChapter(id)
+  await loadChapter(idChapter.value)
 })
 
 onUnmounted(() => {
@@ -242,8 +255,14 @@ watch(
 watch(
   () => currentPageIndex.value,
   async (newVal) => {
+    showModalResetReading.value = false;
     // Feito dessa maneira pois o currentPageIndex inicia com 0...
-    if (newVal > progressoAtual.value) progressoAtual.value = newVal + 1
+    if (newVal >= progressoAtual.value)
+      progressoAtual.value = newVal + 1
+    if(progressoAtual.value === currentChapter.value.readingProgress && qntdExibicaoModal.value === 0) {
+      showModalResetReading.value = true;
+      qntdExibicaoModal.value++;
+    }
   }
 )
 
@@ -255,9 +274,7 @@ window.addEventListener('beforeunload', async () => {
 })
 
 const atualizaProgresso = async () => {
-  if (
-    idChapter.value != undefined &&
-    currentChapter.value.status != StatusType.FINISHED &&
+  if (currentChapter.value.status != StatusType.FINISHED &&
     progressoAtual.value > currentChapter.value.readingProgress
   )
     await chapterStore.updateReadingProgress(idChapter.value, progressoAtual.value)
