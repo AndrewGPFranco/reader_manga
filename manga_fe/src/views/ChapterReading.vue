@@ -21,7 +21,7 @@
             role="dialog"
             aria-modal="true"
           >
-            <template #header-extra> Parabéns! </template>
+            <template #header-extra> Parabéns!</template>
             XP coletado com sucesso!
           </n-card>
         </n-modal>
@@ -46,7 +46,7 @@
           <img
             v-if="image"
             :src="image"
-            :alt="`Manga page `"
+            :alt="`Manga page ${currentPageNumber}`"
             :class="{
               'manga-viewer__image': !isTelaCheia,
               'manga-viewer__image_expand': isTelaCheia
@@ -68,23 +68,34 @@
               :disabled="!canNavigatePrevious"
               @click="previousPage"
               class="manga-viewer__nav-button"
+              @mouseenter="showThumbnails = true"
+              @mouseleave="showThumbnails = false"
             >
               Anterior
             </n-button>
 
-            <n-slider
-              v-model:value="currentPageNumber"
-              :min="1"
-              :max="totalPages"
-              :step="1"
-              class="manga-viewer__slider"
-              @update:value="handleSliderChange"
-            />
+            <div class="manga-viewer__thumbnail-container" v-if="showThumbnails">
+              <div class="manga-viewer__thumbnails">
+                <img
+                  v-for="page in thumbnailPages"
+                  :key="page.index"
+                  :src="page.src"
+                  :alt="`Thumbnail page ${page.index + 1}`"
+                  :class="{
+                    'manga-viewer__thumbnail': true,
+                    active: page.index === currentPageIndex
+                  }"
+                  @click="jumpToPage(page.index)"
+                />
+              </div>
+            </div>
 
             <n-button
               :disabled="!canNavigateNext"
               @click="nextPage"
               class="manga-viewer__nav-button"
+              @mouseenter="showThumbnails = true"
+              @mouseleave="showThumbnails = false"
             >
               Próximo
             </n-button>
@@ -112,6 +123,7 @@ const chapterStore = useChapterStore()
 
 let progressoAtual = ref<number>(1)
 let showModalResetReading = ref<boolean>(false)
+const showThumbnails = ref<boolean>(false)
 
 const currentChapter = ref<any>({})
 const isLoading = ref(true)
@@ -124,20 +136,28 @@ const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
 const idChapter = ref<string>('')
 const titleManga = ref<string>('')
 const qntdExibicaoModal = ref<number>(0)
-
 const totalPages = ref<number | undefined>(0)
+const thumbnails = ref<string[]>([])
 
-const currentPageNumber = computed({
-  get: () => currentPageIndex.value + 1,
-  set: (value: number) => (currentPageIndex.value = value - 1)
-})
+const currentPageNumber = computed(() => currentPageIndex.value + 1)
 
 const canNavigateNext = computed(() => {
-  if(totalPages.value != undefined)
-    return currentPageIndex.value < totalPages.value - 1
-  return false;
-});
-const canNavigatePrevious = computed(() => currentPageIndex.value > 0);
+  if (totalPages.value !== undefined) return currentPageIndex.value < totalPages.value - 1
+  return false
+})
+
+const canNavigatePrevious = computed(() => currentPageIndex.value > 0)
+
+// Mini-mapa de thumbnails (mostra 5 páginas ao redor da atual)
+const thumbnailPages = computed(() => {
+  if (totalPages.value === undefined) return []
+  const start = Math.max(0, currentPageIndex.value - 2)
+  const end = Math.min(totalPages.value, currentPageIndex.value + 3)
+  return Array.from({ length: end - start }, (_, i) => ({
+    index: start + i,
+    src: thumbnails.value[start + i] || ''
+  }))
+})
 
 const loadPage = async (chapterId: string, pageIndex: number) => {
   try {
@@ -151,12 +171,21 @@ const loadPage = async (chapterId: string, pageIndex: number) => {
   }
 }
 
+const loadThumbnails = async (chapterId: string) => {
+  thumbnails.value = []
+  for (let i = 0; i < totalPages.value!; i++) {
+    const response = await chapterStore.getPaginaDoCapitulo(chapterId, i)
+    thumbnails.value.push(URL.createObjectURL(response))
+  }
+}
+
 const loadChapter = async (id: string) => {
   try {
     isLoading.value = true
     error.value = null
     currentPageIndex.value = 0
     await loadPage(id, currentPageIndex.value)
+    await loadThumbnails(id)
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Erro ao carregar capítulo'
     message.error(error.value)
@@ -167,21 +196,26 @@ const loadChapter = async (id: string) => {
 
 const nextPage = async () => {
   if (canNavigateNext.value) {
+    console.log('Antes:', currentPageIndex.value, currentPageNumber.value)
     currentPageIndex.value++
     await loadPage(idChapter.value, currentPageIndex.value)
+    console.log('Depois:', currentPageIndex.value, currentPageNumber.value)
   }
 }
 
 const previousPage = async () => {
   if (canNavigatePrevious.value) {
+    console.log('Antes:', currentPageIndex.value, currentPageNumber.value)
     currentPageIndex.value--
     await loadPage(idChapter.value, currentPageIndex.value)
+    console.log('Depois:', currentPageIndex.value, currentPageNumber.value)
   }
 }
 
-const handleSliderChange = async (value: number) => {
-  currentPageIndex.value = value - 1
+const jumpToPage = async (pageIndex: number) => {
+  currentPageIndex.value = pageIndex
   await loadPage(idChapter.value, currentPageIndex.value)
+  showThumbnails.value = false
 }
 
 const handleImageLoad = () => {
@@ -193,12 +227,21 @@ const handleImageError = () => {
   message.error(error.value)
 }
 
-const handleKeyPress = (event: KeyboardEvent) => {
+const isProcessingKey = ref(false)
+
+const handleKeyPress = async (event: KeyboardEvent) => {
+  if (isProcessingKey.value) return
+  isProcessingKey.value = true
+
   if (event.key === 'ArrowRight' || event.key === 'd') {
-    nextPage()
+    await nextPage()
   } else if (event.key === 'ArrowLeft' || event.key === 'a') {
-    previousPage()
+    await previousPage()
   }
+
+  setTimeout(() => {
+    isProcessingKey.value = false
+  }, 100)
 }
 
 onMounted(async () => {
@@ -214,11 +257,8 @@ onMounted(async () => {
   }
 
   totalPages.value = await chapterStore.getQuantidade(idChapter.value)
-
   await chapterStore.updateReadingProgress(idChapter.value, 1)
-
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
-
   await loadChapter(idChapter.value)
 })
 
@@ -244,7 +284,6 @@ watch(
   () => currentPageIndex.value,
   async (newVal) => {
     showModalResetReading.value = false
-    // Feito dessa maneira pois o currentPageIndex inicia com 0...
     if (newVal >= progressoAtual.value) progressoAtual.value = newVal + 1
     if (
       progressoAtual.value === currentChapter.value.readingProgress &&
@@ -256,9 +295,6 @@ watch(
   }
 )
 
-/**
- * Responsável por atualizar o progresso da leitura caso o usuário feche o site
- */
 window.addEventListener('beforeunload', async () => {
   await atualizaProgresso()
 })
@@ -273,9 +309,8 @@ const atualizaProgresso = async () => {
 
 onUnmounted(async () => {
   await atualizaProgresso()
-
   window.removeEventListener('keydown', handleKeyPress)
-
+  thumbnails.value.forEach((url) => URL.revokeObjectURL(url))
   if (image.value) URL.revokeObjectURL(image.value)
 })
 </script>
@@ -309,18 +344,25 @@ onUnmounted(async () => {
   position: relative;
   overflow: hidden;
   padding: 0 1rem 70px;
+  transition: all 0.3s ease;
 }
 
 .manga-viewer__image {
   max-height: 79vh;
   max-width: 100%;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 .manga-viewer__image_expand {
   max-height: 93vh;
   max-width: 100%;
   object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.manga-viewer__image:hover {
+  transform: scale(1.02);
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -346,49 +388,113 @@ onUnmounted(async () => {
   right: 0;
   padding: 0.75rem;
   border-top: 1px solid;
-  background-color: inherit;
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 5;
+  transition: opacity 0.3s ease;
+}
+
+.manga-viewer__controls:hover {
+  opacity: 1;
 }
 
 .manga-viewer__info {
   text-align: center;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 .manga-viewer__navigation {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   padding: 0 0.5rem;
-}
-
-.manga-viewer__slider {
-  flex: 1;
+  position: relative;
 }
 
 .manga-viewer__nav-button {
   min-width: 100px;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.manga-viewer__nav-button:hover {
+  transform: scale(1.05);
+}
+
+.manga-viewer__thumbnail-container {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 10;
+  animation: fadeIn 0.3s ease;
+}
+
+.manga-viewer__thumbnails {
+  display: flex;
+  gap: 5px;
+}
+
+.manga-viewer__thumbnail {
+  width: 50px;
+  height: 70px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    border-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.manga-viewer__thumbnail:hover {
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.manga-viewer__thumbnail.active {
+  border-color: #ff4500;
 }
 
 .manga-viewer__error {
   padding: 2rem;
 }
 
-.btnExpandir {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  height: 1.5rem;
-  z-index: 10;
-}
-
+.btnExpandir,
 .btn-back {
   position: absolute;
   top: 10px;
-  left: 10px;
   cursor: pointer;
   height: 1.5rem;
   z-index: 10;
+  transition: color 0.3s ease;
+}
+
+.btnExpandir {
+  right: 10px;
+}
+
+.btn-back {
+  left: 10px;
+}
+
+.btnExpandir:hover,
+.btn-back:hover {
+  color: #ff4500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 </style>
