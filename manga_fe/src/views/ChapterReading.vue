@@ -30,7 +30,10 @@
             v-if="image"
             :src="image"
             :alt="`Manga page `"
-            :class="{ 'manga-viewer__image': !isTelaCheia, 'manga-viewer__image_expand': isTelaCheia }"
+            :class="{
+              'manga-viewer__image': !isTelaCheia,
+              'manga-viewer__image_expand': isTelaCheia
+            }"
             @load="handleImageLoad"
             @error="handleImageError"
           />
@@ -84,7 +87,11 @@ import { NCard, useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { useChapterStore } from '@/store/ChapterStore'
 import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
+import { StatusType } from '@/enum/StatusType'
 
+let progressoAtual = ref<number>(1)
+
+const currentChapter = ref<any>({})
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 const currentPageIndex = ref<number>(0)
@@ -92,7 +99,7 @@ const imageLoaded = ref<boolean>(false)
 const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
-const idChapter = ref<string>();
+const idChapter = ref<string>()
 
 const route = useRoute()
 const message = useMessage()
@@ -118,7 +125,7 @@ const loadPage = async (chapterId: string, pageIndex: number) => {
 
     const response = await chapterStore.getPaginaDoCapitulo(chapterId, pageIndex)
     image.value = URL.createObjectURL(response)
-    if(chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
+    if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   } catch (err) {
     console.error(err)
     error.value = 'Erro ao carregar a imagem'
@@ -193,7 +200,7 @@ onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress)
 
   const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  idChapter.value = id;
+  idChapter.value = id
 
   if (!id) {
     error.value = 'Invalid chapter ID'
@@ -201,7 +208,9 @@ onMounted(async () => {
     return
   }
 
-  await chapterStore.updateReadingProgress(idChapter.value, 1);
+  await chapterStore.updateReadingProgress(idChapter.value, 1)
+
+  currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
 
   await loadChapter(id)
 })
@@ -209,8 +218,7 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress)
 
-  if (image.value)
-    URL.revokeObjectURL(image.value)
+  if (image.value) URL.revokeObjectURL(image.value)
 })
 
 watch(
@@ -231,11 +239,32 @@ watch(
   }
 )
 
-watch(() => currentPageIndex.value, async (newVal) => {
-  // Feito dessa maneira pois o currentPageIndex inicia com 0...
-  let progressoAtual = newVal + 1;
-  if (idChapter.value != undefined)
-    await chapterStore.updateReadingProgress(idChapter.value, progressoAtual);
+watch(
+  () => currentPageIndex.value,
+  async (newVal) => {
+    // Feito dessa maneira pois o currentPageIndex inicia com 0...
+    if (newVal > progressoAtual.value) progressoAtual.value = newVal + 1
+  }
+)
+
+/**
+ * Responsável por atualizar o progresso da leitura caso o usuário feche o site
+ */
+window.addEventListener('beforeunload', async () => {
+  await atualizaProgresso()
+})
+
+const atualizaProgresso = async () => {
+  if (
+    idChapter.value != undefined &&
+    currentChapter.value.status != StatusType.FINISHED &&
+    progressoAtual.value > currentChapter.value.readingProgress
+  )
+    await chapterStore.updateReadingProgress(idChapter.value, progressoAtual.value)
+}
+
+onUnmounted(async () => {
+  await atualizaProgresso()
 })
 </script>
 
@@ -282,13 +311,13 @@ watch(() => currentPageIndex.value, async (newVal) => {
   object-fit: contain;
 }
 
-@media(min-width:768px) and (max-width:1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .manga-viewer__image {
     max-height: 72vh;
   }
 }
 
-@media(min-width:1400px) {
+@media (min-width: 1400px) {
   .manga-viewer__image {
     max-height: 85vh;
   }

@@ -167,6 +167,18 @@ export const useChapterStore = defineStore('chapter', {
       } catch (error) {
         console.error(error);
       }
+    },
+    async getReadingProgress(idChapter: string) {
+      try {
+        const response = await api.get(`/api/v1/chapter/reading-progress/${idChapter}`, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
+          }
+        })
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 })
