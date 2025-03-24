@@ -130,4 +130,10 @@ public class ChapterService {
             chapterRepository.save(chapter);
         }
     }
+
+    public Integer getReadingProgress(Long idChapter) {
+        Chapter chapter = getChapterByID(idChapter);
+
+        return chapter.getReadingProgress();
+    }
 }
