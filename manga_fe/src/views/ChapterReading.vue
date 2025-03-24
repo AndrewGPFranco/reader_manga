@@ -44,8 +44,8 @@
           </n-tooltip>
 
           <img
-            v-if="image"
-            :src="image"
+            v-if="currentImage"
+            :src="currentImage"
             :alt="`Manga page ${currentPageNumber}`"
             :class="{
               'manga-viewer__image': !isTelaCheia,
@@ -58,7 +58,7 @@
           <n-empty v-else description="No pages available for this chapter" />
         </div>
 
-        <div v-if="image && !isTelaCheia" class="manga-viewer__controls">
+        <div v-if="currentImage && !isTelaCheia" class="manga-viewer__controls">
           <div class="manga-viewer__info">
             <span>Página {{ currentPageNumber }} de {{ totalPages }}</span>
           </div>
@@ -130,16 +130,16 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const currentPageIndex = ref<number>(0)
 const imageLoaded = ref<boolean>(false)
-const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
 const idChapter = ref<string>('')
 const titleManga = ref<string>('')
 const qntdExibicaoModal = ref<number>(0)
 const totalPages = ref<number | undefined>(0)
-const thumbnails = ref<string[]>([])
+const allImages = ref<string[]>([])
 
 const currentPageNumber = computed(() => currentPageIndex.value + 1)
+const currentImage = computed(() => allImages.value[currentPageIndex.value] || '')
 
 const canNavigateNext = computed(() => {
   if (totalPages.value !== undefined) return currentPageIndex.value < totalPages.value - 1
@@ -148,73 +148,59 @@ const canNavigateNext = computed(() => {
 
 const canNavigatePrevious = computed(() => currentPageIndex.value > 0)
 
-// Mini-mapa de thumbnails (mostra 5 páginas ao redor da atual)
 const thumbnailPages = computed(() => {
   if (totalPages.value === undefined) return []
   const start = Math.max(0, currentPageIndex.value - 2)
   const end = Math.min(totalPages.value, currentPageIndex.value + 3)
   return Array.from({ length: end - start }, (_, i) => ({
     index: start + i,
-    src: thumbnails.value[start + i] || ''
+    src: allImages.value[start + i] || ''
   }))
 })
 
-const loadPage = async (chapterId: string, pageIndex: number) => {
-  try {
-    error.value = null
-    const response = await chapterStore.getPaginaDoCapitulo(chapterId, pageIndex)
-    image.value = URL.createObjectURL(response)
-    if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
-  } catch (err) {
-    error.value = 'Erro ao carregar a imagem'
-    message.error(error.value)
-  }
-}
-
-const loadThumbnails = async (chapterId: string) => {
-  thumbnails.value = []
-  for (let i = 0; i < totalPages.value!; i++) {
-    const response = await chapterStore.getPaginaDoCapitulo(chapterId, i)
-    thumbnails.value.push(URL.createObjectURL(response))
-  }
-}
-
-const loadChapter = async (id: string) => {
+const loadAllPages = async (chapterId: string) => {
   try {
     isLoading.value = true
     error.value = null
+    allImages.value = []
+
+    const total = await chapterStore.getQuantidade(chapterId)
+    totalPages.value = total
+
+    const loadPromises = Array.from({ length: total }, (_, index) =>
+      chapterStore
+        .getPaginaDoCapitulo(chapterId, index)
+        .then((response) => URL.createObjectURL(response))
+    )
+    allImages.value = await Promise.all(loadPromises)
+
     currentPageIndex.value = 0
-    await loadPage(id, currentPageIndex.value)
-    await loadThumbnails(id)
+    if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Erro ao carregar capítulo'
+    error.value = err instanceof Error ? err.message : 'Erro ao carregar o capítulo'
     message.error(error.value)
   } finally {
     isLoading.value = false
   }
 }
 
-const nextPage = async () => {
+const nextPage = () => {
   if (canNavigateNext.value) {
-    console.log('Antes:', currentPageIndex.value, currentPageNumber.value)
     currentPageIndex.value++
-    await loadPage(idChapter.value, currentPageIndex.value)
-    console.log('Depois:', currentPageIndex.value, currentPageNumber.value)
+    if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   }
 }
 
-const previousPage = async () => {
+const previousPage = () => {
   if (canNavigatePrevious.value) {
-    console.log('Antes:', currentPageIndex.value, currentPageNumber.value)
     currentPageIndex.value--
-    await loadPage(idChapter.value, currentPageIndex.value)
-    console.log('Depois:', currentPageIndex.value, currentPageNumber.value)
+    if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   }
 }
 
-const jumpToPage = async (pageIndex: number) => {
+const jumpToPage = (pageIndex: number) => {
   currentPageIndex.value = pageIndex
-  await loadPage(idChapter.value, currentPageIndex.value)
+  if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   showThumbnails.value = false
 }
 
@@ -234,9 +220,9 @@ const handleKeyPress = async (event: KeyboardEvent) => {
   isProcessingKey.value = true
 
   if (event.key === 'ArrowRight' || event.key === 'd') {
-    await nextPage()
+    nextPage()
   } else if (event.key === 'ArrowLeft' || event.key === 'a') {
-    await previousPage()
+    previousPage()
   }
 
   setTimeout(() => {
@@ -256,26 +242,16 @@ onMounted(async () => {
     return
   }
 
-  totalPages.value = await chapterStore.getQuantidade(idChapter.value)
   await chapterStore.updateReadingProgress(idChapter.value, 1)
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
-  await loadChapter(idChapter.value)
+  await loadAllPages(idChapter.value)
 })
 
 watch(
   () => route.params.id,
   async (newId) => {
     if (newId && typeof newId === 'string') {
-      await loadChapter(newId)
-    }
-  }
-)
-
-watch(
-  () => image.value,
-  (newImage, oldImage) => {
-    if (oldImage && oldImage !== newImage) {
-      URL.revokeObjectURL(oldImage)
+      await loadAllPages(newId)
     }
   }
 )
@@ -310,8 +286,7 @@ const atualizaProgresso = async () => {
 onUnmounted(async () => {
   await atualizaProgresso()
   window.removeEventListener('keydown', handleKeyPress)
-  thumbnails.value.forEach((url) => URL.revokeObjectURL(url))
-  if (image.value) URL.revokeObjectURL(image.value)
+  allImages.value.forEach((url) => URL.revokeObjectURL(url))
 })
 </script>
 
