@@ -27,6 +27,7 @@
         </n-modal>
 
         <div class="manga-viewer__content">
+          <router-link :to="`/manga/${titleManga}`"><ArrowBackOutline class="btn-back" /></router-link>
           <n-tooltip trigger="hover" v-if="!isTelaCheia">
             <template #trigger>
               <ExpandOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
@@ -100,7 +101,7 @@ import { useRoute } from 'vue-router'
 import { NCard, useMessage } from 'naive-ui'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { useChapterStore } from '@/store/ChapterStore'
-import { ExpandOutline, ChevronUpOutline } from '@vicons/ionicons5'
+import { ExpandOutline, ChevronUpOutline, ArrowBackOutline } from '@vicons/ionicons5'
 import { StatusType } from '@/enum/StatusType'
 
 let progressoAtual = ref<number>(1)
@@ -115,6 +116,7 @@ const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
 const idChapter = ref<string>("")
+const titleManga = ref<string>("")
 const qntdExibicaoModal = ref<number>(0);
 
 const route = useRoute()
@@ -214,6 +216,7 @@ onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress)
 
   idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+  titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
 
   if (idChapter.value === "") {
     error.value = 'Invalid chapter ID'
@@ -383,6 +386,15 @@ onUnmounted(async () => {
   position: absolute;
   top: 10px;
   right: 10px;
+  cursor: pointer;
+  height: 1.5rem;
+  z-index: 10;
+}
+
+.btn-back {
+  position: absolute;
+  top: 10px;
+  left: 10px;
   cursor: pointer;
   height: 1.5rem;
   z-index: 10;
