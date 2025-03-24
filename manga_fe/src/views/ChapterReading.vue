@@ -27,7 +27,9 @@
         </n-modal>
 
         <div class="manga-viewer__content">
-          <router-link :to="`/manga/${titleManga}`"><ArrowBackOutline class="btn-back" /></router-link>
+          <router-link :to="`/manga/${titleManga}`">
+            <ArrowBackOutline class="btn-back" />
+          </router-link>
           <n-tooltip trigger="hover" v-if="!isTelaCheia">
             <template #trigger>
               <ExpandOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
@@ -104,6 +106,10 @@ import { useChapterStore } from '@/store/ChapterStore'
 import { ExpandOutline, ChevronUpOutline, ArrowBackOutline } from '@vicons/ionicons5'
 import { StatusType } from '@/enum/StatusType'
 
+const route = useRoute()
+const message = useMessage()
+const chapterStore = useChapterStore()
+
 let progressoAtual = ref<number>(1)
 let showModalResetReading = ref<boolean>(false)
 
@@ -115,37 +121,31 @@ const imageLoaded = ref<boolean>(false)
 const image = ref<string>('')
 const isTelaCheia = ref<boolean>(false)
 const chapterCard = ref<InstanceType<typeof NCard> | null>(null)
-const idChapter = ref<string>("")
-const titleManga = ref<string>("")
-const qntdExibicaoModal = ref<number>(0);
-
-const route = useRoute()
-const message = useMessage()
-const chapterStore = useChapterStore()
+const idChapter = ref<string>('')
+const titleManga = ref<string>('')
+const qntdExibicaoModal = ref<number>(0)
 
 const totalPages = ref<number | undefined>(0)
 
 const currentPageNumber = computed({
   get: () => currentPageIndex.value + 1,
-  set: (value: number) => {
-    currentPageIndex.value = value - 1
-  }
+  set: (value: number) => (currentPageIndex.value = value - 1)
 })
 
-const canNavigateNext = computed(() => currentPageIndex.value < (totalPages.value || 0) - 1)
-
-const canNavigatePrevious = computed(() => currentPageIndex.value > 0)
+const canNavigateNext = computed(() => {
+  if(totalPages.value != undefined)
+    return currentPageIndex.value < totalPages.value - 1
+  return false;
+});
+const canNavigatePrevious = computed(() => currentPageIndex.value > 0);
 
 const loadPage = async (chapterId: string, pageIndex: number) => {
   try {
-    imageLoaded.value = false
     error.value = null
-
     const response = await chapterStore.getPaginaDoCapitulo(chapterId, pageIndex)
     image.value = URL.createObjectURL(response)
     if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   } catch (err) {
-    console.error(err)
     error.value = 'Erro ao carregar a imagem'
     message.error(error.value)
   }
@@ -155,13 +155,9 @@ const loadChapter = async (id: string) => {
   try {
     isLoading.value = true
     error.value = null
-
-    totalPages.value = await chapterStore.getQuantidade(id)
-
     currentPageIndex.value = 0
     await loadPage(id, currentPageIndex.value)
   } catch (err) {
-    console.error(err)
     error.value = err instanceof Error ? err.message : 'Erro ao carregar capítulo'
     message.error(error.value)
   } finally {
@@ -172,27 +168,20 @@ const loadChapter = async (id: string) => {
 const nextPage = async () => {
   if (canNavigateNext.value) {
     currentPageIndex.value++
-    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-    if (id) await loadPage(id, currentPageIndex.value)
+    await loadPage(idChapter.value, currentPageIndex.value)
   }
 }
 
 const previousPage = async () => {
   if (canNavigatePrevious.value) {
     currentPageIndex.value--
-    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-    if (id) {
-      await loadPage(id, currentPageIndex.value)
-    }
+    await loadPage(idChapter.value, currentPageIndex.value)
   }
 }
 
 const handleSliderChange = async (value: number) => {
-  currentPageNumber.value = value
-  const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  if (id) {
-    await loadPage(id, currentPageIndex.value)
-  }
+  currentPageIndex.value = value - 1
+  await loadPage(idChapter.value, currentPageIndex.value)
 }
 
 const handleImageLoad = () => {
@@ -218,23 +207,19 @@ onMounted(async () => {
   idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
 
-  if (idChapter.value === "") {
+  if (idChapter.value === '') {
     error.value = 'Invalid chapter ID'
     isLoading.value = false
     return
   }
+
+  totalPages.value = await chapterStore.getQuantidade(idChapter.value)
 
   await chapterStore.updateReadingProgress(idChapter.value, 1)
 
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
 
   await loadChapter(idChapter.value)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyPress)
-
-  if (image.value) URL.revokeObjectURL(image.value)
 })
 
 watch(
@@ -258,13 +243,15 @@ watch(
 watch(
   () => currentPageIndex.value,
   async (newVal) => {
-    showModalResetReading.value = false;
+    showModalResetReading.value = false
     // Feito dessa maneira pois o currentPageIndex inicia com 0...
-    if (newVal >= progressoAtual.value)
-      progressoAtual.value = newVal + 1
-    if(progressoAtual.value === currentChapter.value.readingProgress && qntdExibicaoModal.value === 0) {
-      showModalResetReading.value = true;
-      qntdExibicaoModal.value++;
+    if (newVal >= progressoAtual.value) progressoAtual.value = newVal + 1
+    if (
+      progressoAtual.value === currentChapter.value.readingProgress &&
+      qntdExibicaoModal.value === 0
+    ) {
+      showModalResetReading.value = true
+      qntdExibicaoModal.value++
     }
   }
 )
@@ -277,7 +264,8 @@ window.addEventListener('beforeunload', async () => {
 })
 
 const atualizaProgresso = async () => {
-  if (currentChapter.value.status != StatusType.FINISHED &&
+  if (
+    currentChapter.value.status != StatusType.FINISHED &&
     progressoAtual.value > currentChapter.value.readingProgress
   )
     await chapterStore.updateReadingProgress(idChapter.value, progressoAtual.value)
@@ -285,6 +273,10 @@ const atualizaProgresso = async () => {
 
 onUnmounted(async () => {
   await atualizaProgresso()
+
+  window.removeEventListener('keydown', handleKeyPress)
+
+  if (image.value) URL.revokeObjectURL(image.value)
 })
 </script>
 
