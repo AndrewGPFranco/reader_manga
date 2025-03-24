@@ -29,10 +29,10 @@
           <li
             v-for="chapter in chapterOrdenados"
             :key="chapter.title"
-            :class="{
-              'bg-white p-4 rounded-lg shadow-lg border border-gray-200': true,
-              'bg-green-100': chapter.status === StatusType.FINISHED
-            }"
+            :class="[
+              'p-4 rounded-lg shadow-lg border border-gray-200',
+              chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
+            ]"
           >
             <router-link
               :to="`/manga/${manga.title}/chapter/${chapter.id}`"
