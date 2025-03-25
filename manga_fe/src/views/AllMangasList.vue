@@ -16,7 +16,11 @@
           <n-input :style="{ width: '30%' }" v-model:value="mangaPesquisado" @keydown.enter="procuraMangaEspecifico" />
           <n-button type="primary" @click="procuraMangaEspecifico">Procurar</n-button>
         </n-input-group>
+        <div v-if="!mangasArray.length">
+          <p>Nenhum mangá a ser exibido!</p>
+        </div>
         <div
+          v-else
           class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
           v-for="manga in mangasArray"
           :key="manga.title"
@@ -56,7 +60,7 @@
           </div>
         </div>
       </section>
-      <div class="pagination">
+      <div class="pagination" v-if="mangasArray.length">
         <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
       </div>
     </n-card>
