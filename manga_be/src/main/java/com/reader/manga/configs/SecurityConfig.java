@@ -67,6 +67,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:/app/uploads/");

@@ -138,7 +138,7 @@ public class ChapterController {
     @GetMapping("/reading-progress/{idChapter}")
     public ResponseEntity<GetChapterDTO> getReadingProgress(@PathVariable Long idChapter) {
         Chapter chapterByID = service.getChapterByID(idChapter);
-        GetChapterDTO getChapterDTO = new GetChapterDTO(chapterByID.getTitle(), null,
+        GetChapterDTO getChapterDTO = new GetChapterDTO(chapterByID.getTitle(), chapterByID.getNumberPages(),
                 chapterByID.getStatus(), chapterByID.getReadingProgress());
         return ResponseEntity.ok().body(getChapterDTO);
     }
