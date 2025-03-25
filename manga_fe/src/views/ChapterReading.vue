@@ -262,7 +262,7 @@ watch(
     showModalResetReading.value = false
     if (newVal >= progressoAtual.value) progressoAtual.value = newVal + 1
     if (
-      progressoAtual.value === currentChapter.value.readingProgress &&
+      progressoAtual.value === currentChapter.value.numberPages &&
       qntdExibicaoModal.value === 0
     ) {
       showModalResetReading.value = true
