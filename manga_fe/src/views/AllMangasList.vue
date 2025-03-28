@@ -3,13 +3,7 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card
-      ref="mangaCard"
-      title="Mangás"
-      class="flex flex-col"
-      size="huge"
-      style="height: 95vh; overflow-y: auto"
-    >
+    <n-card ref="mangaCard" title="Mangás" class="flex flex-col" size="huge" style="height: 95vh; overflow-y: auto">
       <section class="container mt-5 flex flex-wrap gap-5 justify-center">
         <n-input-group class="flex justify-end -mt-7 mb-5">
           <n-button v-if="!isExibindoTodosMangas" type="info" @click="findPage">Exibir todos</n-button>
@@ -19,23 +13,15 @@
         <div v-if="!mangasArray.length">
           <p>Nenhum mangá a ser exibido!</p>
         </div>
-        <div
-          v-else
-          :class="{
+        <div v-else :class="{
             'w-72 h-90 rounded overflow-hidden shadow-lg bg-white flex flex-col' : isExibindoTodosMangas,
             'w-72 h-80 rounded overflow-hidden shadow-lg bg-white flex flex-col' : !isExibindoTodosMangas
-          }"
-          v-for="manga in mangasArray"
-          :key="manga.title"
-        >
+          }" v-for="manga in mangasArray" :key="manga.title">
           <div class="relative">
             <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga" />
           </div>
           <div class="p-4 flex flex-col flex-grow overflow-y-auto">
-            <router-link
-              :to="`/manga/${manga.title}`"
-              class="text-xl font-bold text-gray-800 truncate"
-            >
+            <router-link :to="`/manga/${manga.title}`" class="text-xl font-bold text-gray-800 truncate">
               {{ manga.title }}
             </router-link>
             <div class="text-gray-700 text-sm mt-2 flex-grow overflow-y-auto">
@@ -43,20 +29,11 @@
               <p><span class="font-semibold">Status: </span>{{ manga.status }}</p>
             </div>
             <div class="mt-auto" v-if="isExibindoTodosMangas">
-              <n-button
-                v-if="!manga.favorite"
-                @click="adicionaMangaNaListaDoUsuario(manga.id)"
-                type="primary"
-                class="w-full mt-2"
-              >
+              <n-button v-if="!manga.favorite" @click="adicionaMangaNaListaDoUsuario(manga.id)" type="primary"
+                class="w-full mt-2">
                 Adicionar na lista
               </n-button>
-              <n-button
-                v-if="manga.favorite"
-                @click="removerMangaDaLista(manga.id)"
-                type="error"
-                class="w-full mt-2"
-              >
+              <n-button v-if="manga.favorite" @click="removerMangaDaLista(manga.id)" type="error" class="w-full mt-2">
                 Remover da lista
               </n-button>
             </div>
@@ -128,7 +105,7 @@ const procuraMangaEspecifico = async () => {
     } else {
       const data = await mangaStore.getMangaPesquisado(mangaPesquisado.value)
       if (data != undefined) {
-        if(data.content.length === 0) {
+        if (data.content.length === 0) {
           message.info("Nenhum mangá encontrado...")
         } else {
           isExibindoTodosMangas.value = false;
@@ -146,6 +123,8 @@ const procuraMangaEspecifico = async () => {
 }
 
 onMounted(async () => {
+  document.title = 'Leitor de mangás - Mangás'
+
   try {
     await findPage()
   } catch (error: any) {

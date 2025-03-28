@@ -216,6 +216,7 @@ const dataReset = () => {
 }
 
 onMounted(async () => {
+  document.title = 'Leitor de mangás - Leitura'
   window.addEventListener('keydown', handleKeyPress)
 
   idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id

@@ -64,6 +64,8 @@ const setFavorite = async (idManga: number) => {
 }
 
 onMounted(async () => {
+  document.title = 'Leitor de mangás - Biblioteca'
+
   try {
     const user = userAuth.getUserAutenticado()
     let mangas: responseListManga = { mangaList: [] }

@@ -43,6 +43,7 @@ const page = {} as iPageData
 const mangaStore = useMangaStore()
 
 onMounted(async () => {
+  document.title = 'Leitor de mangás - Registros';
   mangasArray.value = await mangaStore.getAllManga()
 })
 </script>

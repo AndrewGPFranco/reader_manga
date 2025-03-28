@@ -30,6 +30,9 @@ import ChapterManagement from '@/components/admin/ChapterManagement.vue'
 import ChapterPagesManagement from '@/components/admin/ChapterPagesManagement.vue'
 import MangaManagement from '@/components/admin/MangaManagement.vue'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import { onMounted } from 'vue'
+
+onMounted(() => document.title = 'Leitor de mangás - Gerenciamento')
 </script>
 
 <style scoped>

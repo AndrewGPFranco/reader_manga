@@ -86,9 +86,13 @@ const isShowDialog = ref<boolean>(false)
 const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
+  
   const title: string = Array.isArray(route.params.title)
-    ? route.params.title[0]
-    : route.params.title
+  ? route.params.title[0]
+  : route.params.title
+
+  document.title = `Leitor de mangás - ${title}`
+
   manga.value = await mangaStore.getInfoManga(title)
 
   if (manga.value.chapters) {

@@ -61,6 +61,8 @@ const acionaFormDeTrocaDeSenha = () => {
 }
 
 onMounted(async () => {
+  document.title = 'Leitor de mangás - Perfil'
+  
   try {
     const result = await auth.getUser()
     name.value = result.firstName

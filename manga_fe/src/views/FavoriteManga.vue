@@ -37,6 +37,7 @@ const mangaStore = useMangaStore()
 
 onMounted(async () => {
   favoriteManga.value = await mangaStore.getAllFavorites()
+  document.title = 'Leitor de mangás - Favoritos'
 })
 </script>
 

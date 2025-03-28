@@ -16,6 +16,9 @@
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { NCard } from 'naive-ui'
+import { onMounted } from 'vue';
+
+onMounted(() => document.title = 'Leitor de mangás - Leituras em andamento');
 </script>
 
 <style scoped>

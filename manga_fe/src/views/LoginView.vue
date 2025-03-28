@@ -53,7 +53,7 @@ import router from '@/router'
 import { useAuthStore } from '@/store/AuthStore'
 import { validationFieldsLogin } from '@/utils/validation'
 import { useMessage } from 'naive-ui'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const useAuth = useAuthStore()
 const message = useMessage()
@@ -84,6 +84,8 @@ const limparCampos = () => {
   email.value = ''
   password.value = ''
 }
+
+onMounted(() => document.title = 'Leitor de mangás - Login')
 </script>
 
 <style scoped>

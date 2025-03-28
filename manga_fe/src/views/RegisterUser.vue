@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { vMaska } from 'maska/vue'
 import { useAuthStore } from '@/store/AuthStore'
 import { UserRegister } from '@/class/UserRegister'
@@ -109,6 +109,8 @@ const registrar = async (e: MouseEvent) => {
     message.error(error.message)
   }
 }
+
+onMounted(() => document.title = 'Leitor de mangás - Registrar-se')
 </script>
 
 <style scoped>

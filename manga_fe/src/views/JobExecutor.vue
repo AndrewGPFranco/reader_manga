@@ -229,7 +229,9 @@ const getNomeDosMangasDisponiveis = async () => {
 onMounted(() => {
   getJobsDisponiveis();
   getNomeDosMangasDisponiveis();
+  document.title = 'Leitor de mangás - Jobs'
 });
+
 onUnmounted(() => fechaEventSource());
 </script>
 
