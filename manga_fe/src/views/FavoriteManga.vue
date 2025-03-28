@@ -4,7 +4,7 @@
   </header>
   <main>
     <section>
-      <n-card class="containerCard" title="Mangás favoritos" size="huge" style="height: 95vh; overflow-y: auto;">
+      <n-card class="containerCard" title="Mangás favoritos" size="huge">
         <div class="card-container" v-if="favoriteManga.length > 0">
           <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
             <template #cover>
@@ -12,8 +12,8 @@
             </template>
             <div class="card-content">
               <h3 class="card-title">{{ manga.title }}</h3>
-              <router-link :to="`/manga/${manga.title}`">
-                <n-button type="info">Access</n-button>
+              <router-link :to="`/manga/${manga.title}`" class="full-width">
+                <n-button type="info" class="access-btn">Acessar</n-button>
               </router-link>
             </div>
           </n-card>
@@ -48,22 +48,22 @@ main {
 .containerCard {
   height: 95vh;
   box-sizing: border-box;
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   padding: 20px;
 }
 
 .mangaCard {
-  width: 300px;
+  width: 280px;
+  max-width: 100%;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
@@ -77,7 +77,7 @@ main {
 }
 
 .card-content {
-  padding: 16px;
+  padding: 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -92,10 +92,28 @@ main {
   margin-bottom: 12px;
 }
 
+.full-width {
+  width: 100%;
+}
+
+.access-btn {
+  width: 100%;
+  margin-top: auto;
+  transition: background 0.3s ease;
+}
+
+.access-btn:hover {
+  background-color: #007aff;
+  color: white;
+}
+
 .containerWithoutManga {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
 }
 </style>

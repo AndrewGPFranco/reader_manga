@@ -21,7 +21,10 @@
         </div>
         <div
           v-else
-          class="w-72 h-96 rounded overflow-hidden shadow-lg bg-white flex flex-col"
+          :class="{
+            'w-72 h-90 rounded overflow-hidden shadow-lg bg-white flex flex-col' : isExibindoTodosMangas,
+            'w-72 h-80 rounded overflow-hidden shadow-lg bg-white flex flex-col' : !isExibindoTodosMangas
+          }"
           v-for="manga in mangasArray"
           :key="manga.title"
         >
@@ -39,7 +42,7 @@
               <p><span class="font-semibold">Chapters: </span>{{ manga.size }}</p>
               <p><span class="font-semibold">Status: </span>{{ manga.status }}</p>
             </div>
-            <div class="mt-auto">
+            <div class="mt-auto" v-if="isExibindoTodosMangas">
               <n-button
                 v-if="!manga.favorite"
                 @click="adicionaMangaNaListaDoUsuario(manga.id)"
