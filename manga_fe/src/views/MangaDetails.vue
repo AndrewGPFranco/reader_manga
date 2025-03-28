@@ -26,27 +26,12 @@
       <div>
         <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Chapters</h2>
         <ul class="space-y-4">
-          <li v-for="chapter in chapterOrdenados" :key="chapter.title" :class="[
+          <li v-for="chapter in chapterOrdenados" :key="chapter.id" :class="[
             'p-4 rounded-lg shadow-lg border border-gray-200',
             chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
           ]">
-            <n-modal v-model:show="isShowDialog">
-              <n-card style="width: 600px; max-width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 12px;"
-                title="Deseja continuar de onde parou?" :bordered="false" size="huge" role="dialog" aria-modal="true">
-                <div class="flex justify-center gap-4 mt-4">
-                  <router-link :to="`/manga/${manga.title}/chapter/${chapter.id}/${chapter.readingProgress}`"
-                    class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700">
-                    Sim
-                  </router-link>
-                  <router-link :to="`/manga/${manga.title}/chapter/${chapter.id}/1`"
-                    class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700">
-                    Não
-                  </router-link>
-                </div>
-              </n-card>
-            </n-modal>
 
-            <p class="font-semibold text-lg cursor-pointer" @click="askContinueReading">{{ chapter.title }}</p>
+            <p class="font-semibold text-lg cursor-pointer" @click="askContinueReading(chapter)">{{ chapter.title }}</p>
             <p class="mt-2"><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
             <p>
               <span class="text-black">Progresso:</span>
@@ -63,6 +48,23 @@
       </div>
     </n-card>
   </main>
+
+  <n-modal v-model:show="isShowDialog">
+    <n-card style="width: 600px; max-width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 12px;"
+      title="Deseja continuar de onde parou?" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <div class="flex justify-center gap-4 mt-4">
+        <router-link v-if="selectedChapter"
+          :to="`/manga/${manga.title}/chapter/${selectedChapter.id}/${selectedChapter.readingProgress}`"
+          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700">
+          Sim
+        </router-link>
+        <router-link v-if="selectedChapter" :to="`/manga/${manga.title}/chapter/${selectedChapter.id}/1`"
+          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700">
+          Não
+        </router-link>
+      </div>
+    </n-card>
+  </n-modal>
 </template>
 
 <script setup lang="ts">
@@ -78,25 +80,32 @@ import { StatusType } from '@/enum/StatusType'
 const mangaStore = useMangaStore()
 const route = useRoute()
 
-let manga = ref<iMangaData>({} as iMangaData)
-let chapterOrdenados = ref<iChapterData[]>([])
-let isShowDialog = ref<boolean>(false)
+const manga = ref<iMangaData>({} as iMangaData)
+const chapterOrdenados = ref<iChapterData[]>([])
+const isShowDialog = ref<boolean>(false)
+const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
   const title: string = Array.isArray(route.params.title)
     ? route.params.title[0]
     : route.params.title
   manga.value = await mangaStore.getInfoManga(title)
-  chapterOrdenados.value = manga.value.chapters.sort((a: iChapterData, b: iChapterData) =>
-    a.title.localeCompare(b.title)
-  )
+
+  if (manga.value.chapters) {
+    chapterOrdenados.value = [...manga.value.chapters].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    )
+  }
 })
 
-const verifyEndDate = (str: iMangaData): any => {
-  return str.endDate != undefined ? formatDate(str.endDate) : 'Still on display.'
+const verifyEndDate = (str: iMangaData): string => {
+  return str.endDate ? formatDate(str.endDate) : 'Still on display.'
 }
 
-const askContinueReading = () => isShowDialog.value = !isShowDialog.value;
+const askContinueReading = (chapter: iChapterData) => {
+  selectedChapter.value = chapter
+  isShowDialog.value = true
+}
 </script>
 
 <style scoped>

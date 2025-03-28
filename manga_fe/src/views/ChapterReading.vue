@@ -22,7 +22,7 @@
 
         <div class="manga-viewer__content">
           <router-link :to="`/manga/${titleManga}`">
-            <ArrowBackOutline class="btn-back" />
+            <ArrowBackOutline class="btn-back" @click="dataReset" />
           </router-link>
           <n-tooltip trigger="hover" v-if="!isTelaCheia">
             <template #trigger>
@@ -108,6 +108,7 @@ const titleManga = ref<string>('')
 const qntdExibicaoModal = ref<number>(0)
 const totalPages = ref<number | undefined>(0)
 const allImages = ref<string[]>([])
+const modalShownForThisChapter = ref<boolean>(false)
 
 const currentPageNumber = computed(() => currentPageIndex.value + 1)
 const currentImage = computed(() => allImages.value[currentPageIndex.value] || '')
@@ -129,11 +130,20 @@ const thumbnailPages = computed(() => {
   }))
 })
 
+const resetState = () => {
+  showModalResetReading.value = false
+  qntdExibicaoModal.value = 0
+  modalShownForThisChapter.value = false
+  isTelaCheia.value = false
+}
+
 const loadAllPages = async (chapterId: string) => {
   try {
     isLoading.value = true
     error.value = null
     allImages.value = []
+
+    resetState()
 
     const total = await chapterStore.getQuantidade(chapterId)
     totalPages.value = total
@@ -201,6 +211,10 @@ const handleKeyPress = async (event: KeyboardEvent) => {
   }, 100)
 }
 
+const dataReset = () => {
+  resetState()
+}
+
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress)
 
@@ -221,8 +235,21 @@ onMounted(async () => {
 
 watch(
   () => route.params.id,
-  async (newId) => {
-    if (newId && typeof newId === 'string') {
+  async (newId, oldId) => {
+    if (newId && typeof newId === 'string' && newId !== oldId) {
+      if (oldId) {
+        await atualizaProgresso()
+      }
+
+      resetState()
+
+      idChapter.value = newId
+      titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
+      currentProgress.value = Number(Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress)
+
+      await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
+      currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
+
       await loadAllPages(newId)
     }
   }
@@ -231,14 +258,18 @@ watch(
 watch(
   () => currentPageIndex.value,
   async (newVal) => {
-    showModalResetReading.value = false
     if (newVal >= currentProgress.value) currentProgress.value = newVal + 1
+
     if (
       currentProgress.value === currentChapter.value.readingProgress &&
-      qntdExibicaoModal.value === 0
+      !modalShownForThisChapter.value &&
+      qntdExibicaoModal.value === 0 &&
+      totalPages.value &&
+      newVal === totalPages.value - 1
     ) {
       showModalResetReading.value = true
       qntdExibicaoModal.value++
+      modalShownForThisChapter.value = true
     }
   }
 )
@@ -250,17 +281,17 @@ window.addEventListener('beforeunload', async () => {
 const atualizaProgresso = async () => {
   if (
     currentChapter.value.status != StatusType.FINISHED &&
-    currentProgress.value > currentChapter.value.readingProgress
-  )
+    currentProgress.value > currentChapter.value.readingProgress &&
+    idChapter.value
+  ) {
     await chapterStore.updateReadingProgress(idChapter.value, currentProgress.value)
+  }
 }
 
 onUnmounted(async () => {
   await atualizaProgresso()
   window.removeEventListener('keydown', handleKeyPress)
   allImages.value.forEach((url) => URL.revokeObjectURL(url))
-  qntdExibicaoModal.value = 0;
-  showModalResetReading.value = false;
 })
 </script>
 
