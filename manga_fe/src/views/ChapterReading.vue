@@ -13,14 +13,8 @@
 
       <template v-else>
         <n-modal v-model:show="showModalResetReading">
-          <n-card
-            style="width: 600px"
-            title="Capítulo finalizado"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-          >
+          <n-card style="width: 600px" title="Capítulo finalizado" :bordered="false" size="huge" role="dialog"
+            aria-modal="true">
             <template #header-extra> Parabéns!</template>
             XP coletado com sucesso!
           </n-card>
@@ -43,17 +37,10 @@
             Minimize as imagens para mais controle da leitura.
           </n-tooltip>
 
-          <img
-            v-if="currentImage"
-            :src="currentImage"
-            :alt="`Manga page ${currentPageNumber}`"
-            :class="{
-              'manga-viewer__image': !isTelaCheia,
-              'manga-viewer__image_expand': isTelaCheia
-            }"
-            @load="handleImageLoad"
-            @error="handleImageError"
-          />
+          <img v-if="currentImage" :src="currentImage" :alt="`Manga page ${currentPageNumber}`" :class="{
+            'manga-viewer__image': !isTelaCheia,
+            'manga-viewer__image_expand': isTelaCheia
+          }" @load="handleImageLoad" @error="handleImageError" />
 
           <n-empty v-else description="No pages available for this chapter" />
         </div>
@@ -64,39 +51,23 @@
           </div>
 
           <div class="manga-viewer__navigation">
-            <n-button
-              :disabled="!canNavigatePrevious"
-              @click="previousPage"
-              class="manga-viewer__nav-button"
-              @mouseenter="showThumbnails = true"
-              @mouseleave="showThumbnails = false"
-            >
+            <n-button :disabled="!canNavigatePrevious" @click="previousPage" class="manga-viewer__nav-button"
+              @mouseenter="showThumbnails = true" @mouseleave="showThumbnails = false">
               Anterior
             </n-button>
 
             <div class="manga-viewer__thumbnail-container" v-if="showThumbnails">
               <div class="manga-viewer__thumbnails">
-                <img
-                  v-for="page in thumbnailPages"
-                  :key="page.index"
-                  :src="page.src"
-                  :alt="`Thumbnail page ${page.index + 1}`"
-                  :class="{
+                <img v-for="page in thumbnailPages" :key="page.index" :src="page.src"
+                  :alt="`Thumbnail page ${page.index + 1}`" :class="{
                     'manga-viewer__thumbnail': true,
                     active: page.index === currentPageIndex
-                  }"
-                  @click="jumpToPage(page.index)"
-                />
+                  }" @click="jumpToPage(page.index)" />
               </div>
             </div>
 
-            <n-button
-              :disabled="!canNavigateNext"
-              @click="nextPage"
-              class="manga-viewer__nav-button"
-              @mouseenter="showThumbnails = true"
-              @mouseleave="showThumbnails = false"
-            >
+            <n-button :disabled="!canNavigateNext" @click="nextPage" class="manga-viewer__nav-button"
+              @mouseenter="showThumbnails = true" @mouseleave="showThumbnails = false">
               Próximo
             </n-button>
           </div>
@@ -121,7 +92,7 @@ const route = useRoute()
 const message = useMessage()
 const chapterStore = useChapterStore()
 
-let progressoAtual = ref<number>(1)
+let currentProgress = ref<number>(1)
 let showModalResetReading = ref<boolean>(false)
 const showThumbnails = ref<boolean>(false)
 
@@ -174,7 +145,7 @@ const loadAllPages = async (chapterId: string) => {
     )
     allImages.value = await Promise.all(loadPromises)
 
-    currentPageIndex.value = 0
+    currentPageIndex.value = currentProgress.value - 1
     if (chapterCard.value != null) chapterCard.value.$el.scrollTop = 0
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Erro ao carregar o capítulo'
@@ -235,6 +206,7 @@ onMounted(async () => {
 
   idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
+  currentProgress.value = Number(Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress)
 
   if (idChapter.value === '') {
     error.value = 'Invalid chapter ID'
@@ -242,7 +214,7 @@ onMounted(async () => {
     return
   }
 
-  await chapterStore.updateReadingProgress(idChapter.value, 1)
+  await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
   await loadAllPages(idChapter.value)
 })
@@ -260,9 +232,9 @@ watch(
   () => currentPageIndex.value,
   async (newVal) => {
     showModalResetReading.value = false
-    if (newVal >= progressoAtual.value) progressoAtual.value = newVal + 1
+    if (newVal >= currentProgress.value) currentProgress.value = newVal + 1
     if (
-      progressoAtual.value === currentChapter.value.readingProgress &&
+      currentProgress.value === currentChapter.value.readingProgress &&
       qntdExibicaoModal.value === 0
     ) {
       showModalResetReading.value = true
@@ -278,15 +250,17 @@ window.addEventListener('beforeunload', async () => {
 const atualizaProgresso = async () => {
   if (
     currentChapter.value.status != StatusType.FINISHED &&
-    progressoAtual.value > currentChapter.value.readingProgress
+    currentProgress.value > currentChapter.value.readingProgress
   )
-    await chapterStore.updateReadingProgress(idChapter.value, progressoAtual.value)
+    await chapterStore.updateReadingProgress(idChapter.value, currentProgress.value)
 }
 
 onUnmounted(async () => {
   await atualizaProgresso()
   window.removeEventListener('keydown', handleKeyPress)
   allImages.value.forEach((url) => URL.revokeObjectURL(url))
+  qntdExibicaoModal.value = 0;
+  showModalResetReading.value = false;
 })
 </script>
 
@@ -467,6 +441,7 @@ onUnmounted(async () => {
     opacity: 0;
     transform: translateX(-50%) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
