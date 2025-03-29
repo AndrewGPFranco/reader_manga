@@ -54,7 +54,7 @@ public class UserController {
             Authentication auth = this.authenticationManager.authenticate(usernamePassword);
             String token = jwtTokenService.generateToken((User) auth.getPrincipal());
 
-            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), userDTO.password(), token));
+            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), null, token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
