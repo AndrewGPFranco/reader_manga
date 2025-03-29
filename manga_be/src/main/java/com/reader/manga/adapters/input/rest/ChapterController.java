@@ -43,8 +43,8 @@ public class ChapterController {
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
         logger.info("*******************Creating mangá!*******************");
         service.createChapter(dto);
-        GetChapterDTO chapterDTO = new GetChapterDTO(dto.title(), 0,
-                StatusType.ONGOING, 0);
+        GetChapterDTO chapterDTO = new GetChapterDTO(null, dto.title(), 0,
+                StatusType.ONGOING, 0, "", "", 0);
         return ResponseEntity.status(HttpStatus.CREATED).body(chapterDTO);
     }
 
@@ -138,9 +138,18 @@ public class ChapterController {
     @GetMapping("/reading-progress/{idChapter}")
     public ResponseEntity<GetChapterDTO> getReadingProgress(@PathVariable Long idChapter) {
         Chapter chapterByID = service.getChapterByID(idChapter);
-        GetChapterDTO getChapterDTO = new GetChapterDTO(chapterByID.getTitle(), chapterByID.getNumberPages(),
-                chapterByID.getStatus(), chapterByID.getReadingProgress());
+        GetChapterDTO getChapterDTO = new GetChapterDTO(null, chapterByID.getTitle(), chapterByID.getNumberPages(),
+                chapterByID.getStatus(), chapterByID.getReadingProgress(), "", "", 0);
         return ResponseEntity.ok().body(getChapterDTO);
+    }
+
+    @GetMapping("/reading-progress")
+    public ResponseEntity<List<GetChapterDTO>> getAllReadingProgress(
+            @RequestParam(defaultValue = "0") int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        List<GetChapterDTO> allReadingProgressPageable = service.getAllReadingProgressPageable(pageable);
+
+        return ResponseEntity.ok().body(allReadingProgressPageable);
     }
 
 }

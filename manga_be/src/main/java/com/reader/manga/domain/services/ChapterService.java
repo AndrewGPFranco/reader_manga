@@ -1,5 +1,6 @@
 package com.reader.manga.domain.services;
 
+import com.reader.manga.adapters.input.dtos.chapter.GetChapterDTO;
 import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
 import com.reader.manga.domain.enums.StatusType;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -135,5 +137,23 @@ public class ChapterService {
         Chapter chapter = getChapterByID(idChapter);
 
         return chapter.getReadingProgress();
+    }
+
+    public List<GetChapterDTO> getAllReadingProgressPageable(Pageable pageable) {
+        Page<Chapter> allReadingsInProgress = chapterRepository.findAllReadingsInProgress(pageable);
+
+        List<GetChapterDTO> allChapter = new ArrayList<>(allReadingsInProgress.getSize());
+
+        allReadingsInProgress.forEach(chapter -> {
+            Optional<Manga> manga = mangaRepository.findById(chapter.getManga().getId());
+            String urlImage = manga.isPresent() ? manga.get().getImage() : "";
+            String nameManga = manga.isPresent() ? manga.get().getTitle() : "";
+
+            GetChapterDTO chapterDTO = new GetChapterDTO(chapter.getId(), chapter.getTitle(), chapter.getNumberPages(),
+                    chapter.getStatus(), chapter.getReadingProgress(), urlImage, nameManga, allReadingsInProgress.getTotalPages());
+            allChapter.add(chapterDTO);
+        });
+
+        return allChapter;
     }
 }
