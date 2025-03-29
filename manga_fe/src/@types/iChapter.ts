@@ -8,4 +8,7 @@ export default interface iChapterData {
     status: StatusType;
     numberPages: number;
     readingProgress: number;
+    urlImageManga?: string;
+    nameManga?: string;
+    numberPageOfPageable?: number;
 }

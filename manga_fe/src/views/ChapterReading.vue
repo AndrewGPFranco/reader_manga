@@ -223,6 +223,8 @@ onMounted(async () => {
   titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
   currentProgress.value = Number(Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress)
 
+  if(currentProgress.value === 0) currentProgress.value = 1;
+
   if (idChapter.value === '') {
     error.value = 'Invalid chapter ID'
     isLoading.value = false

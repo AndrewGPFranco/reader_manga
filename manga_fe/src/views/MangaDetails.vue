@@ -24,14 +24,15 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Chapters</h2>
+        <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Capítulos</h2>
         <ul class="space-y-4">
           <li v-for="chapter in chapterOrdenados" :key="chapter.id" :class="[
             'p-4 rounded-lg shadow-lg border border-gray-200',
             chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
           ]">
 
-            <p class="font-semibold text-lg cursor-pointer" @click="askContinueReading(chapter)">{{ chapter.title }}</p>
+            <p v-if="chapter.readingProgress != 0" class="font-semibold text-lg cursor-pointer" @click="askContinueReading(chapter)">{{ chapter.title }}</p>
+            <router-link :to="`/manga/${manga.title}/chapter/${chapter.id}/1`" v-else class="font-semibold text-lg cursor-router-linkointer">{{ chapter.title }}</router-link>
             <p class="mt-2"><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
             <p>
               <span class="text-black">Progresso:</span>
