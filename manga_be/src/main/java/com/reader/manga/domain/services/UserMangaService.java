@@ -188,4 +188,9 @@ public class UserMangaService {
         jpaUserMangaRepository.deletaAssociacao(idUser, idManga);
     }
 
+    public User getUserById(Long idUser) {
+        return jpaUserRepository.findById(idUser).orElseThrow(() ->
+                new NotFoundException("Nenhum usuário encontrado com o id: " + idUser));
+    }
+
 }

@@ -15,9 +15,9 @@ import java.util.List;
 
 @Data
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "users")
 @Table(name = "users")

@@ -6,6 +6,7 @@ import com.reader.manga.adapters.input.dtos.manga.UpdateMangaDTO;
 import com.reader.manga.adapters.input.dtos.utils.UserData;
 import com.reader.manga.domain.entities.mangas.Chapter;
 import com.reader.manga.domain.entities.mangas.Manga;
+import com.reader.manga.domain.services.UserChapterService;
 import com.reader.manga.ports.repositories.MangaRepository;
 import com.reader.manga.domain.services.MangaService;
 import com.reader.manga.domain.services.UserMangaService;
@@ -42,6 +43,7 @@ public class MangaController {
     private final WebClient webClient;
     private final MangaRepository repository;
     private final UserMangaService userMangaService;
+    private final UserChapterService userChapterService;
     private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
@@ -112,9 +114,12 @@ public class MangaController {
         return ResponseEntity.ok().body(finalList);
     }
 
-    @GetMapping("/get-info-manga/{titulo}")
-    public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable String titulo) {
+    @GetMapping("/get-info-manga/{titulo}/{idUser}")
+    public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable String titulo, @PathVariable Long idUser) {
         Manga manga = service.findByTitle(titulo);
+        Map<Long, Integer> mapaProgressos = userChapterService.obtemProgressoLeituraUsuario(idUser);
+
+        userChapterService.atualizaProgresso(manga.getChapters(), mapaProgressos);
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
                         .title(manga.getTitle())

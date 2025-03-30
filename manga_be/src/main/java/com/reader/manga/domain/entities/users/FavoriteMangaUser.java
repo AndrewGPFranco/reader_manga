@@ -7,6 +7,7 @@ import lombok.*;
 
 @Data
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "manga_favorite_user")

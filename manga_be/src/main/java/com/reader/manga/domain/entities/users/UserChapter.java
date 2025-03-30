@@ -2,12 +2,16 @@ package com.reader.manga.domain.entities.users;
 
 import com.reader.manga.domain.entities.mangas.Chapter;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
 @Builder
+@ToString
+@AllArgsConstructor
 @Table(name = "user_chapter")
 public class UserChapter {
 
@@ -24,6 +28,7 @@ public class UserChapter {
     private Chapter chapter_id;
 
     @Column(name = "progress", nullable = false)
-    private Integer progress = 0;
+    private Integer progress;
 
+    public UserChapter() {}
 }
