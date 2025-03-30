@@ -154,9 +154,11 @@ export const useChapterStore = defineStore('chapter', {
     },
     async updateReadingProgress(idChapter: string, currentProgress: number) {
       try {
+        const idUser = localStorage.getItem("id");
         const data = {
           idChapter: idChapter,
-          readingProgress: currentProgress
+          readingProgress: currentProgress,
+          idUser: idUser
         };
 
         await api.put(`/api/v1/chapter/update-progress`, data, {

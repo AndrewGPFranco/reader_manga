@@ -185,7 +185,7 @@ export const useMangaStore = defineStore('manga', {
     },
     async adicionaMangaNaListaDoUsuario(idManga: number) {
       try {
-        const idUser = this.user.getId()
+        const idUser = localStorage.getItem("id");
         const response = await api.post(
           `/api/v1/user/add-manga?idManga=${idManga}&idUser=${idUser}`,
           {},
