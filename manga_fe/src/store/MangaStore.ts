@@ -61,7 +61,8 @@ export const useMangaStore = defineStore('manga', {
       }
     },
     async getInfoManga(tituloManga: string): Promise<any> {
-      const response = await api.get(`/api/v1/manga/get-info-manga/${tituloManga}`, {
+      const idUser = localStorage.getItem("id");
+      const response = await api.get(`/api/v1/manga/get-info-manga/${tituloManga}/${idUser}`, {
         headers: {
           Authorization: `${this.user.getToken()}`
         }
