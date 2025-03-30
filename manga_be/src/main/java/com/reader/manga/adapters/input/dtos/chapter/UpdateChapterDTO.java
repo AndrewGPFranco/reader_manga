@@ -6,5 +6,6 @@ public record UpdateChapterDTO(
         Long idChapter,
         String title,
         StatusType status,
-        Integer readingProgress
+        Integer readingProgress,
+        Long idUser
 ) {}

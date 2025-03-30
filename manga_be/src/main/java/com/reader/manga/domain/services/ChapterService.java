@@ -3,6 +3,8 @@ package com.reader.manga.domain.services;
 import com.reader.manga.adapters.input.dtos.chapter.GetChapterDTO;
 import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
+import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.entities.users.UserChapter;
 import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.exceptions.CreationErrorException;
 import com.reader.manga.domain.exceptions.NotFoundException;
@@ -14,6 +16,7 @@ import com.reader.manga.domain.entities.mangas.Pagina;
 import com.reader.manga.ports.repositories.ChapterRepository;
 import com.reader.manga.ports.repositories.MangaRepository;
 import com.reader.manga.ports.repositories.PaginaRepository;
+import com.reader.manga.ports.repositories.UserChapterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,9 +33,12 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class ChapterService {
 
-    private final ChapterRepository chapterRepository;
     private final MangaRepository mangaRepository;
     private final PaginaRepository paginaRepository;
+    private final UserMangaService userMangaService;
+    private final ChapterRepository chapterRepository;
+    private final UserChapterService userChapterService;
+    private final UserChapterRepository userChapterRepository;
 
     public void createChapter(ChapterDTO dto) {
         try {
@@ -121,15 +127,22 @@ public class ChapterService {
      * A idéia é que o progresso só seja atualizado caso seja maior do que esta no banco.
      */
     public void updateReadingProgress(UpdateChapterDTO dto) {
+        User user = userMangaService.getUserById(dto.idUser());
         Chapter chapter = getChapterByID(dto.idChapter());
+        UserChapter dadoJaSalvo = userChapterRepository.findByIdChapterAndUser(dto.idChapter(), dto.idUser());
 
-        if(dto.readingProgress() > chapter.getReadingProgress()) {
-            chapter.setReadingProgress(dto.readingProgress());
-
-            if(dto.readingProgress().equals(chapter.getNumberPages()))
-                chapter.setStatus(StatusType.FINISHED);
-
-            chapterRepository.save(chapter);
+        if(dadoJaSalvo != null) {
+            if(dto.readingProgress() > dadoJaSalvo.getProgress()) {
+                dadoJaSalvo.setProgress(dto.readingProgress());
+                userChapterRepository.save(dadoJaSalvo);
+            }
+        } else {
+            UserChapter userChapter = UserChapter.builder()
+                    .user_id(user)
+                    .chapter_id(chapter)
+                    .progress(dto.readingProgress())
+                    .build();
+            userChapterRepository.save(userChapter);
         }
     }
 
