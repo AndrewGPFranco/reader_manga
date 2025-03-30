@@ -47,31 +47,43 @@ public class UserChapterService {
         }
     }
 
-    public Map<Long, Integer> obtemProgressoLeituraUsuario(Long idUser) {
+    public Map<Long, Integer> obtemProgressoLeituraUsuario(Long idUser, Manga mangaRecuperado) {
         User user = userService.getUserById(idUser);
         Map<Long, Integer> progressos = new HashMap<>();
 
-        // Mangás do usuário
-        List<UserManga> userMangas = user.getUserMangas();
-        for (UserManga mangas : userMangas) {
-            Manga manga = mangas.getManga();
-            for (Chapter chapter : manga.getChapters()) {
-                UserChapter chapterId = userChapterRepository.findByIdChapterAndUser(chapter.getId(), user.getId());
-                Integer progressoAtual = chapterId != null ? chapterId.getProgress() : 0;
-                progressos.put(chapter.getId(), progressoAtual);
+        boolean isPossui = verificaUsuarioPossuiManga(user, mangaRecuperado);
+
+        if(isPossui) {
+            // Mangás do usuário
+            List<UserManga> userMangas = user.getUserMangas();
+            for (UserManga mangas : userMangas) {
+                Manga manga = mangas.getManga();
+                for (Chapter chapter : manga.getChapters()) {
+                    UserChapter chapterId = userChapterRepository.findByIdChapterAndUser(chapter.getId(), user.getId());
+                    Integer progressoAtual = chapterId != null ? chapterId.getProgress() : 0;
+                    progressos.put(chapter.getId(), progressoAtual);
+                }
             }
         }
 
         return progressos;
     }
 
+    private boolean verificaUsuarioPossuiManga(User user, Manga mangaRecuperado) {
+        return user.getUserMangas().stream().anyMatch(
+                m -> m.getManga().getId().equals(mangaRecuperado.getId()));
+    }
+
     public void atualizaProgresso(List<Chapter> chapters, Map<Long, Integer> mapaProgressos) {
         chapters.forEach(chapter -> {
-            chapter.setReadingProgress(mapaProgressos.get(chapter.getId()));
-            chapter.setStatus(
-                    mapaProgressos.get(chapter.getId()).equals(chapter.getNumberPages()) ?
-                    StatusType.FINISHED : StatusType.ONGOING
-            );
+            Integer progresso = mapaProgressos.get(chapter.getId());
+            if(progresso != null) {
+                chapter.setReadingProgress(progresso);
+                chapter.setStatus(
+                        mapaProgressos.get(chapter.getId()).equals(chapter.getNumberPages()) ?
+                        StatusType.FINISHED : StatusType.ONGOING
+                );
+            }
         });
     }
 }

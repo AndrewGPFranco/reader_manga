@@ -117,7 +117,7 @@ public class MangaController {
     @GetMapping("/get-info-manga/{titulo}/{idUser}")
     public ResponseEntity<InfoMangaVO> getInfoManga(@PathVariable String titulo, @PathVariable Long idUser) {
         Manga manga = service.findByTitle(titulo);
-        Map<Long, Integer> mapaProgressos = userChapterService.obtemProgressoLeituraUsuario(idUser);
+        Map<Long, Integer> mapaProgressos = userChapterService.obtemProgressoLeituraUsuario(idUser, manga);
 
         userChapterService.atualizaProgresso(manga.getChapters(), mapaProgressos);
 
