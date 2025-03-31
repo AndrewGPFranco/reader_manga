@@ -3,36 +3,61 @@
     <NavbarComponent />
   </header>
   <main>
-    <n-card class="containerCard" title="Leituras em andamento" size="huge" style="height: 95vh; overflow-y: auto">
+    <n-card
+      class="containerCard"
+      title="Leituras em andamento"
+      size="huge"
+      style="height: 95vh; overflow-y: auto"
+    >
       <div>
         <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Capítulos</h2>
         <ul class="grid-container">
-          <li v-for="chapter in chapters" :key="chapter.id" class="chapter-card" tabindex="0"
-            @click="askContinueReading(chapter)" @keydown.enter="askContinueReading(chapter)">
+          <li
+            v-for="chapter in chapters"
+            :key="chapter.id"
+            class="chapter-card"
+            tabindex="0"
+            @click="askContinueReading(chapter)"
+            @keydown.enter="askContinueReading(chapter)"
+          >
             <div class="card-content">
-              <img :src="chapter.urlImageManga" alt="Capa do Mangá" class="chapter-image">
+              <img :src="chapter.urlImageManga" alt="Capa do Mangá" class="chapter-image" />
               <div class="chapter-info">
                 <p class="chapter-title">{{ chapter.title }}</p>
-                <p class="chapter-pages"><span class="label">Páginas:</span> {{ chapter.numberPages }}</p>
+                <p class="chapter-pages">
+                  <span class="label">Páginas:</span> {{ chapter.numberPages }}
+                </p>
                 <p class="chapter-progress">
                   <span class="label">Progresso:</span>
                   {{ chapter.readingProgress }}
                 </p>
                 <n-modal v-model:show="isShowDialog">
                   <n-card
-                    style="width: 600px; max-width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 12px;"
-                    title="Deseja continuar de onde parou?" :bordered="false" size="huge" role="dialog"
-                    aria-modal="true">
+                    style="
+                      width: 600px;
+                      max-width: 90%;
+                      background: rgba(255, 255, 255, 0.9);
+                      border-radius: 12px;
+                    "
+                    title="Deseja continuar de onde parou?"
+                    :bordered="false"
+                    size="huge"
+                    role="dialog"
+                    aria-modal="true"
+                  >
                     <div class="flex justify-center gap-4 mt-4">
-                      <!-- Verificar se selectedChapter está definido para exibir os links -->
-                      <router-link v-if="selectedChapter"
+                      <router-link
+                        v-if="selectedChapter"
                         :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/${selectedChapter.readingProgress}`"
-                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700">
+                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700"
+                      >
                         Sim
                       </router-link>
-                      <router-link v-if="selectedChapter"
+                      <router-link
+                        v-if="selectedChapter"
                         :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/1`"
-                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700">
+                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700"
+                      >
                         Não
                       </router-link>
                     </div>
@@ -43,7 +68,7 @@
           </li>
         </ul>
       </div>
-      <div class="pagination">
+      <div>
         <n-pagination class="mt-5" v-model:page="page" :page-count="pageTotal" simple />
       </div>
     </n-card>
@@ -51,16 +76,16 @@
 </template>
 
 <script setup lang="ts">
-import type iChapterData from '@/@types/iChapter';
+import type iChapterData from '@/@types/iChapter'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import { useChapterStore } from '@/store/ChapterStore';
+import { useChapterStore } from '@/store/ChapterStore'
 import { NCard } from 'naive-ui'
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue'
 
-const chapterStore = useChapterStore();
-const isShowDialog = ref(false);
-const selectedChapter = ref<iChapterData | null>(null);
-const chapters = ref<iChapterData[]>([]);
+const chapterStore = useChapterStore()
+const isShowDialog = ref(false)
+const selectedChapter = ref<iChapterData | null>(null)
+const chapters = ref<iChapterData[]>([])
 
 let page = ref<number>(1)
 let pageTotal = ref<number | undefined>(0)
@@ -108,7 +133,9 @@ main {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: white;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: 1px solid #e2e8f0;
   overflow: hidden;
   flex: 0 0 250px;
@@ -116,7 +143,9 @@ main {
 
 .chapter-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .card-content {

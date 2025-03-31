@@ -156,12 +156,12 @@ export const useChapterStore = defineStore('chapter', {
       try {
         const idUser = localStorage.getItem("id");
         const data = {
+          idUser: idUser,
           idChapter: idChapter,
-          readingProgress: currentProgress,
-          idUser: idUser
+          progress: currentProgress
         };
 
-        await api.put(`/api/v1/chapter/update-progress`, data, {
+        await api.put(`/api/user/chapter`, data, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }
