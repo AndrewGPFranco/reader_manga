@@ -37,7 +37,6 @@ public class ChapterService {
     private final PaginaRepository paginaRepository;
     private final UserMangaService userMangaService;
     private final ChapterRepository chapterRepository;
-    private final UserChapterService userChapterService;
     private final UserChapterRepository userChapterRepository;
 
     public void createChapter(ChapterDTO dto) {
@@ -152,21 +151,34 @@ public class ChapterService {
         return chapter.getReadingProgress();
     }
 
-    public List<GetChapterDTO> getAllReadingProgressPageable(Pageable pageable) {
-        Page<Chapter> allReadingsInProgress = chapterRepository.findAllReadingsInProgress(pageable);
+    public List<GetChapterDTO> getAllReadingProgressPageable(Pageable pageable, Long idUser) {
+        Page<UserChapter> allReadingsInProgress = userChapterRepository.findAllReadingsInProgress(pageable, idUser);
 
         List<GetChapterDTO> allChapter = new ArrayList<>(allReadingsInProgress.getSize());
 
         allReadingsInProgress.forEach(chapter -> {
-            Optional<Manga> manga = mangaRepository.findById(chapter.getManga().getId());
-            String urlImage = manga.isPresent() ? manga.get().getImage() : "";
-            String nameManga = manga.isPresent() ? manga.get().getTitle() : "";
+            Optional<Chapter> chapterId = chapterRepository.findById(chapter.getChapter_id().getId());
+            if(chapterId.isPresent()) {
+                Optional<Manga> manga = mangaRepository.findById(chapterId.get().getManga().getId());
+                if(manga.isPresent()) {
+                    String urlImage = manga.get().getImage();
+                    String nameManga = manga.get().getTitle();
 
-            GetChapterDTO chapterDTO = new GetChapterDTO(chapter.getId(), chapter.getTitle(), chapter.getNumberPages(),
-                    chapter.getStatus(), chapter.getReadingProgress(), urlImage, nameManga, allReadingsInProgress.getTotalPages());
-            allChapter.add(chapterDTO);
+                    GetChapterDTO chapterDTO = new GetChapterDTO(chapterId.get().getId(), chapterId.get().getTitle(),
+                            chapterId.get().getNumberPages(), chapter.getStatus(),
+                            chapter.getProgress(), urlImage, nameManga,
+                            allReadingsInProgress.getTotalPages());
+                    allChapter.add(chapterDTO);
+                }
+            }
         });
 
+        removeFinishedChapters(allChapter);
+
         return allChapter;
+    }
+
+    private void removeFinishedChapters(List<GetChapterDTO> allChapter) {
+        allChapter.removeIf(chapter -> chapter.status().equals(StatusType.FINISHED));
     }
 }

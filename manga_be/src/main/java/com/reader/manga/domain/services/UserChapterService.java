@@ -33,14 +33,32 @@ public class UserChapterService {
             Optional<User> user = userRepository.findById(dto.idUser());
             Optional<Chapter> chapter = chapterRepository.findById(dto.idChapter());
 
-            if(user.isPresent() && chapter.isPresent()) {
-                UserChapter userChapter = UserChapter.builder()
-                        .user_id(user.get())
-                        .chapter_id(chapter.get())
-                        .progress(dto.progress())
-                        .build();
+            UserChapter valorJaExistente = userChapterRepository.findByIdChapterAndUser(dto.idChapter(), dto.idUser());
 
-                userChapterRepository.save(userChapter);
+            if(user.isPresent() && chapter.isPresent()) {
+                if(valorJaExistente != null) {
+                    valorJaExistente.setProgress(
+                            dto.progress() > valorJaExistente.getProgress() ?
+                                    dto.progress() : valorJaExistente.getProgress()
+                    );
+                    valorJaExistente.setStatus(
+                            chapter.get().getNumberPages().equals(dto.progress()) ?
+                                    StatusType.FINISHED : StatusType.ONGOING
+                    );
+                    userChapterRepository.save(valorJaExistente);
+                } else {
+                    UserChapter userChapter = UserChapter.builder()
+                            .user_id(user.get())
+                            .chapter_id(chapter.get())
+                            .progress(dto.progress())
+                            .status(
+                                    chapter.get().getNumberPages().equals(dto.progress()) ?
+                                            StatusType.FINISHED : StatusType.ONGOING
+                            )
+                            .build();
+                    userChapterRepository.save(userChapter);
+                }
+
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

@@ -4,10 +4,7 @@ import com.reader.manga.adapters.input.dtos.chapter.UserChapterDTO;
 import com.reader.manga.domain.services.UserChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +13,7 @@ public class UserChapterController {
 
     private final UserChapterService userChapterService;
 
-    @PostMapping()
+    @PutMapping()
     public ResponseEntity<Object> criaAssociacao(@RequestBody UserChapterDTO dto) {
         try {
             userChapterService.criarAssociacao(dto);

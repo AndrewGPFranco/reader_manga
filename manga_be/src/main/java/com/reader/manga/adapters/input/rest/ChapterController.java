@@ -5,6 +5,7 @@ import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
 import com.reader.manga.domain.entities.mangas.Chapter;
 import com.reader.manga.domain.entities.mangas.Pagina;
+import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.services.ChapterService;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
@@ -145,9 +147,11 @@ public class ChapterController {
 
     @GetMapping("/reading-progress")
     public ResponseEntity<List<GetChapterDTO>> getAllReadingProgress(
-            @RequestParam(defaultValue = "0") int pageNumber) {
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @AuthenticationPrincipal User user
+    ) {
         Pageable pageable = PageRequest.of(pageNumber, 10);
-        List<GetChapterDTO> allReadingProgressPageable = service.getAllReadingProgressPageable(pageable);
+        List<GetChapterDTO> allReadingProgressPageable = service.getAllReadingProgressPageable(pageable, user.getId());
 
         return ResponseEntity.ok().body(allReadingProgressPageable);
     }
