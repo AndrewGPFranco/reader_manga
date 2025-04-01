@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - "5173:5173"
+    container_name: manga-fe
     volumes:
       - .:/app
     command: sh -c "npm install && npm run dev"
