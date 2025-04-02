@@ -91,25 +91,25 @@ let page = ref<number>(1)
 let pageTotal = ref<number | undefined>(0)
 
 onMounted(async () => {
-  document.title = 'Leitor de mangás - Leituras em andamento';
+  document.title = 'Leitor de mangás - Leituras em andamento'
 
   try {
-    const data = await chapterStore.getAllReadingProgress(page.value - 1);
-    chapters.value = data;
+    const data = await chapterStore.getAllReadingProgress(page.value - 1)
+    chapters.value = data
     pageTotal.value = chapters.value[0].numberPageOfPageable
   } catch (error) {
-    console.error('Erro ao carregar os capítulos:', error);
+    console.error('Erro ao carregar os capítulos:', error)
   }
-});
+})
 
 const askContinueReading = (chapter: iChapterData) => {
-  selectedChapter.value = chapter;
-  isShowDialog.value = true;
-};
+  selectedChapter.value = chapter
+  isShowDialog.value = true
+}
 
 watch(page, async () => {
-  const data = await chapterStore.getAllReadingProgress(page.value - 1);
-  chapters.value = data;
+  const data = await chapterStore.getAllReadingProgress(page.value - 1)
+  chapters.value = data
 })
 </script>
 
