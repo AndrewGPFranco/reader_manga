@@ -173,12 +173,6 @@ public class ChapterService {
             }
         });
 
-        removeFinishedChapters(allChapter);
-
         return allChapter;
-    }
-
-    private void removeFinishedChapters(List<GetChapterDTO> allChapter) {
-        allChapter.removeIf(chapter -> chapter.status().equals(StatusType.FINISHED));
     }
 }
