@@ -110,7 +110,8 @@ public class UserMangaService {
             Manga manga = m.getManga();
             FavoriteMangaUser favoriteMangaUser = jpaFavoriteMangaRepository.favoriteIsTrue(manga.getId(), idUser);
             MangaUserVO mangaUserVO = MangaUserVO.builder().id(manga.getId()).title(manga.getTitle()).image(manga.getImage())
-                    .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender()).size(manga.getSize()).build();
+                    .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender())
+                    .status(manga.getStatus()).size(manga.getSize()).build();
             mangaListVO.add(mangaUserVO);
         });
 

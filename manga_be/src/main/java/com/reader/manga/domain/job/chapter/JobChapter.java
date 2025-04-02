@@ -57,7 +57,7 @@ public class JobChapter extends ColetorBaseUpload {
     @Override
     public void executa(MultipartFile file, String... varargs) throws IOException {
         String nomeManga = varargs[0];
-        String nomeCapitulo = varargs[1];
+        String nomeCapitulo = "Cap_" + varargs[1];
 
         validateInput(file, nomeManga);
 
