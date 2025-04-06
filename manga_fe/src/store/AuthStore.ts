@@ -15,21 +15,21 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async efetuarLogin(email: string, password: string): Promise<void> {
       try {
-        const user: User = new User(email, password);
-        const result = await api.post('/api/v1/user/login', user);
-        const decode: iDecodedToken = jwtDecode<iDecodedToken>(result.data.token);
-        user.setToken(result.data.token);
-        user.setId(decode.id);
-        this.user = user;
+        const user: User = new User(email, password)
+        const result = await api.post('/api/v1/user/login', user)
+        const decode: iDecodedToken = jwtDecode<iDecodedToken>(result.data.token)
+        user.setToken(result.data.token)
+        user.setId(decode.id)
+        this.user = user
 
-        const token: string | undefined = user.getToken();
-        const idUser: string | undefined = user.getId();
+        const token: string | undefined = user.getToken()
+        const idUser: string | undefined = user.getId()
         if (token && idUser) {
-          this._setTokenLocalStorage(token);
-          this._setIdLocalStorage(idUser);
+          this._setTokenLocalStorage(token)
+          this._setIdLocalStorage(idUser)
         }
       } catch (error: any) {
-        throw new Error(error.response.data);
+        throw new Error(error.response.data)
       }
     },
     getUserAutenticado() {
@@ -53,8 +53,9 @@ export const useAuthStore = defineStore('auth', {
     async efetuarLogout(): Promise<void> {
       localStorage.removeItem('id')
       localStorage.removeItem('token')
-      this.user = new User('', '', '', '');
+      this.user = new User('', '', '', '')
       this.usuarioLogado = null
+      location.reload()
     },
     getRoleUser(): string {
       const token = localStorage.getItem('token')
@@ -76,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
       const token: string | null = localStorage.getItem('token')
       if (token != undefined) {
         const tokenDecode: iDecodedToken = jwtDecode<iDecodedToken>(token)
-        const email: string = tokenDecode.sub;
+        const email: string = tokenDecode.sub
         const result = await api.get(`/api/v1/user?email=${email}`, {
           headers: {
             Authorization: `${token}`
@@ -95,12 +96,12 @@ export const useAuthStore = defineStore('auth', {
       throw new Error('Falha ao encontrar usuário')
     },
     getIdUsuario(): string | null {
-      const token: string | null = localStorage.getItem('token');
+      const token: string | null = localStorage.getItem('token')
       if (token != null) {
-        const decode = jwtDecode<iDecodedToken>(token);
-        return decode.id;
+        const decode = jwtDecode<iDecodedToken>(token)
+        return decode.id
       }
-      return token;
+      return token
     },
     async changePassword(oldPassword: string, newPassword: string): Promise<Map<boolean, string>> {
       const token = localStorage.getItem('token')

@@ -87,6 +87,7 @@ const isShowDialog = ref<boolean>(false)
 const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
+  manga.value = {} as iMangaData;
   
   const title: string = Array.isArray(route.params.title)
   ? route.params.title[0]
