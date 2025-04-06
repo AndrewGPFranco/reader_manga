@@ -45,21 +45,36 @@
                     role="dialog"
                     aria-modal="true"
                   >
-                    <div class="flex justify-center gap-4 mt-4">
-                      <router-link
-                        v-if="selectedChapter"
-                        :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/${selectedChapter.readingProgress}`"
-                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700"
+                    <div class="flex flex-col items-center gap-4 mt-6">
+                      <div class="flex flex-wrap justify-center gap-4">
+                        <router-link
+                          v-if="selectedChapter"
+                          :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/${selectedChapter.readingProgress}`"
+                          class="px-6 py-2 rounded-2xl text-white font-semibold text-base transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700 shadow-md"
+                        >
+                          Sim
+                        </router-link>
+
+                        <router-link
+                          v-if="selectedChapter"
+                          :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/1`"
+                          class="px-6 py-2 rounded-2xl text-white font-semibold text-base transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700 shadow-md"
+                        >
+                          Não
+                        </router-link>
+                      </div>
+
+                      <n-button
+                        type="warning"
+                        class="refresh-reading-container"
+                        @click="resetarProgresso"
+                        quaternary
                       >
-                        Sim
-                      </router-link>
-                      <router-link
-                        v-if="selectedChapter"
-                        :to="`/manga/${selectedChapter.nameManga}/chapter/${selectedChapter.id}/1`"
-                        class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700"
-                      >
-                        Não
-                      </router-link>
+                        <span class="label text-base font-medium text-gray-700"
+                          >Resetar progresso?</span
+                        >
+                        <RefreshOutline class="refresh-reading ml-2 w-5 h-5 text-yellow-500" />
+                      </n-button>
                     </div>
                   </n-card>
                 </n-modal>
@@ -79,23 +94,24 @@
 import type iChapterData from '@/@types/iChapter'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import { useChapterStore } from '@/store/ChapterStore'
-import { NCard } from 'naive-ui'
+import { NCard, useMessage } from 'naive-ui'
 import { onMounted, ref, watch } from 'vue'
-
-const chapterStore = useChapterStore()
-const isShowDialog = ref(false)
-const selectedChapter = ref<iChapterData | null>(null)
-const chapters = ref<iChapterData[]>([])
+import { RefreshOutline } from '@vicons/ionicons5'
 
 let page = ref<number>(1)
 let pageTotal = ref<number | undefined>(0)
+
+const toast = useMessage()
+const isShowDialog = ref(false)
+const chapterStore = useChapterStore()
+const chapters = ref<iChapterData[]>([])
+const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
   document.title = 'Leitor de mangás - Leituras em andamento'
 
   try {
-    const data = await chapterStore.getAllReadingProgress(page.value - 1)
-    chapters.value = data
+    chapters.value = await chapterStore.getAllReadingProgress(page.value - 1)
     pageTotal.value = chapters.value[0].numberPageOfPageable
   } catch (error) {
     console.error('Erro ao carregar os capítulos:', error)
@@ -107,9 +123,24 @@ const askContinueReading = (chapter: iChapterData) => {
   isShowDialog.value = true
 }
 
+const resetarProgresso = async () => {
+  try {
+    if (selectedChapter.value) {
+      const result = await chapterStore.progressReset(selectedChapter.value.id)
+      isShowDialog.value = false
+      toast.success(result)
+      chapters.value = []
+
+      chapters.value = await chapterStore.getAllReadingProgress(page.value - 1)
+    }
+  } catch (error) {
+    console.error(error)
+    toast.error(String(error))
+  }
+}
+
 watch(page, async () => {
-  const data = await chapterStore.getAllReadingProgress(page.value - 1)
-  chapters.value = data
+  chapters.value = await chapterStore.getAllReadingProgress(page.value - 1)
 })
 </script>
 

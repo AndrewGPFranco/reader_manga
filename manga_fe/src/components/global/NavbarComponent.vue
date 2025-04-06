@@ -31,51 +31,53 @@ const renderIcon = (icon: Component) => {
 
 export default defineComponent({
   setup() {
-    const auth = useAuthStore();
-    const role = auth.getRoleUser();
+    const auth = useAuthStore()
+    const role = auth.getRoleUser()
 
     const menuOptions: MenuOption[] = [
       {
-        whateverLabel: () =>
-          h(RouterLink, { to: '/' }, { default: () => 'Inicio' }),
+        whateverLabel: () => h(RouterLink, { to: '/' }, { default: () => 'Inicio' }),
         icon: renderIcon(ScanCircle),
         path: '/'
       },
-      ...(role.includes("ADMIN")
-        ? [{
-          whateverLabel: () =>
-            h(RouterLink, { to: '/admin/jobs' }, { default: () => 'Jobs' }),
-          icon: renderIcon(Jobs),
-          path: '/admin/jobs'
-        }]
+      ...(role.includes('ADMIN')
+        ? [
+            {
+              whateverLabel: () => h(RouterLink, { to: '/admin/jobs' }, { default: () => 'Jobs' }),
+              icon: renderIcon(Jobs),
+              path: '/admin/jobs'
+            }
+          ]
         : []),
       {
-        whateverLabel: () =>
-          h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),
+        whateverLabel: () => h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),
         icon: renderIcon(Mangas),
         path: '/mangas'
       },
-      ...(role.includes("ADMIN")
-        ? [{
-          whateverLabel: () =>
-            h(RouterLink, { to: '/register' }, { default: () => 'Registros' }),
-          icon: renderIcon(New),
-          path: '/register'
-        }]
+      ...(role.includes('ADMIN')
+        ? [
+            {
+              whateverLabel: () =>
+                h(RouterLink, { to: '/register' }, { default: () => 'Registros' }),
+              icon: renderIcon(New),
+              path: '/register'
+            }
+          ]
         : []),
       {
-        whateverLabel: () =>
-          h(RouterLink, { to: '/profile' }, { default: () => 'Meu perfil' }),
+        whateverLabel: () => h(RouterLink, { to: '/profile' }, { default: () => 'Meu perfil' }),
         icon: renderIcon(Profile),
         path: '/profile'
       },
-      ...(role.includes("ADMIN")
-        ? [{
-          whateverLabel: () =>
-            h(RouterLink, { to: '/management/admin' }, { default: () => 'Gerenciamento' }),
-          icon: renderIcon(Management),
-          path: '/management/admin'
-        }]
+      ...(role.includes('ADMIN')
+        ? [
+            {
+              whateverLabel: () =>
+                h(RouterLink, { to: '/management/admin' }, { default: () => 'Gerenciamento' }),
+              icon: renderIcon(Management),
+              path: '/management/admin'
+            }
+          ]
         : []),
       {
         whateverLabel: () =>

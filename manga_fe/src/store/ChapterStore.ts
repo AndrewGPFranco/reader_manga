@@ -28,11 +28,14 @@ export const useChapterStore = defineStore('chapter', {
     },
     async getAllChapter(pageNumber: number, size: number): Promise<any> {
       try {
-        const response = await api.get(`/api/v1/chapter/readAll?size=${size}&pageNumber=${pageNumber}`, {
-          headers: {
-            Authorization: `${this.user.getToken()}`
+        const response = await api.get(
+          `/api/v1/chapter/readAll?size=${size}&pageNumber=${pageNumber}`,
+          {
+            headers: {
+              Authorization: `${this.user.getToken()}`
+            }
           }
-        })
+        )
         this.allChapter = response.data
         return this.allChapter
       } catch (error: any) {
@@ -81,11 +84,14 @@ export const useChapterStore = defineStore('chapter', {
     },
     async getAllPages(pageNumber: number, size: number): Promise<any> {
       try {
-        const response = await api.get(`/api/v1/chapter/getAll-pages?size=${size}&pageNumber=${pageNumber}`, {
-          headers: {
-            Authorization: `${this.user.getToken()}`
+        const response = await api.get(
+          `/api/v1/chapter/getAll-pages?size=${size}&pageNumber=${pageNumber}`,
+          {
+            headers: {
+              Authorization: `${this.user.getToken()}`
+            }
           }
-        })
+        )
         return response.data
       } catch (error: any) {
         throw new Error(error.response.data)
@@ -142,7 +148,7 @@ export const useChapterStore = defineStore('chapter', {
       return response.data
     },
     async getQuantidadePaginasDoCapitulo(idCapitulo: string): Promise<number> {
-      const response = await this.getChapterByID(idCapitulo);
+      const response = await this.getChapterByID(idCapitulo)
 
       return response.length
     },
@@ -150,24 +156,24 @@ export const useChapterStore = defineStore('chapter', {
       if (this.sizePaginaCapitulo != null) {
         return this.sizePaginaCapitulo
       }
-      return this.getQuantidadePaginasDoCapitulo(id);
+      return this.getQuantidadePaginasDoCapitulo(id)
     },
     async updateReadingProgress(idChapter: string, currentProgress: number) {
       try {
-        const idUser = localStorage.getItem("id");
+        const idUser = localStorage.getItem('id')
         const data = {
           idUser: idUser,
           idChapter: idChapter,
           progress: currentProgress
-        };
+        }
 
         await api.put(`/api/user/chapter`, data, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }
-        });
+        })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async getReadingProgress(idChapter: string) {
@@ -177,21 +183,39 @@ export const useChapterStore = defineStore('chapter', {
             Authorization: `${this.user.getToken()}`
           }
         })
-        return response.data;
+        return response.data
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async getAllReadingProgress(pageNumber: number) {
       try {
-        const response = await api.get(`/api/v1/chapter/reading-progress?pageNumber=${pageNumber}`, {
-          headers: {
-            Authorization: `${this.user.getToken()}`
+        const response = await api.get(
+          `/api/v1/chapter/reading-progress?pageNumber=${pageNumber}`,
+          {
+            headers: {
+              Authorization: `${this.user.getToken()}`
+            }
           }
-        })
-        return response.data;
+        )
+        return response.data
       } catch (error) {
-        console.error(error);
+        console.error(error)
+      }
+    },
+    async progressReset(idChapter: number) {
+      try {
+        const response = await api.delete(
+          `/api/user/chapter/delete/${idChapter}`,
+          {
+            headers: {
+              Authorization: `${this.user.getToken()}`
+            }
+          }
+        )
+        return response.data
+      } catch (error) {
+        console.error(error)
       }
     }
   }
