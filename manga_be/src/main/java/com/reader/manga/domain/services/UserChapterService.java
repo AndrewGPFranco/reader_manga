@@ -91,4 +91,12 @@ public class UserChapterService {
             }
         });
     }
+
+    public void deleteAssociacao(Long idChapter, Long idUser) {
+        try {
+            userChapterRepository.deleteAssociacao(idChapter, idUser);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar associação.");
+        }
+    }
 }
