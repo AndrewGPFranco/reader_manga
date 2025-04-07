@@ -8,4 +8,5 @@ public interface UserMangaRepository {
 
     void deletaAssociacao(Long idUser, Long idManga);
 
+    Integer mangaNumberSignedByUser(Long id);
 }

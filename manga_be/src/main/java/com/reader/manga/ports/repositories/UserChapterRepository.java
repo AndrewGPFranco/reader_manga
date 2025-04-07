@@ -17,4 +17,8 @@ public interface UserChapterRepository {
     Page<UserChapter> findAllReadingsInProgress(Pageable pageable, Long idUser);
 
     void deleteAssociacao(Long idChapter, Long idUser);
+
+    Integer getQuantidadeDeLeiturasEmAndamento(Long id);
+
+    Integer getQuantidadeDeLeiturasFinalizadas(Long id);
 }

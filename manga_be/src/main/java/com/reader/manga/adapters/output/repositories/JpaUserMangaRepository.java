@@ -17,4 +17,7 @@ public interface JpaUserMangaRepository extends UserMangaRepository, JpaReposito
     @Query("DELETE FROM user_manga um WHERE um.manga.id = :idManga AND um.user.id = :idUser")
     void deletaAssociacao(@Param("idUser") Long idUser, @Param("idManga") Long idManga);
 
+    @Query("SELECT COUNT(u) FROM UserChapter u WHERE u.user_id.id = :id")
+    Integer mangaNumberSignedByUser(@Param("id") Long id);
+
 }

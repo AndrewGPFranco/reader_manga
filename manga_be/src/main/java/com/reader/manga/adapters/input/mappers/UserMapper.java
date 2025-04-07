@@ -13,9 +13,9 @@ public class UserMapper {
                 user.getEmail(), user.getPassword(), user.getDateBirth());
     }
 
-    public RecoverUserDTO toRecoverDTO(User user) {
+    public RecoverUserDTO toRecoverDTO(User user, Integer... data) {
         return new RecoverUserDTO(user.getFirstName(), user.getFullName(), user.getUsername(),
-                user.getEmail(), user.getDateBirth());
+                user.getEmail(), user.getDateBirth(), data[0], data[1], data[2]);
     }
 
     public User toEntity(UserDTO user) {

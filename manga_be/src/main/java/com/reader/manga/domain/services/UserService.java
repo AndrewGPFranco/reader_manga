@@ -6,6 +6,8 @@ import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.adapters.input.mappers.PasswordEncoderMapper;
 import com.reader.manga.adapters.input.mappers.UserMapper;
 import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.ports.repositories.UserChapterRepository;
+import com.reader.manga.ports.repositories.UserMangaRepository;
 import com.reader.manga.ports.repositories.UserRepository;
 import com.reader.manga.domain.valueobjects.users.ChangePasswordVO;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository repository;
-    private final PasswordEncoderMapper passwordEncoderMapper;
     private final UserMapper userMapper;
+    private final UserRepository repository;
+    private final UserMangaRepository userMangaRepository;
+    private final PasswordEncoderMapper passwordEncoderMapper;
+    private final UserChapterRepository userChapterRepository;
 
     public RecoverUserDTO register(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
@@ -34,7 +38,11 @@ public class UserService {
         User user = repository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("Nenhum usuário encontrado com o e-mail: " + email));
 
-        return userMapper.toRecoverDTO(user);
+        Integer mangas = userMangaRepository.mangaNumberSignedByUser(user.getId());
+        Integer completeReadings = userChapterRepository.getQuantidadeDeLeiturasFinalizadas(user.getId());
+        Integer inProgressReadings = userChapterRepository.getQuantidadeDeLeiturasEmAndamento(user.getId());
+
+        return userMapper.toRecoverDTO(user, mangas, completeReadings, inProgressReadings);
     }
 
     public void changePassword(ChangePasswordVO userVO) {

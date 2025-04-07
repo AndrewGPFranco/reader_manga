@@ -1,9 +1,6 @@
 package com.reader.manga.adapters.input.rest;
 
-import com.reader.manga.adapters.input.dtos.user.LoginResponseDTO;
-import com.reader.manga.adapters.input.dtos.user.RecoverUserDTO;
-import com.reader.manga.adapters.input.dtos.user.UserDTO;
-import com.reader.manga.adapters.input.dtos.user.UserLoginDTO;
+import com.reader.manga.adapters.input.dtos.user.*;
 import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.JwtTokenService;
@@ -31,6 +28,11 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final UserMangaService userMangaService;
+
+    @PostMapping("/token")
+    public String validateToken(@RequestBody TokenDTO dto) {
+        return jwtTokenService.validateToken(dto.token());
+    }
 
     @PostMapping("/register")
     public ResponseEntity<RecoverUserDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {

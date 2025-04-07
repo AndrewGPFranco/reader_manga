@@ -10,5 +10,8 @@ public record RecoverUserDTO(
         @NotNull @NotBlank String fullName,
         @NotNull @NotBlank String username,
         @NotNull @NotBlank String email,
-        @NotNull LocalDate dateBirth
+        @NotNull LocalDate dateBirth,
+        Integer mangas,
+        Integer completeReadings,
+        Integer inProgressReadings
 ) {}

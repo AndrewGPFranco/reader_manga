@@ -23,4 +23,10 @@ public interface JpaUserChapterRepository extends UserChapterRepository, JpaRepo
     @Query("DELETE FROM UserChapter u WHERE u.chapter_id.id = :idChapter AND u.user_id.id = :idUser")
     void deleteAssociacao(@Param("idChapter") Long idChapter, @Param("idUser") Long idUser);
 
+    @Query("SELECT COUNT(u) FROM UserChapter u WHERE u.user_id.id = :id AND u.status = 'ONGOING'")
+    Integer getQuantidadeDeLeiturasEmAndamento(@Param("id") Long id);
+
+    @Query("SELECT COUNT(u) FROM UserChapter u WHERE u.user_id.id = :id AND u.status = 'FINISHED'")
+    Integer getQuantidadeDeLeiturasFinalizadas(@Param("id") Long id);
+
 }
