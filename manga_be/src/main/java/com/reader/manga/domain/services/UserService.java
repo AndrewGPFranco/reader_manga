@@ -38,7 +38,7 @@ public class UserService {
         User user = repository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("Nenhum usuário encontrado com o e-mail: " + email));
 
-        Integer mangas = userMangaRepository.mangaNumberSignedByUser(user.getId());
+        Integer mangas = userMangaRepository.quantidadeMangasAssinadosPeloUsuario(user.getId());
         Integer completeReadings = userChapterRepository.getQuantidadeDeLeiturasFinalizadas(user.getId());
         Integer inProgressReadings = userChapterRepository.getQuantidadeDeLeiturasEmAndamento(user.getId());
 

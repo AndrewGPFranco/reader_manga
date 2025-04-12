@@ -33,6 +33,7 @@ public class UserManga implements iListaMangasPorUsuario {
     private LocalDate signatureDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private StatusType status;
 
     @Column(name = "nota")

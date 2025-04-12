@@ -109,9 +109,11 @@ public class UserMangaService {
         mangaList.forEach(m -> {
             Manga manga = m.getManga();
             FavoriteMangaUser favoriteMangaUser = jpaFavoriteMangaRepository.favoriteIsTrue(manga.getId(), idUser);
+            Long nota = jpaUserMangaRepository.getNotaDoMangaDadoPeloUsuario(idUser, manga.getId());
             MangaUserVO mangaUserVO = MangaUserVO.builder().id(manga.getId()).title(manga.getTitle()).image(manga.getImage())
                     .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender())
-                    .status(manga.getStatus()).size(manga.getSize()).build();
+                    .status(manga.getStatus()).size(manga.getSize()).nota(
+                            nota != null ?Math.toIntExact(nota) : 0).build();
             mangaListVO.add(mangaUserVO);
         });
 
@@ -172,7 +174,6 @@ public class UserMangaService {
     }
 
     /**
-     * TODO: ajustar
      * @param idUser
      * @param idManga
      */
@@ -181,7 +182,6 @@ public class UserMangaService {
     }
 
     /**
-     * TODO: ajustar
      * @param idUser
      * @param idManga
      */

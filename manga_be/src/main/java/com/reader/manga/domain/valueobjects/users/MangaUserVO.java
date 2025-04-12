@@ -13,14 +13,15 @@ import java.util.Date;
 @Builder
 public record MangaUserVO(
         Long id,
+        int size,
         String title,
         String image,
-        String description,
-        Date creationDate,
-        Date closingDate,
-        @Setter boolean favorite,
-        int size,
-        StatusType status,
+        Integer nota,
         String author,
-        String gender
+        String gender,
+        Date closingDate,
+        StatusType status,
+        Date creationDate,
+        String description,
+        @Setter boolean favorite
 ) {}
