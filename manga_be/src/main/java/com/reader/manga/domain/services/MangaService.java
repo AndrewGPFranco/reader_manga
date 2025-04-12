@@ -62,8 +62,8 @@ public class MangaService {
 
         coversManga.forEach((title, cover) -> coversMangaVOMap.put(title, CoversMangaVO.builder()
                 .titulo(title)
-                .urlImage(cover.getUrlImage())
-                .urlReader(nomeDosMangasRegistrados.contains(title.toLowerCase()) ? null : cover.getUrlReader())
+                .urlImage(cover.urlImage())
+                .urlReader(nomeDosMangasRegistrados.contains(title.toLowerCase()) ? null : cover.urlReader())
                 .build()));
 
         return coversMangaVOMap;

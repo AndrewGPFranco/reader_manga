@@ -7,6 +7,7 @@ import com.reader.manga.domain.entities.mangas.Manga;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.entities.users.UserManga;
 import com.reader.manga.domain.interfaces.iListaMangasPorUsuario;
+import com.reader.manga.domain.valueobjects.mangas.AvaliacaoMangaVO;
 import com.reader.manga.ports.repositories.FavoriteMangaRepository;
 import com.reader.manga.ports.repositories.MangaRepository;
 import com.reader.manga.ports.repositories.UserMangaRepository;
@@ -113,7 +114,7 @@ public class UserMangaService {
             MangaUserVO mangaUserVO = MangaUserVO.builder().id(manga.getId()).title(manga.getTitle()).image(manga.getImage())
                     .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender())
                     .status(manga.getStatus()).size(manga.getSize()).nota(
-                            nota != null ?Math.toIntExact(nota) : 0).build();
+                            nota != null ? Math.toIntExact(nota) : null).build();
             mangaListVO.add(mangaUserVO);
         });
 
@@ -192,6 +193,10 @@ public class UserMangaService {
     public User getUserById(Long idUser) {
         return jpaUserRepository.findById(idUser).orElseThrow(() ->
                 new NotFoundException("Nenhum usuário encontrado com o id: " + idUser));
+    }
+
+    public void avaliaManga(AvaliacaoMangaVO vo, User user) {
+        jpaUserMangaRepository.atualizaNotaManga(user.getId(), vo.idManga(), vo.nota());
     }
 
 }

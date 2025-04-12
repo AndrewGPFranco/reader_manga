@@ -6,7 +6,9 @@ import com.reader.manga.adapters.input.dtos.manga.UpdateMangaDTO;
 import com.reader.manga.adapters.input.dtos.utils.UserData;
 import com.reader.manga.domain.entities.mangas.Chapter;
 import com.reader.manga.domain.entities.mangas.Manga;
+import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.UserChapterService;
+import com.reader.manga.domain.valueobjects.mangas.AvaliacaoMangaVO;
 import com.reader.manga.ports.repositories.MangaRepository;
 import com.reader.manga.domain.services.MangaService;
 import com.reader.manga.domain.services.UserMangaService;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -122,6 +125,7 @@ public class MangaController {
         userChapterService.atualizaProgresso(manga.getChapters(), mapaProgressos);
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
+                        .id(manga.getId())
                         .title(manga.getTitle())
                         .size(manga.getSize())
                         .creationDate(manga.getCreationDate())
@@ -168,6 +172,11 @@ public class MangaController {
     public Page<Manga> getMangaPesquisado(@RequestParam String pesquisado,
                                           @RequestParam(defaultValue = "0") int pageNumber) {
         return service.getMangaPesquisado(pesquisado, pageNumber);
+    }
+
+    @PostMapping("/avaliacao")
+    public void avaliaManga(@RequestBody AvaliacaoMangaVO vo, @AuthenticationPrincipal User user) {
+        userMangaService.avaliaManga(vo, user);
     }
 
 }

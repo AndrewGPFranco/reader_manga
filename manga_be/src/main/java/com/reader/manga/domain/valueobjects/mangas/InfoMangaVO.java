@@ -21,6 +21,7 @@ import java.util.List;
  */
 @Builder
 public record InfoMangaVO(
+        Long id,
         String title,
         String author,
         Integer size,

@@ -23,4 +23,10 @@ public interface JpaUserMangaRepository extends UserMangaRepository, JpaReposito
     @Query("SELECT um.nota FROM user_manga um WHERE um.user.id = :id AND um.manga.id = :idManga")
     Long getNotaDoMangaDadoPeloUsuario(@Param("id") Long id, @Param("idManga") Long idManga);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE user_manga SET nota = :nota WHERE user.id = :idUser AND manga.id = :idManga")
+    void atualizaNotaManga(@Param("idUser") Long idUser, @Param("idManga") Long idManga, @Param("nota") Integer nota);
+
+
 }
