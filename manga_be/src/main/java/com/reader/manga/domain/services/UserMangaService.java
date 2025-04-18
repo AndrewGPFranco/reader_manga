@@ -110,7 +110,7 @@ public class UserMangaService {
         mangaList.forEach(m -> {
             Manga manga = m.getManga();
             FavoriteMangaUser favoriteMangaUser = jpaFavoriteMangaRepository.favoriteIsTrue(manga.getId(), idUser);
-            Long nota = jpaUserMangaRepository.getNotaDoMangaDadoPeloUsuario(idUser, manga.getId());
+            Long nota = getNotaDoMangaPeloUsuario(manga.getId(), idUser);
             MangaUserVO mangaUserVO = MangaUserVO.builder().id(manga.getId()).title(manga.getTitle()).image(manga.getImage())
                     .author(manga.getAuthor()).favorite(favoriteMangaUser != null).gender(manga.getGender())
                     .status(manga.getStatus()).size(manga.getSize()).nota(
@@ -121,6 +121,10 @@ public class UserMangaService {
         UserMangaVO userManga = new UserMangaVO();
         userManga.setMangaList(mangaListVO);
         return userManga;
+    }
+
+    public Long getNotaDoMangaPeloUsuario(Long idManga, Long idUser) {
+        return jpaUserMangaRepository.getNotaDoMangaDadoPeloUsuario(idUser, idManga);
     }
 
     public Integer getQuantidadeTodosMangasDoUsuario(Long idUser) {

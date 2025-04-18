@@ -23,13 +23,14 @@ import java.util.List;
 public record InfoMangaVO(
         Long id,
         String title,
-        String author,
+        String image,
+        Long nota,
         Integer size,
+        String author,
         String gender,
+        Date endDate,
         StatusType status,
         Date creationDate,
-        Date endDate,
         String description,
-        List<Chapter> chapters,
-        String image
+        List<Chapter> chapters
 ) {}
