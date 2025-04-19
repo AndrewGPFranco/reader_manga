@@ -7,14 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 @Entity
 @Builder
-@Table(name = "anime")
-public class Anime {
+@Table(name = "episode")
+public class Episode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +22,12 @@ public class Anime {
     private String title;
 
     @NotNull
-    @Column(name = "upload_date")
-    private LocalDate uploadDate;
+    @NotBlank
+    private String uri;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Episode> episodes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "anime_id", nullable = false)
+    private Anime anime;
 
 }
