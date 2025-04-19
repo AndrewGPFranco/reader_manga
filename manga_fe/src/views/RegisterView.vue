@@ -20,9 +20,9 @@
             <FormToChapterPages :mangas="mangasArray" :is-edit="false" :page="page" />
           </section>
         </n-tab-pane>
-        <n-tab-pane name="Animes" tab="Registro de Animes" style="height: 95%">
+        <n-tab-pane name="Episode" tab="Registro de Animes" style="height: 95%">
           <section class="container">
-            <FormToEpisodeRegister />
+            <FormToAnimeRegister />
           </section>
         </n-tab-pane>
         <n-tab-pane name="Animes" tab="Registro de Episódios" style="height: 95%">
@@ -38,8 +38,9 @@
 <script setup lang="ts">
 import { Chapter } from '@/class/Chapter'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import FormToEpisodeRegister from '@/components/registerEpisode/formToEpisodeRegister.vue'
 import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue'
+import FormToEpisodeRegister from '@/components/registerEpisode/formToEpisodeRegister.vue'
+import FormToAnimeRegister from '@/components/registerAnime/formToAnimeRegister.vue'
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue'
 import FormToChapterPages from '@/components/registerChapterPages/formToChapterPages.vue'
 import type iMangaData from '@/@types/Manga'
