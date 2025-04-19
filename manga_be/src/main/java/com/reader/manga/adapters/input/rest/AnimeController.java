@@ -1,6 +1,8 @@
 package com.reader.manga.adapters.input.rest;
 
-import com.reader.manga.adapters.input.dtos.animes.AnimeDTO;
+import com.reader.manga.adapters.input.dtos.ResponseAPI;
+import com.reader.manga.adapters.input.dtos.anime.AnimeDTO;
+import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.services.AnimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -18,6 +20,16 @@ public class AnimeController {
 
     private final AnimeService animeService;
 
+    @PostMapping
+    public ResponseEntity<ResponseAPI> registrarAnime(@RequestBody AnimeDTO dto) {
+        try {
+            animeService.registraAnime(dto);
+            return ResponseEntity.ok().body(new ResponseAPI("Registrado com sucesso!", HttpStatus.CREATED.value()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ResponseAPI(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadAnime(
                                               @RequestPart("file") MultipartFile file,
@@ -25,7 +37,7 @@ public class AnimeController {
                                               @RequestPart("title") String title
     ) {
         try {
-            AnimeDTO dto = new AnimeDTO(file, id, title);
+            EpisodeDTO dto = new EpisodeDTO(file, id, title);
             animeService.uploadAnime(dto);
 
             return ResponseEntity.ok("Vídeo salvo com sucesso!");
@@ -35,9 +47,9 @@ public class AnimeController {
         }
     }
 
-    @GetMapping("/episode/{id}/{title}")
-    public ResponseEntity<UrlResource> getEpisodeAnime(@PathVariable String id, @PathVariable String title) {
-        UrlResource resource = animeService.serveVideo(AnimeDTO.builder().id(id).title(title).build());
+    @GetMapping("/episode/{id}/{anime}")
+    public ResponseEntity<UrlResource> getEpisodeAnime(@PathVariable String id, @PathVariable String anime) {
+        UrlResource resource = animeService.serveVideo(EpisodeDTO.builder().id(id).title(anime).build());
 
         if(resource != null)
             return ResponseEntity.ok()

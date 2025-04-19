@@ -1,12 +1,12 @@
-package com.reader.manga.adapters.input.dtos.animes;
+package com.reader.manga.adapters.input.dtos.episode;
 
-import lombok.Builder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Builder
-public record AnimeDTO(
+public record EpisodeDTO(
         MultipartFile file,
         @NotNull @NotBlank String id,
         @NotNull @NotBlank String title
