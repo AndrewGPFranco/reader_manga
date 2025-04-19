@@ -41,7 +41,7 @@
 
         <n-gi :span="24">
           <div class="flex justify-end mt-4">
-            <n-button round type="primary" @click="realizarUploadAnime">
+            <n-button round type="primary" @click="realizarUploadEpisodio">
               {{ action }}
             </n-button>
           </div>
@@ -54,8 +54,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
-import AnimeDTO from '@/class/DTO/AnimeDTO'
-import { useAnimeStore } from '@/store/AnimeStore'
+import { useEpisodeStore } from '@/store/EpisodeStore'
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
 
 const id = ref<string>('');
@@ -63,8 +62,8 @@ const toast = useMessage();
 const title = ref<string>('');
 const episode = ref<File[]>([]);
 const selectedFile = ref<File>();
-const animeStore = useAnimeStore();
 const action = ref<string>('Enviar');
+const episodeStore = useEpisodeStore();
 
 const handleFileChange = (fileList: any) => {
   if (fileList.fileList.length > 0) {
@@ -73,7 +72,7 @@ const handleFileChange = (fileList: any) => {
   }
 }
 
-const realizarUploadAnime = async () => {
+const realizarUploadEpisodio = async () => {
   try {
     if(selectedFile.value !== undefined) {
       const formData = new FormData();
@@ -81,7 +80,7 @@ const realizarUploadAnime = async () => {
       formData.append("id", id.value);
       formData.append("title", title.value);
 
-      await animeStore.uploadEpisode(formData);
+      await episodeStore.uploadEpisode(formData);
     }
   } catch(error) {
     toast.error(String(error));
