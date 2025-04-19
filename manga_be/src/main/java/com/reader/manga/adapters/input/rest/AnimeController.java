@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +19,13 @@ public class AnimeController {
     private final AnimeService animeService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadAnime(@RequestBody AnimeDTO dto) {
+    public ResponseEntity<String> uploadAnime(
+                                              @RequestPart("file") MultipartFile file,
+                                              @RequestPart("id") String id,
+                                              @RequestPart("title") String title
+    ) {
         try {
+            AnimeDTO dto = new AnimeDTO(file, id, title);
             animeService.uploadAnime(dto);
 
             return ResponseEntity.ok("Vídeo salvo com sucesso!");
@@ -29,9 +35,9 @@ public class AnimeController {
         }
     }
 
-    @GetMapping("/video")
-    public ResponseEntity<UrlResource> getEpisodeAnime(@RequestBody AnimeDTO dto) {
-        UrlResource resource = animeService.serveVideo(dto);
+    @GetMapping("/episode/{id}/{title}")
+    public ResponseEntity<UrlResource> getEpisodeAnime(@PathVariable String id, @PathVariable String title) {
+        UrlResource resource = animeService.serveVideo(AnimeDTO.builder().id(id).title(title).build());
 
         if(resource != null)
             return ResponseEntity.ok()

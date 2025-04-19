@@ -46,7 +46,7 @@ public class AnimeService {
                     .title(dto.title()).size(dto.file().getSize())
                     .uploadDate(LocalDate.now()).build();
 
-            animeRepository.save(anime);
+//            animeRepository.save(anime);
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar vídeo", e);
         }
