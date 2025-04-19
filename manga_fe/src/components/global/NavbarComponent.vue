@@ -69,6 +69,11 @@ export default defineComponent({
         icon: renderIcon(Profile),
         path: '/profile'
       },
+      {
+        whateverLabel: () => h(RouterLink, { to: '/episode' }, { default: () => 'Episódios' }),
+        icon: renderIcon(Profile),
+        path: '/episode'
+      },
       ...(role.includes('ADMIN')
         ? [
             {

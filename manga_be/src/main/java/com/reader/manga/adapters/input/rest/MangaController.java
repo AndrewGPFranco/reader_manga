@@ -126,6 +126,7 @@ public class MangaController {
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
                         .id(manga.getId())
+                        .nota(userMangaService.getNotaDoMangaPeloUsuario(manga.getId(), idUser))
                         .title(manga.getTitle())
                         .size(manga.getSize())
                         .creationDate(manga.getCreationDate())

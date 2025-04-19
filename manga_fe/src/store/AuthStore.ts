@@ -5,6 +5,9 @@ import { jwtDecode } from 'jwt-decode'
 import type iDecodedToken from '@/@types/iDecodedToken'
 import type { UserRegister } from '@/class/UserRegister'
 import { UserSession } from '@/class/UserSession'
+import { useUser } from '@/composables/user'
+
+const { setToken } = useUser();
 
 export const useAuthStore = defineStore('auth', {
   state: (): { user: User; usuarioLogado: UserSession | null } => ({
@@ -18,6 +21,7 @@ export const useAuthStore = defineStore('auth', {
         const user: User = new User(email, password)
         const result = await api.post('/api/v1/user/login', user)
         const decode: iDecodedToken = jwtDecode<iDecodedToken>(result.data.token)
+        setToken(result.data.token);
         user.setToken(result.data.token)
         user.setId(decode.id)
         this.user = user

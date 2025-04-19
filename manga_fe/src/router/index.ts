@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/AuthStore'
 import RegisterUser from '@/views/RegisterUser.vue'
 import JobExecutor from '@/views/JobExecutor.vue'
 import ProgressReadings from '@/views/ProgressReadings.vue'
+import EpisodeAnime from '@/views/EpisodeAnime.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
       path: '/progress-readings',
       name: 'progress-readings',
       component: ProgressReadings
+    },
+    {
+      path: '/episode',
+      name: 'episode',
+      component: EpisodeAnime
     }
   ]
 });

@@ -5,19 +5,24 @@
   <main>
     <n-card title="Gerenciamento de Registros" size="huge" style="height: 95vh; overflow-y: auto">
       <n-tabs style="height: 100%" type="card">
-        <n-tab-pane name="Mangá" tab="Mangá Register" style="height: 95%">
+        <n-tab-pane name="Mangá" tab="Registro de Mangás" style="height: 95%">
           <section class="container">
             <FormToMangaRegister :is-edit="false" :manga="mangasArray[0]" />
           </section>
         </n-tab-pane>
-        <n-tab-pane name="Chapter" tab="Chapter Register" style="height: 95%">
+        <n-tab-pane name="Chapter" tab="Registro de Capítulos" style="height: 95%">
           <section class="container">
             <FormToChapterRegister :mangas="mangasArray" :is-edit="false" :chapter="chapter" />
           </section>
         </n-tab-pane>
-        <n-tab-pane name="Chapter Pages" tab="Chapter Pages Register" style="height: 95%">
+        <n-tab-pane name="Chapter Pages" tab="Registro de Páginas" style="height: 95%">
           <section class="container">
             <FormToChapterPages :mangas="mangasArray" :is-edit="false" :page="page" />
+          </section>
+        </n-tab-pane>
+        <n-tab-pane name="Animes" tab="Registro de Episódios" style="height: 95%">
+          <section class="container">
+            <FormToAnimeRegister />
           </section>
         </n-tab-pane>
       </n-tabs>
@@ -28,9 +33,10 @@
 <script setup lang="ts">
 import { Chapter } from '@/class/Chapter'
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import FormToAnimeRegister from '@/components/registerAnime/formToAnimeRegister.vue'
+import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue'
 import FormToChapterRegister from '@/components/registerChapter/formToChapterRegister.vue'
 import FormToChapterPages from '@/components/registerChapterPages/formToChapterPages.vue'
-import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue'
 import type iMangaData from '@/@types/Manga'
 import type iPageData from '@/@types/Pagee'
 import { useMangaStore } from '@/store/MangaStore'
