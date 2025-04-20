@@ -7,6 +7,7 @@
             v-model:value="title"
             placeholder="Digite o nome do anime"
             clearable
+            @keydown.enter="realizarInsercaoAnime"
           />
         </n-form-item-gi>
 

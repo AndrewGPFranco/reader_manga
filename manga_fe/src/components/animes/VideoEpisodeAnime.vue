@@ -19,18 +19,18 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useAnimeStore } from '@/store/AnimeStore'
+import { useEpisodeStore } from '@/store/EpisodeStore'
 
 const error = ref<string | null>(null)
 const videoUrl = ref<string | null>(null)
 
-const animeStore = useAnimeStore()
+const episodeStore = useEpisodeStore()
 
 onMounted(async () => {
   document.title = 'Episódio de Anime - Assistindo'
 
   try {
-    const response = await animeStore.getEpisode()
+    const response = await episodeStore.getEpisode()
     videoUrl.value = URL.createObjectURL(response)
   } catch (err) {
     console.error('Erro ao carregar o vídeo:', err)

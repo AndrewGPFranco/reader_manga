@@ -22,7 +22,7 @@ export const useEpisodeStore = defineStore("episode", {
     },
 
     async getEpisode() {
-      const response = await api.get("/api/v1/episode/1/noragami", {
+      const response = await api.get("/api/v1/episode/1/Noragami", {
         responseType: "blob",
         headers: {
           Authorization: `${this.token}`

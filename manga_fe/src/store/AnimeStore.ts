@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useUser } from '@/composables/user'
 import { api } from '@/network/axiosInstance'
 import ResponseAPI from '@/class/api/ResponseAPI'
+import type { iAnime } from '@/@types/iAnime'
 
 const { getToken } = useUser();
 
@@ -22,6 +23,15 @@ export const useAnimeStore = defineStore("anime", {
       } catch(error) {
         throw new Error(String(error));
       }
+    },
+
+    async findAll(): Promise<Array<iAnime>>{
+      const response = await api.get("/api/v1/anime", {
+        headers: {
+          Authorization: `${this.token}`
+        }
+      })
+      return response.data;
     }
   }
 });
