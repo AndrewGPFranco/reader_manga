@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Entity
 @Builder
+@AllArgsConstructor
 @Table(name = "episode")
 public class Episode {
 
@@ -30,4 +32,5 @@ public class Episode {
     @JoinColumn(name = "anime_id", nullable = false)
     private Anime anime;
 
+    public Episode() {}
 }

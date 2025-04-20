@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Builder
+@AllArgsConstructor
 @Table(name = "anime")
 public class Anime {
 
@@ -32,4 +34,5 @@ public class Anime {
     @OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Episode> episodes;
 
+    public Anime() {}
 }
