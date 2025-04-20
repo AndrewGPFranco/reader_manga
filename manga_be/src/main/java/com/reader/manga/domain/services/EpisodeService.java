@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -62,16 +63,22 @@ public class EpisodeService {
 
     public UrlResource serveVideo(EpisodeDTO dto) {
         try {
-            Path file = pastaOrigem.resolve(dto.title()).resolve("episode_" + dto.id() + "_.mp4");
-            UrlResource resource = new UrlResource(file.toUri());
+            Optional<Episode> episode = episodeRepository.findById(dto.animeId());
 
-            if (resource.exists() && resource.isReadable())
-                return resource;
-            else
-                return null;
+            if(episode.isPresent()) {
+                UrlResource resource = new UrlResource("file:" + episode.get().getUri());
+
+                if (resource.exists() && resource.isReadable())
+                    return resource;
+            }
+            return null;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Episode> obterEpisodiosDoAnime(Long idAnime) {
+        return episodeRepository.findByIdAndAnime(idAnime);
     }
 
 }

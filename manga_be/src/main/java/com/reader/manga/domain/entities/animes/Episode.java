@@ -7,10 +7,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
 @Builder
+@ToString
 @AllArgsConstructor
 @Table(name = "episode")
 public class Episode {

@@ -1,6 +1,7 @@
 package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
+import com.reader.manga.domain.entities.animes.Episode;
 import com.reader.manga.domain.services.EpisodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class EpisodeController {
 
     @GetMapping("/{id}/{anime}")
     public ResponseEntity<UrlResource> getEpisodeAnime(@PathVariable String id, @PathVariable String anime) {
-        UrlResource resource = episodeService.serveVideo(EpisodeDTO.builder().id(id).title(anime).build());
+        UrlResource resource = episodeService.serveVideo(EpisodeDTO.builder().animeId(Long.parseLong(id)).title(anime).build());
 
         if(resource != null)
             return ResponseEntity.ok()
@@ -46,6 +49,11 @@ public class EpisodeController {
                     .body(resource);
         else
             return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/all/{idAnime}")
+    public ResponseEntity<List<Episode>> getTodosEpisodiosDoAnime(@PathVariable Long idAnime) {
+        return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime));
     }
 
 }
