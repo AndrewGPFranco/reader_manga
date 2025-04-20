@@ -1,8 +1,23 @@
 <template>
-  <n-layout-sider bordered collapse-mode="width" :collapsed-width="250" width="17vw" position="absolute" top="0"
-    left="0" height="100%" :aria-expanded="true">
-    <n-menu :collapsed-width="64" :collapsed-icon-size="30" :options="menuOptions" key-field="whateverKey"
-      label-field="whateverLabel" children-field="whateverChildren" />
+  <n-layout-sider
+    bordered
+    collapse-mode="width"
+    :collapsed-width="250"
+    width="17vw"
+    position="absolute"
+    top="0"
+    left="0"
+    height="100%"
+    :aria-expanded="true"
+  >
+    <n-menu
+      :collapsed-width="64"
+      :collapsed-icon-size="30"
+      :options="menuOptions"
+      key-field="whateverKey"
+      label-field="whateverLabel"
+      children-field="whateverChildren"
+    />
   </n-layout-sider>
 </template>
 
@@ -20,10 +35,11 @@ import {
   PersonOutline as Profile,
   NewspaperOutline as Mangas,
   CodeWorkingOutline as Jobs,
-  HourglassOutline as ProgressReadings,
+  HourglassOutline as ProgressReadings
 } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/store/AuthStore'
+import { VideocamOutline } from '@vicons/ionicons5/lib'
 
 const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -50,6 +66,11 @@ export default defineComponent({
           ]
         : []),
       {
+        whateverLabel: () => h(RouterLink, { to: '/animes' }, { default: () => 'Animes' }),
+        icon: renderIcon(VideocamOutline),
+        path: '/animes'
+      },
+      {
         whateverLabel: () => h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),
         icon: renderIcon(Mangas),
         path: '/mangas'
@@ -68,11 +89,6 @@ export default defineComponent({
         whateverLabel: () => h(RouterLink, { to: '/profile' }, { default: () => 'Meu perfil' }),
         icon: renderIcon(Profile),
         path: '/profile'
-      },
-      {
-        whateverLabel: () => h(RouterLink, { to: '/episode' }, { default: () => 'Episódios' }),
-        icon: renderIcon(Profile),
-        path: '/episode'
       },
       ...(role.includes('ADMIN')
         ? [

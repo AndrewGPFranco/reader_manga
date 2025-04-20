@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useUser } from '@/composables/user'
 import { api } from '@/network/axiosInstance'
+import type { iEpisode } from '@/@types/iEpisode'
 
 const { getToken } = useUser();
 
@@ -21,9 +22,19 @@ export const useEpisodeStore = defineStore("episode", {
       }
     },
 
-    async getEpisode() {
-      const response = await api.get("/api/v1/episode/1/Noragami", {
+    async getEpisode(title: string, id: string) {
+      const response = await api.get(`/api/v1/episode/${id}/${title}`, {
         responseType: "blob",
+        headers: {
+          Authorization: `${this.token}`
+        }
+      });
+
+      return response.data;
+    },
+
+    async getAllEpisodesByAnime(idManga: string): Promise<Array<iEpisode>> {
+      const response = await api.get(`/api/v1/episode/all/${idManga}`, {
         headers: {
           Authorization: `${this.token}`
         }

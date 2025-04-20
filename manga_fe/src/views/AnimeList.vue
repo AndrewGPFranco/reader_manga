@@ -1,16 +1,13 @@
 <template>
   <NavbarComponent />
   <main>
-    <n-card size="huge" style="height: 95vh; overflow-y: auto">
-      <VideoEpisodeAnime />
-    </n-card>
+    <AllAnimes />
   </main>
 </template>
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import VideoEpisodeAnime from '@/components/animes/VideoEpisodeAnime.vue'
-import { NCard } from 'naive-ui'
+import AllAnimes from '@/components/animes/AllAnimes.vue'
 </script>
 
 <style scoped>
