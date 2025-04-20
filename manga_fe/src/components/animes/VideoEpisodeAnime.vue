@@ -1,13 +1,11 @@
 <template>
-  <div>
+  <div class="video-wrapper">
     <div v-if="videoUrl" class="video-container">
-      <video :src="videoUrl" controls class="rounded-lg shadow-lg h-96" />
+      <video :src="videoUrl" controls class="video-player" />
     </div>
 
-    <div v-else class="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg">
-      <div
-        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600 mb-4"
-      ></div>
+    <div v-else class="loading-container">
+      <div class="spinner"></div>
       <p class="text-lg text-gray-600">Carregando vídeo...</p>
     </div>
 
@@ -21,7 +19,7 @@
 import { onMounted, ref } from 'vue'
 import { useEpisodeStore } from '@/store/EpisodeStore'
 
-const episodeStore = useEpisodeStore();
+const episodeStore = useEpisodeStore()
 const error = ref<string | null>(null)
 const videoUrl = ref<string | null>(null)
 
@@ -34,13 +32,13 @@ const props = defineProps({
     type: String,
     required: true
   }
-});
+})
 
 onMounted(async () => {
   document.title = 'Episódio de Anime - Assistindo'
 
   try {
-    const response = await episodeStore.getEpisode(props.title, props.id);
+    const response = await episodeStore.getEpisode(props.title, props.id)
     videoUrl.value = URL.createObjectURL(response)
   } catch (err) {
     console.error('Erro ao carregar o vídeo:', err)
@@ -50,20 +48,49 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.video-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .video-container {
-  transition: all 0.3s ease;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-video {
-  width: 73%;
+.video-player {
+  width: 100%;
   height: 100%;
-  border: 1px solid #000000;
+  object-fit: contain;
+  background-color: #000;
 }
 
-video:focus {
-  outline: none;
+.loading-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  border-top: 2px solid #6366f1;
+  border-bottom: 2px solid #6366f1;
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -4,9 +4,9 @@
     <n-card
       class="flex flex-col anime-card"
       size="huge"
-      style="height: 95vh; overflow-y: auto"
+      style="height: 95vh;"
     >
-      <section v-if="!renderEpisode" class="episodes-container">
+      <section v-if="!renderEpisode">
         <div class="anime-info">
           <h2 class="anime-title">{{ title }}</h2>
           <p class="episodes-count">{{ allEpisodes.length }} episódios</p>
@@ -40,7 +40,9 @@
           </div>
         </div>
       </section>
-      <VideoEpisodeAnime v-else :title="title" :id="idEpisode" />
+      <section v-else class="container-video">
+        <VideoEpisodeAnime :title="title" :id="idEpisode" />
+      </section>
     </n-card>
   </main>
 </template>
@@ -186,5 +188,9 @@ main {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.container-video {
+  margin-top: -8px;
 }
 </style>
