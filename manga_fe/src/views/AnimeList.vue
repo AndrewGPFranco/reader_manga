@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import NavbarComponent from '@/components/global/NavbarComponent.vue'
-import AllAnimes from '@/components/animes/AllAnimes.vue'
+import AllAnimes from '@/components/anime/AllAnimes.vue'
 </script>
 
 <style scoped>

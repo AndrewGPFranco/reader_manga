@@ -85,8 +85,8 @@ const router = createRouter({
       component: ProgressReadings
     },
     {
-      path: '/animes',
-      name: 'animes',
+      path: '/anime',
+      name: 'anime',
       component: AnimeList
     },
     {

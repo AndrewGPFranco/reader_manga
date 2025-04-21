@@ -3,4 +3,5 @@ export interface iEpisode {
   uri: string;
   title: string;
   animeId: number;
+  numberEpisode: number;
 }

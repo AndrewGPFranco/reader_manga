@@ -52,6 +52,7 @@ public class EpisodeService {
                 Episode episode = Episode.builder()
                         .title(dto.title())
                         .uri(destino.toAbsolutePath().toString())
+                        .numberEpisode(Integer.valueOf(dto.id()))
                         .anime(anime.get()).build();
 
                 episodeRepository.save(episode);

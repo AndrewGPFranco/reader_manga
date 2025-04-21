@@ -29,9 +29,9 @@ public class AnimeService {
                     Anime.builder()
                             .title(dto.title())
                             .uploadDate(LocalDate.now())
+                            .uriImage(dto.uriImage())
                             .episodes(new ArrayList<>())
-                            .build()
-            );
+                            .build());
         } catch (DataIntegrityViolationException e) {
             log.error(e.getMessage());
             throw new RuntimeException("Anime já cadastrado!");

@@ -66,9 +66,9 @@ export default defineComponent({
           ]
         : []),
       {
-        whateverLabel: () => h(RouterLink, { to: '/animes' }, { default: () => 'Animes' }),
+        whateverLabel: () => h(RouterLink, { to: '/anime' }, { default: () => 'Animes' }),
         icon: renderIcon(VideocamOutline),
-        path: '/animes'
+        path: '/anime'
       },
       {
         whateverLabel: () => h(RouterLink, { to: '/mangas' }, { default: () => 'Mangás' }),

@@ -7,7 +7,14 @@
             v-model:value="title"
             placeholder="Digite o nome do anime"
             clearable
-            @keydown.enter="realizarInsercaoAnime"
+          />
+        </n-form-item-gi>
+
+        <n-form-item-gi :span="12" label="URL imagem" path="uriImage">
+          <n-input
+            v-model:value="uriImage"
+            placeholder="Digite a url da imagem"
+            clearable
           />
         </n-form-item-gi>
 
@@ -32,11 +39,12 @@ import type ResponseAPI from '@/class/api/ResponseAPI'
 const toast = useMessage();
 const animeStore = useAnimeStore();
 const title = ref<string>('');
+const uriImage = ref<string>('');
 let action = ref<string>('Registrar');
 
 const realizarInsercaoAnime = async () => {
   try {
-    const response: ResponseAPI = await animeStore.registraAnime(title.value);
+    const response: ResponseAPI = await animeStore.registraAnime(title.value, uriImage.value);
 
     if(response.statusCode === 201)
       toast.success(response.message);
@@ -51,6 +59,7 @@ const realizarInsercaoAnime = async () => {
 
 const resetForm = () => {
   title.value = '';
+  uriImage.value = '';
 }
 
 </script>

@@ -34,5 +34,10 @@ public class Anime {
     @OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Episode> episodes;
 
+    @NotNull
+    @NotBlank
+    @Column(name = "uri_image")
+    private String uriImage;
+
     public Anime() {}
 }

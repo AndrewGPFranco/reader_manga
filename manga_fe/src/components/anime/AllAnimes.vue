@@ -15,7 +15,7 @@
           <div class="aspect-[3/2] w-full overflow-hidden">
             <img
               class="w-full h-full object-cover"
-              src="https://github.com/AndrewGPFranco.png"
+              :src="anime.uriImage"
               alt="Capa do Anime"
             />
           </div>
@@ -67,7 +67,6 @@ watch(page, () => {
 </script>
 
 <style scoped>
-/* Scrollbar bonitinho */
 .n-card ::-webkit-scrollbar {
   width: 6px;
 }
