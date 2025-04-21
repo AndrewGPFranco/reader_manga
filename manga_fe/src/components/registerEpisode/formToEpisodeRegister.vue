@@ -59,12 +59,21 @@ const toast = useMessage()
 const selectedFile = ref<File>()
 const id = ref<string>('')
 const animeStore = useAnimeStore()
-const animeSelected = ref<iAnime>()
+const animeSelected = ref<string>()
 const title = ref<string>('')
 const episode = ref<File[]>([])
 const episodeStore = useEpisodeStore()
 const animes = ref<iAnime[]>([])
 const action = ref<string>('Enviar')
+
+const resetData = () => {
+  id.value = ''
+  title.value = ''
+  selectedFile.value = undefined
+  episode.value = []
+  animeSelected.value = ''
+  action.value = 'Enviar'
+}
 
 const handleFileChange = (fileList: any) => {
   if (fileList.fileList.length > 0) {
@@ -76,16 +85,22 @@ const handleFileChange = (fileList: any) => {
 const realizarUploadEpisodio = async () => {
   try {
     if (selectedFile.value !== undefined && animeSelected.value !== undefined) {
+      action.value = 'Enviando...'
       const formData = new FormData()
       formData.append('id', id.value)
       formData.append('title', title.value)
       formData.append('file', selectedFile.value)
       formData.append('anime', animeSelected.value)
 
-      await episodeStore.uploadEpisode(formData)
+      const response = await episodeStore.uploadEpisode(formData)
+
+      resetData();
+      toast.success(response);
     }
   } catch (error) {
     toast.error(String(error))
+  } finally {
+    action.value = 'Enviar'
   }
 }
 

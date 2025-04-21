@@ -10,13 +10,14 @@ export const useEpisodeStore = defineStore("episode", {
     token: getToken()
   }),
   actions: {
-    async uploadEpisode(data: FormData) {
+    async uploadEpisode(data: FormData): Promise<string> {
       try {
-        await api.post("/api/v1/episode/upload", data, {
+        const response = await api.post("/api/v1/episode/upload", data, {
           headers: {
             Authorization: `${this.token}`
           }
         })
+        return response.data;
       } catch(error) {
         throw new Error(String(error));
       }

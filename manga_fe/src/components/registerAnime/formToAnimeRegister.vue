@@ -39,11 +39,13 @@ const realizarInsercaoAnime = async () => {
     const response: ResponseAPI = await animeStore.registraAnime(title.value);
 
     if(response.statusCode === 201)
-      toast.create(response.message);
+      toast.success(response.message);
 
     resetForm();
   } catch (error) {
     toast.error(String(error));
+  } finally {
+    action.value = 'Registrar';
   }
 }
 
