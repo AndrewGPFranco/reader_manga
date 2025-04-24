@@ -51,6 +51,16 @@ public class EpisodeController {
             return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getEpisodeLink(@PathVariable Long id) {
+        String link = episodeService.getVideoById(id);
+
+        if(link != null)
+            return ResponseEntity.ok().body(link);
+
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/all/{idAnime}")
     public ResponseEntity<List<Episode>> getTodosEpisodiosDoAnime(@PathVariable Long idAnime) {
         return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime));

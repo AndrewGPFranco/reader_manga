@@ -2,6 +2,7 @@ package com.reader.manga.domain.services;
 
 import com.reader.manga.adapters.input.dtos.anime.AnimeDTO;
 import com.reader.manga.domain.entities.animes.Anime;
+import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.ports.repositories.AnimeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +40,16 @@ public class AnimeService {
             log.error(e.getMessage());
             throw new RuntimeException("Ocorreu um erro ao registrar o anime!");
         }
+    }
+
+    public String getImageByAnime(Long id) {
+        Anime anime = getAnimeById(id);
+
+        return anime.getUriImage();
+    }
+
+    public Anime getAnimeById(Long id) {
+        return animeRepository.findById(id).orElseThrow(() ->
+            new NotFoundException("Nenhum anime encontrado com o ID: " + id));
     }
 }

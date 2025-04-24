@@ -37,7 +37,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->  {
-                    auth.requestMatchers("/api/v1/job/sse").permitAll();
+                    auth.requestMatchers("/uploads/**").permitAll().anyRequest().authenticated();
+                    auth.requestMatchers("/api/v1/job/sse").permitAll().anyRequest().authenticated();
                     auth.requestMatchers(WHITE_LIST)
                             .permitAll().anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults())

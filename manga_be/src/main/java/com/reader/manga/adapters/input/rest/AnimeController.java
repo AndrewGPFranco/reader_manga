@@ -33,4 +33,11 @@ public class AnimeController {
         return ResponseEntity.ok().body(animeService.getAllAnimes());
     }
 
+    @GetMapping("/{id}/get-image")
+    public ResponseEntity<String> getUriImage(@PathVariable Long id) {
+        String imageByAnime = animeService.getImageByAnime(id);
+
+        return ResponseEntity.ok().body(imageByAnime);
+    }
+
 }
