@@ -3,7 +3,10 @@ package com.reader.manga.domain.services;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.entities.animes.Anime;
 import com.reader.manga.domain.entities.animes.Episode;
+import com.reader.manga.domain.enums.TagType;
 import com.reader.manga.domain.exceptions.NotFoundException;
+import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
+import com.reader.manga.domain.valueobjects.screens.listing.animes.EpisodeToAnimesVO;
 import com.reader.manga.ports.repositories.EpisodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -15,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +81,28 @@ public class EpisodeService {
 
     public List<Episode> obterEpisodiosDoAnime(Long idAnime) {
         return episodeRepository.findByIdAndAnime(idAnime);
+    }
+
+    public AnimeListingVO obterEpisodiosDoAnimeV2(Long idAnime) {
+        Anime anime = animeService.getAnimeById(idAnime);
+        List<Episode> listaEpisodios = episodeRepository.findByIdAndAnime(idAnime);
+        List<EpisodeToAnimesVO> episodes = new ArrayList<>();
+
+        listaEpisodios.forEach(episode -> {
+            episodes.add(EpisodeToAnimesVO.builder().id(episode.getId()).titleEpisode(episode.getTitle())
+                    .uriEpisode(episode.getUri()).numberEpisode(episode.getNumberEpisode()).build());
+        });
+
+        return AnimeListingVO.builder()
+                .idAnime(anime.getId())
+                .titleAnime(anime.getTitle())
+                .episodes(episodes)
+                .note(10)
+                .tags(List.of(TagType.HD, TagType.ANIME))
+                .isFavorite(true)
+                .launchYear("0000")
+                .uriImage(anime.getUriImage())
+                .build();
     }
 
     public String getVideoById(Long id) {

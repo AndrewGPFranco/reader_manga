@@ -1,8 +1,8 @@
 package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
-import com.reader.manga.domain.entities.animes.Episode;
 import com.reader.manga.domain.services.EpisodeService;
+import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -62,8 +62,8 @@ public class EpisodeController {
     }
 
     @GetMapping("/all/{idAnime}")
-    public ResponseEntity<List<Episode>> getTodosEpisodiosDoAnime(@PathVariable Long idAnime) {
-        return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime));
+    public ResponseEntity<AnimeListingVO> getTodosEpisodiosDoAnime(@PathVariable Long idAnime) {
+        return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnimeV2(idAnime));
     }
 
 }
