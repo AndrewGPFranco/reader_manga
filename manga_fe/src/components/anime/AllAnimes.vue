@@ -37,12 +37,11 @@
 
 <script setup lang="ts">
 import { NCard, useMessage } from 'naive-ui'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { iAnime } from '@/@types/iAnime'
 import { useAnimeStore } from '@/store/AnimeStore'
 
 const message = useMessage()
-const page = ref<number>(1)
 const animeStore = useAnimeStore()
 const animesArray = ref<iAnime[]>([])
 const animeCard = ref<InstanceType<typeof NCard> | null>(null)
@@ -59,10 +58,6 @@ onMounted(async () => {
   } catch (error: any) {
     message.error(error.message || 'Erro ao buscar os mangás')
   }
-})
-
-watch(page, () => {
-  getAnimes()
 })
 </script>
 

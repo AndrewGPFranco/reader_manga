@@ -49,7 +49,7 @@ onMounted(async () => {
   allEpisodes.value = await episodeStore.getAllEpisodesByAnime(idAnime.value)
 })
 
-function playEpisode(episode: iEpisode) {
+const playEpisode = (episode: iEpisode) => {
   idEpisode.value = episode.id.toString()
   renderEpisode.value = true
 }
