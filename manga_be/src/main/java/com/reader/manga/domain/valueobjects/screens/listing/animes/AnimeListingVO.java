@@ -3,6 +3,7 @@ package com.reader.manga.domain.valueobjects.screens.listing.animes;
 import com.reader.manga.domain.enums.TagType;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public record AnimeListingVO(
         Integer note,
         String uriImage,
         String titleAnime,
-        String launchYear,
+        LocalDate launchYear,
         Boolean isFavorite,
         List<TagType> tags,
         List<EpisodeToAnimesVO> episodes

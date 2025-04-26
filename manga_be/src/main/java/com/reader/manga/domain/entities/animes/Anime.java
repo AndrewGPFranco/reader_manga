@@ -39,5 +39,9 @@ public class Anime {
     @Column(name = "uri_image")
     private String uriImage;
 
+    @NotNull
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
     public Anime() {}
 }

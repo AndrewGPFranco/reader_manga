@@ -100,7 +100,7 @@ public class EpisodeService {
                 .note(10)
                 .tags(List.of(TagType.HD, TagType.ANIME))
                 .isFavorite(true)
-                .launchYear("0000")
+                .launchYear(anime.getReleaseDate())
                 .uriImage(anime.getUriImage())
                 .build();
     }
