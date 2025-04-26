@@ -27,6 +27,7 @@ import java.util.Objects;
 public class EpisodeService {
 
     private final AnimeService animeService;
+    private final AnimeUserService animeUserService;
     private final EpisodeRepository episodeRepository;
 
     private final Path pastaOrigem = Paths.get("uploads/animes");
@@ -79,11 +80,7 @@ public class EpisodeService {
         }
     }
 
-    public List<Episode> obterEpisodiosDoAnime(Long idAnime) {
-        return episodeRepository.findByIdAndAnime(idAnime);
-    }
-
-    public AnimeListingVO obterEpisodiosDoAnimeV2(Long idAnime) {
+    public AnimeListingVO obterEpisodiosDoAnime(Long idAnime, Long idUser) {
         Anime anime = animeService.getAnimeById(idAnime);
         List<Episode> listaEpisodios = episodeRepository.findByIdAndAnime(idAnime);
         List<EpisodeToAnimesVO> episodes = new ArrayList<>();
@@ -93,13 +90,16 @@ public class EpisodeService {
                     .uriEpisode(episode.getUri()).numberEpisode(episode.getNumberEpisode()).build());
         });
 
+        Integer nota = animeUserService.getNotaPeloUsuario(idUser, idAnime);
+        boolean isFavorite = animeService.animeIsFavorite(idUser, idAnime);
+
         return AnimeListingVO.builder()
                 .idAnime(anime.getId())
                 .titleAnime(anime.getTitle())
                 .episodes(episodes)
-                .note(10)
+                .note(nota)
                 .tags(List.of(TagType.HD, TagType.ANIME))
-                .isFavorite(true)
+                .isFavorite(isFavorite)
                 .launchYear(anime.getReleaseDate())
                 .uriImage(anime.getUriImage())
                 .build();
