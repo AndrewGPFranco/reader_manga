@@ -1,7 +1,6 @@
 package com.reader.manga.domain.entities.users;
 
-import com.reader.manga.domain.entities.mangas.Manga;
-import com.reader.manga.domain.interfaces.iListaMangasPorUsuario;
+import com.reader.manga.domain.entities.animes.Anime;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,20 +9,19 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "manga_favorite_user")
-@Entity(name = "manga_favorite_user")
-public class FavoriteMangaUser implements iListaMangasPorUsuario {
+@Table(name = "anime_favorite_user")
+@Entity(name = "anime_favorite_user")
+public class FavoriteAnimeUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "manga_id", nullable = false)
-    private Manga manga;
+    @JoinColumn(name = "anime_id", nullable = false)
+    private Anime anime;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }

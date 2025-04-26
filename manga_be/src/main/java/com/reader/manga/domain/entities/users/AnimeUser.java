@@ -1,6 +1,6 @@
-package com.reader.manga.domain.entities.animes;
+package com.reader.manga.domain.entities.users;
 
-import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.entities.animes.Anime;
 import com.reader.manga.domain.enums.StatusType;
 
 import jakarta.persistence.Entity;

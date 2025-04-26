@@ -1,6 +1,6 @@
 package com.reader.manga.ports.repositories;
 
-import com.reader.manga.domain.entities.animes.AnimeUser;
+import com.reader.manga.domain.entities.users.AnimeUser;
 import jakarta.validation.constraints.NotNull;
 
 public interface AnimeUserRepository {

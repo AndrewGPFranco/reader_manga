@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.reader.manga.domain.entities.animes.AnimeUser;
+import com.reader.manga.domain.entities.users.AnimeUser;
 import com.reader.manga.ports.repositories.AnimeUserRepository;
 
 @Repository

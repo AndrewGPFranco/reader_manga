@@ -91,6 +91,7 @@ public class EpisodeService {
         });
 
         Integer nota = animeUserService.getNotaPeloUsuario(idUser, idAnime);
+        boolean isFavorite = animeService.animeIsFavorite(idUser, idAnime);
 
         return AnimeListingVO.builder()
                 .idAnime(anime.getId())
@@ -98,7 +99,7 @@ public class EpisodeService {
                 .episodes(episodes)
                 .note(nota)
                 .tags(List.of(TagType.HD, TagType.ANIME))
-                .isFavorite(true)
+                .isFavorite(isFavorite)
                 .launchYear(anime.getReleaseDate())
                 .uriImage(anime.getUriImage())
                 .build();
