@@ -1,6 +1,7 @@
 package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
+import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.EpisodeService;
 import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,8 +62,8 @@ public class EpisodeController {
     }
 
     @GetMapping("/all/{idAnime}")
-    public ResponseEntity<AnimeListingVO> getTodosEpisodiosDoAnime(@PathVariable Long idAnime) {
-        return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnimeV2(idAnime));
+    public ResponseEntity<AnimeListingVO> getTodosEpisodiosDoAnime(@PathVariable Long idAnime, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime, user.getId()));
     }
 
 }

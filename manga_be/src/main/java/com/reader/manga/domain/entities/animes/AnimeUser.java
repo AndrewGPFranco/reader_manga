@@ -19,10 +19,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Table
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "anime_user")
 public class AnimeUser {
 
     @Id

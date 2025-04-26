@@ -6,4 +6,6 @@ public interface AnimeUserRepository {
 
     AnimeUser save(AnimeUser animeUser);
 
+    Integer getNotaDoAnimeDadoPeloUsuario(Long id, Long idAnime);
+
 }

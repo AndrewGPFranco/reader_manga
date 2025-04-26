@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AnimeUserService {
 
-    private final UserRepository userRepository;
     private final AnimeService animeService;
+    private final UserRepository userRepository;
     private final AnimeUserRepository animeUserRepository;
 
     public void criaAssociacaoEntreAnimeUsuario(Long idUser, Long idAnime) {
@@ -30,4 +30,9 @@ public class AnimeUserService {
 
         animeUserRepository.save(animeUser);
     }
+
+    public Integer getNotaPeloUsuario(Long idUser, Long idAnime) {
+        return animeUserRepository.getNotaDoAnimeDadoPeloUsuario(idUser, idAnime);
+    }
+
 }
