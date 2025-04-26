@@ -1,13 +1,13 @@
 package com.reader.manga.adapters.input.rest;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.valueobjects.animes.AvaliacaoAnimeVO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.reader.manga.adapters.input.dtos.AnimeUserDTO;
 import com.reader.manga.domain.services.AnimeUserService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,15 +19,9 @@ public class AnimeUserController {
 
     private final AnimeUserService service;
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody AnimeUserDTO dto) {
-        try {
-            service.criaAssociacaoEntreAnimeUsuario(dto.idUser(), dto.idAnime());
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("Associação criada com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/avaliacao")
+    public void avaliaAnime(@RequestBody AvaliacaoAnimeVO vo, @AuthenticationPrincipal User user) {
+        service.avaliaAnime(vo, user);
     }
 
 }

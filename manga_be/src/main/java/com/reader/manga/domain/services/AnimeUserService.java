@@ -1,5 +1,6 @@
 package com.reader.manga.domain.services;
 
+import com.reader.manga.domain.valueobjects.animes.AvaliacaoAnimeVO;
 import org.springframework.stereotype.Service;
 
 import com.reader.manga.domain.entities.animes.Anime;
@@ -20,13 +21,13 @@ public class AnimeUserService {
     private final UserRepository userRepository;
     private final AnimeUserRepository animeUserRepository;
 
-    public void criaAssociacaoEntreAnimeUsuario(Long idUser, Long idAnime) {
+    public void criaAssociacaoEntreAnimeUsuario(Long idUser, Long idAnime, Integer nota, Integer progress) {
         User user = userRepository.findById(idUser).orElseThrow(() -> 
             new NotFoundException("Nenhum usuário encontrado com o id: , " + idUser));
             
         Anime anime = animeService.getAnimeById(idAnime);
 
-        AnimeUser animeUser = new AnimeUser(user, anime, null, null, StatusType.ONGOING);
+        AnimeUser animeUser = new AnimeUser(user, anime, nota, progress, StatusType.ONGOING);
 
         animeUserRepository.save(animeUser);
     }
@@ -35,4 +36,11 @@ public class AnimeUserService {
         return animeUserRepository.getNotaDoAnimeDadoPeloUsuario(idUser, idAnime);
     }
 
+    public void avaliaAnime(AvaliacaoAnimeVO vo, User user) {
+        Integer notaDoAnimeDadoPeloUsuario = animeUserRepository.getNotaDoAnimeDadoPeloUsuario(user.getId(), vo.idAnime());
+        if(notaDoAnimeDadoPeloUsuario != null)
+            animeUserRepository.atualizaNotaAnime(user.getId(), vo.idAnime(), vo.nota());
+        else
+            criaAssociacaoEntreAnimeUsuario(user.getId(), vo.idAnime(), vo.nota(), null);
+    }
 }
