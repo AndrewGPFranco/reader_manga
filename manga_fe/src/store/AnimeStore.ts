@@ -11,9 +11,9 @@ export const useAnimeStore = defineStore("anime", {
     token: getToken()
   }),
   actions: {
-    async registraAnime(title: string, uriImage: string): Promise<ResponseAPI> {
+    async registraAnime(title: string, uriImage: string, releaseDate: Date | undefined): Promise<ResponseAPI> {
       try {
-        const data = {title: title, uriImage: uriImage};
+        const data = {title: title, uriImage: uriImage, releaseDate: releaseDate};
         const response = await api.post("/api/v1/anime", data, {
           headers: {
             Authorization: `${this.token}`

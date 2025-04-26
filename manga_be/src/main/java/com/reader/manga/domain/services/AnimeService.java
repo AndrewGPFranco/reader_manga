@@ -35,6 +35,7 @@ public class AnimeService {
                             .uploadDate(LocalDate.now())
                             .uriImage(dto.uriImage())
                             .episodes(new ArrayList<>())
+                            .releaseDate(dto.releaseDate())
                             .build());
         } catch (DataIntegrityViolationException e) {
             log.error(e.getMessage());
