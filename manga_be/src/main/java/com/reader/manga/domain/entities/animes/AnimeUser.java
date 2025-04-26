@@ -45,4 +45,12 @@ public class AnimeUser {
     @Enumerated(EnumType.STRING)
     private StatusType status;
 
+    public AnimeUser(User userId, Anime animeId, Integer note, Integer progress, @NotNull StatusType status) {
+        this.userId = userId;
+        this.animeId = animeId;
+        this.note = note;
+        this.progress = progress;
+        this.status = status;
+    }
+
 }

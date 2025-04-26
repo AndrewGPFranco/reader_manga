@@ -2,7 +2,6 @@ package com.reader.manga.domain.valueobjects.users;
 
 import com.reader.manga.domain.enums.StatusType;
 import lombok.Builder;
-import lombok.Setter;
 
 import java.util.Date;
 
@@ -23,5 +22,5 @@ public record MangaUserVO(
         StatusType status,
         Date creationDate,
         String description,
-        @Setter boolean favorite
+        boolean favorite
 ) {}
