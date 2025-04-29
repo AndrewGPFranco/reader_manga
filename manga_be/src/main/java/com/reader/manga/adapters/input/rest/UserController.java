@@ -1,6 +1,7 @@
 package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.user.*;
+import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.JwtTokenService;
@@ -11,12 +12,14 @@ import com.reader.manga.domain.valueobjects.users.UserMangaVO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,10 +38,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RecoverUserDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
-        RecoverUserDTO userRegistered = userService.register(userDTO);
+    public ResponseEntity<Object> registerUser(@RequestBody @Valid UserDTO userDTO) {
+        try {
+            RecoverUserDTO userRegistered = userService.register(userDTO);
 
-        return ResponseEntity.ok().body(userRegistered);
+            return ResponseEntity.ok().body(userRegistered);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -110,6 +117,16 @@ public class UserController {
             return ResponseEntity.ok().body("Senha alterada com sucesso!");
         } catch (PasswordException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/change-tier/{tier}")
+    public ResponseEntity<String> changeTierUser(@PathVariable String tier, @AuthenticationPrincipal User user) {
+        try {
+            userService.alteraTierDoUsuario(RoleType.valueOf(tier), user);
+            return ResponseEntity.ok().body("Mudança realizada com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 

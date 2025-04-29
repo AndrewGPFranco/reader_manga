@@ -30,7 +30,9 @@ public class JwtTokenService {
             return JWT.create()
                     .withIssuer("reader-manga")
                     .withClaim("id", user.getId())
-                    .withClaim("role", user.getRoles().stream().toList())
+                    .withClaim("role", user.getRoles().stream()
+                            .map(Enum::name)
+                            .toList())
                     .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);

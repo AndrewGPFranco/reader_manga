@@ -2,6 +2,7 @@ package com.reader.manga.domain.services;
 
 import com.reader.manga.adapters.input.dtos.user.RecoverUserDTO;
 import com.reader.manga.adapters.input.dtos.user.UserDTO;
+import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.adapters.input.mappers.PasswordEncoderMapper;
 import com.reader.manga.adapters.input.mappers.UserMapper;
@@ -12,6 +13,7 @@ import com.reader.manga.ports.repositories.UserRepository;
 import com.reader.manga.domain.valueobjects.users.ChangePasswordVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.Sets;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,16 @@ public class UserService {
         repository.save(user);
 
         return userMapper.toRecoverDTO(user);
+    }
+
+    public void alteraTierDoUsuario(RoleType role, User user) {
+        switch (role) {
+            case USER -> user.setRoles(Sets.newHashSet(RoleType.USER));
+            case MODERATOR -> user.setRoles(Sets.newHashSet(RoleType.USER, RoleType.MODERATOR));
+            case ADMIN -> user.setRoles(Sets.newHashSet(RoleType.USER, RoleType.MODERATOR, RoleType.ADMIN));
+        };
+
+        repository.save(user);
     }
 
     public RecoverUserDTO getUserByEmail(String email) {

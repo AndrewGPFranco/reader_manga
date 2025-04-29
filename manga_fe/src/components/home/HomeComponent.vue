@@ -77,7 +77,7 @@ import type iCoversManga from '@/@types/iCoversManga'
 import { useMangaStore } from '@/store/MangaStore'
 import { useMessage } from 'naive-ui'
 import { onMounted, ref } from 'vue'
-import { InformationOutline, RefreshOutline, SearchOutline } from '@vicons/ionicons5'
+import { InformationOutline, RefreshOutline } from '@vicons/ionicons5'
 
 const mangas = ref<iCoversManga[]>([])
 const message = useMessage()
@@ -107,7 +107,7 @@ const getMangaRandom = async () => {
     })
     mangas.value = mangasResult
   } catch (error) {
-    message.error('Erro ao carregar os mangás.')
+    message.error(String(error));
   }
 }
 </script>
