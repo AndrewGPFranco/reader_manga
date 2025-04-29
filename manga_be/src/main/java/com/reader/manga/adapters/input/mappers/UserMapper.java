@@ -3,7 +3,11 @@ package com.reader.manga.adapters.input.mappers;
 import com.reader.manga.adapters.input.dtos.user.RecoverUserDTO;
 import com.reader.manga.adapters.input.dtos.user.UserDTO;
 import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.enums.RoleType;
+import org.apache.commons.compress.utils.Sets;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class UserMapper {
@@ -20,7 +24,7 @@ public class UserMapper {
 
     public User toEntity(UserDTO user) {
         return new User(user.username(), user.fullName(), user.firstName(),
-                user.dateBirth(), "USER", user.password(), user.email());
+                user.dateBirth(), Sets.newHashSet(RoleType.USER), user.password(), user.email());
     }
 
 }

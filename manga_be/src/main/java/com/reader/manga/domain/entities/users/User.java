@@ -1,6 +1,7 @@
 package com.reader.manga.domain.entities.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reader.manga.domain.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,10 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -44,8 +43,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<RoleType> roles;
 
     @Column(nullable = false)
     private LocalDate  dateBirth;
@@ -58,7 +57,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteMangaUser> mangaFavorites = new ArrayList<>();
 
-    public User(String username, String fullName, String firstName, LocalDate dateBirth, String roles, String password, String email) {
+    public User(String username, String fullName, String firstName, LocalDate dateBirth, Set<RoleType> roles, String password, String email) {
         this.username = username;
         this.fullName = fullName;
         this.firstName = firstName;
@@ -70,9 +69,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(roles.split(","))
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        return this.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toList());
     }
 
     @Override

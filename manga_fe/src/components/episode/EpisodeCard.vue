@@ -22,9 +22,7 @@ const props = defineProps<{
   episode: iEpisode
 }>()
 
-const emit = defineEmits<{
-  (e: 'play', episode: iEpisode): void
-}>()
+const emit = defineEmits<(e: 'play', episode: iEpisode) => void>()
 
 const onClick = () => emit('play', props.episode)
 </script>
