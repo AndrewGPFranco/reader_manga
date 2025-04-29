@@ -70,14 +70,14 @@ public class ColetorMangaFonteI extends ColetorBaseFonte<MangaJobVOI> {
         String title = getTituloDoManga(atributos);
         String description = atributos.get("description").asText();
         String creationDate = atributos.get("startDate").asText();
-        String cloasingDate = atributos.get("endDate").asText();
+        String cloasing = atributos.get("endDate").asText();
         StatusType status = !statusStr.equals("CURRENT") ? StatusType.valueOf(statusStr) : StatusType.ONGOING;
         String image = atributos.get("posterImage").get("small").asText();
         Integer size = atributos.get("chapterCount").asInt() != 0 ? atributos.get("chapterCount").asInt() : 1;
 
         return MangaJobVOI.builder().title(title).description(description).status(status)
                 .creationDate(formataData(creationDate)).closingDate(
-                        !cloasingDate.equals("null") ? formataData(cloasingDate) : null)
+                        !cloasing.equals("null") ? formataData(cloasing) : null)
                 .image(image).size(size).build();
     }
 

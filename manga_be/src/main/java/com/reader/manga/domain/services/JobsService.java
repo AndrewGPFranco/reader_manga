@@ -33,7 +33,7 @@ public class JobsService {
     }
 
     /**
-     * Responsável por levar ao front todos os Jobs dísponiveis no sistema.
+     * Responsável por levar ao front todos os Jobs disponíveis no sistema.
      * @return lista com todos os Jobs.
      */
     public List<JobsType> getJobs() {
