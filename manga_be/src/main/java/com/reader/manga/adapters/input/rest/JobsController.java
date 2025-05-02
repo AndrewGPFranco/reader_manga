@@ -8,6 +8,7 @@ import com.reader.manga.domain.services.JobsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -24,6 +25,7 @@ public class JobsController <T> implements iDadosManga {
     private final JobsService jobsService;
 
     @PostMapping("/{name}/{parametros}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<T> executaJob(@PathVariable JobsType name, @PathVariable String parametros) {
         T responseJobVO;
         switch(name) {
@@ -37,6 +39,7 @@ public class JobsController <T> implements iDadosManga {
     }
 
     @GetMapping("/get-jobs")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<JobDTO>> getJobs() {
         List<JobsType> jobs = jobsService.getJobs();
         List<JobDTO> jobDtoList = new ArrayList<>(jobs.size());
@@ -53,6 +56,7 @@ public class JobsController <T> implements iDadosManga {
     }
 
     @PostMapping("/upload-chapter")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> executaJobChapter(
             @RequestParam("file") MultipartFile file,
             @RequestParam("titleChapter") String titleChapter,
@@ -67,6 +71,7 @@ public class JobsController <T> implements iDadosManga {
     }
 
     @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SseEmitter subscribe() {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         jobChapter.addEmitter(emitter);
