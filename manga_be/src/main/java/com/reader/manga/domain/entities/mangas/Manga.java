@@ -83,7 +83,7 @@ public class Manga {
     private List<Comment> comments;
 
     @Column(name = "favorite")
-    private boolean isFavorite = false;
+    private boolean isFavorite;
 
     public Manga(String title, String description, Integer size, Date creationDate, Date closingDate, StatusType status, String gender, String author, String image) {
         this.title = title;

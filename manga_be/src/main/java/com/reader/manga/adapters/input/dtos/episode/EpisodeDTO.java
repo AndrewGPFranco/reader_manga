@@ -1,6 +1,5 @@
 package com.reader.manga.adapters.input.dtos.episode;
 
-import com.reader.manga.domain.entities.animes.Anime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

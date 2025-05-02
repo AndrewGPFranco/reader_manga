@@ -7,6 +7,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest
 class MangaApplicationTests {
 
+	@SuppressWarnings("resource")
 	static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15")
 			.withDatabaseName("reeadertest")
 			.withUsername("andrew")
@@ -20,7 +21,6 @@ class MangaApplicationTests {
 	}
 
 	@Test
-	void contextLoads() {
-	}
+	void contextLoads() {}
 
 }

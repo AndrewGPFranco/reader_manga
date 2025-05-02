@@ -41,7 +41,7 @@ public class UserService {
             case USER -> user.setRoles(Sets.newHashSet(RoleType.USER));
             case MODERATOR -> user.setRoles(Sets.newHashSet(RoleType.USER, RoleType.MODERATOR));
             case ADMIN -> user.setRoles(Sets.newHashSet(RoleType.USER, RoleType.MODERATOR, RoleType.ADMIN));
-        };
+        }
 
         repository.save(user);
     }

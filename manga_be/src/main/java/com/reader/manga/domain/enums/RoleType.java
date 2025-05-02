@@ -7,6 +7,7 @@ public enum RoleType {
     MODERATOR("Moderador")
     ;
 
+    @SuppressWarnings("unused")
     private final String roleDescription;
 
     RoleType(String roleDescription) {

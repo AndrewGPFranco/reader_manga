@@ -5,7 +5,6 @@ import com.reader.manga.adapters.input.dtos.page.PageDTO;
 import com.reader.manga.adapters.input.dtos.page.UpdatePageDTO;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.entities.users.UserChapter;
-import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.exceptions.CreationErrorException;
 import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.adapters.input.dtos.chapter.ChapterDTO;
