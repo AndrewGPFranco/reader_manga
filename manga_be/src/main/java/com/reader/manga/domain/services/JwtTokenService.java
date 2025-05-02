@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.enums.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class JwtTokenService {
                     .withClaim("role", user.getRoles().stream()
                             .map(Enum::name)
                             .toList())
+                    .withClaim("isAdmin", user.getRoles().contains(RoleType.ADMIN))
                     .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
