@@ -17,4 +17,6 @@ public interface PaginaRepository {
 
     Page<Pagina> findAll(Pageable pageable);
 
+    List<String> getUriPagina(Long idChapter);
+
 }

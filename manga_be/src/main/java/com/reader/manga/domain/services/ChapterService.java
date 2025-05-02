@@ -174,4 +174,17 @@ public class ChapterService {
 
         return allChapter;
     }
+
+    public String getPageById(Long id, Integer paginaAtual) {
+        List<String> uriList = paginaRepository.getUriPagina(id);
+
+        Optional<String> urlEncontrada = uriList.stream().filter(p ->
+                p.contains("pagina_" + paginaAtual)).findFirst();
+        if(urlEncontrada.isPresent()) {
+            String[] uriTratada = urlEncontrada.get().split("/app");
+            return uriTratada[1];
+        }
+
+        return null;
+    }
 }

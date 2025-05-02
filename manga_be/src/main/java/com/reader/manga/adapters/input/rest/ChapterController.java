@@ -120,7 +120,7 @@ public class ChapterController {
     }
 
     @GetMapping("/image/{idChapter}/{pageNumber}")
-    public ResponseEntity<UrlResource> getPages(@PathVariable Long idChapter, @PathVariable Integer pageNumber) throws MalformedURLException {
+    public ResponseEntity<UrlResource> getPage(@PathVariable Long idChapter, @PathVariable Integer pageNumber) throws MalformedURLException {
         List<Pagina> paginas = service.getCapituloPorId(idChapter);
         paginas.sort(Comparator.comparingLong(Pagina::getId));
 
@@ -130,6 +130,12 @@ public class ChapterController {
         UrlResource resource = new UrlResource(path.toUri());
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
+    }
+
+    @GetMapping("/page/{idManga}/{indicePaginaAtual}")
+    public ResponseEntity<String> getPageLink(@PathVariable Long idManga, @PathVariable Integer indicePaginaAtual) {
+        String link = service.getPageById(idManga, indicePaginaAtual);
+        return ResponseEntity.ok().body(link);
     }
 
     @PutMapping("/update-progress")

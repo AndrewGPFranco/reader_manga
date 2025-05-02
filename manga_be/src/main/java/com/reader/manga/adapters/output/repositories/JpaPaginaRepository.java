@@ -15,4 +15,7 @@ public interface JpaPaginaRepository extends PaginaRepository, JpaRepository<Pag
     @Query("SELECT p FROM Pagina p WHERE p.chapter.id = :id")
     List<Pagina> findByIdChapter(@Param("id") Long id);
 
+    @Query("SELECT p.pathPage FROM Pagina p WHERE p.chapter.id = :idChapter")
+    List<String> getUriPagina(@Param("idChapter") Long idChapter);
+
 }

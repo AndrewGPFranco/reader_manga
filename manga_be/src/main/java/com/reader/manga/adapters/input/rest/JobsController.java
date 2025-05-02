@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,12 +29,10 @@ public class JobsController <T> implements iDadosManga {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<T> executaJob(@PathVariable JobsType name, @PathVariable String parametros) {
         T responseJobVO;
-        switch(name) {
-            case MANGA:
-                responseJobVO = (T) jobsService.executaJobManga(parametros);
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de job inválido: " + name);
+        if (Objects.requireNonNull(name) == JobsType.MANGA) {
+            responseJobVO = (T) jobsService.executaJobManga(parametros);
+        } else {
+            throw new IllegalArgumentException("Tipo de job inválido: " + name);
         }
         return ResponseEntity.ok().body(responseJobVO);
     }
