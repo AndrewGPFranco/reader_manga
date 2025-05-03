@@ -5,16 +5,12 @@
       <section v-if="!renderEpisode">
         <div class="anime-info">
           <h2 class="anime-title">{{ title }}</h2>
-          <p class="episodes-count">{{ allEpisodes.length }} episódios</p>
+          <p v-if="animeList.episodes" class="episodes-count">{{ animeList.episodes.length }} episódios</p>
         </div>
 
         <div class="episodes-grid">
-          <EpisodeCard
-            v-for="episode in allEpisodes"
-            :key="episode.id"
-            :episode="episode"
-            @play="playEpisode"
-          />
+          <EpisodeCard v-for="episode in animeList.episodes || []" :key="episode.id" :episode="episode"
+            @play="playEpisode" />
         </div>
       </section>
 
@@ -33,23 +29,25 @@ import NavbarComponent from '@/components/global/NavbarComponent.vue'
 import VideoEpisodeAnime from '@/components/anime/VideoEpisodeAnime.vue'
 import EpisodeCard from '@/components/episode/EpisodeCard.vue'
 import { useEpisodeStore } from '@/store/EpisodeStore'
-import type { iEpisode } from '@/@types/iEpisode'
+import type { AnimeListingVO } from '@/@types/AnimeListingVO'
+import type { EpisodeToAnimesVO } from '@/@types/iEpisodeToAnimesVO'
 
 const route = useRoute()
 const title = ref<string>('')
 const idAnime = ref<string>('')
 const idEpisode = ref<string>('')
 const renderEpisode = ref<boolean>(false)
-const allEpisodes = ref<iEpisode[]>([])
 const episodeStore = useEpisodeStore()
+const animeList = ref<AnimeListingVO>({} as AnimeListingVO)
 
 onMounted(async () => {
   title.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
   idAnime.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  allEpisodes.value = await episodeStore.getAllEpisodesByAnime(idAnime.value)
+  const animeListResponse = await episodeStore.getAllEpisodesByAnime(idAnime.value)
+  animeList.value = animeListResponse
 })
 
-const playEpisode = (episode: iEpisode) => {
+const playEpisode = (episode: EpisodeToAnimesVO) => {
   idEpisode.value = episode.id.toString()
   renderEpisode.value = true
 }

@@ -9,20 +9,20 @@
     </div>
     <div class="episode-info">
       <span class="episode-number">EP {{ episode.numberEpisode }}</span>
-      <h3 class="episode-title">{{ episode.title }}</h3>
+      <h3 class="episode-title">{{ episode.titleEpisode }}</h3>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { NIcon } from 'naive-ui'
-import type { iEpisode } from '@/@types/iEpisode'
+import type { EpisodeToAnimesVO } from '@/@types/iEpisodeToAnimesVO';
 
 const props = defineProps<{
-  episode: iEpisode
+  episode: EpisodeToAnimesVO
 }>()
 
-const emit = defineEmits<(e: 'play', episode: iEpisode) => void>()
+const emit = defineEmits<(e: 'play', episode: EpisodeToAnimesVO) => void>()
 
 const onClick = () => emit('play', props.episode)
 </script>
