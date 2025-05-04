@@ -123,10 +123,13 @@ public class JobChapter extends ColetorBaseUpload {
                                       String basePath, Chapter capitulo) throws IOException {
         List<Pagina> paginas = new ArrayList<>();
 
+        int indexInicial1 = 1;
         for (int i = 0; i < totalPages; i++) {
             final int pageIndex = i;
             BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, DPI);
-            String outputPath = basePath + "/pagina_" + pageIndex + ".png";
+            String outputPath = basePath + "/pagina_" + indexInicial1 + ".png";
+
+            indexInicial1++;
 
             executorService.submit(() -> {
                 try {

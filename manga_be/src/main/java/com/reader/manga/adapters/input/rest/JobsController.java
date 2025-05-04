@@ -70,7 +70,6 @@ public class JobsController <T> implements iDadosManga {
     }
 
     @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @PreAuthorize("hasAuthority('ADMIN')")
     public SseEmitter subscribe() {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         jobChapter.addEmitter(emitter);
