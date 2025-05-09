@@ -28,5 +28,7 @@ public interface JpaUserMangaRepository extends UserMangaRepository, JpaReposito
     @Query("UPDATE user_manga SET nota = :nota WHERE user.id = :idUser AND manga.id = :idManga")
     void atualizaNotaManga(@Param("idUser") Long idUser, @Param("idManga") Long idManga, @Param("nota") Integer nota);
 
+    @Query("SELECT COUNT(um) FROM user_manga um WHERE um.manga.id = :idManga AND um.user.id = :idUser")
+    Integer mangaIsInUserLibrary(@Param("idManga") Long idManga, @Param("idUser") Long idUser);
 
 }

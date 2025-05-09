@@ -203,4 +203,13 @@ public class UserMangaService {
         jpaUserMangaRepository.atualizaNotaManga(user.getId(), vo.idManga(), vo.nota());
     }
 
+    public boolean mangaIsInUserLibrary(Long idManga, Long idUser) {
+        try {
+            Integer quantity = jpaUserMangaRepository.mangaIsInUserLibrary(idManga, idUser);
+            return quantity > 0;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar associação.");
+        }
+    }
+
 }

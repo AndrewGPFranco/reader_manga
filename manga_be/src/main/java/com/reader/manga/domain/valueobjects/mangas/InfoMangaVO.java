@@ -32,5 +32,6 @@ public record InfoMangaVO(
         StatusType status,
         Date creationDate,
         String description,
-        List<Chapter> chapters
+        List<Chapter> chapters,
+        boolean isInUserLibrary
 ) {}

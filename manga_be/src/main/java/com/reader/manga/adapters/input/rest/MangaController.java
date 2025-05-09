@@ -123,6 +123,7 @@ public class MangaController {
         Map<Long, Integer> mapaProgressos = userChapterService.obtemProgressoLeituraUsuario(idUser, manga);
 
         userChapterService.atualizaProgresso(manga.getChapters(), mapaProgressos);
+        boolean isInLibrary = userMangaService.mangaIsInUserLibrary(manga.getId(), idUser);
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
                         .id(manga.getId())
@@ -137,6 +138,7 @@ public class MangaController {
                         .author(manga.getAuthor())
                         .status(manga.getStatus())
                         .image(manga.getImage())
+                        .isInUserLibrary(isInLibrary)
                 .build());
     }
 

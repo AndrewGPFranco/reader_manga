@@ -13,4 +13,6 @@ public interface UserMangaRepository {
     Long getNotaDoMangaDadoPeloUsuario(Long id, Long idManga);
 
     void atualizaNotaManga(Long idUser, Long idManga, Integer nota);
+
+    Integer mangaIsInUserLibrary(Long idManga, Long idUser);
 }
