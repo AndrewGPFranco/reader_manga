@@ -1,6 +1,7 @@
 package com.reader.manga.domain.entities.animes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reader.manga.domain.entities.users.FavoriteEpisodeUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -36,7 +40,20 @@ public class Episode {
     private Anime anime;
 
     @Min(1)
+    @NotNull
     private Integer numberEpisode;
 
-    public Episode() {}
+    @NotNull
+    private Integer views;
+
+    @NotNull
+    private LocalDate uploaded;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteEpisodeUser> favoriteEpisodeUsers;
+
+    public Episode() {
+    }
+
 }
