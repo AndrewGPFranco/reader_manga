@@ -35,4 +35,5 @@ public class FavoriteEpisodeUser {
     @JoinColumn(name = "episode_id", nullable = false)
     private Episode episode;
 
+    public FavoriteEpisodeUser() {}
 }

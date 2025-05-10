@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AnimesManagementFacade {
@@ -28,11 +30,11 @@ public class AnimesManagementFacade {
         return FeedbackEpisodeType.valueOf(feedbackByUserAndEpisode);
     }
 
-    public Page<EpisodeCommentsVO> getVideoComments(Long idEpisode, int pageNumber, int pageSize) {
+    public List<EpisodeCommentsVO> getVideoComments(Long idEpisode, int pageNumber, int pageSize) {
         Page<VideosComments> commentsByEpisode = videosCommentsRepository
                 .getCommentsByEpisode(idEpisode, getPageable(pageNumber, pageSize));
 
-        return commentsByEpisode.map(commentMapper::entityEpisodeCommentToVO);
+        return commentsByEpisode.map(commentMapper::entityEpisodeCommentToVO).stream().toList();
     }
 
     public Pageable getPageable(int pageNumber, int pageSize) {

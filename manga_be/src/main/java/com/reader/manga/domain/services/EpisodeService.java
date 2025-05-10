@@ -129,7 +129,7 @@ public class EpisodeService {
         String uri = getVideoById(idEpisode);
         Episode episode = getEpisodeById(idEpisode);
         FeedbackEpisodeType feedback = animesManagementFacade.feedbackOfVideoByUser(user.getId(), idEpisode);
-        Page<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode, pageNumber, pageSize);
+        List<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode, pageNumber, pageSize);
 
         return EpisodeDisplayVO.builder()
                 .uriEpisode(uri)

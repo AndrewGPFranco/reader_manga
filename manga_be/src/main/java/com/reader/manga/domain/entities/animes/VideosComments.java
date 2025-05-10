@@ -33,4 +33,5 @@ public class VideosComments {
     @Length(min = 1, max = 2000)
     private String comment;
 
+    public VideosComments() {}
 }
