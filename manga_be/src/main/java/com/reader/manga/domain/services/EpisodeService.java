@@ -3,13 +3,20 @@ package com.reader.manga.domain.services;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.entities.animes.Anime;
 import com.reader.manga.domain.entities.animes.Episode;
+import com.reader.manga.domain.entities.users.FavoriteEpisodeUser;
+import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.enums.FeedbackEpisodeType;
 import com.reader.manga.domain.enums.TagType;
 import com.reader.manga.domain.exceptions.NotFoundException;
+import com.reader.manga.domain.facades.AnimesManagementFacade;
+import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeCommentsVO;
+import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeDisplayVO;
 import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
 import com.reader.manga.domain.valueobjects.screens.listing.animes.EpisodeToAnimesVO;
 import com.reader.manga.ports.repositories.EpisodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,6 +36,7 @@ public class EpisodeService {
     private final AnimeService animeService;
     private final AnimeUserService animeUserService;
     private final EpisodeRepository episodeRepository;
+    private final AnimesManagementFacade animesManagementFacade;
 
     private final Path pastaOrigem = Paths.get("uploads/animes");
 
@@ -116,4 +124,21 @@ public class EpisodeService {
         return episodeRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Nenhum episódio encontrado com o ID: " + id));
     }
+
+    public EpisodeDisplayVO getEpisodeInfos(Long idEpisode, User user, int pageNumber, int pageSize) {
+        String uri = getVideoById(idEpisode);
+        Episode episode = getEpisodeById(idEpisode);
+        FeedbackEpisodeType feedback = animesManagementFacade.feedbackOfVideoByUser(user.getId(), idEpisode);
+        Page<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode, pageNumber, pageSize);
+
+        return EpisodeDisplayVO.builder()
+                .uriEpisode(uri)
+                .titleEpisode(episode.getTitle())
+                .amountViews(episode.getViews())
+                .uploaded(episode.getUploaded())
+                .feedback(feedback)
+                .commentsList(videoComments)
+                .build();
+    }
+
 }

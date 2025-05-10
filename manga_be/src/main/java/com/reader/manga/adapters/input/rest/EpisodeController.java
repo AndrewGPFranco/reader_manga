@@ -3,6 +3,7 @@ package com.reader.manga.adapters.input.rest;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.EpisodeService;
+import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeDisplayVO;
 import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -43,7 +44,7 @@ public class EpisodeController {
     public ResponseEntity<UrlResource> getEpisodeAnime(@PathVariable String id, @PathVariable String anime) {
         UrlResource resource = episodeService.serveVideo(EpisodeDTO.builder().animeId(Long.parseLong(id)).title(anime).build());
 
-        if(resource != null)
+        if (resource != null)
             return ResponseEntity.ok()
                     .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
                     .body(resource);
@@ -55,7 +56,7 @@ public class EpisodeController {
     public ResponseEntity<String> getEpisodeLink(@PathVariable Long id) {
         String link = episodeService.getVideoById(id);
 
-        if(link != null)
+        if (link != null)
             return ResponseEntity.ok().body(link);
 
         return ResponseEntity.notFound().build();
@@ -64,6 +65,15 @@ public class EpisodeController {
     @GetMapping("/all/{idAnime}")
     public ResponseEntity<AnimeListingVO> getTodosEpisodiosDoAnime(@PathVariable Long idAnime, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime, user.getId()));
+    }
+
+    @GetMapping("/get-info-episode/{idEpisode}/{pageNumber}/{pageSize}")
+    public ResponseEntity<EpisodeDisplayVO> getEpisodeInfos(@PathVariable Long idEpisode,
+                                                            @PathVariable Integer pageNumber,
+                                                            @PathVariable Integer pageSize,
+                                                            @AuthenticationPrincipal User user) {
+        EpisodeDisplayVO episode = episodeService.getEpisodeInfos(idEpisode, user, pageNumber, pageSize);
+        return ResponseEntity.ok().body(episode);
     }
 
 }

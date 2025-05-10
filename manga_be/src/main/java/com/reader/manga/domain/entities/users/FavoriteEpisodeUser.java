@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @ToString
 @AllArgsConstructor
-@Table(name = "favorite_episode_user")
+@Table(name = "favorite_episode")
 public class FavoriteEpisodeUser {
 
     @Id
