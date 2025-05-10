@@ -11,4 +11,7 @@ public interface JpaFavoriteEpisodeUserRepository extends JpaRepository<Favorite
     @Query("select fe.feedback from FavoriteEpisodeUser fe where fe.user.id = :idUser and fe.episode.id = :idEpisode")
     String getFeedbackByUserAndEpisode(@Param("idUser") Long idUser, @Param("idEpisode") Long idEpisode);
 
+    @Query("select fe from FavoriteEpisodeUser fe where fe.user.id = :idUser and fe.episode.id = :idEpisode")
+    FavoriteEpisodeUser favoriteEpisodeByUser(Long idUser, Long idEpisode);
+
 }

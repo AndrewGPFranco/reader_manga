@@ -2,9 +2,11 @@ package com.reader.manga.domain.services;
 
 import com.reader.manga.adapters.input.dtos.episode.CommentDTO;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
+import com.reader.manga.adapters.input.dtos.episode.FeedbackDTO;
 import com.reader.manga.domain.entities.animes.Anime;
 import com.reader.manga.domain.entities.animes.Episode;
 import com.reader.manga.domain.entities.animes.VideosComments;
+import com.reader.manga.domain.entities.users.FavoriteEpisodeUser;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.enums.FeedbackEpisodeType;
 import com.reader.manga.domain.enums.TagType;
@@ -157,5 +159,34 @@ public class EpisodeService {
                 .build();
 
         animesManagementFacade.addCommentToEpisode(comment);
+    }
+
+    public void handleFeedback(FeedbackDTO dto, User user) {
+        FeedbackEpisodeType feedbackType = getFeedbackTypeByDTO(dto.feedback());
+        Episode episode = getEpisodeById(dto.idEpisode());
+        FeedbackEpisodeType feedbackAlreadyExists = animesManagementFacade.feedbackOfVideoByUser(user.getId(), dto.idEpisode());
+
+        if (feedbackAlreadyExists.equals(feedbackType)) {
+            animesManagementFacade.removeFavorite(user.getId(), dto.idEpisode());
+        } else if (feedbackAlreadyExists.equals(FeedbackEpisodeType.NOTHING)) {
+            animesManagementFacade.saveHandleFeedback(FavoriteEpisodeUser.builder()
+                    .user(user)
+                    .episode(episode)
+                    .feedback(feedbackType)
+                    .build());
+        } else {
+            FavoriteEpisodeUser valueDatabase = animesManagementFacade.favoriteEpisodeByUser(user.getId(), dto.idEpisode());
+            valueDatabase.setFeedback(feedbackType);
+            animesManagementFacade.saveHandleFeedback(valueDatabase);
+        }
+    }
+
+    private FeedbackEpisodeType getFeedbackTypeByDTO(String feedbackStr) {
+        return switch (feedbackStr) {
+            case "Gostei" -> FeedbackEpisodeType.LIKE;
+            case "Não gostei" -> FeedbackEpisodeType.DISLIKE;
+            case "Sem feedback" -> FeedbackEpisodeType.NOTHING;
+            default -> throw new IllegalArgumentException(String.format("Nenhum tipo encontrado para %s", feedbackStr));
+        };
     }
 }

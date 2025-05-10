@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 @Entity
@@ -27,7 +26,6 @@ public class FavoriteEpisodeUser {
     private User user;
 
     @NotNull
-    @Length(min = 7, max = 13)
     @Enumerated(EnumType.STRING)
     private FeedbackEpisodeType feedback;
 

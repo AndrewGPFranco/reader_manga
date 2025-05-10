@@ -2,6 +2,7 @@ package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.episode.CommentDTO;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
+import com.reader.manga.adapters.input.dtos.episode.FeedbackDTO;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.EpisodeService;
 import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeDisplayVO;
@@ -90,6 +91,14 @@ public class EpisodeController {
             episodeService.addCommentToEpisode(dto, user);
         } catch (Exception e) {
             throw new RuntimeException(String.format("Ocorreu um erro ao adicionar comentário do usuário: %s", user.getUsername()));
+        }
+    }
+    @PostMapping("/handle-feedback")
+    public void handleFeedback(@RequestBody FeedbackDTO dto, @AuthenticationPrincipal User user) {
+        try {
+            episodeService.handleFeedback(dto, user);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Ocorreu um erro ao alterar o feedback do episódio com id: %s", dto.idEpisode()));
         }
     }
 

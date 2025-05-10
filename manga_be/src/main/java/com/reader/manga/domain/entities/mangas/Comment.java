@@ -44,7 +44,7 @@ public class Comment {
     private FeedbackType feedback;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
 

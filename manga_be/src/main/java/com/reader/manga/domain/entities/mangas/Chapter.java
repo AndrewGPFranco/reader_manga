@@ -34,7 +34,7 @@ public class Chapter {
     private Integer numberPages = 0;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manga_id", nullable = false)
     private Manga manga;
 

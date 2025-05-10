@@ -35,7 +35,7 @@ public class Episode {
     private String uri;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "anime_id", nullable = false)
     private Anime anime;
 

@@ -27,7 +27,7 @@ public class Pagina {
     private String pathPage;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
