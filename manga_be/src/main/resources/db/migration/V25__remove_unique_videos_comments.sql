@@ -1,0 +1,2 @@
+alter table videos_comments
+drop constraint if exists videos_comments_user_id_episode_id_key;
