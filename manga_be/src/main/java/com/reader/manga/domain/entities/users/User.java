@@ -47,15 +47,19 @@ public class User implements UserDetails {
     private Set<RoleType> roles;
 
     @Column(nullable = false)
-    private LocalDate  dateBirth;
+    private LocalDate dateBirth;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserManga> userMangas = new ArrayList<>();
+    private List<UserManga> userMangas;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteMangaUser> mangaFavorites = new ArrayList<>();
+    private List<FavoriteMangaUser> mangaFavorites;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteEpisodeUser> favoriteEpisodeUsers;
 
     public User(String username, String fullName, String firstName, LocalDate dateBirth, Set<RoleType> roles, String password, String email) {
         this.username = username;

@@ -49,9 +49,8 @@ public class Episode {
     @NotNull
     private LocalDate uploaded;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteEpisodeUser> favoriteEpisodeUsers;
+    private List<VideosComments> commentsList;
 
     public Episode() {
     }
