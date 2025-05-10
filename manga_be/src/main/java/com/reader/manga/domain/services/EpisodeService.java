@@ -141,4 +141,10 @@ public class EpisodeService {
                 .build();
     }
 
+    public void updateAmountViews(Long idEpisode) {
+        Episode episode = getEpisodeById(idEpisode);
+        int newAmount = episode.getViews() + 1;
+        episode.setViews(newAmount);
+        episodeRepository.save(episode);
+    }
 }

@@ -76,4 +76,13 @@ public class EpisodeController {
         return ResponseEntity.ok().body(episode);
     }
 
+    @PostMapping("/{idEpisode}/update-view")
+    public void updateAmountViews(@PathVariable Long idEpisode) {
+        try {
+            episodeService.updateAmountViews(idEpisode);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Ocorreu um erro ao atualizar contagem de views do episódio com ID: %s", idEpisode));
+        }
+    }
+
 }
