@@ -1,5 +1,6 @@
 package com.reader.manga.adapters.input.rest;
 
+import com.reader.manga.adapters.input.dtos.episode.CommentDTO;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.EpisodeService;
@@ -67,12 +68,10 @@ public class EpisodeController {
         return ResponseEntity.ok().body(episodeService.obterEpisodiosDoAnime(idAnime, user.getId()));
     }
 
-    @GetMapping("/get-info-episode/{idEpisode}/{pageNumber}/{pageSize}")
+    @GetMapping("/get-info-episode/{idEpisode}")
     public ResponseEntity<EpisodeDisplayVO> getEpisodeInfos(@PathVariable Long idEpisode,
-                                                            @PathVariable Integer pageNumber,
-                                                            @PathVariable Integer pageSize,
                                                             @AuthenticationPrincipal User user) {
-        EpisodeDisplayVO episode = episodeService.getEpisodeInfos(idEpisode, user, pageNumber, pageSize);
+        EpisodeDisplayVO episode = episodeService.getEpisodeInfos(idEpisode, user);
         return ResponseEntity.ok().body(episode);
     }
 
@@ -82,6 +81,15 @@ public class EpisodeController {
             episodeService.updateAmountViews(idEpisode);
         } catch (Exception e) {
             throw new RuntimeException(String.format("Ocorreu um erro ao atualizar contagem de views do episódio com ID: %s", idEpisode));
+        }
+    }
+
+    @PostMapping("/add-comment")
+    public void addComment(@RequestBody CommentDTO dto, @AuthenticationPrincipal User user) {
+        try {
+            episodeService.addCommentToEpisode(dto, user);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Ocorreu um erro ao adicionar comentário do usuário: %s", user.getUsername()));
         }
     }
 

@@ -1,9 +1,10 @@
 package com.reader.manga.domain.services;
 
+import com.reader.manga.adapters.input.dtos.episode.CommentDTO;
 import com.reader.manga.adapters.input.dtos.episode.EpisodeDTO;
 import com.reader.manga.domain.entities.animes.Anime;
 import com.reader.manga.domain.entities.animes.Episode;
-import com.reader.manga.domain.entities.users.FavoriteEpisodeUser;
+import com.reader.manga.domain.entities.animes.VideosComments;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.enums.FeedbackEpisodeType;
 import com.reader.manga.domain.enums.TagType;
@@ -16,7 +17,6 @@ import com.reader.manga.domain.valueobjects.screens.listing.animes.EpisodeToAnim
 import com.reader.manga.ports.repositories.EpisodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -125,11 +125,11 @@ public class EpisodeService {
                 new NotFoundException("Nenhum episódio encontrado com o ID: " + id));
     }
 
-    public EpisodeDisplayVO getEpisodeInfos(Long idEpisode, User user, int pageNumber, int pageSize) {
+    public EpisodeDisplayVO getEpisodeInfos(Long idEpisode, User user) {
         String uri = getVideoById(idEpisode);
         Episode episode = getEpisodeById(idEpisode);
         FeedbackEpisodeType feedback = animesManagementFacade.feedbackOfVideoByUser(user.getId(), idEpisode);
-        List<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode, pageNumber, pageSize);
+        List<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode);
 
         return EpisodeDisplayVO.builder()
                 .uriEpisode(uri)
@@ -146,5 +146,16 @@ public class EpisodeService {
         int newAmount = episode.getViews() + 1;
         episode.setViews(newAmount);
         episodeRepository.save(episode);
+    }
+
+    public void addCommentToEpisode(CommentDTO dto, User user) {
+        Episode episode = getEpisodeById(dto.idEpisode());
+        VideosComments comment = VideosComments.builder()
+                .user(user)
+                .episode(episode)
+                .comment(dto.comment())
+                .build();
+
+        animesManagementFacade.addCommentToEpisode(comment);
     }
 }

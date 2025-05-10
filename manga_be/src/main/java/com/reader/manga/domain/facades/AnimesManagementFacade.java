@@ -7,7 +7,6 @@ import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeCommentsVO;
 import com.reader.manga.ports.repositories.FavoriteEpisodeUserRepository;
 import com.reader.manga.ports.repositories.VideosCommentsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -30,15 +29,19 @@ public class AnimesManagementFacade {
         return FeedbackEpisodeType.valueOf(feedbackByUserAndEpisode);
     }
 
-    public List<EpisodeCommentsVO> getVideoComments(Long idEpisode, int pageNumber, int pageSize) {
-        Page<VideosComments> commentsByEpisode = videosCommentsRepository
-                .getCommentsByEpisode(idEpisode, getPageable(pageNumber, pageSize));
+    public List<EpisodeCommentsVO> getVideoComments(Long idEpisode) {
+        List<VideosComments> commentsByEpisode = videosCommentsRepository
+                .getCommentsByEpisode(idEpisode);
 
-        return commentsByEpisode.map(commentMapper::entityEpisodeCommentToVO).stream().toList();
+        return commentsByEpisode.stream().map(commentMapper::entityEpisodeCommentToVO).toList();
     }
 
     public Pageable getPageable(int pageNumber, int pageSize) {
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    public void addCommentToEpisode(VideosComments comment) {
+        videosCommentsRepository.save(comment);
     }
 
 }
