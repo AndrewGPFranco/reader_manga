@@ -1,5 +1,6 @@
 package com.reader.manga.adapters.input.rest;
 
+import com.reader.manga.adapters.input.dtos.ResponseAPI;
 import com.reader.manga.adapters.input.dtos.user.*;
 import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
@@ -12,6 +13,7 @@ import com.reader.manga.domain.valueobjects.users.UserMangaVO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -126,6 +129,20 @@ public class UserController {
             return ResponseEntity.ok().body("Mudança realizada com sucesso!");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/change-photo")
+    public ResponseEntity<ResponseAPI> changeProfilePhoto(@AuthenticationPrincipal User user,
+                                                          @RequestParam("file") MultipartFile profilePhoto) {
+        try {
+            userService.handleProfilePhoto(profilePhoto, user);
+            return ResponseEntity.ok().body(ResponseAPI.builder().build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseAPI(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
+                            ResponseAPI.builder().message(e.getMessage())
+                                    .statusCode(400).build()));
         }
     }
 

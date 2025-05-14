@@ -27,9 +27,14 @@ public class AnimeUserController {
     public ResponseEntity<ResponseAPI> alteraFavoritoAnime(@PathVariable String idAnime, @AuthenticationPrincipal User user) {
         try {
             service.alteraFavoritoAnime(Long.parseLong(idAnime), user.getId());
-            return ResponseEntity.ok().body(new ResponseAPI("Favorito alterado com sucesso", 200));
+            return ResponseEntity.ok().body(ResponseAPI.builder()
+                    .message("Favorito alterado com sucesso")
+                    .statusCode(200).build());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ResponseAPI("Ocorreu um erro, tente novamente", 400));
+            return ResponseEntity.badRequest().body(ResponseAPI.builder()
+                            .message("Ocorreu um erro, tente novamente")
+                            .statusCode(400)
+                    .build());
         }
     }
 

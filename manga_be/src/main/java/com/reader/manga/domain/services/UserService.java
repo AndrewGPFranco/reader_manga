@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -70,4 +71,7 @@ public class UserService {
             throw new PasswordException("A senha informada não corresponde com a atual");
     }
 
+    public void handleProfilePhoto(MultipartFile profilePhoto, User user) {
+
+    }
 }

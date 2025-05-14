@@ -49,6 +49,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDate dateBirth;
 
+    private String uriProfilePhoto;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserManga> userMangas;
