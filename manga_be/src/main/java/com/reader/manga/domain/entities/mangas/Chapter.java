@@ -12,7 +12,6 @@ import java.util.List;
 
 @Data
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -52,6 +51,19 @@ public class Chapter {
         this.title = title;
         this.numberPages = numberPages;
         this.manga = manga;
+    }
+
+    @Override
+    public String toString() {
+        return "Chapter{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", numberPages=" + numberPages +
+                ", manga=" + manga +
+                ", pages=" + pages +
+                ", status=" + status +
+                ", readingProgress=" + readingProgress +
+                '}';
     }
 
 }

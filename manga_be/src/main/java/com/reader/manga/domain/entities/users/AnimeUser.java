@@ -53,4 +53,16 @@ public class AnimeUser {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "AnimeUser{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", animeId=" + animeId +
+                ", note=" + note +
+                ", progress=" + progress +
+                ", status=" + status +
+                '}';
+    }
+
 }

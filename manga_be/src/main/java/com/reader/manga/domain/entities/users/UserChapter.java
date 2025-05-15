@@ -7,12 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @Table(name = "user_chapter")
 public class UserChapter {
@@ -37,4 +35,16 @@ public class UserChapter {
     private StatusType status = StatusType.ONGOING;
 
     public UserChapter() {}
+
+    @Override
+    public String toString() {
+        return "UserChapter{" +
+                "id=" + id +
+                ", user_id=" + user_id +
+                ", chapter_id=" + chapter_id +
+                ", progress=" + progress +
+                ", status=" + status +
+                '}';
+    }
+
 }

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -90,4 +89,23 @@ public class User implements UserDetails {
     public String getUsername() {
         return this.username;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", dateBirth=" + dateBirth +
+                ", uriProfilePhoto='" + uriProfilePhoto + '\'' +
+                ", userMangas=" + userMangas +
+                ", mangaFavorites=" + mangaFavorites +
+                ", favoriteEpisodeUsers=" + favoriteEpisodeUsers +
+                '}';
+    }
+
 }
