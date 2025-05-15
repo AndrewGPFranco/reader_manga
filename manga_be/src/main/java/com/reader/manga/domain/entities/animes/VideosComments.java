@@ -6,13 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 @Data
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @Table(name = "videos_comments")
 public class VideosComments {
@@ -34,4 +32,15 @@ public class VideosComments {
     private String comment;
 
     public VideosComments() {}
+
+    @Override
+    public String toString() {
+        return "VideosComments{" +
+                "id=" + id +
+                ", user=" + user +
+                ", episode=" + episode +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
+
 }

@@ -7,6 +7,7 @@ import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.adapters.input.mappers.PasswordEncoderMapper;
 import com.reader.manga.adapters.input.mappers.UserMapper;
 import com.reader.manga.domain.entities.users.User;
+import com.reader.manga.domain.exceptions.UnauthorizedFormatException;
 import com.reader.manga.ports.repositories.UserChapterRepository;
 import com.reader.manga.ports.repositories.UserMangaRepository;
 import com.reader.manga.ports.repositories.UserRepository;
@@ -18,6 +19,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +36,9 @@ public class UserService {
     private final UserMangaRepository userMangaRepository;
     private final PasswordEncoderMapper passwordEncoderMapper;
     private final UserChapterRepository userChapterRepository;
+
+    private static final String MDIR = "/app/uploads/profile-photo/";
+    private static final String MDIR_GETTER = "/uploads/profile-photo/";
 
     public RecoverUserDTO register(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
@@ -71,7 +82,35 @@ public class UserService {
             throw new PasswordException("A senha informada não corresponde com a atual");
     }
 
-    public void handleProfilePhoto(MultipartFile profilePhoto, User user) {
+    public void handleProfilePhoto(MultipartFile profilePhoto, User user)  {
+        if(!verifyTypeImage(Objects.requireNonNull(profilePhoto.getOriginalFilename())))
+            throw new UnauthorizedFormatException("Formato não suportado");
 
+        createDirectory();
+
+        String finalPath = MDIR + String.join("-", "profile", user.getUsername()) + ".png";
+        String pathToSave = MDIR_GETTER + String.join("-", "profile", user.getUsername()) + ".png";
+
+        Path path = Path.of(finalPath);
+
+        try {
+            Files.copy(profilePhoto.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            user.setUriProfilePhoto(pathToSave);
+            repository.save(user);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Ocorreu um erro ao salvar a imagem no diretório!");
+        }
+    }
+
+    private void createDirectory() {
+        File directory = new File(MDIR);
+
+        if(!directory.exists())
+            directory.mkdirs();
+    }
+
+    private boolean verifyTypeImage(String uri) {
+        return uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp");
     }
 }

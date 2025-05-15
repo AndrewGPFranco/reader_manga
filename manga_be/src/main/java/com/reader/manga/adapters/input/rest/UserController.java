@@ -13,7 +13,6 @@ import com.reader.manga.domain.valueobjects.users.UserMangaVO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -137,13 +136,18 @@ public class UserController {
                                                           @RequestParam("file") MultipartFile profilePhoto) {
         try {
             userService.handleProfilePhoto(profilePhoto, user);
-            return ResponseEntity.ok().body(ResponseAPI.builder().build());
+            return ResponseEntity.ok().body(ResponseAPI.builder()
+                    .message("Foto de perfil alterada com sucesso!")
+                    .statusCode(200).build());
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new ResponseAPI(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
-                            ResponseAPI.builder().message(e.getMessage())
-                                    .statusCode(400).build()));
+            return ResponseEntity.badRequest().body(
+                    ResponseAPI.builder().message(e.getMessage()).statusCode(400).build());
         }
+    }
+
+    @GetMapping("get-profile-photo")
+    public ResponseEntity<ResponseAPI> getProfilePhoto(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(ResponseAPI.builder().responseObject(user.getUriProfilePhoto()).build());
     }
 
 }
