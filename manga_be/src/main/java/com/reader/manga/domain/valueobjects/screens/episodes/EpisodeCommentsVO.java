@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public record EpisodeCommentsVO(
         String nameUser,
-        String comment
+        String comment,
+        String uriPath
 ) {}

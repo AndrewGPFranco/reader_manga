@@ -11,6 +11,7 @@ public record RecoverUserDTO(
         @NotNull @NotBlank String username,
         @NotNull @NotBlank String email,
         @NotNull LocalDate dateBirth,
+        String uriPath,
         Integer mangas,
         Integer completeReadings,
         Integer inProgressReadings

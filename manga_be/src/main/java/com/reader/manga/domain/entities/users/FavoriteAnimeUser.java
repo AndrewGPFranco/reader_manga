@@ -6,7 +6,6 @@ import lombok.*;
 
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "anime_favorite_user")
@@ -24,4 +23,14 @@ public class FavoriteAnimeUser {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "FavoriteAnimeUser{" +
+                "id=" + id +
+                ", anime=" + anime +
+                ", user=" + user +
+                '}';
+    }
+
 }

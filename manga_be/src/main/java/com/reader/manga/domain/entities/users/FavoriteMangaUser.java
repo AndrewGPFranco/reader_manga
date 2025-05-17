@@ -7,7 +7,6 @@ import lombok.*;
 
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "manga_favorite_user")
@@ -25,5 +24,14 @@ public class FavoriteMangaUser implements iListaMangasPorUsuario {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "FavoriteMangaUser{" +
+                "id=" + id +
+                ", manga=" + manga +
+                ", user=" + user +
+                '}';
+    }
 
 }

@@ -12,6 +12,7 @@ import com.reader.manga.domain.enums.FeedbackEpisodeType;
 import com.reader.manga.domain.enums.TagType;
 import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.domain.facades.AnimesManagementFacade;
+import com.reader.manga.domain.facades.UserManagementFacade;
 import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeCommentsVO;
 import com.reader.manga.domain.valueobjects.screens.episodes.EpisodeDisplayVO;
 import com.reader.manga.domain.valueobjects.screens.listing.animes.AnimeListingVO;
@@ -39,6 +40,7 @@ public class EpisodeService {
     private final AnimeUserService animeUserService;
     private final EpisodeRepository episodeRepository;
     private final AnimesManagementFacade animesManagementFacade;
+    private final UserManagementFacade userManagementFacade;
 
     private final Path pastaOrigem = Paths.get("uploads/animes");
 
@@ -130,6 +132,7 @@ public class EpisodeService {
     public EpisodeDisplayVO getEpisodeInfos(Long idEpisode, User user) {
         String uri = getVideoById(idEpisode);
         Episode episode = getEpisodeById(idEpisode);
+        String uriProfilePhoto = userManagementFacade.getUriProfilePhoto(user.getId());
         FeedbackEpisodeType feedback = animesManagementFacade.feedbackOfVideoByUser(user.getId(), idEpisode);
         List<EpisodeCommentsVO> videoComments = animesManagementFacade.getVideoComments(idEpisode);
 
@@ -140,6 +143,7 @@ public class EpisodeService {
                 .uploaded(episode.getUploaded())
                 .feedback(feedback)
                 .commentsList(videoComments)
+                .uriPath(uriProfilePhoto)
                 .build();
     }
 

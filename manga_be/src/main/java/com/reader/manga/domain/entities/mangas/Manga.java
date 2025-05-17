@@ -16,7 +16,6 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "manga")
@@ -95,6 +94,25 @@ public class Manga {
         this.gender = gender;
         this.author = author;
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Manga{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", size=" + size +
+                ", creationDate=" + creationDate +
+                ", closingDate=" + closingDate +
+                ", status=" + status +
+                ", author='" + author + '\'' +
+                ", gender='" + gender + '\'' +
+                ", image='" + image + '\'' +
+                ", chapters=" + chapters +
+                ", comments=" + comments +
+                ", isFavorite=" + isFavorite +
+                '}';
     }
 
 }

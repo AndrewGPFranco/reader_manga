@@ -34,6 +34,7 @@ public class CommentMapper {
         return EpisodeCommentsVO.builder()
                 .nameUser(comment.getUser().getUsername())
                 .comment(comment.getComment())
+                .uriPath(comment.getUser().getUriProfilePhoto())
                 .build();
     }
 

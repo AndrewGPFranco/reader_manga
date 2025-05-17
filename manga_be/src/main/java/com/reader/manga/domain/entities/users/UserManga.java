@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_manga")
@@ -41,5 +40,18 @@ public class UserManga implements iListaMangasPorUsuario {
 
     @Column(name = "comentario")
     private String comment;
+
+    @Override
+    public String toString() {
+        return "UserManga{" +
+                "id=" + id +
+                ", manga=" + manga +
+                ", user=" + user +
+                ", signatureDate=" + signatureDate +
+                ", status=" + status +
+                ", nota=" + nota +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 
 }

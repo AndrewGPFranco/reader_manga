@@ -7,12 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @Table(name = "favorite_episode")
 public class FavoriteEpisodeUser {
@@ -34,4 +32,15 @@ public class FavoriteEpisodeUser {
     private Episode episode;
 
     public FavoriteEpisodeUser() {}
+
+    @Override
+    public String toString() {
+        return "FavoriteEpisodeUser{" +
+                "id=" + id +
+                ", user=" + user +
+                ", feedback=" + feedback +
+                ", episode=" + episode +
+                '}';
+    }
+
 }

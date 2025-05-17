@@ -7,5 +7,6 @@ import jakarta.validation.constraints.NotNull;
 @Builder
 public record ResponseAPI(
         @NotNull @NotBlank String message,
-        @NotNull Integer statusCode
+        @NotNull Integer statusCode,
+        Object responseObject
 ) {}
