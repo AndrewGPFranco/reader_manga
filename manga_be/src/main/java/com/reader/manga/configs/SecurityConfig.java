@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
-    @Value("${reader.user.password}")
+    @Value("${reader.user.password:default.user.password}")
     private String password;
 
     private final SecurityFilter securityFilter;

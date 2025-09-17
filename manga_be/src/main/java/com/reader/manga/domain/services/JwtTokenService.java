@@ -16,7 +16,7 @@ import java.time.ZoneOffset;
 @Service
 public class JwtTokenService {
 
-    @Value("${reader.jwt.secret}")
+    @Value("${reader.jwt.secret:secret.default}")
     private String secret;
 
     /**
