@@ -112,7 +112,8 @@ onMounted(async () => {
 
   try {
     chapters.value = await chapterStore.getAllReadingProgress(page.value - 1)
-    pageTotal.value = chapters.value[0].numberPageOfPageable
+    if (chapters.value.length !== 0)
+      pageTotal.value = chapters.value[0].numberPageOfPageable
   } catch (error) {
     console.error('Erro ao carregar os capítulos:', error)
   }
