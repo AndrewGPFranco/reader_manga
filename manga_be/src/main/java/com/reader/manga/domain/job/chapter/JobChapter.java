@@ -8,7 +8,6 @@ import com.reader.manga.domain.entities.mangas.Pagina;
 import com.reader.manga.ports.repositories.ChapterRepository;
 import com.reader.manga.ports.repositories.MangaRepository;
 import com.reader.manga.ports.repositories.PaginaRepository;
-import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -103,7 +102,8 @@ public class JobChapter extends ColetorBaseUpload {
     public void unZip(MultipartFile zipFile, Chapter capitulo, String basePath) throws IOException {
         File diretorioDestino = new File(basePath);
         if (!diretorioDestino.exists()) {
-            diretorioDestino.mkdirs();
+            boolean isCreated = diretorioDestino.mkdirs();
+            throwErrorIfUnableToCreateFileOrDirectory(isCreated);
         }
 
         List<Pagina> paginas = new ArrayList<>();
@@ -178,9 +178,11 @@ public class JobChapter extends ColetorBaseUpload {
                 }
 
                 if (entry.isDirectory()) {
-                    newFile.mkdirs();
+                    boolean isCreated = newFile.mkdirs();
+                    throwErrorIfUnableToCreateFileOrDirectory(isCreated);
                 } else {
-                    new File(newFile.getParent()).mkdirs();
+                    boolean isCreated = new File(newFile.getParent()).mkdirs();
+                    throwErrorIfUnableToCreateFileOrDirectory(isCreated);
 
                     try (FileOutputStream fos = new FileOutputStream(newFile)) {
                         byte[] buffer = new byte[4096];
@@ -199,6 +201,13 @@ public class JobChapter extends ColetorBaseUpload {
             }
         }
         return arquivosExtraidos;
+    }
+
+    private void throwErrorIfUnableToCreateFileOrDirectory(boolean isCreated) {
+        if (!isCreated) {
+            log.error("Ocorreu um erro na criação do arquivo");
+            throw new RuntimeException("Erro ao criar arquivo");
+        }
     }
 
     private void validateInput(MultipartFile file, String nomeManga) {
@@ -238,8 +247,7 @@ public class JobChapter extends ColetorBaseUpload {
         List<Pagina> paginas = new ArrayList<>();
 
         int indexInicial1 = 1;
-        for (int i = 0; i < totalPages; i++) {
-            final int pageIndex = i;
+        for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
             BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, DPI);
             String outputPath = basePath + "/pagina_" + indexInicial1 + ".png";
 
@@ -257,7 +265,7 @@ public class JobChapter extends ColetorBaseUpload {
                 paginas.clear();
             }
 
-            int progresso = (int) ((i / (double) totalPages) * 100);
+            int progresso = (int) ((pageIndex / (double) totalPages) * 100);
             for (SseEmitter emitter : emitters) {
                 try {
                     emitter.send(progresso);
@@ -284,11 +292,6 @@ public class JobChapter extends ColetorBaseUpload {
         emitters.add(emitter);
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
-    }
-
-    @PreDestroy
-    public void destroy() {
-        executorService.shutdown();
     }
 
 }
