@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +67,9 @@ public class EpisodeService {
                     .title(dto.title())
                     .uri(destino.toAbsolutePath().toString())
                     .numberEpisode(Integer.valueOf(dto.id()))
+                    .views(0)
+                    .uploaded(LocalDate.now())
+                    .commentsList(new ArrayList<>())
                     .anime(anime).build();
 
             episodeRepository.save(episode);
@@ -95,10 +99,9 @@ public class EpisodeService {
         List<Episode> listaEpisodios = episodeRepository.findByIdAndAnime(idAnime);
         List<EpisodeToAnimesVO> episodes = new ArrayList<>();
 
-        listaEpisodios.forEach(episode -> {
-            episodes.add(EpisodeToAnimesVO.builder().id(episode.getId()).titleEpisode(episode.getTitle())
-                    .uriEpisode(episode.getUri()).numberEpisode(episode.getNumberEpisode()).build());
-        });
+        listaEpisodios.forEach(episode -> episodes.add(EpisodeToAnimesVO.builder()
+                .id(episode.getId()).titleEpisode(episode.getTitle()).uriEpisode(episode.getUri())
+                .numberEpisode(episode.getNumberEpisode()).build()));
 
         Integer nota = animeUserService.getNotaPeloUsuario(idUser, idAnime);
         boolean isFavorite = animeService.animeIsFavorite(idUser, idAnime);
