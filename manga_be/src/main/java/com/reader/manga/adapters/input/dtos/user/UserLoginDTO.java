@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * Classe auxiliar para recebimento de dados para realização de login
- * @param email
+ * @param usernameOrEmail
  * @param password
  */
 public record UserLoginDTO(
-        @NotNull @NotBlank String email,
+        @NotNull @NotBlank String usernameOrEmail,
         @NotNull @NotBlank String password,
         String token
 ) {}

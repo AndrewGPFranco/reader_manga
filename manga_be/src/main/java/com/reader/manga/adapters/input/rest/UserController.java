@@ -57,37 +57,40 @@ public class UserController {
     public ResponseEntity<Object> login(@RequestBody @Valid UserLoginDTO userDTO) {
         try {
             UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
-                    userDTO.email(), userDTO.password());
+                    userDTO.usernameOrEmail(), userDTO.password());
 
             Authentication auth = this.authenticationManager.authenticate(usernamePassword);
             String token = jwtTokenService.generateToken((User) auth.getPrincipal());
 
-            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.email(), token));
+            return ResponseEntity.ok().body(new LoginResponseDTO(userDTO.usernameOrEmail(), token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/add-manga")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> addMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.adicionaMangaALista(idManga, idUser);
         return ResponseEntity.ok().body("Adicionado na lista");
     }
 
     @PostMapping("/remove-manga")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> removeMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.removeMangaDaLista(idManga, idUser);
         return ResponseEntity.ok().body("Removido da lista");
     }
 
     @PostMapping("/favorite-manga")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> addMangaToFavoriteList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.adicionaMangaAListaDeFavoritos(idManga, idUser);
         return ResponseEntity.ok().body("Adicionado na lista de favoritos.");
     }
 
-    @GetMapping("/manga-favorite-list/{idUser}")
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/manga-favorite-list/{idUser}")
     public ResponseEntity<UserMangaVO> getMangasFavoritosDoUsuario(@PathVariable Long idUser) {
         return ResponseEntity.ok().body(userMangaService.getMangasFavoritosDoUsuario(idUser));
     }
@@ -99,10 +102,12 @@ public class UserController {
     }
 
     @GetMapping("/manga-list-quantity")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Integer> getQuantidadeTodosMangasDoUsuario(Long idUser) {
         return ResponseEntity.ok().body(userMangaService.getQuantidadeTodosMangasDoUsuario(idUser));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/favorite-manga/{idUser}/{idManga}")
     public ResponseEntity<String> changeMangaFavoriteStatus(@PathVariable Long idUser, @PathVariable Long idManga) {
         userMangaService.changeMangaFavoriteStatus(idManga, idUser);
@@ -120,6 +125,7 @@ public class UserController {
     }
 
     @PutMapping("/change-tier/{tier}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> changeTierUser(@PathVariable String tier, @AuthenticationPrincipal User user) {
         try {
             userService.alteraTierDoUsuario(RoleType.valueOf(tier), user);
