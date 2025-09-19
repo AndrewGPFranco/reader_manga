@@ -17,13 +17,13 @@ public class UserMapper {
 
     public RecoverUserDTO toRecoverDTO(User user) {
         return new RecoverUserDTO(user.getFirstName(), user.getFullName(), user.getUsername(),
-                user.getEmail(), user.getDateBirth(), 0, 0, 0);
+                user.getEmail(), user.getDateBirth(), user.getUriProfilePhoto(), 0, 0, 0);
     }
 
     public RecoverUserDTO toRecoverDTO(User user, Integer... data) {
         if (data[0] != null && data[1] != null && data[2] != null) {
             return new RecoverUserDTO(user.getFirstName(), user.getFullName(), user.getUsername(),
-                user.getEmail(), user.getDateBirth(), user.getUriProfilePhoto(), data[0], data[1], data[2]);
+                    user.getEmail(), user.getDateBirth(), user.getUriProfilePhoto(), data[0], data[1], data[2]);
         }
         return new RecoverUserDTO(user.getFirstName(), user.getFullName(), user.getUsername(),
                 user.getEmail(), user.getDateBirth(), user.getUriProfilePhoto(), 0, 0, 0);
