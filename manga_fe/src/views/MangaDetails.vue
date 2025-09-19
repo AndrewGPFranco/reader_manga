@@ -24,19 +24,19 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Capítulos</h2>
+        <h2 class="text-xl font-semibold border-b mb-4 pb-2">Capítulos</h2>
         <ul class="space-y-4">
           <li
             v-for="chapter in chapterOrdenados"
             :key="chapter.id"
             :class="[
-              'p-4 rounded-lg shadow-lg border border-gray-200',
-              chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
+              'p-4 rounded-lg shadow-lg',
+              chapter.status === StatusType.FINISHED ? 'bg-green-100' : {}
             ]"
           >
             <p
               v-if="chapter.readingProgress != 0"
-              class="font-semibold text-lg cursor-pointer text-black"
+              class="font-semibold text-lg cursor-pointer"
               @click="askContinueReading(chapter)"
             >
               {{ chapter.title }}
@@ -44,12 +44,12 @@
             <router-link
               :to="`/manga/${manga.title}/chapter/${chapter.id}/1`"
               v-else
-              class="font-semibold text-lg cursor-router-linkointer text-black"
+              class="font-semibold text-lg cursor-router-linkointer"
               >{{ chapter.title }}</router-link
             >
-            <p class="mt-2 text-black"><span>Páginas:</span> {{ chapter.numberPages }}</p>
-            <p class="text-black">
-              <span class="text-black">Progresso:</span>
+            <p class="mt-2"><span>Páginas:</span> {{ chapter.numberPages }}</p>
+            <p>
+              <span>Progresso:</span>
               {{
                 chapter.status === StatusType.FINISHED
                   ? 'Leitura finalizada'
@@ -66,12 +66,7 @@
 
   <n-modal v-model:show="isShowDialog">
     <n-card
-      style="
-        width: 600px;
-        max-width: 90%;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 12px;
-      "
+      style="width: 600px; max-width: 90%; border-radius: 12px"
       title="Deseja continuar de onde parou?"
       :bordered="false"
       size="huge"
@@ -108,12 +103,11 @@ import { useRoute } from 'vue-router'
 import type iChapterData from '@/@types/iChapter'
 import { StatusType } from '@/enum/StatusType'
 
-const mangaStore = useMangaStore()
 const route = useRoute()
-
+const mangaStore = useMangaStore()
+const isShowDialog = ref<boolean>(false)
 const manga = ref<iMangaData>({} as iMangaData)
 const chapterOrdenados = ref<iChapterData[]>([])
-const isShowDialog = ref<boolean>(false)
 const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
