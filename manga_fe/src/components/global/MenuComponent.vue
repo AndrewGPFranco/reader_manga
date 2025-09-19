@@ -9,6 +9,7 @@
     left="0"
     height="100%"
     :aria-expanded="true"
+    class="pt-6 pb-6"
   >
     <n-menu
       :collapsed-width="64"

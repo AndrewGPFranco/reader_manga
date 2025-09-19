@@ -1,21 +1,13 @@
 <template>
-  <div class="p-6 bg-white rounded-2xl shadow-md">
+  <div class="p-6 rounded-2xl shadow-md">
     <n-form ref="formRef" :size="'medium'" label-placement="top">
       <n-grid :span="24" :x-gap="24" :y-gap="16">
         <n-form-item-gi :span="12" label="Nome" path="title">
-          <n-input
-            v-model:value="title"
-            placeholder="Digite o nome do anime"
-            clearable
-          />
+          <n-input v-model:value="title" placeholder="Digite o nome do anime" clearable />
         </n-form-item-gi>
 
         <n-form-item-gi :span="12" label="URL imagem" path="uriImage">
-          <n-input
-            v-model:value="uriImage"
-            placeholder="Digite a url da imagem"
-            clearable
-          />
+          <n-input v-model:value="uriImage" placeholder="Digite a url da imagem" clearable />
         </n-form-item-gi>
 
         <n-form-item-gi :span="12" label="Data de Lançamento" path="releaseDate">
@@ -44,31 +36,33 @@ import { useMessage } from 'naive-ui'
 import { useAnimeStore } from '@/store/AnimeStore'
 import type ResponseAPI from '@/class/api/ResponseAPI'
 
-const toast = useMessage();
-const title = ref<string>('');
-const uriImage = ref<string>('');
-const animeStore = useAnimeStore();
-let action = ref<string>('Registrar');
-const releaseDate = ref<number | null>(null);
+const toast = useMessage()
+const title = ref<string>('')
+const uriImage = ref<string>('')
+const animeStore = useAnimeStore()
+let action = ref<string>('Registrar')
+const releaseDate = ref<number | null>(null)
 
 const realizarInsercaoAnime = async () => {
   try {
-    const response: ResponseAPI = await animeStore.registraAnime(title.value, uriImage.value, new Date(releaseDate.value!));
+    const response: ResponseAPI = await animeStore.registraAnime(
+      title.value,
+      uriImage.value,
+      new Date(releaseDate.value!)
+    )
 
-    if(response.statusCode === 201)
-      toast.success(response.message);
+    if (response.statusCode === 201) toast.success(response.message)
 
-    resetForm();
+    resetForm()
   } catch (error) {
-    toast.error(String(error));
+    toast.error(String(error))
   } finally {
-    action.value = 'Registrar';
+    action.value = 'Registrar'
   }
 }
 
 const resetForm = () => {
-  title.value = '';
-  uriImage.value = '';
+  title.value = ''
+  uriImage.value = ''
 }
-
 </script>

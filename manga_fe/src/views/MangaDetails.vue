@@ -1,8 +1,8 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
-  <main id="main-container" class="text-black bg-white p-10 shadow-lg max-h-screen overflow-y-auto">
+  <main id="main-container" class="text-black p-10 shadow-lg max-h-screen overflow-y-auto">
     <n-card style="height: 95vh; overflow-y: auto">
       <div class="flex items-center space-x-4 mb-6">
         <img :src="manga.image" alt="Mangá" class="w-24 h-24 object-cover rounded-lg shadow-lg" />
@@ -26,15 +26,29 @@
       <div>
         <h2 class="text-xl font-semibold border-b border-black mb-4 pb-2">Capítulos</h2>
         <ul class="space-y-4">
-          <li v-for="chapter in chapterOrdenados" :key="chapter.id" :class="[
-            'p-4 rounded-lg shadow-lg border border-gray-200',
-            chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
-          ]">
-
-            <p v-if="chapter.readingProgress != 0" class="font-semibold text-lg cursor-pointer" @click="askContinueReading(chapter)">{{ chapter.title }}</p>
-            <router-link :to="`/manga/${manga.title}/chapter/${chapter.id}/1`" v-else class="font-semibold text-lg cursor-router-linkointer">{{ chapter.title }}</router-link>
-            <p class="mt-2"><span class="text-black">Páginas:</span> {{ chapter.numberPages }}</p>
-            <p>
+          <li
+            v-for="chapter in chapterOrdenados"
+            :key="chapter.id"
+            :class="[
+              'p-4 rounded-lg shadow-lg border border-gray-200',
+              chapter.status === StatusType.FINISHED ? 'bg-green-100' : 'bg-white'
+            ]"
+          >
+            <p
+              v-if="chapter.readingProgress != 0"
+              class="font-semibold text-lg cursor-pointer text-black"
+              @click="askContinueReading(chapter)"
+            >
+              {{ chapter.title }}
+            </p>
+            <router-link
+              :to="`/manga/${manga.title}/chapter/${chapter.id}/1`"
+              v-else
+              class="font-semibold text-lg cursor-router-linkointer text-black"
+              >{{ chapter.title }}</router-link
+            >
+            <p class="mt-2 text-black"><span>Páginas:</span> {{ chapter.numberPages }}</p>
+            <p class="text-black">
               <span class="text-black">Progresso:</span>
               {{
                 chapter.status === StatusType.FINISHED
@@ -51,16 +65,32 @@
   </main>
 
   <n-modal v-model:show="isShowDialog">
-    <n-card style="width: 600px; max-width: 90%; background: rgba(255, 255, 255, 0.9); border-radius: 12px;"
-      title="Deseja continuar de onde parou?" :bordered="false" size="huge" role="dialog" aria-modal="true">
+    <n-card
+      style="
+        width: 600px;
+        max-width: 90%;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+      "
+      title="Deseja continuar de onde parou?"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
       <div class="flex justify-center gap-4 mt-4">
-        <router-link v-if="selectedChapter"
+        <router-link
+          v-if="selectedChapter"
           :to="`/manga/${manga.title}/chapter/${selectedChapter.id}/${selectedChapter.readingProgress}`"
-          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700">
+          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-green-600 hover:bg-green-700"
+        >
           Sim
         </router-link>
-        <router-link v-if="selectedChapter" :to="`/manga/${manga.title}/chapter/${selectedChapter.id}/1`"
-          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700">
+        <router-link
+          v-if="selectedChapter"
+          :to="`/manga/${manga.title}/chapter/${selectedChapter.id}/1`"
+          class="px-6 py-2 rounded-lg text-white font-semibold text-lg transition-all duration-200 ease-in-out bg-gray-600 hover:bg-gray-700"
+        >
           Não
         </router-link>
       </div>
@@ -69,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
 import { formatDate } from '@/utils/utils'
@@ -87,11 +117,11 @@ const isShowDialog = ref<boolean>(false)
 const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
-  manga.value = {} as iMangaData;
-  
+  manga.value = {} as iMangaData
+
   const title: string = Array.isArray(route.params.title)
-  ? route.params.title[0]
-  : route.params.title
+    ? route.params.title[0]
+    : route.params.title
 
   document.title = `Leitor de mangás - ${title}`
 

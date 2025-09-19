@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card title="Centro de Gerenciamento" size="huge" style="height: 95vh; overflow-y: auto;">
@@ -29,7 +29,7 @@
 import ChapterManagement from '@/components/admin/ChapterManagement.vue'
 import ChapterPagesManagement from '@/components/admin/ChapterPagesManagement.vue'
 import MangaManagement from '@/components/admin/MangaManagement.vue'
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import { onMounted } from 'vue'
 
 onMounted(() => document.title = 'Leitor de mangás - Gerenciamento')

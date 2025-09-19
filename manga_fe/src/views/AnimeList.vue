@@ -1,12 +1,12 @@
 <template>
-  <NavbarComponent />
+  <MenuComponent />
   <main>
     <AllAnimes />
   </main>
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import AllAnimes from '@/components/anime/AllAnimes.vue'
 </script>
 

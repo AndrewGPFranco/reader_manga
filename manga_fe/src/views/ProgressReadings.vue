@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card
@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import type iChapterData from '@/@types/iChapter'
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import { useChapterStore } from '@/store/ChapterStore'
 import { NCard, useMessage } from 'naive-ui'
 import { onMounted, ref, watch } from 'vue'

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 bg-white rounded-2xl shadow-md">
+  <div class="p-6 rounded-2xl shadow-md">
     <n-form ref="formRef" :size="'medium'" label-placement="top">
       <n-grid :span="24" :x-gap="24" :y-gap="16">
         <n-form-item-gi :span="12" label="Título" path="title">
@@ -7,7 +7,7 @@
         </n-form-item-gi>
 
         <n-form-item-gi :span="12" label="Número do Episódio" path="id">
-          <n-input v-model:value="id" placeholder="Digite um id para o episódio" clearable />
+          <n-input-number v-model:value="id" placeholder="Digite um id para o episódio" clearable min="1" />
         </n-form-item-gi>
 
         <n-form-item-gi :span="12" label="Anime" path="anime">
@@ -20,9 +20,7 @@
 
         <n-form-item-gi :span="12" label="Episódio" path="episode">
           <n-upload multiple directory-dnd :max="5" @change="handleFileChange" class="w-full">
-            <n-upload-dragger
-              class="p-6 border-dashed border-2 border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition"
-            >
+            <n-upload-dragger class="p-6 border-2 border-gray-300 rounded-xl">
               <div class="flex flex-col items-center space-y-3">
                 <n-icon size="48" :depth="3">
                   <ArchiveIcon />
@@ -94,8 +92,8 @@ const realizarUploadEpisodio = async () => {
 
       const response = await episodeStore.uploadEpisode(formData)
 
-      resetData();
-      toast.success(response);
+      resetData()
+      toast.success(response)
     }
   } catch (error) {
     toast.error(String(error))

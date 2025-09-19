@@ -1,7 +1,7 @@
 <template>
   <div class="video-wrapper">
     <div v-if="videoUrl" class="video-container">
-      <video :src="videoUrl" controls class="video-player" />
+      <video :src="videoUrl" controls class="video-player rounded-lg" />
     </div>
 
     <div v-else class="loading-container">
@@ -9,7 +9,7 @@
       <p class="text-lg text-gray-600">Carregando vídeo...</p>
     </div>
 
-    <div v-if="error" class="mt-4 p-4 bg-red-100 text-red-700 rounded-md">
+    <div v-if="error" class="mt-4 p-4 text-red-700 rounded-md">
       {{ error }}
     </div>
   </div>
@@ -75,7 +75,6 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
   border-radius: 8px;
 }
 

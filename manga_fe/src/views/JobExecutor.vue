@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card title="Jobs" size="huge" style="height: 95vh; overflow-y: auto;">
@@ -15,19 +15,18 @@
         <div class="job-form" v-if="selectedJob">
           <n-form ref="formRef" label-width="120px">
             <n-form-item label="Parâmetros" path="parametros" v-if="tipoJob === 'Parâmetros'">
-              <input
+              <n-input
                 v-model="parametros"
                 placeholder="Digite os parâmetros"
                 type="text"
-                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </n-form-item>
             <n-form-item label="Número do Capítulo" path="parametros" v-if="tipoJob === 'Uploads'">
-              <input
+              <n-input-number
+                clearable
                 v-model="titleChapter"
                 placeholder="Digite o número do capítulo"
-                type="text"
-                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                min="1"
               />
             </n-form-item>
             <n-form-item label="Título do Mangá" path="parametros" v-if="tipoJob === 'Uploads'">
@@ -71,7 +70,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import { NCard, NList, NListItem, NButton, NForm, NFormItem, useMessage } from 'naive-ui'
 import { api } from '@/network/axiosInstance'
 import type IJobType from '@/@types/IJobType'

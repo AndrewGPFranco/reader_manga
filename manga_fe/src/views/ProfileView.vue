@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card style="height: 95vh; overflow-y: auto;">
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import router from '@/router'
 import { useAuthStore } from '@/store/AuthStore'
 import { onMounted, ref } from 'vue'

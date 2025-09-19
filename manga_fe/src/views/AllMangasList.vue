@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card
@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
 import { NCard, useMessage } from 'naive-ui'

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-6 rounded-2xl shadow-md">
     <n-form ref="formRef" :model="model" :rules="rules" size="medium" label-placement="top">
       <n-grid :span="24" :x-gap="24">
         <n-form-item-gi :span="12" label="Image link" path="page">
@@ -91,7 +91,7 @@ const pageRegister = async () => {
     idChapter: model.value.chapter
   }
 
-  let response;
+  let response
 
   if (!props.isEdit) response = await chapterStore.registerPage(data, clearFields)
   else {

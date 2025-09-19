@@ -10,20 +10,16 @@
           v-else
           v-for="anime in animesArray"
           :key="anime.title"
-          class="bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300 overflow-hidden"
+          class="rounded-xl shadow-md hover:shadow-lg transition duration-300 overflow-hidden"
         >
           <div class="aspect-[3/2] w-full overflow-hidden">
-            <img
-              class="w-full h-full object-cover"
-              :src="anime.uriImage"
-              alt="Capa do Anime"
-            />
+            <img class="w-full h-full object-cover" :src="anime.uriImage" alt="Capa do Anime" />
           </div>
 
           <div class="p-4">
             <router-link
               :to="`/anime/${anime.title}/${anime.id}`"
-              class="block text-lg font-semibold text-gray-800 truncate hover:text-blue-500 transition"
+              class="block text-lg font-semibold truncate hover:text-blue-500 transition"
               :title="anime.title"
             >
               {{ anime.title }}
@@ -36,8 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, useMessage } from 'naive-ui'
 import { onMounted, ref } from 'vue'
+import { NCard, useMessage } from 'naive-ui'
 import type { iAnime } from '@/@types/iAnime'
 import { useAnimeStore } from '@/store/AnimeStore'
 

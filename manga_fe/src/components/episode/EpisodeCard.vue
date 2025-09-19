@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { NIcon } from 'naive-ui'
-import type { EpisodeToAnimesVO } from '@/@types/iEpisodeToAnimesVO';
+import type { EpisodeToAnimesVO } from '@/@types/iEpisodeToAnimesVO'
 
 const props = defineProps<{
   episode: EpisodeToAnimesVO
@@ -34,7 +34,6 @@ const onClick = () => emit('play', props.episode)
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  background-color: #fff;
   transition: transform 0.2s ease;
 }
 
@@ -77,7 +76,6 @@ const onClick = () => emit('play', props.episode)
   font-size: 16px;
   font-weight: 600;
   margin: 0;
-  color: #333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

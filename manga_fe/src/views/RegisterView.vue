@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <n-card title="Gerenciamento de Registros" size="huge" style="height: 95vh; overflow-y: auto">
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { Chapter } from '@/class/Chapter'
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import FormToMangaRegister from '@/components/registerManga/formToMangaRegister.vue'
 import FormToEpisodeRegister from '@/components/registerEpisode/formToEpisodeRegister.vue'
 import FormToAnimeRegister from '@/components/registerAnime/formToAnimeRegister.vue'
@@ -55,7 +55,7 @@ const page = {} as iPageData
 const mangaStore = useMangaStore()
 
 onMounted(async () => {
-  document.title = 'Leitor de mangás - Registros';
+  document.title = 'Leitor de mangás - Registros'
   mangasArray.value = await mangaStore.getAllManga()
 })
 </script>

@@ -1,6 +1,6 @@
 <template>
   <header>
-    <NavbarComponent />
+    <MenuComponent />
   </header>
   <main>
     <section>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
 import { onMounted, ref } from 'vue'

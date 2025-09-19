@@ -1,5 +1,5 @@
 <template>
-  <NavbarComponent />
+  <MenuComponent />
   <main>
     <n-card class="anime-card" size="huge">
       <section v-if="!renderEpisode">
@@ -25,7 +25,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { NCard } from 'naive-ui'
-import NavbarComponent from '@/components/global/NavbarComponent.vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 import VideoEpisodeAnime from '@/components/anime/VideoEpisodeAnime.vue'
 import EpisodeCard from '@/components/episode/EpisodeCard.vue'
 import { useEpisodeStore } from '@/store/EpisodeStore'
@@ -56,12 +56,10 @@ const playEpisode = (episode: EpisodeToAnimesVO) => {
 <style scoped>
 main {
   padding: 15px;
-  background-color: #f9f9f9;
 }
 
 .anime-card {
   border-radius: 12px;
-  background-color: #ffffff;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
   min-height: 95vh;

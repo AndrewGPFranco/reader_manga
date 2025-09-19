@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-6 rounded-2xl shadow-md">
     <n-form ref="formRef" :model="model" :rules="rules" :size="size" label-placement="top">
       <n-grid :span="24" :x-gap="24">
         <n-form-item-gi :span="12" label="Title" path="title">
