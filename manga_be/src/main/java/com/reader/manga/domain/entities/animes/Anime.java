@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @Table(name = "anime")
 public class Anime {
@@ -46,4 +44,17 @@ public class Anime {
     private LocalDate releaseDate;
 
     public Anime() {}
+
+    @Override
+    public String toString() {
+        return "Anime{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", uploadDate=" + uploadDate +
+                ", episodes=" + episodes +
+                ", uriImage='" + uriImage + '\'' +
+                ", releaseDate=" + releaseDate +
+                '}';
+    }
+
 }

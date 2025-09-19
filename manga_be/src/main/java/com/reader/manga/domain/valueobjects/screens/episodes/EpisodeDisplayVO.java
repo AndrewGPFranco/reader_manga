@@ -13,5 +13,6 @@ public record EpisodeDisplayVO(
         Integer amountViews,
         LocalDate uploaded,
         FeedbackEpisodeType feedback,
-        List<EpisodeCommentsVO> commentsList
+        List<EpisodeCommentsVO> commentsList,
+        String uriPath
 ) {}

@@ -7,11 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "page")
@@ -35,5 +33,14 @@ public class Pagina {
         this.pathPage = pathPage;
         this.chapter = chapter;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Pagina{" +
+                "id=" + id +
+                ", pathPage='" + pathPage + '\'' +
+                ", chapter=" + chapter +
+                '}';
+    }
+
 }

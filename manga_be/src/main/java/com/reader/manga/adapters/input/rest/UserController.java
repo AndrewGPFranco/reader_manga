@@ -1,5 +1,6 @@
 package com.reader.manga.adapters.input.rest;
 
+import com.reader.manga.adapters.input.dtos.ResponseAPI;
 import com.reader.manga.adapters.input.dtos.user.*;
 import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -133,6 +135,25 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/change-photo")
+    public ResponseEntity<ResponseAPI> changeProfilePhoto(@AuthenticationPrincipal User user,
+                                                          @RequestParam("file") MultipartFile profilePhoto) {
+        try {
+            userService.handleProfilePhoto(profilePhoto, user);
+            return ResponseEntity.ok().body(ResponseAPI.builder()
+                    .message("Foto de perfil alterada com sucesso!")
+                    .statusCode(200).build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    ResponseAPI.builder().message(e.getMessage()).statusCode(400).build());
+        }
+    }
+
+    @GetMapping("get-profile-photo")
+    public ResponseEntity<ResponseAPI> getProfilePhoto(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(ResponseAPI.builder().responseObject(user.getUriProfilePhoto()).build());
     }
 
 }

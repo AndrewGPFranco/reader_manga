@@ -22,9 +22,13 @@ public class AnimeController {
     public ResponseEntity<ResponseAPI> registrarAnime(@RequestBody AnimeDTO dto) {
         try {
             animeService.registraAnime(dto);
-            return ResponseEntity.ok().body(new ResponseAPI("Registrado com sucesso!", HttpStatus.CREATED.value()));
+            return ResponseEntity.ok().body(ResponseAPI.builder()
+                            .message("Registrado com sucesso!")
+                            .statusCode(HttpStatus.CREATED.value()).build());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ResponseAPI(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.badRequest().body(ResponseAPI.builder()
+                    .message(e.getMessage())
+                    .statusCode(HttpStatus.BAD_REQUEST.value()).build());
         }
     }
 

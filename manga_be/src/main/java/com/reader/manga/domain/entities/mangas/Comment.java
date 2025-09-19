@@ -8,13 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "comment")
@@ -55,4 +53,17 @@ public class Comment {
         this.feedback = feedback;
         this.manga = manga;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", nameUser='" + nameUser + '\'' +
+                ", commentText='" + commentText + '\'' +
+                ", timestamp=" + timestamp +
+                ", feedback=" + feedback +
+                ", manga=" + manga +
+                '}';
+    }
+
 }
