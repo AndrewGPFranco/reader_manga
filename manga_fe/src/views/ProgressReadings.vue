@@ -36,7 +36,6 @@
                     style="
                       width: 600px;
                       max-width: 90%;
-                      background: rgba(255, 255, 255, 0.9);
                       border-radius: 12px;
                     "
                     title="Deseja continuar de onde parou?"
@@ -70,7 +69,7 @@
                         @click="resetarProgresso"
                         quaternary
                       >
-                        <span class="label text-base font-medium text-gray-700"
+                        <span class="label text-base font-medium"
                           >Resetar progresso?</span
                         >
                         <RefreshOutline class="refresh-reading ml-2 w-5 h-5 text-yellow-500" />
@@ -112,8 +111,7 @@ onMounted(async () => {
 
   try {
     chapters.value = await chapterStore.getAllReadingProgress(page.value - 1)
-    if (chapters.value.length !== 0)
-      pageTotal.value = chapters.value[0].numberPageOfPageable
+    if (chapters.value.length !== 0) pageTotal.value = chapters.value[0].numberPageOfPageable
   } catch (error) {
     console.error('Erro ao carregar os capítulos:', error)
   }
@@ -163,12 +161,10 @@ main {
   width: 250px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: white;
   cursor: pointer;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  border: 1px solid #e2e8f0;
   overflow: hidden;
   flex: 0 0 250px;
 }
@@ -218,7 +214,6 @@ main {
 
 .label {
   font-weight: 600;
-  color: #2d3748;
 }
 
 @media (max-width: 768px) {

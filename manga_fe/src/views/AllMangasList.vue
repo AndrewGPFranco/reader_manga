@@ -28,9 +28,9 @@
         <div
           v-else
           :class="{
-            'w-72 h-90 rounded overflow-hidden shadow-lg bg-white flex flex-col':
+            'w-72 h-90 rounded overflow-hidden shadow-lg flex flex-col':
               isExibindoTodosMangas,
-            'w-72 h-80 rounded overflow-hidden shadow-lg bg-white flex flex-col':
+            'w-72 h-80 rounded overflow-hidden shadow-lg flex flex-col':
               !isExibindoTodosMangas
           }"
           v-for="manga in mangasArray"
@@ -42,11 +42,11 @@
           <div class="p-4 flex flex-col flex-grow overflow-y-auto">
             <router-link
               :to="`/manga/${manga.title}`"
-              class="text-xl font-bold text-gray-800 truncate"
+              class="text-xl font-bold truncate"
             >
               {{ manga.title }}
             </router-link>
-            <div class="text-gray-700 text-sm mt-2 flex-grow overflow-y-auto">
+            <div class="text-sm mt-2 flex-grow overflow-y-auto">
               <p><span class="font-semibold">Chapters: </span>{{ manga.size }}</p>
               <p><span class="font-semibold">Status: </span>{{ manga.status }}</p>
             </div>
@@ -79,18 +79,18 @@
 </template>
 
 <script lang="ts" setup>
-import MenuComponent from '@/components/global/MenuComponent.vue'
+import { onMounted, ref, watch } from 'vue'
+import { NCard, useMessage } from 'naive-ui'
 import type iMangaData from '@/@types/Manga'
 import { useMangaStore } from '@/store/MangaStore'
-import { NCard, useMessage } from 'naive-ui'
-import { onMounted, ref, watch } from 'vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 
 const message = useMessage()
-const mangasArray = ref<iMangaData[]>([])
-const mangaStore = useMangaStore()
 const page = ref<number>(1)
+const mangaStore = useMangaStore()
 const pageTotal = ref<number>(0)
 const mangaQuantity = ref<number>(0)
+const mangasArray = ref<iMangaData[]>([])
 const mangaCard = ref<InstanceType<typeof NCard> | null>(null)
 
 let mangaPesquisado = ref<string>('')
