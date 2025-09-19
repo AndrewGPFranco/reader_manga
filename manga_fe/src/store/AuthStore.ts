@@ -1,33 +1,36 @@
 import { User } from '@/class/User'
-import { api } from '@/network/axiosInstance'
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
+import { useUser } from '@/composables/user'
+import { api } from '@/network/axiosInstance'
+import { UserSession } from '@/class/UserSession'
 import type iDecodedToken from '@/@types/iDecodedToken'
 import type { UserRegister } from '@/class/UserRegister'
-import { UserSession } from '@/class/UserSession'
-import { useUser } from '@/composables/user'
 
-const { setToken } = useUser();
+const { setToken } = useUser()
 
 export const useAuthStore = defineStore('auth', {
   state: (): { user: User; usuarioLogado: UserSession | null } => ({
-    user: new User('', '', '', ''),
+    user: new User('', '', ''),
     usuarioLogado: null as UserSession | null
   }),
 
   actions: {
     async efetuarLogin(email: string, password: string): Promise<void> {
       try {
-        const user: User = new User(email, password)
+        const user = {
+          usernameOrEmail: email,
+          password: password
+        }
+
         const result = await api.post('/api/v1/user/login', user)
         const decode: iDecodedToken = jwtDecode<iDecodedToken>(result.data.token)
-        setToken(result.data.token);
-        user.setToken(result.data.token)
-        user.setId(decode.id)
-        this.user = user
+        setToken(result.data.token)
 
-        const token: string | undefined = user.getToken()
-        const idUser: string | undefined = user.getId()
+        this.user = new User(decode.sub, result.data.token, decode.id)
+
+        const token: string | undefined = this.user.getToken()
+        const idUser: string | undefined = this.user.getId()
         if (token && idUser) {
           this._setTokenLocalStorage(token)
           this._setIdLocalStorage(idUser)
@@ -57,7 +60,7 @@ export const useAuthStore = defineStore('auth', {
     async efetuarLogout(): Promise<void> {
       localStorage.removeItem('id')
       localStorage.removeItem('token')
-      this.user = new User('', '', '', '')
+      this.user = new User('', '', '')
       this.usuarioLogado = null
       location.reload()
     },

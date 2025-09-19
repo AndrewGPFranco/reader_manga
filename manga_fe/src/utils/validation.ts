@@ -43,13 +43,11 @@ export function validationFields(data: iMangaData): string | boolean{
 }
 
 export function validationFieldsLogin(data: ILogin): string | boolean {
-    if(data.email === null || data.email === "") {
-        return "Email é obrigatório!"
-    }
+    if(data.username === null || data.username === "")
+        return "Email/Username é obrigatório!"
 
-    if(data.password === null || data.password === "") {
+    if(data.password === null || data.password === "")
         return "Senha é obrigatório!"
-    }
 
     return true;
 }
