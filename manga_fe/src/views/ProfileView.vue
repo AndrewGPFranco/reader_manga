@@ -3,7 +3,7 @@
     <MenuComponent />
   </header>
   <main>
-    <n-card style="height: 95vh; overflow-y: auto;">
+    <n-card style="height: 95vh; overflow-y: auto">
       <section class="card-content">
         <div class="profile-container">
           <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="profile-image" />
@@ -62,7 +62,7 @@ const acionaFormDeTrocaDeSenha = () => {
 
 onMounted(async () => {
   document.title = 'Leitor de mangás - Perfil'
-  
+
   try {
     const result = await auth.getUser()
     name.value = result.firstName
@@ -84,8 +84,6 @@ main {
 .card-content {
   width: 75vw;
   padding: 20px;
-  background-color: #010024;
-  color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
 }
@@ -112,7 +110,6 @@ main {
 }
 
 .profile-info {
-  color: #d0d0d0;
   margin: 5px 0;
 }
 
@@ -126,7 +123,6 @@ button {
   padding: 10px 15px;
   border: none;
   border-radius: 8px;
-  color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }

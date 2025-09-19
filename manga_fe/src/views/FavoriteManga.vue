@@ -63,9 +63,7 @@ main {
 .mangaCard {
   width: 280px;
   max-width: 100%;
-  background-color: white;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -89,7 +87,6 @@ main {
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #333;
   margin-bottom: 12px;
 }
 
@@ -101,11 +98,6 @@ main {
   width: 100%;
   margin-top: auto;
   transition: background 0.3s ease;
-}
-
-.access-btn:hover {
-  background-color: #007aff;
-  color: white;
 }
 
 .containerWithoutManga {

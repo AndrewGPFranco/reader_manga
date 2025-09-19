@@ -1,10 +1,9 @@
-<!-- Essa é a lista individual do usuário -->
 <template>
   <header>
     <MenuComponent />
   </header>
   <main>
-    <n-card title="Biblioteca" size="huge" style="height: 95vh; overflow-y: auto;">
+    <n-card title="Biblioteca" size="huge" style="height: 95vh; overflow-y: auto">
       <section class="card-container" v-if="mangasArray != undefined && mangasArray.length > 0">
         <div class="card" v-for="manga in mangasArray" :key="manga.title">
           <div class="relative">
@@ -94,7 +93,6 @@ main {
 
 .card {
   width: 300px;
-  background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -118,14 +116,12 @@ main {
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #333;
   margin-bottom: 8px;
   text-decoration: none;
 }
 
 .card-details {
   font-size: 0.875rem;
-  color: #666;
   flex-grow: 1;
 }
 
