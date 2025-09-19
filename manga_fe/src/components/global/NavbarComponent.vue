@@ -24,7 +24,7 @@
 <script lang="ts">
 import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
-import { NIcon } from 'naive-ui'
+import { NButton, NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import {
   ScanCircleOutline as ScanCircle,
@@ -35,10 +35,12 @@ import {
   PersonOutline as Profile,
   NewspaperOutline as Mangas,
   CodeWorkingOutline as Jobs,
-  HourglassOutline as ProgressReadings
+  HourglassOutline as ProgressReadings,
+  SettingsOutline
 } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/store/AuthStore'
+import { useSystemStore } from '@/store/SystemStore'
 import { VideocamOutline } from '@vicons/ionicons5/lib'
 
 const renderIcon = (icon: Component) => {
@@ -49,6 +51,7 @@ export default defineComponent({
   setup() {
     const auth = useAuthStore()
     const role = auth.getRoleUser()
+    const systemStore = useSystemStore()
 
     const menuOptions: MenuOption[] = [
       {
@@ -117,6 +120,26 @@ export default defineComponent({
           h(RouterLink, { to: '/progress-readings' }, { default: () => 'Leituras em andamento' }),
         icon: renderIcon(ProgressReadings),
         path: '/progress-readings'
+      },
+      {
+        whateverLabel: () =>
+          h(
+            NButton,
+            {
+              type: 'primary',
+              tertiary: systemStore.theme === null,
+              onClick: () => systemStore.alterTheme(),
+              style: {
+                width: '100%',
+                justifyContent: 'flex-start'
+              }
+            },
+            {
+              default: () => (systemStore.theme === null ? 'Ativar Dark Mode' : 'Ativar Light Mode')
+            }
+          ),
+        icon: () => h(NIcon, null, { default: () => h(SettingsOutline) }),
+        whateverKey: 'alterar-tema'
       }
     ]
 
