@@ -27,8 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public boolean isEmail(String usernameOrEmail) {
-        boolean matches = patternEmail.matcher(usernameOrEmail).matches();
-        return matches;
+        return patternEmail.matcher(usernameOrEmail).matches();
     }
 
 }

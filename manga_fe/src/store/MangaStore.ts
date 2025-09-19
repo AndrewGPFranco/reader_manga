@@ -1,5 +1,4 @@
 import type iMangaData from '@/@types/Manga'
-import type iMangaDexData from '@/@types/MangaDex'
 import type responseRequest from '@/@types/ResponseRequest'
 import { api } from '@/network/axiosInstance'
 import { defineStore } from 'pinia'
@@ -61,27 +60,13 @@ export const useMangaStore = defineStore('manga', {
       }
     },
     async getInfoManga(tituloManga: string): Promise<any> {
-      const idUser = localStorage.getItem("id");
+      const idUser = this.user.getId()
       const response = await api.get(`/api/v1/manga/get-info-manga/${tituloManga}/${idUser}`, {
         headers: {
           Authorization: `${this.user.getToken()}`
         }
       })
       return response.data
-    },
-    // Get 5 manga covers from the MangaDex API
-    async getFiveMangaRandomMD(): Promise<iMangaDexData[]> {
-      try {
-        const token: string | null = localStorage.getItem('token');
-        const response = await api.get('/api/v1/manga/get-covers', {
-          headers: {
-            Authorization: `${token}`
-          }
-        })
-        return response.data;
-      } catch (error: any) {
-        throw new Error(error.response.data);
-      }
     },
     // Get 5 manga covers from my library
     async getFiveMangaRandom(): Promise<iCoversManga[]> {
@@ -185,7 +170,7 @@ export const useMangaStore = defineStore('manga', {
     },
     async adicionaMangaNaListaDoUsuario(idManga: number) {
       try {
-        const idUser = localStorage.getItem("id");
+        const idUser = this.user.getId()
         const response = await api.post(
           `/api/v1/user/add-manga?idManga=${idManga}&idUser=${idUser}`,
           {},
@@ -221,25 +206,24 @@ export const useMangaStore = defineStore('manga', {
       const token = localStorage.getItem('token')
       if (token != undefined) {
         const decode = jwtDecode<iDecodedToken>(token)
-          return decode.id
+        return decode.id
       }
     },
     async getApenasNomeDosMangas(): Promise<string[]> {
-      const result = await api.get("/api/v1/manga/nome-mangas", {
+      const result = await api.get('/api/v1/manga/nome-mangas', {
         headers: {
           Authorization: this.user.getToken()
         }
-      });
-      return result.data;
+      })
+      return result.data
     },
     async getMangaPesquisado(mangaPesquisado: string): Promise<any> {
-      const result = await api
-        .get(`/api/v1/manga?pesquisado=${mangaPesquisado}`, {
+      const result = await api.get(`/api/v1/manga?pesquisado=${mangaPesquisado}`, {
         headers: {
           Authorization: this.user.getToken()
         }
-      });
-      return result.data;
+      })
+      return result.data
     }
   }
 })

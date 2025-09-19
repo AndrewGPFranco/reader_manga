@@ -160,7 +160,7 @@ export const useChapterStore = defineStore('chapter', {
     },
     async updateReadingProgress(idChapter: string, currentProgress: number) {
       try {
-        const idUser = localStorage.getItem('id')
+        const idUser = this.user.getId();
         const data = {
           idUser: idUser,
           idChapter: idChapter,

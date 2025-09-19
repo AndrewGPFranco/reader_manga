@@ -30,29 +30,27 @@ export const useAuthStore = defineStore('auth', {
         this.user = new User(decode.sub, result.data.token, decode.id)
 
         const token: string | undefined = this.user.getToken()
-        const idUser: string | undefined = this.user.getId()
-        if (token && idUser) {
+
+        if (token)
           this._setTokenLocalStorage(token)
-          this._setIdLocalStorage(idUser)
-        }
       } catch (error: any) {
         throw new Error(error.response.data)
       }
     },
     getUserAutenticado() {
-      const token = localStorage.getItem('token')
-      const id = localStorage.getItem('id')
-      if (token && id) {
-        this.user.setToken(token)
-        this.user.setId(id)
+      if (this.user.getId() === "") {
+        const token = localStorage.getItem('token')
+        if (token) {
+          const decode: iDecodedToken = jwtDecode<iDecodedToken>(token)
+
+          this.user = new User(decode.sub, token, decode.id)
+        }
       }
+
       return this.user
     },
     _setTokenLocalStorage(token: string): void {
       localStorage.setItem('token', token)
-    },
-    _setIdLocalStorage(id: string): void {
-      localStorage.setItem('id', id)
     },
     isUserAutenticado(): boolean {
       return this.user.getToken() !== '' || localStorage.getItem('token') !== null
