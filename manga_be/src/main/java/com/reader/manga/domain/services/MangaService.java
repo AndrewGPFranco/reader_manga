@@ -31,13 +31,13 @@ import java.util.stream.Collectors;
 public class MangaService {
 
     private final MangaMapper mangaMapper;
-    private final MangaRepository repository;
+    private final MangaRepository mangaRepository;
     private final UserMangaService userMangaService;
 
     private static final String MANGA_NAO_ENCONTRADO = "Mangá não encontrado.";
 
     public Map<String, CoversMangaVO> obtemMangasFamosos() {
-        List<Manga> todosMangas = repository.findAll();
+        List<Manga> todosMangas = mangaRepository.findAll();
         Set<String> nomeDosMangasRegistrados = todosMangas.stream()
                 .map(m -> m.getTitle().toLowerCase())
                 .collect(Collectors.toSet());
@@ -73,7 +73,7 @@ public class MangaService {
     public GetMangaDTO createManga(MangaDTO dto) {
         try {
             Manga manga = new Manga(dto.title(), dto.description(), dto.size(), dto.creationDate(), dto.closingDate(), dto.status(), dto.gender(), dto.author(),  dto.image());
-            Manga savedManga = repository.save(manga);
+            Manga savedManga = mangaRepository.save(manga);
             return new GetMangaDTO(savedManga.getId(), savedManga.getTitle(), savedManga.getDescription(), savedManga.getSize(), savedManga.getCreationDate(), savedManga.getClosingDate(), savedManga.getStatus(), savedManga.getGender(), savedManga.getAuthor(), savedManga.getImage());
         }catch (Exception e) {
             throw new CreationErrorException("Error creating Manga. Please try again... " + e.getMessage());
@@ -81,18 +81,18 @@ public class MangaService {
     }
 
     public void deleteManga(UserData userData) {
-        Optional<Manga> mangaById = repository.findById(userData.idManga());
+        Optional<Manga> mangaById = mangaRepository.findById(userData.idManga());
         if(mangaById.isEmpty()){
             throw new NotFoundException("No manga found with the id: " + userData.idManga() + ".");
         }
         userMangaService.deleteAssociacaoUserMangaFavorite(userData.idUser(), userData.idManga());
         userMangaService.deleteAssociacaoUserManga(userData.idUser(), userData.idManga());
-        repository.deleteById(userData.idManga());
+        mangaRepository.deleteById(userData.idManga());
     }
 
     public Set<MangaUserVO> readAllMangas(Long idUser) {
         UserMangaVO todosMangasDoUsuario = userMangaService.getTodosMangasDoUsuario(idUser);
-        List<Manga> todosMangasDoSistema = repository.findAll();
+        List<Manga> todosMangasDoSistema = mangaRepository.findAll();
 
         Set<MangaUserVO> listaParaRetornar = new HashSet<>();
 
@@ -115,7 +115,7 @@ public class MangaService {
     }
 
     public void updateManga(Long id, UpdateMangaDTO dto) {
-        Manga manga = repository.findById(id)
+        Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Manga not found"));
 
         UtilsService.updateField(dto.title(), manga::setTitle);
@@ -128,23 +128,23 @@ public class MangaService {
         UtilsService.updateField(dto.gender(), manga::setGender);
         UtilsService.updateField(dto.image(), manga::setImage);
 
-        repository.save(manga);
+        mangaRepository.save(manga);
     }
 
     public List<Manga> getAll() {
-        return repository.findAll();
+        return mangaRepository.findAll();
     }
 
     public Manga findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
+        return mangaRepository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
     }
 
     public Manga findByTitle(String titulo) {
-        return repository.findByTitle(titulo).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
+        return mangaRepository.findByTitle(titulo).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO));
     }
 
     public List<Chapter> getChaptersByManga(Long id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO)).getChapters();
+        return mangaRepository.findById(id).orElseThrow(() -> new NotFoundException(MANGA_NAO_ENCONTRADO)).getChapters();
     }
 
     public Mono<MangaCoverVO> fetchCoverForTitle(String title, WebClient webClient) {
@@ -196,7 +196,7 @@ public class MangaService {
     }
 
     public List<String> getApenasNomeDosMangas() {
-        List<Manga> todosMangas = repository.findAll();
+        List<Manga> todosMangas = mangaRepository.findAll();
         List<String> nomeDosMangas = new ArrayList<>(todosMangas.size());
 
         todosMangas.forEach(manga -> nomeDosMangas.add(manga.getTitle()));
@@ -206,7 +206,7 @@ public class MangaService {
 
     public Page<Manga> getMangaPesquisado(String pesquisado, int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        return repository.findByTitleLike(pesquisado, pageable);
+        return mangaRepository.findByTitleLike(pesquisado, pageable);
     }
 
 }

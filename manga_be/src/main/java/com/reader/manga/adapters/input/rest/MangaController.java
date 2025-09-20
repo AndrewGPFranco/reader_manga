@@ -56,16 +56,16 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body(manga);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
         logger.info("*******************Creating mangá!*******************");
         GetMangaDTO manga = service.createManga(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(manga);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteManga(@RequestBody UserData userDto) {
         logger.info("*******************Deleting mangá!*******************");
         service.deleteManga(userDto);
@@ -79,8 +79,8 @@ public class MangaController {
         return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/edit/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> updateMangaById(@PathVariable Long id, @RequestBody UpdateMangaDTO dto) {
         service.updateManga(id, dto);
         logger.info("*******************Updating mangá!*******************");

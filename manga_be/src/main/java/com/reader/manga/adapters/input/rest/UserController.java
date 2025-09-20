@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/remove-manga")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> removeMangaToList(@RequestParam Long idManga, @RequestParam Long idUser) {
         userMangaService.removeMangaDaLista(idManga, idUser);
         return ResponseEntity.ok().body("Removido da lista");
