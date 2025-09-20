@@ -5,21 +5,23 @@ import { useUser } from '@/composables/user'
 import { useSystemStore } from '@/store/SystemStore'
 
 const { setToken } = useUser()
-const systemStore = useSystemStore();
+const systemStore = useSystemStore()
 const theme = computed(() => systemStore.theme)
 
 onMounted(() => {
   setToken(localStorage.getItem('token') || undefined)
-  systemStore.getLatestTheme();
+  systemStore.getLatestTheme()
 })
 </script>
 
 <template>
   <n-config-provider :theme="theme">
-    <n-message-provider>
-      <section :style="theme !== null ? { backgroundColor: '#000' } : {}">
-        <router-view />
-      </section>
-    </n-message-provider>
+    <n-modal-provider>
+      <n-message-provider>
+        <section :style="theme !== null ? { backgroundColor: '#000' } : {}">
+          <router-view />
+        </section>
+      </n-message-provider>
+    </n-modal-provider>
   </n-config-provider>
 </template>

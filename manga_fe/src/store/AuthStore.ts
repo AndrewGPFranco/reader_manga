@@ -124,6 +124,16 @@ export const useAuthStore = defineStore('auth', {
         }
       }
       return new Map([[false, 'Token inválido!']])
+    },
+    async changeProfilePhoto(dados: FormData) {
+      const token = localStorage.getItem('token')
+      if (token != undefined) {
+        await api.post('/api/v1/user/change-photo', dados, {
+          headers: {
+            Authorization: `${token}`
+          }
+        })
+      }
     }
   }
 })

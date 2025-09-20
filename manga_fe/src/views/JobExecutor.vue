@@ -69,21 +69,21 @@
 </template>
 
 <script setup lang="ts">
+import { URL_SSE } from '@/utils/utils'
+import type IJobType from '@/@types/IJobType'
+import { api } from '@/network/axiosInstance'
+import { useMangaStore } from '@/store/MangaStore'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
 import MenuComponent from '@/components/global/MenuComponent.vue'
 import { NCard, NList, NListItem, NButton, NForm, NFormItem, useMessage } from 'naive-ui'
-import { api } from '@/network/axiosInstance'
-import type IJobType from '@/@types/IJobType'
-import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
-import { URL_SSE } from '@/utils/utils'
-import { useMangaStore } from '@/store/MangaStore'
 
 const message = useMessage()
 const mangaStore = useMangaStore()
 const jobs = ref<IJobType[]>([])
 const selectedJob = ref<string>('')
-const token = localStorage.getItem('token')
 const mangasNomes = ref<string[]>([]);
+const token = localStorage.getItem('token')
 
 let selectedFile = ref<File>()
 let titleManga = ref<string>()

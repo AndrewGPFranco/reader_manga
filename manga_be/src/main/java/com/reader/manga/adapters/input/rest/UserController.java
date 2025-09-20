@@ -151,9 +151,4 @@ public class UserController {
         }
     }
 
-    @GetMapping("get-profile-photo")
-    public ResponseEntity<ResponseAPI> getProfilePhoto(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok().body(ResponseAPI.builder().responseObject(user.getUriProfilePhoto()).build());
-    }
-
 }
