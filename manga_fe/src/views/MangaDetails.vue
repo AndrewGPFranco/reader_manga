@@ -112,6 +112,7 @@ const selectedChapter = ref<iChapterData | null>(null)
 
 onMounted(async () => {
   manga.value = {} as iMangaData
+  console.log("OI")
 
   const title: string = Array.isArray(route.params.title)
     ? route.params.title[0]

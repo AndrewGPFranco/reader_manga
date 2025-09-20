@@ -28,10 +28,8 @@
         <div
           v-else
           :class="{
-            'w-72 h-90 rounded overflow-hidden shadow-lg flex flex-col':
-              isExibindoTodosMangas,
-            'w-72 h-80 rounded overflow-hidden shadow-lg flex flex-col':
-              !isExibindoTodosMangas
+            'w-72 h-90 rounded overflow-hidden shadow-lg flex flex-col': isExibindoTodosMangas,
+            'w-72 h-80 rounded overflow-hidden shadow-lg flex flex-col': !isExibindoTodosMangas
           }"
           v-for="manga in mangasArray"
           :key="manga.title"
@@ -40,14 +38,10 @@
             <img class="w-full h-48 object-cover" :src="manga.image" alt="Capa do Manga" />
           </div>
           <div class="p-4 flex flex-col flex-grow overflow-y-auto">
-            <router-link
-              :to="`/manga/${manga.title}`"
-              class="text-xl font-bold truncate"
-            >
+            <router-link :to="`/manga/${manga.title}`" class="text-xl font-bold truncate">
               {{ manga.title }}
             </router-link>
             <div class="text-sm mt-2 flex-grow overflow-y-auto">
-              <p><span class="font-semibold">Chapters: </span>{{ manga.size }}</p>
               <p><span class="font-semibold">Status: </span>{{ manga.status }}</p>
             </div>
             <div class="mt-auto" v-if="isExibindoTodosMangas">

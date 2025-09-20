@@ -143,12 +143,12 @@
 <script setup lang="ts">
 import router from '@/router'
 import { onMounted, ref } from 'vue'
+import { formatDate } from '@/utils/utils'
 import { useAuthStore } from '@/store/AuthStore'
 import MenuComponent from '@/components/global/MenuComponent.vue'
 import PasswordRecovery from '@/components/profile/PasswordRecovery.vue'
 import { EnterOutline, ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
 import { useMessage, NModal, NUpload, NButton, NCard, NDivider } from 'naive-ui'
-import { formatDate } from '@/utils/utils'
 
 const toast = useMessage()
 const auth = useAuthStore()
@@ -217,7 +217,9 @@ const atualizaUsuarioLogado = async () => {
   email.value = result.email
   dateBirth.value = formatDate(result.dateBirth)
   username.value = result.username
-  profilePhoto.value = `http://localhost:8080${result.profilePhoto}?t=${Date.now()}`
+
+  if (result.profilePhoto !== null)
+    profilePhoto.value = `http://localhost:8080${result.profilePhoto}?t=${Date.now()}`
 }
 
 onMounted(async () => {

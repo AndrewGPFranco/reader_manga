@@ -33,11 +33,7 @@
                 </p>
                 <n-modal v-model:show="isShowDialog">
                   <n-card
-                    style="
-                      width: 600px;
-                      max-width: 90%;
-                      border-radius: 12px;
-                    "
+                    style="width: 600px; max-width: 90%; border-radius: 12px"
                     title="Deseja continuar de onde parou?"
                     :bordered="false"
                     size="huge"
@@ -69,9 +65,7 @@
                         @click="resetarProgresso"
                         quaternary
                       >
-                        <span class="label text-base font-medium"
-                          >Resetar progresso?</span
-                        >
+                        <span class="label text-base font-medium">Resetar progresso?</span>
                         <RefreshOutline class="refresh-reading ml-2 w-5 h-5 text-yellow-500" />
                       </n-button>
                     </div>

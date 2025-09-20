@@ -16,17 +16,16 @@
           <n-form ref="formRef" label-width="120px">
             <n-form-item label="Parâmetros" path="parametros" v-if="tipoJob === 'Parâmetros'">
               <n-input
-                v-model="parametros"
+                v-model:value="parametros"
                 placeholder="Digite os parâmetros"
                 type="text"
               />
             </n-form-item>
             <n-form-item label="Número do Capítulo" path="parametros" v-if="tipoJob === 'Uploads'">
-              <n-input-number
+              <n-input
                 clearable
-                v-model="titleChapter"
+                v-model:value="titleChapter"
                 placeholder="Digite o número do capítulo"
-                min="1"
               />
             </n-form-item>
             <n-form-item label="Título do Mangá" path="parametros" v-if="tipoJob === 'Uploads'">
