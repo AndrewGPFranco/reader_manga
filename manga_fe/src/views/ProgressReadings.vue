@@ -199,7 +199,6 @@ main {
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 8px;
-  color: #2d3748;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -209,7 +208,6 @@ main {
 .chapter-progress {
   margin-top: 6px;
   font-size: 0.9rem;
-  color: #4a5568;
 }
 
 .label {

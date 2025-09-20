@@ -31,7 +31,7 @@
             :key="chapter.id"
             :class="[
               'p-4 rounded-lg shadow-lg',
-              chapter.status === StatusType.FINISHED ? 'bg-green-100' : {}
+              chapter.status === StatusType.FINISHED ? 'bg-green-100 text-black' : {}
             ]"
           >
             <p

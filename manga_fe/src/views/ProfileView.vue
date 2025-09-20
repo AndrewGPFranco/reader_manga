@@ -6,7 +6,7 @@
     <n-card style="height: 95vh; overflow-y: auto">
       <section class="card-content">
         <div class="profile-container">
-          <img src="../assets/home/op.jpeg" alt="Foto de Perfil" class="profile-image" />
+          <img :src="profilePhoto || profilePhotoDefault" alt="Foto de Perfil" class="profile-image" />
           <h2 class="profile-name">{{ name }}</h2>
           <p class="profile-info">{{ email }}</p>
           <p class="profile-info">Nickname: {{ username }}</p>
@@ -29,12 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import MenuComponent from '@/components/global/MenuComponent.vue'
 import router from '@/router'
-import { useAuthStore } from '@/store/AuthStore'
 import { onMounted, ref } from 'vue'
-import PasswordRecovery from '@/components/profile/PasswordRecovery.vue'
 import { useMessage } from 'naive-ui'
+import { useAuthStore } from '@/store/AuthStore'
+import MenuComponent from '@/components/global/MenuComponent.vue'
+import PasswordRecovery from '@/components/profile/PasswordRecovery.vue'
 
 const auth = useAuthStore()
 const toast = useMessage()
@@ -43,6 +43,8 @@ const email = ref<string>('')
 const username = ref<string>('')
 const dateBirth = ref<Date | null>(null)
 let isPasswordRecovery = ref<boolean>(false)
+const profilePhoto = ref<string | null>(null)
+const profilePhotoDefault = new URL("../assets/home/op.jpeg", import.meta.url).href;
 
 /**
  * Emit recuperado pelo componente PasswordRecovery para esconder novamente o formulário.
@@ -69,6 +71,7 @@ onMounted(async () => {
     email.value = result.email
     dateBirth.value = result.dateBirth
     username.value = result.username
+    profilePhoto.value = result.profilePhoto
   } catch (error: any) {
     console.error(error.message)
     toast.error(error.message)
@@ -96,8 +99,8 @@ main {
 }
 
 .profile-image {
-  width: 128px;
-  height: 128px;
+  width: 400px;
+  height: 400px;
   object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);

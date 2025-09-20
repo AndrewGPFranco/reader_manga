@@ -31,14 +31,13 @@ export const useAuthStore = defineStore('auth', {
 
         const token: string | undefined = this.user.getToken()
 
-        if (token)
-          this._setTokenLocalStorage(token)
+        if (token) this._setTokenLocalStorage(token)
       } catch (error: any) {
         throw new Error(error.response.data)
       }
     },
     getUserAutenticado() {
-      if (this.user.getId() === "") {
+      if (this.user.getId() === '') {
         const token = localStorage.getItem('token')
         if (token) {
           const decode: iDecodedToken = jwtDecode<iDecodedToken>(token)
@@ -60,7 +59,6 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       this.user = new User('', '', '')
       this.usuarioLogado = null
-      location.reload()
     },
     getRoleUser(): string {
       const token = localStorage.getItem('token')
@@ -94,7 +92,8 @@ export const useAuthStore = defineStore('auth', {
           userData.fullName,
           userData.username,
           userData.email,
-          userData.dateBirth
+          userData.dateBirth,
+          userData.uriPath
         )
         return this.usuarioLogado
       }

@@ -1,5 +1,5 @@
 <template>
-  <section class="p-4">
+  <section>
     <n-card ref="animeCard" title="Animes" class="h-[95vh] overflow-y-auto" size="huge">
       <section class="mt-5 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
         <div v-if="!animesArray.length" class="col-span-full text-center text-gray-600">
