@@ -13,26 +13,5 @@ services:
     volumes:
       - postgres_data:/var/lib/postgres
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-      - "5005:5005"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/reader
-      SPRING_DATASOURCE_USERNAME: andrew
-      SPRING_DATASOURCE_PASSWORD: gomes
-      SPRING_PROFILES_ACTIVE: dev
-    volumes:
-      - ./src:/app/src
-      - ~/.m2:/root/.m2
-      - /home/andrewgo/Documentos/Capitulos_salvos:/app/uploads:rw,Z
-    depends_on:
-      - postgres
-    container_name: manga-back
-    command: ./mvnw spring-boot:run
-
 volumes:
   postgres_data:
