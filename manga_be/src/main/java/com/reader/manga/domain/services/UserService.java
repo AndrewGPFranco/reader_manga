@@ -37,7 +37,7 @@ public class UserService {
     private final PasswordEncoderMapper passwordEncoderMapper;
     private final UserChapterRepository userChapterRepository;
 
-    private static final String MDIR = "/app/uploads/profile-photo/";
+    private static final String MDIR = "/home/andrewgo/reader/uploads/profile-photo/";
     private static final String MDIR_GETTER = "/uploads/profile-photo/";
 
     public RecoverUserDTO register(UserDTO userDTO) {

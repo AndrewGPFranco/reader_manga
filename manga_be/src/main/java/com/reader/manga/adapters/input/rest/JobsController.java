@@ -43,13 +43,8 @@ public class JobsController <T> implements iDadosManga {
         List<JobsType> jobs = jobsService.getJobs();
         List<JobDTO> jobDtoList = new ArrayList<>(jobs.size());
         jobs.forEach(job ->
-            jobDtoList.add(JobDTO.builder()
-                    .nomeJob(job.getNomeJob())
-                    .isPossuiVersaoAntiga(job.isPossuiVersaoAntiga())
-                    .tipoDoJob(job.getTipoDoJob())
-                    .isAtivo(job.isAtivo())
-                    .dataIn(job.getDataIn())
-                    .build()));
+                jobDtoList.add(new JobDTO(job.getNomeJob(), job.getDataIn(),
+                        job.isAtivo(), job.getTipoDoJob(), job.isPossuiVersaoAntiga())));
 
         return ResponseEntity.ok().body(jobDtoList);
     }

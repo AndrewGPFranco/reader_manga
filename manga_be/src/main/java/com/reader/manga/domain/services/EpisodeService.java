@@ -43,7 +43,7 @@ public class EpisodeService {
     private final AnimesManagementFacade animesManagementFacade;
     private final UserManagementFacade userManagementFacade;
 
-    private final Path pastaOrigem = Paths.get("uploads/animes");
+    private final Path pastaOrigem = Paths.get("/home/andrewgo/reader/uploads/animes/");
 
     public void uploadAnime(EpisodeDTO dto) {
         try {

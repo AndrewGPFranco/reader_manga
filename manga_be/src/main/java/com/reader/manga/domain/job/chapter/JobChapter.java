@@ -35,10 +35,10 @@ import java.util.zip.ZipInputStream;
 @RequiredArgsConstructor
 public class JobChapter extends ColetorBaseUpload {
 
-    private static final String BASE_PATH = "/app/uploads/";
-    private static final String IMAGE_FORMAT = "PNG";
-    private static final int BATCH_SIZE = 100;
     private static final int DPI = 300;
+    private static final int BATCH_SIZE = 100;
+    private static final String IMAGE_FORMAT = "PNG";
+    public static final String BASE_PATH = "/home/andrewgo/reader/uploads/mangas";
     private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
     private final MangaRepository mangaRepository;
@@ -83,6 +83,11 @@ public class JobChapter extends ColetorBaseUpload {
 
                 capitulo.setPages(paginas);
                 capituloRepository.save(capitulo);
+
+                if (manga.getSize() < Integer.parseInt(varargs[1])) {
+                    manga.setSize(Integer.parseInt(varargs[1]));
+                    mangaRepository.save(manga);
+                }
             }
         }
 
@@ -137,7 +142,7 @@ public class JobChapter extends ColetorBaseUpload {
             }
 
             int progresso = (int) ((i / (double) totalPages) * 100);
-            for (Iterator<SseEmitter> it = emitters.iterator(); it.hasNext();) {
+            for (Iterator<SseEmitter> it = emitters.iterator(); it.hasNext(); ) {
                 SseEmitter emitter = it.next();
                 try {
                     emitter.send(progresso);
@@ -192,7 +197,7 @@ public class JobChapter extends ColetorBaseUpload {
                         }
                     }
 
-                    if(newFile.getCanonicalPath().contains(".png") || newFile.getCanonicalPath().contains(".jpg")) {
+                    if (newFile.getCanonicalPath().contains(".png") || newFile.getCanonicalPath().contains(".jpg")) {
                         arquivosExtraidos.add(newFile);
                     }
                 }
