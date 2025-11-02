@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class JobsController <T> implements iDadosManga {
 
     private final JobChapter jobChapter;
     private final JobsService jobsService;
+    private final ExecutorService executorService;
 
     @PostMapping("/{name}/{parametros}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -69,6 +69,13 @@ public class JobsController <T> implements iDadosManga {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         jobChapter.addEmitter(emitter);
         return emitter;
+    }
+
+    @PostMapping("/inserts-mangas-defaults")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String inseriMangasPadroesNoSistema() {
+        executorService.execute(jobsService::inseriMangasPadroesNoSistema);
+        return "Início de inserção dos mangás padrões do sistema";
     }
 
 }

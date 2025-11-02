@@ -2,6 +2,7 @@ package com.reader.manga.domain.job.manga;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.reader.manga.domain.enums.StatusType;
+import com.reader.manga.domain.fixtures.FixtureMangas;
 import com.reader.manga.domain.job.base.ColetorBaseFonte;
 import com.reader.manga.domain.entities.mangas.Manga;
 import com.reader.manga.ports.repositories.MangaRepository;
@@ -11,6 +12,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Coletor responsável por obter dados de mangás para o sistema.
@@ -25,6 +30,12 @@ public class ColetorMangaFonteI extends ColetorBaseFonte<MangaJobVOI> {
     private final MangaRepository repository;
     private static final String EN_US = "en_us";
     private static final String EN_JP = "en_jp";
+
+    private static final Set<String> mangasDefault = new HashSet<>();
+
+    static {
+        mangasDefault.addAll(FixtureMangas.getMangasDefault());
+    }
 
     @Override
     public Mono<MangaJobVOI> executa(Object manga) {
@@ -56,11 +67,15 @@ public class ColetorMangaFonteI extends ColetorBaseFonte<MangaJobVOI> {
     
     @Override
     public void salvaDadosNoBanco(MangaJobVOI vo) {
-        Manga manga = new Manga(vo.getTitle(), vo.getDescription(), vo.getSize(), vo.getCreationDate(),
-                vo.getClosingDate(), vo.getStatus(), vo.getGender() != null ? vo.getGender() : "Não informado",
-                vo.getAuthor() != null ? vo.getAuthor() : "Não informado", vo.getImage());
+        Optional<Manga> mangaJaSalvo = repository.findByTitle(vo.getTitle());
 
-        repository.save(manga);
+        if (mangaJaSalvo.isEmpty()) {
+            Manga manga = new Manga(vo.getTitle(), vo.getDescription(), vo.getSize(), vo.getCreationDate(),
+                    vo.getClosingDate(), vo.getStatus(), vo.getGender() != null ? vo.getGender() : "Não informado",
+                    vo.getAuthor() != null ? vo.getAuthor() : "Não informado", vo.getImage());
+
+            repository.save(manga);
+        }
     }
 
     @Override
@@ -92,6 +107,15 @@ public class ColetorMangaFonteI extends ColetorBaseFonte<MangaJobVOI> {
             return titles.get(EN_JP).asText();
 
         return "Título indisponível";
+    }
+
+    public void inseriMangasPadroesNoSistema() {
+        for (String manga : mangasDefault) {
+            Optional<Manga> mangaJaSalvo = repository.findByTitle(manga);
+
+            if (mangaJaSalvo.isEmpty())
+                executa(manga).block();
+        }
     }
 
 }

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -39,15 +38,13 @@ public class JobChapter extends ColetorBaseUpload {
     private static final int BATCH_SIZE = 100;
     private static final String IMAGE_FORMAT = "PNG";
     public static final String BASE_PATH = "/home/andrewgo/reader/uploads/mangas";
-    private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
     private final MangaRepository mangaRepository;
+    private final ExecutorService executorService;
     private final PaginaRepository paginaRepository;
     private final ChapterRepository capituloRepository;
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-
-    private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
     /**
      * Executa o job de processamento do capítulo

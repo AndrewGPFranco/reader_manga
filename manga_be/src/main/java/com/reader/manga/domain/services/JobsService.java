@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobsService {
 
-    private final ColetorMangaFonteI coletorManga;
     private final JobChapter jobChapter;
+    private final ColetorMangaFonteI coletorManga;
 
     /**
      * Job que busca informações de um mangá e as salvas.
@@ -44,4 +44,7 @@ public class JobsService {
         jobChapter.executa(path, titleManga, titleChapter);
     }
 
+    public void inseriMangasPadroesNoSistema() {
+        coletorManga.inseriMangasPadroesNoSistema();
+    }
 }
