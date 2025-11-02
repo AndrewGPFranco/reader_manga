@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th>Usuário</th>
-      <th class="text-center">Ações</th>
+      <th class="text-center">Ações</th> <!-- TODO: Melhorar para possibilidade de alterar o tier para qualquer opção! -->
     </tr>
     </thead>
 
