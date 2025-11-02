@@ -1,6 +1,6 @@
 <template>
   <header>
-    <MenuComponent />
+    <MenuComponent/>
   </header>
   <main>
     <section>
@@ -8,10 +8,12 @@
         <div class="card-container" v-if="favoriteManga.length > 0">
           <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
             <template #cover>
-              <img class="card-image" :src="manga.image" :alt="manga.title" />
+              <img class="card-image" :src="manga.image" :alt="manga.title"/>
             </template>
             <div class="card-content">
-              <h3 class="card-title">{{ manga.title }}</h3>
+              <div class="card-content-title">
+                <h3 class="card-title">{{ tratamentoTitulo(manga.title) }}</h3>
+              </div>
               <router-link :to="`/manga/${manga.title}`" class="full-width">
                 <n-button type="info" class="access-btn">Acessar</n-button>
               </router-link>
@@ -29,11 +31,15 @@
 <script setup lang="ts">
 import MenuComponent from '@/components/global/MenuComponent.vue'
 import type iMangaData from '@/@types/Manga'
-import { useMangaStore } from '@/store/MangaStore'
-import { onMounted, ref } from 'vue'
+import {useMangaStore} from '@/store/MangaStore'
+import {onMounted, ref} from 'vue'
 
-const favoriteManga = ref([] as iMangaData[])
 const mangaStore = useMangaStore()
+const favoriteManga = ref([] as iMangaData[])
+
+const tratamentoTitulo = (title: string) => {
+  return title.length > 15 ? `${title.substring(0, 15)}...` : title
+}
 
 onMounted(async () => {
   favoriteManga.value = await mangaStore.getAllFavorites()
@@ -82,6 +88,10 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.card-content-title {
+  height: 50px;
 }
 
 .card-title {

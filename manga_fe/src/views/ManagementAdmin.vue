@@ -20,17 +20,23 @@
             <ChapterPagesManagement />
           </section>
         </n-tab-pane>
+        <n-tab-pane name="Gerenciar usuários" tab="Gerenciar usuários" style="height: 95%">
+          <section class="container">
+            <UsersManagement />
+          </section>
+        </n-tab-pane>
       </n-tabs>
     </n-card>
   </main>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import MenuComponent from '@/components/global/MenuComponent.vue'
+import MangaManagement from '@/components/admin/MangaManagement.vue'
+import UsersManagement from '@/components/admin/UsersManagement.vue'
 import ChapterManagement from '@/components/admin/ChapterManagement.vue'
 import ChapterPagesManagement from '@/components/admin/ChapterPagesManagement.vue'
-import MangaManagement from '@/components/admin/MangaManagement.vue'
-import MenuComponent from '@/components/global/MenuComponent.vue'
-import { onMounted } from 'vue'
 
 onMounted(() => document.title = 'Leitor de mangás - Gerenciamento')
 </script>
