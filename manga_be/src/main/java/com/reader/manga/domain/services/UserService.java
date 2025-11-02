@@ -15,6 +15,8 @@ import com.reader.manga.domain.valueobjects.users.ChangePasswordVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Sets;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -112,5 +116,21 @@ public class UserService {
 
     private boolean verifyTypeImage(String uri) {
         return uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp");
+    }
+
+    public Set<String> getUsersForManagement(Integer paginaAtual) {
+        PageRequest pageRequest = PageRequest.of(paginaAtual, 10);
+
+        Page<User> users = repository.findAll(pageRequest);
+
+        return users.stream().map(User::getUsername).collect(Collectors.toSet());
+    }
+
+    public void tornarUsuarioAdmin(String username) {
+        User user = repository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Nenhum usuário encontrado com o username: " + username));
+
+        user.getRoles().add(RoleType.ADMIN);
+        repository.save(user);
     }
 }

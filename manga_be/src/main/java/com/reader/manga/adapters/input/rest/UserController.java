@@ -23,6 +23,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -149,6 +151,18 @@ public class UserController {
             return ResponseEntity.badRequest().body(
                     ResponseAPI.builder().message(e.getMessage()).statusCode(400).build());
         }
+    }
+
+    @GetMapping("/get-users")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Set<String>> getUsersForManagement(@RequestParam Integer paginaAtual) {
+        return ResponseEntity.ok().body(userService.getUsersForManagement(paginaAtual));
+    }
+
+    @PutMapping("/tornar-admin")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    void tornarUsuarioAdmin(@RequestParam String username) {
+        userService.tornarUsuarioAdmin(username);
     }
 
 }
