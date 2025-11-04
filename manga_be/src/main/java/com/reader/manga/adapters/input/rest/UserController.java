@@ -11,8 +11,10 @@ import com.reader.manga.domain.services.UserService;
 import com.reader.manga.domain.valueobjects.users.ChangePasswordVO;
 import com.reader.manga.domain.valueobjects.users.UserMangaVO;
 
+import com.reader.manga.domain.valueobjects.users.UsersManagementVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -155,14 +155,14 @@ public class UserController {
 
     @GetMapping("/get-users")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Set<String>> getUsersForManagement(@RequestParam Integer paginaAtual) {
+    public ResponseEntity<Page<UsersManagementVO>> getUsersForManagement(@RequestParam Integer paginaAtual) {
         return ResponseEntity.ok().body(userService.getUsersForManagement(paginaAtual));
     }
 
-    @PutMapping("/tornar-admin")
+    @PutMapping("/mudar-role")
     @PreAuthorize("hasAuthority('ADMIN')")
-    void tornarUsuarioAdmin(@RequestParam String username) {
-        userService.tornarUsuarioAdmin(username);
+    void alterarRoleUsuario(@RequestParam String username, @RequestParam String role) {
+        userService.alterarRoleUsuario(username, role);
     }
 
 }

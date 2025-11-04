@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.reader.manga.domain.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +43,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<RoleType> roles;
 
@@ -49,6 +51,10 @@ public class User implements UserDetails {
     private LocalDate dateBirth;
 
     private String uriProfilePhoto;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDate createdAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -90,6 +96,11 @@ public class User implements UserDetails {
         return this.username;
     }
 
+    public RoleType getRolePrincipal() {
+        Set<RoleType> roles = getRoles();
+        return RoleType.getRolePrincipal(roles);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -102,10 +113,10 @@ public class User implements UserDetails {
                 ", roles=" + roles +
                 ", dateBirth=" + dateBirth +
                 ", uriProfilePhoto='" + uriProfilePhoto + '\'' +
+                ", createdAt=" + createdAt +
                 ", userMangas=" + userMangas +
                 ", mangaFavorites=" + mangaFavorites +
                 ", favoriteEpisodeUsers=" + favoriteEpisodeUsers +
                 '}';
     }
-
 }

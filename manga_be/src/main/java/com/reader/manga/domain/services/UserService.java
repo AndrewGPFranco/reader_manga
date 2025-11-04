@@ -8,6 +8,7 @@ import com.reader.manga.adapters.input.mappers.PasswordEncoderMapper;
 import com.reader.manga.adapters.input.mappers.UserMapper;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.exceptions.UnauthorizedFormatException;
+import com.reader.manga.domain.valueobjects.users.UsersManagementVO;
 import com.reader.manga.ports.repositories.UserChapterRepository;
 import com.reader.manga.ports.repositories.UserMangaRepository;
 import com.reader.manga.ports.repositories.UserRepository;
@@ -26,9 +27,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -118,19 +119,19 @@ public class UserService {
         return uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp");
     }
 
-    public Set<String> getUsersForManagement(Integer paginaAtual) {
+    public Page<UsersManagementVO> getUsersForManagement(Integer paginaAtual) {
         PageRequest pageRequest = PageRequest.of(paginaAtual, 10);
 
         Page<User> users = repository.findAll(pageRequest);
 
-        return users.stream().map(User::getUsername).collect(Collectors.toSet());
+        return users.map(u -> new UsersManagementVO(u.getUsername(), u.getRolePrincipal(), u.getCreatedAt()));
     }
 
-    public void tornarUsuarioAdmin(String username) {
+    public void alterarRoleUsuario(String username, String role) {
         User user = repository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("Nenhum usuário encontrado com o username: " + username));
 
-        user.getRoles().add(RoleType.ADMIN);
+        user.setRoles(new HashSet<>(List.of(RoleType.valueOf(role))));
         repository.save(user);
     }
 }
