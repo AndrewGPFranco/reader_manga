@@ -6,6 +6,7 @@ import {api} from '@/network/axiosInstance'
 import {UserSession} from '@/class/UserSession'
 import type {UserRegister} from '@/class/UserRegister'
 import type iDecodedToken from '@/@types/iDecodedToken'
+import type { iUsersManagament } from '@/@types/iUsersManagament'
 
 const {setToken} = useUser()
 
@@ -135,7 +136,7 @@ export const useAuthStore = defineStore('auth', {
                 })
             }
         },
-        async getUsuarios(pagina: number): Promise<string[]> {
+        async getUsuarios(pagina: number): Promise<any> {
             const token = localStorage.getItem('token')
             if (token != undefined) {
                 const result = await api.get(`/api/v1/user/get-users?paginaAtual=${pagina}`, {
@@ -149,19 +150,19 @@ export const useAuthStore = defineStore('auth', {
 
             return []
         },
-        async tornarUsuarioAdmin(username: string): Promise<string> {
+        async mudarRole(username: string, role: string): Promise<string> {
             const token = localStorage.getItem('token')
             if (token != undefined) {
-                await api.put(`/api/v1/user/tornar-admin?username=${username}`, null, {
+                await api.put(`/api/v1/user/mudar-role?username=${username}&role=${role}`, null, {
                     headers: {
                         Authorization: `${token}`
                     }
                 });
 
-                return "Usuário virou ADMIN";
+                return `Usuário ${username} virou ${role}`;
             }
 
-            return "Ocorreu um erro ao realizar a mudança de tier!";
+            return "Ocorreu um erro ao realizar a mudança de role!";
         }
     }
 })
