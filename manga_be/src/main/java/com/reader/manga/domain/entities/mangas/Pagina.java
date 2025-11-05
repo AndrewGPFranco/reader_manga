@@ -39,7 +39,6 @@ public class Pagina {
         return "Pagina{" +
                 "id=" + id +
                 ", pathPage='" + pathPage + '\'' +
-                ", chapter=" + chapter +
                 '}';
     }
 

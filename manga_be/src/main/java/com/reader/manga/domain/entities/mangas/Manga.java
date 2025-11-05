@@ -109,7 +109,6 @@ public class Manga {
                 ", author='" + author + '\'' +
                 ", gender='" + gender + '\'' +
                 ", image='" + image + '\'' +
-                ", chapters=" + chapters +
                 ", comments=" + comments +
                 ", isFavorite=" + isFavorite +
                 '}';

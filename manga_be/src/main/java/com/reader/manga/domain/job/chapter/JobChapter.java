@@ -114,16 +114,21 @@ public class JobChapter extends ColetorBaseUpload {
         int totalPages = arquivosExtraidos.size();
         capitulo.setNumberPages(totalPages);
 
-        ordenaListaPaginas(arquivosExtraidos);
-
         List<Pagina> paginasASalvar = new ArrayList<>(totalPages);
         for (int i = 0; i < totalPages; i++) {
             File file = arquivosExtraidos.get(i);
-            int index = i + 1;
 
-            String outputPath = basePath + "/pagina_" + index + ".png";
+            if (file == null) break;
 
-            BufferedImage image = ImageIO.read(file);
+            String nomePagina = "/pagina_" + (i + 1);
+
+            String outputPath = basePath + nomePagina + getExtensionFile(file);
+
+            String novoNomePagina = nomePagina.concat(getExtensionFile(file));
+
+            File newFile = new File(file.getParent().concat(novoNomePagina));
+            file.renameTo(newFile);
+            BufferedImage image = ImageIO.read(newFile);
 
             escreveImagem(image, outputPath, i);
 
@@ -154,6 +159,14 @@ public class JobChapter extends ColetorBaseUpload {
         capituloRepository.save(capitulo);
     }
 
+    private String getExtensionFile(File file) throws IOException {
+        if (file.getCanonicalPath().contains(".png")) return ".png";
+        else if (file.getCanonicalPath().contains(".jpg")) return ".jpg";
+        else if (file.getCanonicalPath().contains(".webp")) return ".webp";
+        throw new RuntimeException("Formato não suportado!");
+    }
+
+    @Deprecated(since = "04/11/2025")
     private void ordenaListaPaginas(List<File> arquivosExtraidos) {
         arquivosExtraidos.sort(Comparator.comparing(a -> {
             try {
@@ -183,8 +196,9 @@ public class JobChapter extends ColetorBaseUpload {
                     boolean isCreated = newFile.mkdirs();
                     throwErrorIfUnableToCreateFileOrDirectory(isCreated);
                 } else {
-                    boolean isCreated = new File(newFile.getParent()).mkdirs();
-                    throwErrorIfUnableToCreateFileOrDirectory(isCreated);
+                    File parentDir = newFile.getParentFile();
+                    if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs())
+                        throw new IOException("Não foi possível criar diretório pai: " + parentDir);
 
                     try (FileOutputStream fos = new FileOutputStream(newFile)) {
                         byte[] buffer = new byte[4096];
@@ -194,7 +208,9 @@ public class JobChapter extends ColetorBaseUpload {
                         }
                     }
 
-                    if (newFile.getCanonicalPath().contains(".png") || newFile.getCanonicalPath().contains(".jpg")) {
+                    if (newFile.getCanonicalPath().contains(".png") ||
+                            newFile.getCanonicalPath().contains(".jpg") ||
+                            newFile.getCanonicalPath().contains(".webp")) {
                         arquivosExtraidos.add(newFile);
                     }
                 }

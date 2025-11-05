@@ -60,7 +60,6 @@ public class Chapter {
                 ", title='" + title + '\'' +
                 ", numberPages=" + numberPages +
                 ", manga=" + manga +
-                ", pages=" + pages +
                 ", status=" + status +
                 ", readingProgress=" + readingProgress +
                 '}';
