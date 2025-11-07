@@ -1,11 +1,21 @@
 import {ref} from 'vue'
 
-const menuCollapsed = ref<boolean>(true)
+const getInitialState = (): boolean => {
+    if (typeof localStorage !== 'undefined') {
+        const saved = localStorage.getItem('menuCollapsed')
+        return saved !== null ? saved === 'true' : true
+    }
+    return true
+}
+
+const menuCollapsed = ref<boolean>(getInitialState())
 
 export function useMenu() {
     const setMenuCollapsed = (collapsed: boolean) => {
         menuCollapsed.value = collapsed
         updateMenuMargin(collapsed)
+        if (typeof localStorage !== 'undefined')
+            localStorage.setItem('menuCollapsed', String(collapsed))
     }
 
     const updateMenuMargin = (collapsed: boolean) => {
@@ -13,9 +23,8 @@ export function useMenu() {
         document.documentElement.style.setProperty('--menu-margin-left', marginLeft)
     }
 
-    if (typeof document !== 'undefined') {
+    if (typeof document !== 'undefined')
         updateMenuMargin(menuCollapsed.value)
-    }
 
     return {
         menuCollapsed,

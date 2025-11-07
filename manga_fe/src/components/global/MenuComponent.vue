@@ -1,6 +1,6 @@
 <template>
-  <n-layout-sider bordered collapse-mode="width" :collapsed="collapsed" @collapse="updateMenuState(true)"
-                  @expand="updateMenuState(false)"
+  <n-layout-sider bordered collapse-mode="width" :collapsed="collapsed" @collapse="handleCollapse"
+                  @expand="handleExpand"
                   position="absolute" top="0" left="0" height="100%" :aria-expanded="!collapsed" class="pt-6 pb-6"
                   show-trigger>
     <n-menu :collapsed="collapsed" :collapsed-icon-size="20" :options="menuOptions" key-field="whateverKey"
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import type {Component} from 'vue'
-import {defineComponent, h, onMounted, onUnmounted, ref} from 'vue'
+import {defineComponent, h, onMounted, onUnmounted, ref, watch, nextTick} from 'vue'
 import {NButton, NIcon} from 'naive-ui'
 import type {MenuOption} from 'naive-ui'
 import {
@@ -38,16 +38,35 @@ export default defineComponent({
   setup() {
     const auth = useAuthStore()
     const systemStore = useSystemStore()
-    const {setMenuCollapsed} = useMenu()
+    const {menuCollapsed, setMenuCollapsed} = useMenu()
 
     const role = auth.getRoleUser()
-    const collapsed = ref<boolean>(true)
+    const collapsed = ref<boolean>(menuCollapsed.value)
     const activeKey = ref<string | null>(null)
+    const isInitialized = ref<boolean>(false)
 
     const updateMenuState = (newState: boolean) => {
       collapsed.value = newState
       setMenuCollapsed(newState)
     }
+
+    const handleCollapse = () => {
+      if (isInitialized.value) {
+        updateMenuState(true)
+      }
+    }
+
+    const handleExpand = () => {
+      if (isInitialized.value) {
+        updateMenuState(false)
+      }
+    }
+
+    watch(menuCollapsed, (newValue) => {
+      if (!isInitialized.value) {
+        collapsed.value = newValue
+      }
+    }, {immediate: true})
 
     const execKey = (e: KeyboardEvent) => {
       if (e.altKey && e.key.toLowerCase() === 'q') {
@@ -161,13 +180,15 @@ export default defineComponent({
       }
     ]
 
-    onMounted(() => {
+    onMounted(async () => {
       globalThis.addEventListener('keydown', execKey)
-      setMenuCollapsed(collapsed.value)
+      await nextTick()
+      collapsed.value = menuCollapsed.value
+      isInitialized.value = true
     })
     onUnmounted(() => globalThis.removeEventListener('keydown', execKey))
 
-    return {menuOptions, collapsed, activeKey, updateMenuState}
+    return {menuOptions, collapsed, activeKey, updateMenuState, handleCollapse, handleExpand}
   }
 })
 </script>
