@@ -1,5 +1,5 @@
 <template>
-  <MenuComponent />
+  <MenuComponent/>
   <main>
     <n-card class="anime-card" size="huge">
       <section v-if="!renderEpisode">
@@ -10,27 +10,27 @@
 
         <div class="episodes-grid">
           <EpisodeCard v-for="episode in animeList.episodes || []" :key="episode.id" :episode="episode"
-            @play="playEpisode" />
+                       @play="playEpisode"/>
         </div>
       </section>
 
       <section v-else class="container-video">
-        <VideoEpisodeAnime :title="title" :id="idEpisode" />
+        <VideoEpisodeAnime :title="title" :id="idEpisode"/>
       </section>
     </n-card>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { NCard } from 'naive-ui'
+import {ref, onMounted} from 'vue'
+import {useRoute} from 'vue-router'
+import {NCard} from 'naive-ui'
 import MenuComponent from '@/components/global/MenuComponent.vue'
 import VideoEpisodeAnime from '@/components/anime/VideoEpisodeAnime.vue'
 import EpisodeCard from '@/components/episode/EpisodeCard.vue'
-import { useEpisodeStore } from '@/store/EpisodeStore'
-import type { AnimeListingVO } from '@/@types/AnimeListingVO'
-import type { EpisodeToAnimesVO } from '@/@types/iEpisodeToAnimesVO'
+import {useEpisodeStore} from '@/store/EpisodeStore'
+import type {AnimeListingVO} from '@/@types/AnimeListingVO'
+import type {EpisodeToAnimesVO} from '@/@types/iEpisodeToAnimesVO'
 
 const route = useRoute()
 const title = ref<string>('')
@@ -91,5 +91,12 @@ main {
 
 .container-video {
   margin-top: -8px;
+  width: 100%;
+  max-width: 100%;
+  height: calc(95vh - 60px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 </style>

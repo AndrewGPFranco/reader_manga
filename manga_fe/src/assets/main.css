@@ -15,11 +15,97 @@
 main {
     margin-left: var(--menu-margin-left);
     height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - var(--menu-margin-left));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+main > * {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+main .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+main section.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+main .n-tabs .n-tab-pane section.container {
+    display: block !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 0;
+}
+
+main .card-container,
+main .grid-container {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+main section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+main .container .n-input-group {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+main .container.flex.justify-center {
+    justify-content: center;
+}
+
+main .container-video {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+main .container-video .video-wrapper,
+main .container-video .video-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+main .container-video video {
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
     main {
         margin-left: var(--menu-margin-left);
+        width: calc(100% - var(--menu-margin-left));
     }
 }

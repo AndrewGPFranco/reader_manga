@@ -1,7 +1,7 @@
 <template>
   <div class="video-wrapper">
     <div v-if="videoUrl" class="video-container">
-      <video :src="videoUrl" controls class="video-player rounded-lg" />
+      <video :src="videoUrl" controls class="video-player rounded-lg"/>
     </div>
 
     <div v-else class="loading-container">
@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useEpisodeStore } from '@/store/EpisodeStore'
+import {onMounted, ref} from 'vue'
+import {useEpisodeStore} from '@/store/EpisodeStore'
 
 const episodeStore = useEpisodeStore()
 const error = ref<string | null>(null)
@@ -53,6 +53,9 @@ onMounted(async () => {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .video-container {
@@ -60,13 +63,21 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .video-player {
   width: 100%;
+  max-width: 100%;
   height: 100%;
+  max-height: 100%;
   object-fit: contain;
   background-color: #000;
+  box-sizing: border-box;
 }
 
 .loading-container {
