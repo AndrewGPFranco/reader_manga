@@ -5,7 +5,7 @@
         <h1>Descubra Novos Mangás</h1>
         <n-button @click="getMangaRandom" secondary type="primary" size="small">
           <template #icon>
-            <RefreshOutline />
+            <RefreshOutline/>
           </template>
           Atualizar
         </n-button>
@@ -25,7 +25,7 @@
           Mangás Populares
           <n-tooltip trigger="hover">
             <template #trigger>
-              <span class="info"><InformationOutline /></span>
+              <span class="info"><InformationOutline/></span>
             </template>
             Caso o mangá já esteja cadastrado em nosso sistema, iremos redireciona-lo para a leitura
             interna, caso o contrário, iremos fornecer um link de um excelente site.
@@ -34,21 +34,21 @@
       </div>
 
       <div v-if="mangas.length === 0" class="loading-container">
-        <n-spin size="large" />
+        <n-spin size="large"/>
       </div>
 
       <div class="manga-grid" v-else>
         <div v-for="(item, index) in mangas" :key="index" class="manga-card-item">
           <div class="manga-cover">
             <a
-              v-if="!item.urlReader.includes(`/manga/${item.titulo}`)"
-              :href="item.urlReader"
-              target="_blank"
+                v-if="!item.urlReader.includes(`/manga/${item.titulo}`)"
+                :href="item.urlReader"
+                target="_blank"
             >
-              <img :src="item.urlImage" :alt="item.titulo" />
+              <img :src="item.urlImage" :alt="item.titulo"/>
             </a>
             <router-link v-else :to="item.urlReader">
-              <img :src="item.urlImage" :alt="item.titulo" />
+              <img :src="item.urlImage" :alt="item.titulo"/>
             </router-link>
             <div class="manga-overlay">
               <h3 class="manga-title">{{ item.titulo }}</h3>
@@ -57,9 +57,9 @@
                   Ler agora
                 </router-link>
                 <a
-                  v-else
-                  :href="item.urlReader"
-                  target="_blank"
+                    v-else
+                    :href="item.urlReader"
+                    target="_blank"
                 >
                   Ler agora
                 </a>
@@ -73,11 +73,11 @@
 </template>
 
 <script setup lang="ts">
+import {onMounted, ref} from 'vue'
+import {useMessage} from 'naive-ui'
+import {useMangaStore} from '@/store/MangaStore'
 import type iCoversManga from '@/@types/iCoversManga'
-import { useMangaStore } from '@/store/MangaStore'
-import { useMessage } from 'naive-ui'
-import { onMounted, ref } from 'vue'
-import { InformationOutline, RefreshOutline } from '@vicons/ionicons5'
+import {InformationOutline, RefreshOutline} from '@vicons/ionicons5'
 
 const mangas = ref<iCoversManga[]>([])
 const message = useMessage()

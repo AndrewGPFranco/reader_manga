@@ -3,12 +3,23 @@
 @tailwind utilities;
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --menu-margin-left: 48px;
 }
 
 main {
-  margin-left: 17vw;
-  height: 100vh;
+    margin-left: var(--menu-margin-left);
+    height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: var(--menu-margin-left);
+    }
 }
