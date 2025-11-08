@@ -2,6 +2,7 @@ package com.reader.manga.adapters.input.rest;
 
 import com.reader.manga.adapters.input.dtos.ResponseAPI;
 import com.reader.manga.adapters.input.dtos.user.*;
+import com.reader.manga.domain.components.AgentRabbitMQ;
 import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.domain.entities.users.User;
@@ -15,6 +16,7 @@ import com.reader.manga.domain.valueobjects.users.UsersManagementVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -31,9 +34,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+    private final AgentRabbitMQ agentRabbitMQ;
     private final JwtTokenService jwtTokenService;
     private final UserMangaService userMangaService;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/token")
     public String validateToken(@RequestBody TokenDTO dto) {
@@ -163,6 +167,13 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     void alterarRoleUsuario(@RequestParam String username, @RequestParam String role) {
         userService.alterarRoleUsuario(username, role);
+    }
+
+    @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe() {
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        agentRabbitMQ.addEmitter(emitter);
+        return emitter;
     }
 
 }

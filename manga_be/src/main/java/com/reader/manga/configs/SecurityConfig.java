@@ -41,6 +41,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/uploads/**").permitAll();
                     auth.requestMatchers("/api/v1/job/sse").permitAll();
+                    auth.requestMatchers("/api/v1/user/sse").permitAll();
                     auth.requestMatchers(WHITE_LIST)
                             .permitAll().anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults())

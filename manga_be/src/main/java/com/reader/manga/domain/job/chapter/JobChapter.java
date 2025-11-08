@@ -1,5 +1,6 @@
 package com.reader.manga.domain.job.chapter;
 
+import com.reader.manga.domain.components.AgentRabbitMQ;
 import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.domain.job.base.ColetorBaseUpload;
 import com.reader.manga.domain.entities.mangas.Chapter;
@@ -37,8 +38,9 @@ public class JobChapter extends ColetorBaseUpload {
     private static final int DPI = 300;
     private static final int BATCH_SIZE = 100;
     private static final String IMAGE_FORMAT = "PNG";
-    public static final String BASE_PATH = "/home/andrewgo/reader/uploads/mangas";
+    public static final String BASE_PATH = "/home/andrewgo/reader/uploads/mangas/";
 
+    private final AgentRabbitMQ agentRabbitMQ;
     private final MangaRepository mangaRepository;
     private final ExecutorService executorService;
     private final PaginaRepository paginaRepository;
@@ -93,6 +95,8 @@ public class JobChapter extends ColetorBaseUpload {
             emitter.complete();
         }
         emitters.clear();
+
+        agentRabbitMQ.enviarMensagem(String.format("Novo Capítulo de %s já disponível! %s", manga.getTitle(), nomeCapitulo));
     }
 
     private void processPagesZip(String nomeManga, String nomeCapitulo, Manga manga, MultipartFile file) throws IOException {
