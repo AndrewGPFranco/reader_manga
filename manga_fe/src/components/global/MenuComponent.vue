@@ -69,9 +69,10 @@ export default defineComponent({
     }, {immediate: true})
 
     const execKey = (e: KeyboardEvent) => {
-      if (e.altKey && e.key.toLowerCase() === 'q') {
+      if (e.altKey && e.key.toLowerCase() === 'q')
         updateMenuState(!collapsed.value)
-      }
+      else if (e.altKey && e.key.toLowerCase() === 'a')
+        systemStore.alterTheme()
     }
 
     const menuOptions: MenuOption[] = [
