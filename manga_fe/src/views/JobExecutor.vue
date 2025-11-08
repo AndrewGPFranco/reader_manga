@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { URL_SSE } from '@/utils/utils'
+import { URL_SSE_JOB } from '@/utils/utils'
 import type IJobType from '@/@types/IJobType'
 import { api } from '@/network/axiosInstance'
 import { useMangaStore } from '@/store/MangaStore'
@@ -161,7 +161,7 @@ const executeJob = async (e: MouseEvent) => {
 }
 
 const executaProgressoJob = () => {
-  eventSource = new EventSource(URL_SSE);
+  eventSource = new EventSource(URL_SSE_JOB);
 
   eventSource.onmessage = (event) => {
     const data = event.data;

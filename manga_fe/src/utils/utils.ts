@@ -16,4 +16,5 @@ export function formatDate(data: Date): string {
   return dataFormatada;
 }
 
-export const URL_SSE: string = 'http://localhost:8080/api/v1/job/sse'
+export const URL_SSE_JOB: string = 'http://localhost:8080/api/v1/job/sse'
+export const URL_SSE_NOTIFICATIONS: string = 'http://localhost:8080/api/v1/user/sse'
