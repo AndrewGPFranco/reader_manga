@@ -6,19 +6,26 @@
     <section>
       <n-card class="containerCard" title="Mangás favoritos" size="huge">
         <div class="card-container" v-if="favoriteManga.length > 0">
-          <n-card class="mangaCard" v-for="manga in favoriteManga" :key="manga.id" bordered>
-            <template #cover>
-              <img class="card-image" :src="manga.image" :alt="manga.title"/>
-            </template>
-            <div class="card-content">
-              <div class="card-content-title">
-                <h3 class="card-title">{{ tratamentoTitulo(manga.title) }}</h3>
-              </div>
-              <router-link :to="`/manga/${manga.title}`" class="full-width">
-                <n-button type="info" class="access-btn">Acessar</n-button>
+          <div v-for="manga in favoriteManga" :key="manga.id" class="manga-card-item">
+            <div class="manga-cover">
+              <router-link :to="`/manga/${manga.title}`">
+                <img :src="manga.image" :alt="manga.title"/>
               </router-link>
+              <div class="manga-overlay">
+                <h3 class="manga-title">{{ tratamentoTitulo(manga.title) }}</h3>
+                <router-link :to="`/manga/${manga.title}`">
+                  <n-button size="small" class="read-button" type="primary">
+                    <template #icon>
+                      <n-icon>
+                        <BookOutline/>
+                      </n-icon>
+                    </template>
+                    Ler agora
+                  </n-button>
+                </router-link>
+              </div>
             </div>
-          </n-card>
+          </div>
         </div>
         <div v-else class="containerWithoutManga">
           <h1>Não há nenhum mangá em sua lista de favoritos.</h1>
@@ -29,10 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import MenuComponent from '@/components/global/MenuComponent.vue'
-import type iMangaData from '@/@types/Manga'
-import {useMangaStore} from '@/store/MangaStore'
+import {NIcon} from 'naive-ui'
 import {onMounted, ref} from 'vue'
+import type iMangaData from '@/@types/Manga'
+import {BookOutline} from '@vicons/ionicons5'
+import {useMangaStore} from '@/store/MangaStore'
+import MenuComponent from '@/components/global/MenuComponent.vue'
 
 const mangaStore = useMangaStore()
 const favoriteManga = ref([] as iMangaData[])
@@ -59,55 +68,67 @@ main {
 }
 
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
   padding: 20px;
 }
 
-.mangaCard {
-  width: 280px;
-  max-width: 100%;
-  border-radius: 10px;
+.manga-card-item {
+  transition: transform 0.3s ease;
+  border-radius: 8px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-image {
+.manga-card-item:hover {
+  transform: translateY(-5px);
+}
+
+.manga-cover {
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+}
+
+.manga-cover img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
 }
 
-.card-content {
-  padding: 10px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.manga-cover:hover img {
+  transform: scale(1.05);
 }
 
-.card-content-title {
-  height: 50px;
+.manga-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 1rem;
+  transition: opacity 0.3s ease;
+  opacity: 0;
 }
 
-.card-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 12px;
+.manga-cover:hover .manga-overlay {
+  opacity: 1;
 }
 
-.full-width {
+.manga-title {
+  color: white;
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.read-button {
   width: 100%;
-}
-
-.access-btn {
-  width: 100%;
-  margin-top: auto;
-  transition: background 0.3s ease;
 }
 
 .containerWithoutManga {
