@@ -18,8 +18,6 @@ import com.reader.manga.domain.valueobjects.users.MangaCoverVO;
 import com.reader.manga.domain.valueobjects.users.MangaUserVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,11 +45,9 @@ public class MangaController {
     private final MangaRepository repository;
     private final UserMangaService userMangaService;
     private final UserChapterService userChapterService;
-    private static final Logger logger = LoggerFactory.getLogger(MangaController.class);
 
     @GetMapping("/read/{id}")
     public ResponseEntity<Manga> getMangaById(@PathVariable Long id) {
-        logger.info("*******************Reading manga!*******************");
         Manga manga = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(manga);
     }
@@ -59,7 +55,6 @@ public class MangaController {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> createManga(@RequestBody @Valid MangaDTO dto) {
-        logger.info("*******************Creating mangá!*******************");
         GetMangaDTO manga = service.createManga(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(manga);
     }
@@ -67,14 +62,12 @@ public class MangaController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteManga(@RequestBody UserData userDto) {
-        logger.info("*******************Deleting mangá!*******************");
         service.deleteManga(userDto);
         return ResponseEntity.status(HttpStatus.OK).body("Mangá deleted successfully!");
     }
 
     @GetMapping("/readAll/{idUser}")
     public ResponseEntity<Set<MangaUserVO>> readAllMangas(@PathVariable Long idUser) {
-        logger.info("*******************Reading all mangas!*******************");
         Set<MangaUserVO> mangas = service.readAllMangas(idUser);
         return ResponseEntity.status(HttpStatus.OK).body(mangas);
     }
@@ -83,7 +76,6 @@ public class MangaController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> updateMangaById(@PathVariable Long id, @RequestBody UpdateMangaDTO dto) {
         service.updateManga(id, dto);
-        logger.info("*******************Updating mangá!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Mangá updated successfully!");
     }
 
@@ -126,19 +118,19 @@ public class MangaController {
         boolean isInLibrary = userMangaService.mangaIsInUserLibrary(manga.getId(), idUser);
 
         return ResponseEntity.ok().body(InfoMangaVO.builder()
-                        .id(manga.getId())
-                        .nota(userMangaService.getNotaDoMangaPeloUsuario(manga.getId(), idUser))
-                        .title(manga.getTitle())
-                        .size(manga.getSize())
-                        .creationDate(manga.getCreationDate())
-                        .description(manga.getDescription())
-                        .chapters(manga.getChapters())
-                        .gender(manga.getGender())
-                        .endDate(manga.getClosingDate())
-                        .author(manga.getAuthor())
-                        .status(manga.getStatus())
-                        .image(manga.getImage())
-                        .isInUserLibrary(isInLibrary)
+                .id(manga.getId())
+                .nota(userMangaService.getNotaDoMangaPeloUsuario(manga.getId(), idUser))
+                .title(manga.getTitle())
+                .size(manga.getSize())
+                .creationDate(manga.getCreationDate())
+                .description(manga.getDescription())
+                .chapters(manga.getChapters())
+                .gender(manga.getGender())
+                .endDate(manga.getClosingDate())
+                .author(manga.getAuthor())
+                .status(manga.getStatus())
+                .image(manga.getImage())
+                .isInUserLibrary(isInLibrary)
                 .build());
     }
 
@@ -157,7 +149,7 @@ public class MangaController {
             List<MangaUserVO> list = todosMangasDoUsuario.stream().filter(tm ->
                     tm.title().equals(mp.getTitle())).toList();
 
-            if(!list.isEmpty())
+            if (!list.isEmpty())
                 mp.setFavorite(true);
         });
 

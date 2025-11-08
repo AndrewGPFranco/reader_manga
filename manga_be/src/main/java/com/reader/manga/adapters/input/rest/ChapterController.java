@@ -9,8 +9,6 @@ import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.services.ChapterService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,8 +30,6 @@ import java.util.List;
 @RequestMapping("/api/v1/chapter")
 public class ChapterController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChapterController.class);
-
     private final ChapterService service;
 
     public ChapterController(ChapterService service) {
@@ -43,7 +39,6 @@ public class ChapterController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Object> createChapter(@RequestBody ChapterDTO dto) {
-        logger.info("*******************Creating mangá!*******************");
         service.createChapter(dto);
         GetChapterDTO chapterDTO = new GetChapterDTO(null, dto.title(), 0,
                 StatusType.ONGOING, 0, "", "", 0);
@@ -56,7 +51,6 @@ public class ChapterController {
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "10") int size
     ) {
-        logger.info("*******************Reading all chapters!*******************");
         Pageable pageable = PageRequest.of(pageNumber, size);
         return service.readAllChapters(pageable);
     }
@@ -64,7 +58,6 @@ public class ChapterController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteChapter(@PathVariable Long id) {
-        logger.info("*******************Deleting mangá!*******************");
         service.deleteChapter(id);
         return ResponseEntity.status(HttpStatus.OK).body("Chapter deleted successfully!");
     }
@@ -73,14 +66,12 @@ public class ChapterController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateChapterById(@PathVariable Long id, @RequestBody UpdateChapterDTO dto) {
         service.updateChapter(id, dto);
-        logger.info("*******************Updating chapter!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Chapter updated successfully!");
     }
 
     @GetMapping("/read/{id}")
     public ResponseEntity<Object> getChapterById(@PathVariable Long id) {
         Chapter chapter = service.getChapterByID(id);
-        logger.info("*******************Searching chapter!*******************");
         List<Pagina> pages = chapter.getPages();
         pages.sort(Comparator.comparing(Pagina::getId));
         return ResponseEntity.ok().body(pages);
@@ -90,7 +81,6 @@ public class ChapterController {
     @PostMapping("/register/page")
     public ResponseEntity<String> registerPageChapter(@RequestBody @Valid PageDTO pageDTO) {
         service.pageChapterRegister(pageDTO);
-        logger.info("Chapter page registered successfully");
         return ResponseEntity.ok().body("Chapter page registered successfully");
     }
 
@@ -106,7 +96,6 @@ public class ChapterController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/page/{idPage}")
     public ResponseEntity<String> deletePage(@PathVariable Long idPage) {
-        logger.info("*******************Deleting page!*******************");
         service.deletePage(idPage);
         return ResponseEntity.status(HttpStatus.OK).body("Page deleted successfully!");
     }
@@ -115,7 +104,6 @@ public class ChapterController {
     @PutMapping("/edit/page/{id}")
     public ResponseEntity<String> updatePageById(@PathVariable Long id, @RequestBody UpdatePageDTO dto) {
         service.updatePage(id, dto);
-        logger.info("*******************Updating page!*******************");
         return ResponseEntity.status(HttpStatus.OK).body("Page updated successfully!");
     }
 
