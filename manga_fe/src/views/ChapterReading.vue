@@ -1,25 +1,25 @@
 <template>
   <header>
-    <MenuComponent />
+    <MenuComponent/>
   </header>
 
   <main class="manga-viewer__main">
     <n-card ref="chapterCard" v-if="!isLoading" class="manga-viewer__card">
       <template v-if="error">
         <div class="manga-viewer__error">
-          <n-alert type="error" :title="error" />
+          <n-alert type="error" :title="error"/>
         </div>
       </template>
 
       <template v-else>
         <n-modal v-model:show="showModalResetReading">
           <n-card
-            style="width: 600px"
-            title="Capítulo finalizado"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
+              style="width: 600px"
+              title="Capítulo finalizado"
+              :bordered="false"
+              size="huge"
+              role="dialog"
+              aria-modal="true"
           >
             <template #header-extra> Parabéns!</template>
             XP coletado com sucesso!
@@ -28,34 +28,34 @@
 
         <div class="manga-viewer__content">
           <router-link :to="`/manga/${titleManga}`">
-            <ArrowBackOutline class="btn-back" @click="dataReset" />
+            <ArrowBackOutline class="btn-back" @click="dataReset"/>
           </router-link>
           <n-tooltip trigger="hover" v-if="!isTelaCheia">
             <template #trigger>
-              <ExpandOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
+              <ExpandOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia"/>
             </template>
             Expanda as imagens para melhor experiência de leitura.
           </n-tooltip>
           <n-tooltip trigger="hover" v-if="isTelaCheia">
             <template #trigger>
-              <ChevronUpOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia" />
+              <ChevronUpOutline class="btnExpandir" @click="isTelaCheia = !isTelaCheia"/>
             </template>
             Minimize as imagens para mais controle da leitura.
           </n-tooltip>
 
           <img
-            v-if="currentImage"
-            :src="currentImage"
-            :alt="`Manga page ${currentPageNumber}`"
-            :class="{
+              v-if="currentImage"
+              :src="currentImage"
+              :alt="`Manga page ${currentPageNumber}`"
+              :class="{
               'manga-viewer__image': !isTelaCheia,
               'manga-viewer__image_expand': isTelaCheia
             }"
-            @load="handleImageLoad"
-            @error="handleImageError"
+              @load="handleImageLoad"
+              @error="handleImageError"
           />
 
-          <n-empty v-else description="No pages available for this chapter" />
+          <n-empty v-else description="No pages available for this chapter"/>
         </div>
 
         <div v-if="currentImage && !isTelaCheia" class="manga-viewer__controls">
@@ -65,11 +65,11 @@
 
           <div class="manga-viewer__navigation">
             <n-button
-              :disabled="!canNavigatePrevious"
-              @click="previousPage"
-              class="manga-viewer__nav-button"
-              @mouseenter="showThumbnails = true"
-              @mouseleave="showThumbnails = false"
+                :disabled="!canNavigatePrevious"
+                @click="previousPage"
+                class="manga-viewer__nav-button"
+                @mouseenter="showThumbnails = true"
+                @mouseleave="showThumbnails = false"
             >
               Anterior
             </n-button>
@@ -77,25 +77,25 @@
             <div class="manga-viewer__thumbnail-container" v-if="showThumbnails">
               <div class="manga-viewer__thumbnails">
                 <img
-                  v-for="page in thumbnailPages"
-                  :key="page.index"
-                  :src="page.src"
-                  :alt="`Thumbnail page ${page.index + 1}`"
-                  :class="{
+                    v-for="page in thumbnailPages"
+                    :key="page.index"
+                    :src="page.src"
+                    :alt="`Thumbnail page ${page.index + 1}`"
+                    :class="{
                     'manga-viewer__thumbnail': true,
                     active: page.index === currentPageIndex
                   }"
-                  @click="jumpToPage(page.index)"
+                    @click="jumpToPage(page.index)"
                 />
               </div>
             </div>
 
             <n-button
-              :disabled="!canNavigateNext"
-              @click="nextPage"
-              class="manga-viewer__nav-button"
-              @mouseenter="showThumbnails = true"
-              @mouseleave="showThumbnails = false"
+                :disabled="!canNavigateNext"
+                @click="nextPage"
+                class="manga-viewer__nav-button"
+                @mouseenter="showThumbnails = true"
+                @mouseleave="showThumbnails = false"
             >
               Próximo
             </n-button>
@@ -104,18 +104,18 @@
       </template>
     </n-card>
 
-    <n-spin v-else size="large" />
+    <n-spin v-else size="large"/>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { NCard, useMessage } from 'naive-ui'
+import {useRoute} from 'vue-router'
+import {NCard, useMessage} from 'naive-ui'
+import {StatusType} from '@/enum/StatusType'
+import {useChapterStore} from '@/store/ChapterStore'
+import {ref, computed, onMounted, watch, onUnmounted} from 'vue'
 import MenuComponent from '@/components/global/MenuComponent.vue'
-import { useChapterStore } from '@/store/ChapterStore'
-import { ExpandOutline, ChevronUpOutline, ArrowBackOutline } from '@vicons/ionicons5'
-import { StatusType } from '@/enum/StatusType'
+import {ExpandOutline, ChevronUpOutline, ArrowBackOutline} from '@vicons/ionicons5'
 
 const route = useRoute()
 const message = useMessage()
@@ -153,7 +153,7 @@ const thumbnailPages = computed(() => {
   if (totalPages.value === undefined) return []
   const start = Math.max(0, currentPageIndex.value - 2)
   const end = Math.min(totalPages.value, currentPageIndex.value + 3)
-  return Array.from({ length: end - start }, (_, i) => ({
+  return Array.from({length: end - start}, (_, i) => ({
     index: start + i,
     src: allImages.value[start + i] || ''
   }))
@@ -177,10 +177,10 @@ const loadAllPages = async (chapterId: string) => {
     const total = await chapterStore.getQuantidade(chapterId)
     totalPages.value = total
 
-    const loadPromises = Array.from({ length: total }, (_, index) =>
-      chapterStore
-        .getPaginaDoCapitulo(chapterId, index)
-        .then((response) => URL.createObjectURL(response))
+    const loadPromises = Array.from({length: total}, (_, index) =>
+        chapterStore
+            .getPaginaDoCapitulo(chapterId, index)
+            .then((response) => URL.createObjectURL(response))
     )
     allImages.value = await Promise.all(loadPromises)
 
@@ -226,6 +226,11 @@ const handleImageError = () => {
 const isProcessingKey = ref(false)
 
 const handleKeyPress = async (event: KeyboardEvent) => {
+  if (event.altKey && event.key === '=') {
+    isTelaCheia.value = !isTelaCheia.value
+    return;
+  }
+
   if (isProcessingKey.value) return
   isProcessingKey.value = true
 
@@ -251,7 +256,7 @@ onMounted(async () => {
   idChapter.value = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   titleManga.value = Array.isArray(route.params.title) ? route.params.title[0] : route.params.title
   currentProgress.value = Number(
-    Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress
+      Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress
   )
 
   if (currentProgress.value === 0) currentProgress.value = 1
@@ -268,48 +273,48 @@ onMounted(async () => {
 })
 
 watch(
-  () => route.params.id,
-  async (newId, oldId) => {
-    if (newId && typeof newId === 'string' && newId !== oldId) {
-      if (oldId) {
-        await atualizaProgresso()
+    () => route.params.id,
+    async (newId, oldId) => {
+      if (newId && typeof newId === 'string' && newId !== oldId) {
+        if (oldId) {
+          await atualizaProgresso()
+        }
+
+        resetState()
+
+        idChapter.value = newId
+        titleManga.value = Array.isArray(route.params.title)
+            ? route.params.title[0]
+            : route.params.title
+        currentProgress.value = Number(
+            Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress
+        )
+
+        await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
+        currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
+
+        await loadAllPages(newId)
       }
-
-      resetState()
-
-      idChapter.value = newId
-      titleManga.value = Array.isArray(route.params.title)
-        ? route.params.title[0]
-        : route.params.title
-      currentProgress.value = Number(
-        Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress
-      )
-
-      await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
-      currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
-
-      await loadAllPages(newId)
     }
-  }
 )
 
 watch(
-  () => currentPageIndex.value,
-  async (newVal) => {
-    if (newVal >= currentProgress.value) currentProgress.value = newVal + 1
+    () => currentPageIndex.value,
+    async (newVal) => {
+      if (newVal >= currentProgress.value) currentProgress.value = newVal + 1
 
-    if (
-      currentProgress.value === currentChapter.value.readingProgress &&
-      !modalShownForThisChapter.value &&
-      qntdExibicaoModal.value === 0 &&
-      totalPages.value &&
-      newVal === totalPages.value - 1
-    ) {
-      showModalResetReading.value = true
-      qntdExibicaoModal.value++
-      modalShownForThisChapter.value = true
+      if (
+          currentProgress.value === currentChapter.value.readingProgress &&
+          !modalShownForThisChapter.value &&
+          qntdExibicaoModal.value === 0 &&
+          totalPages.value &&
+          newVal === totalPages.value - 1
+      ) {
+        showModalResetReading.value = true
+        qntdExibicaoModal.value++
+        modalShownForThisChapter.value = true
+      }
     }
-  }
 )
 
 window.addEventListener('beforeunload', async () => {
@@ -318,9 +323,9 @@ window.addEventListener('beforeunload', async () => {
 
 const atualizaProgresso = async () => {
   if (
-    currentChapter.value.status != StatusType.FINISHED &&
-    currentProgress.value > currentChapter.value.readingProgress &&
-    idChapter.value
+      currentChapter.value.status != StatusType.FINISHED &&
+      currentProgress.value > currentChapter.value.readingProgress &&
+      idChapter.value
   ) {
     await chapterStore.updateReadingProgress(idChapter.value, currentProgress.value)
   }
@@ -431,9 +436,8 @@ onUnmounted(async () => {
 
 .manga-viewer__nav-button {
   min-width: 100px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: background-color 0.3s ease,
+  transform 0.2s ease;
 }
 
 .manga-viewer__nav-button:hover {
@@ -463,9 +467,8 @@ onUnmounted(async () => {
   object-fit: cover;
   cursor: pointer;
   border: 2px solid transparent;
-  transition:
-    border-color 0.3s ease,
-    transform 0.2s ease;
+  transition: border-color 0.3s ease,
+  transform 0.2s ease;
 }
 
 .manga-viewer__thumbnail:hover {
