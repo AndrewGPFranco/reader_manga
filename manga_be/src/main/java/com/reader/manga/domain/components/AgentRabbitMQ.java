@@ -31,8 +31,12 @@ public class AgentRabbitMQ {
 
     public void addEmitter(SseEmitter emitter) {
         emittersNotificacaoNovoCapitulo.add(emitter);
-        emitter.onCompletion(() -> emittersNotificacaoNovoCapitulo.remove(emitter));
-        emitter.onTimeout(() -> emittersNotificacaoNovoCapitulo.remove(emitter));
+
+        Runnable remover = () -> emittersNotificacaoNovoCapitulo.remove(emitter);
+
+        emitter.onCompletion(remover);
+        emitter.onTimeout(remover);
+        emitter.onError(t -> remover.run());
     }
 
     private void enviaNotificacaoNovoCapitulo(String mensagem) {
