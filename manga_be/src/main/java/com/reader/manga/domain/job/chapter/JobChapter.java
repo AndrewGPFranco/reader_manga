@@ -1,6 +1,8 @@
 package com.reader.manga.domain.job.chapter;
 
 import com.reader.manga.domain.components.AgentRabbitMQ;
+import com.reader.manga.domain.entities.notifications.Notification;
+import com.reader.manga.domain.enums.OriginType;
 import com.reader.manga.domain.exceptions.NotFoundException;
 import com.reader.manga.domain.job.base.ColetorBaseUpload;
 import com.reader.manga.domain.entities.mangas.Chapter;
@@ -8,6 +10,7 @@ import com.reader.manga.domain.entities.mangas.Manga;
 import com.reader.manga.domain.entities.mangas.Pagina;
 import com.reader.manga.ports.repositories.ChapterRepository;
 import com.reader.manga.ports.repositories.MangaRepository;
+import com.reader.manga.ports.repositories.NotificationRepository;
 import com.reader.manga.ports.repositories.PaginaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -45,6 +49,7 @@ public class JobChapter extends ColetorBaseUpload {
     private final ExecutorService executorService;
     private final PaginaRepository paginaRepository;
     private final ChapterRepository capituloRepository;
+    private final NotificationRepository notificationRepository;
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
@@ -96,9 +101,13 @@ public class JobChapter extends ColetorBaseUpload {
         }
         emitters.clear();
 
-        agentRabbitMQ.enviarMensagem(
-                String.format("Novo Capítulo de %s já disponível! %s / Capa: %s", manga.getTitle(), nomeCapitulo, manga.getImage())
-        );
+        String mensagemNotification = String.format("Novo Capítulo de %s já disponível! %s / Capa: %s",
+                manga.getTitle(), nomeCapitulo, manga.getImage());
+
+        notificationRepository.save(Notification.builder().content(mensagemNotification).dataIn(LocalDate.now())
+                .dataOut(null).origin(OriginType.MANGA).build());
+
+        agentRabbitMQ.enviarMensagem(mensagemNotification);
     }
 
     private void processPagesZip(String nomeManga, String nomeCapitulo, Manga manga, MultipartFile file) throws IOException {
