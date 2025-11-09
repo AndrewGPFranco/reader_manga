@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -28,20 +28,16 @@ public class Notification {
 
     @CreationTimestamp
     @Column(name = "data_in")
-    private LocalDate dataIn;
+    private LocalDateTime dataIn;
 
     @Column(name = "data_out")
-    private LocalDate dataOut;
+    private LocalDateTime dataOut;
 
     @Column(name = "origin")
     @Enumerated(EnumType.STRING)
     private OriginType origin;
 
-    public Notification(String content, LocalDate dataIn, LocalDate dataOut, OriginType origin) {
-        this.content = content;
-        this.dataIn = dataIn;
-        this.dataOut = dataOut;
-        this.origin = origin;
+    public Notification() {
     }
 
 }

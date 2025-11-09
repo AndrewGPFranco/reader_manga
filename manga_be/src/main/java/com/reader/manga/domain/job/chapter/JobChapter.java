@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -104,7 +105,7 @@ public class JobChapter extends ColetorBaseUpload {
         String mensagemNotification = String.format("Novo Capítulo de %s já disponível! %s / Capa: %s",
                 manga.getTitle(), nomeCapitulo, manga.getImage());
 
-        notificationRepository.save(Notification.builder().content(mensagemNotification).dataIn(LocalDate.now())
+        notificationRepository.save(Notification.builder().content(mensagemNotification).dataIn(LocalDateTime.now())
                 .dataOut(null).origin(OriginType.MANGA).build());
 
         agentRabbitMQ.enviarMensagem(mensagemNotification);
