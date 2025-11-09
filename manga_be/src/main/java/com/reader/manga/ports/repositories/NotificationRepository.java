@@ -1,4 +1,6 @@
 package com.reader.manga.ports.repositories;
 
-public interface NotificationRepository {
+import com.reader.manga.adapters.output.repositories.JpaNotificationRepository;
+
+public interface NotificationRepository extends JpaNotificationRepository {
 }
