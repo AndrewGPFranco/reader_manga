@@ -25,6 +25,7 @@ const listenerNotificacoes = () => {
       title: 'Alerta de capítulo novo!',
       content: `${mensagemParaExibicao}`,
       meta: `${formatDate(new Date())}`,
+      duration: 15000,
       avatar: () =>
         h(NAvatar, {
           size: 'medium',
