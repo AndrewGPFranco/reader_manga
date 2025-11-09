@@ -150,4 +150,10 @@ public class ChapterController {
         return ResponseEntity.ok().body(allReadingProgressPageable);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/correcao-nome-paginas")
+    void corrigePathPaginas() {
+        service.corrigePathPaginas();
+    }
+
 }
