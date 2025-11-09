@@ -98,6 +98,7 @@ export default defineComponent({
     const execKey = (e: KeyboardEvent) => {
       if (e.altKey && e.key.toLowerCase() === 'q') updateMenuState(!collapsed.value)
       else if (e.altKey && e.key.toLowerCase() === 'a') systemStore.alterTheme()
+      else if (e.altKey && e.key.toLowerCase() === 'n') isShowNotifications.value = !isShowNotifications.value
     }
 
     const menuOptions: MenuOption[] = [
