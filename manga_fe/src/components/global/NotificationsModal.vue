@@ -2,7 +2,7 @@
   <n-modal
       v-model:show="show"
       preset="card"
-      :title="notifications.length > 0 ? `Notificações (${notifications.length})` : 'Notificações'"
+      :title="notifications.length > 0 ? `Notificações (${totalNotificacoes})` : 'Notificações'"
       closable
       style="width: 450px; max-height: 80vh;"
       :segmented="{ content: 'soft' }"
@@ -51,6 +51,13 @@
           </div>
         </div>
       </n-scrollbar>
+      <n-pagination
+          v-if="totalPaginas > 1"
+          class="mt-5"
+          v-model:page="paginaAtual"
+          :page-count="totalPaginas"
+          simple
+      />
     </div>
   </n-modal>
 </template>
@@ -58,7 +65,7 @@
 <script setup lang="ts">
 import {NIcon} from 'naive-ui';
 import {formatDate} from "@/utils/utils";
-import {computed, onMounted, ref, h} from "vue";
+import {computed, onMounted, onUnmounted, ref, h, watch} from "vue";
 import type {iNotification} from "@/@types/iNotification";
 import {useNotificationStore} from "@/store/NotificationStore";
 
@@ -76,8 +83,14 @@ const BellIcon = {
   }
 };
 
-const notifications = ref<iNotification[]>([]);
+const paginaAtual = ref<number>(1);
+const totalPaginas = ref<number>(0);
+const totalNotificacoes = ref<number>(0);
+
 const notificationStore = useNotificationStore();
+const notifications = ref<iNotification[]>([]);
+
+let intervalId: number | null = null;
 
 const props = defineProps({
   isShowNotifications: {
@@ -93,8 +106,14 @@ const show = computed({
   set: (value) => emit('update:isShowNotifications', value)
 });
 
-onMounted(async () => {
-  const response = await notificationStore.getNotifications(0);
+const loadNotifications = async (page: number = 0) => {
+  notifications.value = [];
+
+  const response = await notificationStore.getNotifications(page);
+
+  paginaAtual.value = response.number + 1;
+  totalPaginas.value = response.totalPages;
+  totalNotificacoes.value = response.totalElements;
 
   response.content.forEach((item: any) => {
     const dadosExibicao = item.content.split(' / Capa: ');
@@ -111,6 +130,23 @@ onMounted(async () => {
 
     notifications.value.push(data);
   });
+};
+
+onMounted(async () => {
+  await loadNotifications(0);
+
+  intervalId = setInterval(async () => {
+    await loadNotifications(paginaAtual.value - 1);
+  }, 2 * 60 * 1000);
+});
+
+onUnmounted(() => {
+  if (intervalId)
+    clearInterval(intervalId);
+});
+
+watch(paginaAtual, async (newPage) => {
+  await loadNotifications(newPage - 1);
 });
 </script>
 
@@ -123,6 +159,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 16px;
 }
 
 .notif-item-wrapper {
@@ -170,7 +207,6 @@ onMounted(async () => {
 .notif-text {
   margin: 0;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -191,6 +227,10 @@ onMounted(async () => {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.4);
   white-space: nowrap;
+}
+
+.mt-5 {
+  margin-top: 20px;
 }
 
 :deep(.n-scrollbar-rail__scrollbar) {
