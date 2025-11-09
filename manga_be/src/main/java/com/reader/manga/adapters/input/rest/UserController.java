@@ -3,10 +3,12 @@ package com.reader.manga.adapters.input.rest;
 import com.reader.manga.adapters.input.dtos.ResponseAPI;
 import com.reader.manga.adapters.input.dtos.user.*;
 import com.reader.manga.domain.components.AgentRabbitMQ;
+import com.reader.manga.domain.entities.notifications.Notification;
 import com.reader.manga.domain.enums.RoleType;
 import com.reader.manga.domain.exceptions.PasswordException;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.services.JwtTokenService;
+import com.reader.manga.domain.services.NotificationService;
 import com.reader.manga.domain.services.UserMangaService;
 import com.reader.manga.domain.services.UserService;
 import com.reader.manga.domain.valueobjects.users.ChangePasswordVO;
@@ -37,6 +39,7 @@ public class UserController {
     private final AgentRabbitMQ agentRabbitMQ;
     private final JwtTokenService jwtTokenService;
     private final UserMangaService userMangaService;
+    private final NotificationService notificationService;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/token")
@@ -174,6 +177,11 @@ public class UserController {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         agentRabbitMQ.addEmitter(emitter);
         return emitter;
+    }
+
+    @GetMapping("/get-notifications")
+    Page<Notification> getNotifications(@RequestParam Integer paginaAtual) {
+        return notificationService.getAllNotifications(paginaAtual);
     }
 
 }
