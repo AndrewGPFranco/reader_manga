@@ -96,7 +96,9 @@ public class JobChapter extends ColetorBaseUpload {
         }
         emitters.clear();
 
-        agentRabbitMQ.enviarMensagem(String.format("Novo Capítulo de %s já disponível! %s", manga.getTitle(), nomeCapitulo));
+        agentRabbitMQ.enviarMensagem(
+                String.format("Novo Capítulo de %s já disponível! %s / Capa: %s", manga.getTitle(), nomeCapitulo, manga.getImage())
+        );
     }
 
     private void processPagesZip(String nomeManga, String nomeCapitulo, Manga manga, MultipartFile file) throws IOException {
