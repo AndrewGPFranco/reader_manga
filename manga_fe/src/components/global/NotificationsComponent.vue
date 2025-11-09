@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { NAvatar, useNotification } from 'naive-ui'
-import { h, onMounted, onUnmounted } from 'vue'
-import { URL_SSE_NOTIFICATIONS, formatDate } from '@/utils/utils'
+import {h, onMounted, onUnmounted} from 'vue'
+import {NAvatar, useNotification} from 'naive-ui'
+import {URL_SSE_NOTIFICATIONS, formatDate} from '@/utils/utils'
 
 const notification = useNotification()
 
@@ -23,15 +23,15 @@ const listenerNotificacoes = () => {
 
     notification.create({
       title: () =>
-        h('div', { style: 'color: #22c55e; font-weight: 700;' }, 'Alerta de capítulo novo!'),
-      content: () => h('div', { style: 'color: #22c55e; font-weight: 600;' }, mensagemParaExibicao),
+          h('div', {style: 'color: #22c55e; font-weight: 700;'}, 'Alerta de capítulo novo!'),
+      content: () => h('div', {style: 'color: #22c55e; font-weight: 600;'}, mensagemParaExibicao),
       meta: formatDate(new Date()),
       duration: 15000,
       avatar: () =>
-        h(NAvatar, {
-          size: 'large',
-          src: imagemMangaParaAvatar
-        })
+          h(NAvatar, {
+            size: 'large',
+            src: imagemMangaParaAvatar
+          })
     })
   }
 

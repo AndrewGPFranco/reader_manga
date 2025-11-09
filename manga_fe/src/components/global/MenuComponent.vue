@@ -1,11 +1,30 @@
 <template>
-  <n-layout-sider bordered collapse-mode="width" :collapsed="collapsed" @collapse="handleCollapse"
-                  @expand="handleExpand"
-                  position="absolute" top="0" left="0" height="100%" :aria-expanded="!collapsed" class="pt-6 pb-6"
-                  show-trigger>
-    <n-menu :collapsed="collapsed" :collapsed-icon-size="20" :options="menuOptions" key-field="whateverKey"
-            label-field="whateverLabel" children-field="whateverChildren" v-model:value="activeKey"/>
+  <n-layout-sider
+      bordered
+      collapse-mode="width"
+      :collapsed="collapsed"
+      @collapse="handleCollapse"
+      @expand="handleExpand"
+      position="absolute"
+      top="0"
+      left="0"
+      height="100%"
+      :aria-expanded="!collapsed"
+      class="pt-6 pb-6"
+      show-trigger
+  >
+    <n-menu
+        :collapsed="collapsed"
+        :collapsed-icon-size="20"
+        :options="menuOptions"
+        key-field="whateverKey"
+        label-field="whateverLabel"
+        children-field="whateverChildren"
+        v-model:value="activeKey"
+    />
   </n-layout-sider>
+
+  <NotificationsModal v-model:isShowNotifications="isShowNotifications" />
 </template>
 
 <script lang="ts">
@@ -23,22 +42,26 @@ import {
   NewspaperOutline as Mangas,
   CodeWorkingOutline as Jobs,
   HourglassOutline as ProgressReadings,
-  SettingsOutline
+  SettingsOutline,
+  NotificationsOutline as Notification
 } from '@vicons/ionicons5'
 import {RouterLink} from 'vue-router'
 import {useAuthStore} from '@/store/AuthStore'
 import {useSystemStore} from '@/store/SystemStore'
 import {VideocamOutline} from '@vicons/ionicons5/lib'
 import {useMenu} from '@/composables/menu'
+import NotificationsModal from "@/components/global/NotificationsModal.vue";
 
-const renderIcon = (icon: Component) => () =>
-    h(NIcon, null, {default: () => h(icon)})
+const renderIcon = (icon: Component) => () => h(NIcon, null, {default: () => h(icon)})
 
 export default defineComponent({
+  components: {NotificationsModal},
   setup() {
     const auth = useAuthStore()
     const systemStore = useSystemStore()
     const {menuCollapsed, setMenuCollapsed} = useMenu()
+
+    const isShowNotifications = ref<boolean>(false);
 
     const role = auth.getRoleUser()
     const collapsed = ref<boolean>(menuCollapsed.value)
@@ -62,17 +85,19 @@ export default defineComponent({
       }
     }
 
-    watch(menuCollapsed, (newValue) => {
-      if (!isInitialized.value) {
-        collapsed.value = newValue
-      }
-    }, {immediate: true})
+    watch(
+        menuCollapsed,
+        (newValue) => {
+          if (!isInitialized.value) {
+            collapsed.value = newValue
+          }
+        },
+        {immediate: true}
+    )
 
     const execKey = (e: KeyboardEvent) => {
-      if (e.altKey && e.key.toLowerCase() === 'q')
-        updateMenuState(!collapsed.value)
-      else if (e.altKey && e.key.toLowerCase() === 'a')
-        systemStore.alterTheme()
+      if (e.altKey && e.key.toLowerCase() === 'q') updateMenuState(!collapsed.value)
+      else if (e.altKey && e.key.toLowerCase() === 'a') systemStore.alterTheme()
     }
 
     const menuOptions: MenuOption[] = [
@@ -86,8 +111,7 @@ export default defineComponent({
           ? [
             {
               whateverKey: 'jobs',
-              whateverLabel: () =>
-                  h(RouterLink, {to: '/admin/jobs'}, {default: () => 'Jobs'}),
+              whateverLabel: () => h(RouterLink, {to: '/admin/jobs'}, {default: () => 'Jobs'}),
               icon: renderIcon(Jobs),
               path: '/admin/jobs'
             }
@@ -95,15 +119,13 @@ export default defineComponent({
           : []),
       {
         whateverKey: 'anime',
-        whateverLabel: () =>
-            h(RouterLink, {to: '/anime'}, {default: () => 'Animes'}),
+        whateverLabel: () => h(RouterLink, {to: '/anime'}, {default: () => 'Animes'}),
         icon: renderIcon(VideocamOutline),
         path: '/anime'
       },
       {
         whateverKey: 'mangas',
-        whateverLabel: () =>
-            h(RouterLink, {to: '/mangas'}, {default: () => 'Mangás'}),
+        whateverLabel: () => h(RouterLink, {to: '/mangas'}, {default: () => 'Mangás'}),
         icon: renderIcon(Mangas),
         path: '/mangas'
       },
@@ -120,10 +142,18 @@ export default defineComponent({
           : []),
       {
         whateverKey: 'perfil',
-        whateverLabel: () =>
-            h(RouterLink, {to: '/profile'}, {default: () => 'Meu perfil'}),
+        whateverLabel: () => h(RouterLink, {to: '/profile'}, {default: () => 'Meu perfil'}),
         icon: renderIcon(Profile),
         path: '/profile'
+      },
+      {
+        key: 'notifications',
+        label: 'Notifications',
+        whateverLabel: () => "Notificações",
+        icon: renderIcon(Notification),
+        onClick: () => {
+          isShowNotifications.value = !isShowNotifications.value
+        }
       },
       ...(role.includes('ADMIN')
           ? [
@@ -171,10 +201,7 @@ export default defineComponent({
                   style: {width: '100%', justifyContent: 'flex-start'}
                 },
                 {
-                  default: () =>
-                      systemStore.theme === null
-                          ? 'Ativar Dark Mode'
-                          : 'Ativar Light Mode'
+                  default: () => (systemStore.theme === null ? 'Ativar Dark Mode' : 'Ativar Light Mode')
                 }
             ),
         icon: () => h(NIcon, null, {default: () => h(SettingsOutline)})
@@ -189,7 +216,7 @@ export default defineComponent({
     })
     onUnmounted(() => globalThis.removeEventListener('keydown', execKey))
 
-    return {menuOptions, collapsed, activeKey, updateMenuState, handleCollapse, handleExpand}
+    return {menuOptions, collapsed, activeKey, updateMenuState, handleCollapse, handleExpand, isShowNotifications}
   }
 })
 </script>
