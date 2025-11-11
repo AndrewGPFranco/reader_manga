@@ -19,4 +19,6 @@ public interface PaginaRepository {
 
     List<String> getUriPagina(Long idChapter);
 
+    List<Pagina> findAll();
+
 }

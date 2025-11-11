@@ -6,3 +6,8 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: andrew
+    password: reader

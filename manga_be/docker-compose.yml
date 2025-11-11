@@ -13,5 +13,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgres
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbit_manga
+    environment:
+      - RABBITMQ_DEFAULT_USER=andrew
+      - RABBITMQ_DEFAULT_PASS=reader
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
 volumes:
   postgres_data:
