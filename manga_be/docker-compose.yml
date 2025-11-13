@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
-    container_name: manga-postgres
+    container_name: db_manga
     environment:
       - 'POSTGRES_DB=reader'
       - 'POSTGRES_USER=andrew'

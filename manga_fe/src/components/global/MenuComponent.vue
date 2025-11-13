@@ -29,7 +29,6 @@
 
 <script lang="ts">
 import type {Component} from 'vue'
-import {defineComponent, h, onMounted, onUnmounted, ref, watch, nextTick} from 'vue'
 import {NButton, NIcon} from 'naive-ui'
 import type {MenuOption} from 'naive-ui'
 import {
@@ -43,14 +42,16 @@ import {
   CodeWorkingOutline as Jobs,
   HourglassOutline as ProgressReadings,
   SettingsOutline,
-  NotificationsOutline as Notification
+  NotificationsOutline as Notification,
+  TimeOutline as Historic
 } from '@vicons/ionicons5'
 import {RouterLink} from 'vue-router'
+import {useMenu} from '@/composables/menu'
 import {useAuthStore} from '@/store/AuthStore'
 import {useSystemStore} from '@/store/SystemStore'
 import {VideocamOutline} from '@vicons/ionicons5/lib'
-import {useMenu} from '@/composables/menu'
 import NotificationsModal from "@/components/global/NotificationsModal.vue";
+import {defineComponent, h, onMounted, onUnmounted, ref, watch, nextTick} from 'vue'
 
 const renderIcon = (icon: Component) => () => h(NIcon, null, {default: () => h(icon)})
 
@@ -180,6 +181,15 @@ export default defineComponent({
             h(RouterLink, {to: '/manga/favorites'}, {default: () => 'Mangás favoritos'}),
         icon: renderIcon(Favorites),
         path: '/manga/favorites'
+      },
+      {
+        whateverKey: 'histórico',
+        whateverLabel: () =>
+          h(RouterLink, {to: '/historic'}, {
+            default: () => 'Histórico de Leitura'
+          }),
+        icon: renderIcon(Historic),
+        path: '/historic'
       },
       {
         whateverKey: 'leituras-em-andamento',
