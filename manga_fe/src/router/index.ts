@@ -15,6 +15,7 @@ import JobExecutor from '@/views/JobExecutor.vue'
 import ProgressReadings from '@/views/ProgressReadings.vue'
 import AnimeList from '@/views/AnimeList.vue'
 import EpisodeDisplay from '@/views/EpisodeDisplay.vue'
+import ReadingHistory from '@/views/ReadingHistory.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -93,27 +94,32 @@ const router = createRouter({
       path: '/anime/:title/:id',
       name: 'episode',
       component: EpisodeDisplay
+    },
+    {
+      path: '/reading-history',
+      name: 'history',
+      component: ReadingHistory
     }
   ]
-});
+})
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  const isAuthenticated = authStore.isUserAutenticado();
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isUserAutenticado()
 
-  const publicRoutes = ['login', 'registerUser'];
-  
+  const publicRoutes = ['login', 'registerUser']
+
   if (to.name && publicRoutes.includes(to.name.toString())) {
     if (isAuthenticated) {
-      next({ name: 'home' });
+      next({ name: 'home' })
     } else {
-      next();
+      next()
     }
   } else if (!isAuthenticated) {
-      next({ name: 'login' });
-    } else {
-      next();
-    }
-});
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
 
-export default router;
+export default router

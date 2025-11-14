@@ -185,7 +185,7 @@ export default defineComponent({
       {
         whateverKey: 'histórico',
         whateverLabel: () =>
-          h(RouterLink, {to: '/historic'}, {
+          h(RouterLink, {to: '/reading-history'}, {
             default: () => 'Histórico de Leitura'
           }),
         icon: renderIcon(Historic),
