@@ -1,8 +1,6 @@
 package com.reader.manga.adapters.output.repositories;
 
 import com.reader.manga.domain.entities.mangas.History;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +16,5 @@ public interface JPAHistoryRepository extends JpaRepository<History, UUID> {
     List<History> getAllHistoryByUserChapterAndManga(@Param("idUser") Long idUser, @Param("idChapter") Long idChapter, @Param("idManga") Long idManga);
 
     @Query("select h from History h where h.idUser = :idUser")
-    Page<History> findAllByUser(@Param("idUser") Long id, PageRequest of);
+    List<History> findAllByUser(@Param("idUser") Long id);
 }

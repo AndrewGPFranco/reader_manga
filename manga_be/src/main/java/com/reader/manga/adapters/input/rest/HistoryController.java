@@ -6,9 +6,10 @@ import com.reader.manga.domain.valueobjects.mangas.HistoryMangaOutputVO;
 import com.reader.manga.domain.valueobjects.mangas.HistoryMangaVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/history")
@@ -24,9 +25,8 @@ public class HistoryController {
     }
 
     @GetMapping("/get-history")
-    Page<HistoryMangaOutputVO> getHistoryByUser(@AuthenticationPrincipal User user,
-                                                @RequestParam("numberPage") Integer numberPage) {
-        return historyService.getHistoricoDoUsuario(user, numberPage);
+    List<HistoryMangaOutputVO> getHistoryByUser(@AuthenticationPrincipal User user) {
+        return historyService.getHistoricoDoUsuario(user);
     }
 
 }

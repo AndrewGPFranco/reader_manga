@@ -12,15 +12,12 @@ import com.reader.manga.ports.repositories.HistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,10 +93,10 @@ public class HistoryService {
         }
     }
 
-    public Page<HistoryMangaOutputVO> getHistoricoDoUsuario(User user, Integer numberPage) {
-        Page<History> all = historyRepository.findAllByUser(user.getId(), PageRequest.of(numberPage, 20));
+    public List<HistoryMangaOutputVO> getHistoricoDoUsuario(User user) {
+        List<History> all = historyRepository.findAllByUser(user.getId());
 
-        return all.map(his -> {
+        return all.stream().map(his -> {
             Optional<Chapter> chapter = chapterRepository.findById(his.getIdCapitulo());
 
             return new HistoryMangaOutputVO(
@@ -109,6 +106,6 @@ public class HistoryService {
                     his.getStatusType(),
                     getDataHoraOffSetBrasil(his.getLastCheck())
             );
-        });
+        }).toList();
     }
 }
