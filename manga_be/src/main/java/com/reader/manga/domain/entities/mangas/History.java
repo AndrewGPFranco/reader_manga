@@ -17,7 +17,7 @@ import java.util.UUID;
 @Table(name = "history_mangas_user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {
-                        "idUser", "idCapitulo", "idManga"
+                        "user_id", "chapter_id", "manga_id", "last_check"
                 })
         }
 )
