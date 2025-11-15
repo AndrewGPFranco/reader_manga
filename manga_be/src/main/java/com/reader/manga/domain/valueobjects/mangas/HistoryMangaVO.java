@@ -5,7 +5,6 @@ import lombok.Builder;
 
 @Builder
 public record HistoryMangaVO(
-    @NotNull Long idManga,
     @NotNull Long idChapter,
     @NotNull Integer currentProgress
 ) {
