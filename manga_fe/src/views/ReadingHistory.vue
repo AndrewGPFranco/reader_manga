@@ -3,9 +3,9 @@
     <MenuComponent />
   </header>
   <main>
-    <TimelineHistory
-      :historico="historico"
-    />
+    <n-card class="containerCard" title="Histórico de Leitura" size="huge">
+      <TimelineHistory :historico="historico" />
+    </n-card>
   </main>
 </template>
 
@@ -25,6 +25,18 @@ async function getAllHistorico() {
 
 onMounted(async () => {
   const result = await getAllHistorico()
-  historico.value = result.content;
+  historico.value = result.content
 })
 </script>
+
+<style lang="css" scoped>
+main {
+  padding: 15px;
+}
+
+.containerCard {
+  height: 95vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+</style>

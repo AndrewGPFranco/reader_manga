@@ -87,7 +87,6 @@ function getTimelineType(index: number, total: number): 'default' | 'success' | 
 
 <style scoped>
 .history {
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
