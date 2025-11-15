@@ -235,7 +235,7 @@ export const useChapterStore = defineStore('chapter', {
     },
     async getAllHistorico() {
       try {
-        const response = await api.get(`/api/v1/history/get-history?numberPage=0`, {
+        const response = await api.get(`/api/v1/history/get-history`, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }

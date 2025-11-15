@@ -93,7 +93,7 @@
               :key="historico.id"
               :time="formatDate(historico.lastCheck)"
               :type="getTimelineType(index, group.items.length)"
-              :title="getTimelineTitle(index, group.items.length)"
+              :title="getTimelineTitle(index, group.items.length, historico.statusType)"
             >
               <template #icon>
                 <n-icon size="16">
@@ -109,7 +109,9 @@
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
                   <svg
-                    v-else-if="index === group.items.length - 1"
+                    v-else-if="
+                      index === group.items.length - 1 && historico.statusType === 'FINISHED'
+                    "
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -200,10 +202,10 @@ function getTimelineType(index: number, total: number): 'default' | 'success' | 
   return 'warning'
 }
 
-function getTimelineTitle(index: number, total: number): string {
+function getTimelineTitle(index: number, total: number, status: string): string {
   if (total === 1) return 'Verificação'
   if (index === 0) return 'Início'
-  if (index === total - 1) return 'Última'
+  if (index === total - 1 && status === 'FINISHED') return 'Última'
   return `${index + 1}ª`
 }
 </script>
@@ -212,14 +214,14 @@ function getTimelineTitle(index: number, total: number): string {
 .history {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   padding: 0.5rem;
 }
 
 .timeline-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .timeline-card {
@@ -247,7 +249,7 @@ function getTimelineTitle(index: number, total: number): string {
 .card-header {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .manga-badge {
@@ -275,7 +277,7 @@ function getTimelineTitle(index: number, total: number): string {
 
 .manga-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   background: linear-gradient(135deg, rgb(99, 226, 183), rgb(79, 206, 163));
   -webkit-background-clip: text;
@@ -302,21 +304,21 @@ function getTimelineTitle(index: number, total: number): string {
 }
 
 .custom-divider {
-  margin: 1rem 0;
+  margin: 0.75rem 0;
   opacity: 0.6;
 }
 
 .timeline-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .timeline-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
 }
 
 .clock-icon {
@@ -337,7 +339,7 @@ function getTimelineTitle(index: number, total: number): string {
 }
 
 .custom-timeline {
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
 .timeline-fade-enter-active,

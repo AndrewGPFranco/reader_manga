@@ -24,8 +24,7 @@ async function getAllHistorico() {
 }
 
 onMounted(async () => {
-  const result = await getAllHistorico()
-  historico.value = result.content
+  historico.value = await getAllHistorico()
 })
 </script>
 
