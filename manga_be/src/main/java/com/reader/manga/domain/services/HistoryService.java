@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -28,12 +29,13 @@ public class HistoryService {
     public void preencheHistorico(User user, HistoryMangaVO historyMangaVO) {
         Chapter chapter = getChapter(historyMangaVO);
 
-        History history = historyRepository.getHistory(user.getId(), historyMangaVO.idChapter(), chapter.getManga().getId());
+        List<History> allHistory = historyRepository.getAllHistoryByUserChapterAndManga(user.getId(),
+                historyMangaVO.idChapter(), chapter.getManga().getId());
 
-        if (history == null)
+        if (allHistory.isEmpty())
             inicializaMarcacaoHistorico(user, historyMangaVO, chapter);
         else
-            atualizaMarcacaoHistorico(user, historyMangaVO, history, chapter);
+            atualizaMarcacaoHistorico(user, historyMangaVO, allHistory, chapter);
     }
 
     private Chapter getChapter(HistoryMangaVO historyMangaVO) {
@@ -53,17 +55,27 @@ public class HistoryService {
         return LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toOffsetDateTime();
     }
 
-    private void atualizaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, History history, Chapter chapter) {
+    private void atualizaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, List<History> historical, Chapter chapter) {
         Integer ultimaPagina = historyMangaVO.currentProgress();
 
-        history.setLastCheck(getDataHoraAtual());
-
         if (chapter.getNumberPages().equals(ultimaPagina)) {
-            history.setStatusType(StatusType.FINISHED);
-            historyRepository.save(history);
-            log.info("Marcação de tempo finalizada para: Usuário: {} Id Manga: {} Id Capítulo: {}", user.getId(),
-                    chapter.getManga().getId(), history.getIdCapitulo());
-        } else historyRepository.save(history);
+            for (History history : historical) {
+                history.setStatusType(StatusType.FINISHED);
+            }
+
+            History newHistory = new History(user.getId(), historyMangaVO.idChapter(),
+                    chapter.getManga().getId(), StatusType.FINISHED, getDataHoraAtual());
+            historical.add(newHistory);
+
+            historyRepository.saveAll(historical);
+
+            log.info("Marcação de tempo finalizada para: Usuário: {} | Id Manga: {} | Id Capítulo: {}", user.getId(),
+                    chapter.getManga().getId(), historical.get(0).getIdCapitulo());
+        } else {
+            History newHistory = new History(user.getId(), historyMangaVO.idChapter(),
+                    chapter.getManga().getId(), StatusType.ONGOING, getDataHoraAtual());
+            historyRepository.save(newHistory);
+        }
     }
 
 }
