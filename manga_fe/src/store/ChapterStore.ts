@@ -160,7 +160,7 @@ export const useChapterStore = defineStore('chapter', {
     },
     async updateReadingProgress(idChapter: string, currentProgress: number) {
       try {
-        const idUser = this.user.getId();
+        const idUser = this.user.getId()
         const data = {
           idUser: idUser,
           idChapter: idChapter,
@@ -174,6 +174,18 @@ export const useChapterStore = defineStore('chapter', {
         })
       } catch (error) {
         console.error(error)
+      } finally {
+        // Realiza a marcação no histórico
+        const data = {
+          idChapter: idChapter,
+          currentProgress: currentProgress
+        }
+
+        await api.post(`/api/v1/history/preenche-historico`, data, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
+          }
+        })
       }
     },
     async getReadingProgress(idChapter: string) {
@@ -205,14 +217,11 @@ export const useChapterStore = defineStore('chapter', {
     },
     async progressReset(idChapter: number) {
       try {
-        const response = await api.delete(
-          `/api/user/chapter/delete/${idChapter}`,
-          {
-            headers: {
-              Authorization: `${this.user.getToken()}`
-            }
+        const response = await api.delete(`/api/user/chapter/delete/${idChapter}`, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
           }
-        )
+        })
         return response.data
       } catch (error) {
         console.error(error)
