@@ -5,18 +5,24 @@ import com.reader.manga.domain.entities.mangas.History;
 import com.reader.manga.domain.entities.users.User;
 import com.reader.manga.domain.enums.StatusType;
 import com.reader.manga.domain.exceptions.NotFoundException;
+import com.reader.manga.domain.valueobjects.mangas.HistoryMangaOutputVO;
 import com.reader.manga.domain.valueobjects.mangas.HistoryMangaVO;
 import com.reader.manga.ports.repositories.ChapterRepository;
 import com.reader.manga.ports.repositories.HistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,15 +50,18 @@ public class HistoryService {
     }
 
     public void inicializaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, Chapter chapter) {
-        History history = new History(user.getId(), historyMangaVO.idChapter(), chapter.getManga().getId(), StatusType.ONGOING, getDataHoraAtual());
+        History history = new History(user.getId(), historyMangaVO.idChapter(), chapter.getManga().getId(), StatusType.ONGOING, getDataHoraOffSetBrasil(null));
 
         historyRepository.save(history);
         log.info("Marcação no tempo iniciada para: Usuário: {} | Id Manga: {} | Id Capítulo:" +
                 " {}", user.getId(), chapter.getManga().getId(), history.getIdCapitulo());
     }
 
-    private @NotNull OffsetDateTime getDataHoraAtual() {
-        return LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toOffsetDateTime();
+    private @NotNull OffsetDateTime getDataHoraOffSetBrasil(OffsetDateTime offsetDateTime) {
+        if (offsetDateTime == null)
+            return LocalDateTime.now().atZone(ZoneId.of("America/Sao_Paulo")).toOffsetDateTime();
+
+        return offsetDateTime.withOffsetSameInstant(ZoneOffset.of("-03:00"));
     }
 
     private void atualizaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, List<History> historical, Chapter chapter) {
@@ -64,7 +73,7 @@ public class HistoryService {
             }
 
             History newHistory = new History(user.getId(), historyMangaVO.idChapter(),
-                    chapter.getManga().getId(), StatusType.FINISHED, getDataHoraAtual());
+                    chapter.getManga().getId(), StatusType.FINISHED, getDataHoraOffSetBrasil(null));
             historical.add(newHistory);
 
             historyRepository.saveAll(historical);
@@ -73,9 +82,24 @@ public class HistoryService {
                     chapter.getManga().getId(), historical.get(0).getIdCapitulo());
         } else {
             History newHistory = new History(user.getId(), historyMangaVO.idChapter(),
-                    chapter.getManga().getId(), StatusType.ONGOING, getDataHoraAtual());
+                    chapter.getManga().getId(), StatusType.ONGOING, getDataHoraOffSetBrasil(null));
             historyRepository.save(newHistory);
         }
     }
 
+    public Page<HistoryMangaOutputVO> getHistoricoDoUsuario(User user, Integer numberPage) {
+        Page<History> all = historyRepository.findAllByUser(user.getId(), PageRequest.of(numberPage, 20));
+
+        return all.map(his -> {
+            Optional<Chapter> chapter = chapterRepository.findById(his.getIdCapitulo());
+
+            return new HistoryMangaOutputVO(
+                    his.getId(),
+                    chapter.map(Chapter::getTitle).orElse("Capítulo não encontrado"),
+                    chapter.map(c -> c.getManga().getTitle()).orElse("Manga não encontrado"),
+                    his.getStatusType(),
+                    getDataHoraOffSetBrasil(his.getLastCheck())
+            );
+        });
+    }
 }
