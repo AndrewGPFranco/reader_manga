@@ -23,6 +23,7 @@ public class UserChapterService {
 
     private final UserMangaService userService;
     private final UserRepository userRepository;
+    private final HistoryService historyService;
     private final ChapterRepository chapterRepository;
     private final UserChapterRepository userChapterRepository;
 
@@ -95,6 +96,7 @@ public class UserChapterService {
     public void deleteAssociacao(Long idChapter, Long idUser) {
         try {
             userChapterRepository.deleteAssociacao(idChapter, idUser);
+            historyService.excluirHistoricoDoCapitulo(idChapter, idUser);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao deletar associação.");
         }

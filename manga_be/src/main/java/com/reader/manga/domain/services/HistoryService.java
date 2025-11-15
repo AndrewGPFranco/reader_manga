@@ -9,9 +9,11 @@ import com.reader.manga.domain.valueobjects.mangas.HistoryMangaOutputVO;
 import com.reader.manga.domain.valueobjects.mangas.HistoryMangaVO;
 import com.reader.manga.ports.repositories.ChapterRepository;
 import com.reader.manga.ports.repositories.HistoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +32,7 @@ public class HistoryService {
     private final ChapterRepository chapterRepository;
 
     public void preencheHistorico(User user, HistoryMangaVO historyMangaVO) {
-        Chapter chapter = getChapter(historyMangaVO);
+        Chapter chapter = getChapter(historyMangaVO.idChapter());
 
         List<History> allHistory = historyRepository.getAllHistoryByUserChapterAndManga(user.getId(),
                 historyMangaVO.idChapter(), chapter.getManga().getId());
@@ -45,9 +47,9 @@ public class HistoryService {
         }
     }
 
-    private Chapter getChapter(HistoryMangaVO historyMangaVO) {
-        return chapterRepository.findById(historyMangaVO.idChapter())
-                .orElseThrow(() -> new NotFoundException("Nenhum capítulo encontrado com o ID: " + historyMangaVO.idChapter()));
+    private Chapter getChapter(Long idChapter) {
+        return chapterRepository.findById(idChapter)
+                .orElseThrow(() -> new NotFoundException("Nenhum capítulo encontrado com o ID: " + idChapter));
     }
 
     public void inicializaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, Chapter chapter) {
@@ -107,5 +109,14 @@ public class HistoryService {
                     getDataHoraOffSetBrasil(his.getLastCheck())
             );
         }).toList();
+    }
+
+    @Modifying
+    @Transactional
+    public void excluirHistoricoDoCapitulo(Long idChapter, Long idUser) {
+        Chapter chapter = getChapter(idChapter);
+        List<History> allHistoryByUserChapterAndManga = historyRepository.getAllHistoryByUserChapterAndManga(idUser, idChapter, chapter.getManga().getId());
+
+        historyRepository.deleteAll(allHistoryByUserChapterAndManga);
     }
 }
