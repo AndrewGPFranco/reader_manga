@@ -267,7 +267,7 @@ onMounted(async () => {
     return
   }
 
-  await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
+  await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value), true)
   currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
   await loadAllPages(idChapter.value)
 })
@@ -290,7 +290,7 @@ watch(
         Array.isArray(route.params.progress) ? route.params.progress[0] : route.params.progress
       )
 
-      await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value))
+      await chapterStore.updateReadingProgress(idChapter.value, Number(currentProgress.value), false)
       currentChapter.value = await chapterStore.getReadingProgress(idChapter.value)
 
       await loadAllPages(newId)
@@ -327,7 +327,7 @@ const atualizaProgresso = async () => {
     currentProgress.value > currentChapter.value.readingProgress &&
     idChapter.value
   ) {
-    await chapterStore.updateReadingProgress(idChapter.value, currentProgress.value)
+    await chapterStore.updateReadingProgress(idChapter.value, currentProgress.value, false)
   }
 }
 
