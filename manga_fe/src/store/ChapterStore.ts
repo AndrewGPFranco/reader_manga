@@ -158,7 +158,11 @@ export const useChapterStore = defineStore('chapter', {
       }
       return this.getQuantidadePaginasDoCapitulo(id)
     },
-    async updateReadingProgress(idChapter: string, currentProgress: number, isStartReading: boolean) {
+    async updateReadingProgress(
+      idChapter: string,
+      currentProgress: number,
+      isStartReading: boolean
+    ) {
       try {
         const idUser = this.user.getId()
         const data = {
@@ -220,6 +224,18 @@ export const useChapterStore = defineStore('chapter', {
     async progressReset(idChapter: number) {
       try {
         const response = await api.delete(`/api/user/chapter/delete/${idChapter}`, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
+          }
+        })
+        return response.data
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async getAllHistorico() {
+      try {
+        const response = await api.get(`/api/v1/history/get-history?numberPage=0`, {
           headers: {
             Authorization: `${this.user.getToken()}`
           }
