@@ -158,11 +158,7 @@ export const useChapterStore = defineStore('chapter', {
       }
       return this.getQuantidadePaginasDoCapitulo(id)
     },
-    async updateReadingProgress(
-      idChapter: string,
-      currentProgress: number,
-      isStartReading: boolean
-    ) {
+    async updateReadingProgress(idChapter: string, currentProgress: number) {
       try {
         const idUser = this.user.getId()
         const data = {
@@ -179,19 +175,17 @@ export const useChapterStore = defineStore('chapter', {
       } catch (error) {
         console.error(error)
       } finally {
-        if (!isStartReading) {
-          // Realiza a marcação no histórico
-          const data = {
-            idChapter: idChapter,
-            currentProgress: currentProgress
-          }
-
-          await api.post(`/api/v1/history/preenche-historico`, data, {
-            headers: {
-              Authorization: `${this.user.getToken()}`
-            }
-          })
+        // Realiza a marcação no histórico
+        const data = {
+          idChapter: idChapter,
+          currentProgress: currentProgress
         }
+
+        await api.post(`/api/v1/history/preenche-historico`, data, {
+          headers: {
+            Authorization: `${this.user.getToken()}`
+          }
+        })
       }
     },
     async getReadingProgress(idChapter: string) {
