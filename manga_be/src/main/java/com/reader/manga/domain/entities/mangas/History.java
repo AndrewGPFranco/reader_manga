@@ -4,7 +4,6 @@ import com.reader.manga.domain.enums.StatusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Builder
 @EqualsAndHashCode
 @AllArgsConstructor
 @Table(name = "history_mangas_user",
@@ -51,6 +49,14 @@ public class History {
     private OffsetDateTime lastCheck;
 
     public History() {/* Construtor vazio */}
+
+    public History(Long idUser, Long idCapitulo, Long idManga, StatusType statusType, OffsetDateTime lastCheck) {
+        this.idUser = idUser;
+        this.idCapitulo = idCapitulo;
+        this.idManga = idManga;
+        this.statusType = statusType;
+        this.lastCheck = lastCheck;
+    }
 
     @Override
     public String toString() {
