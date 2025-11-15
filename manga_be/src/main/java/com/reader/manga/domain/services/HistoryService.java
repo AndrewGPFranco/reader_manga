@@ -38,10 +38,14 @@ public class HistoryService {
         List<History> allHistory = historyRepository.getAllHistoryByUserChapterAndManga(user.getId(),
                 historyMangaVO.idChapter(), chapter.getManga().getId());
 
-        if (allHistory.isEmpty())
-            inicializaMarcacaoHistorico(user, historyMangaVO, chapter);
-        else
-            atualizaMarcacaoHistorico(user, historyMangaVO, allHistory, chapter);
+        boolean isFinalized = allHistory.stream().anyMatch(h -> h.getStatusType().equals(StatusType.FINISHED));
+
+        if (!isFinalized) {
+            if (allHistory.isEmpty())
+                inicializaMarcacaoHistorico(user, historyMangaVO, chapter);
+            else
+                atualizaMarcacaoHistorico(user, historyMangaVO, allHistory, chapter);
+        }
     }
 
     private Chapter getChapter(HistoryMangaVO historyMangaVO) {
