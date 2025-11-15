@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface JPAHistoryRepository extends JpaRepository<History, UUID> {
 
-    @Query("select h from History h where h.user_id = :idUser and h.chapter_id = :idChapter and h.manga_id = :idManga")
+    @Query("select h from History h where h.idUser = :idUser and h.idCapitulo = :idChapter and h.idManga = :idManga")
     History getHistory(@Param("idUser") Long idUser, @Param("idChapter") Long idChapter, @Param("idManga") Long idManga);
 
 }
