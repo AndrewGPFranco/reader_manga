@@ -54,7 +54,12 @@ public class HistoryService {
     }
 
     public void inicializaMarcacaoHistorico(User user, HistoryMangaVO historyMangaVO, Chapter chapter) {
-        History history = new History(user.getId(), historyMangaVO.idChapter(), chapter.getManga().getId(), StatusType.ONGOING, getDataHoraOffSetBrasil(null));
+        Integer ultimaPagina = historyMangaVO.currentProgress();
+
+        StatusType statusType = chapter.getNumberPages().equals(ultimaPagina) ? StatusType.FINISHED : StatusType.ONGOING;
+
+        History history = new History(user.getId(), historyMangaVO.idChapter(), chapter.getManga().getId(), statusType,
+                getDataHoraOffSetBrasil(null));
 
         historyRepository.save(history);
         log.info("Marcação no tempo iniciada para: Usuário: {} | Id Manga: {} | Id Capítulo:" +

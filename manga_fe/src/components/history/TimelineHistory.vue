@@ -1,22 +1,29 @@
 <template>
   <div class="history">
-    <div class="manga-info">
-      <h3>{{ getMangaName() }}</h3>
-      <p>{{ getChapterNumber() }}</p>
-    </div>
+    <div
+      v-for="group in groupedHistorico"
+      :key="`${group.manga}-${group.chapter}`"
+      class="timeline-group"
+    >
+      <div class="manga-info">
+        <NH3>{{ group.manga }}</NH3>
+        <NP>Capítulo {{ group.chapter }}</NP>
+      </div>
 
-    <n-timeline horizontal>
-      <n-timeline-item
-        v-for="(historico, index) in props.historico"
-        :key="historico.id"
-        :time="formatDate(historico.lastCheck)"
-        :type="getTimelineType(index)"
-      />
-    </n-timeline>
+      <n-timeline horizontal>
+        <n-timeline-item
+          v-for="(historico, index) in group.items"
+          :key="historico.id"
+          :time="formatDate(historico.lastCheck)"
+          :type="getTimelineType(index, group.items.length)"
+        />
+      </n-timeline>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { PropType } from 'vue'
 import type { IHistoricoVO } from '@/@types/IHistoricoVO'
 
@@ -27,17 +34,36 @@ const props = defineProps({
   }
 })
 
-function getMangaName(): string {
-  if (props.historico.length === 0) return ''
-  return props.historico[0].titleManga
+interface GroupedHistorico {
+  manga: string
+  chapter: string
+  items: IHistoricoVO[]
 }
 
-function getChapterNumber(): string {
-  if (props.historico.length === 0) return ''
-  const title = props.historico[0].titleChapter
-  const numeroCapitulo = title.split('_')[1]
-  return `Capítulo ${numeroCapitulo}`
-}
+const groupedHistorico = computed<GroupedHistorico[]>(() => {
+  const groups = new Map<string, GroupedHistorico>()
+
+  props.historico.forEach((item) => {
+    const numeroCapitulo = item.titleChapter.split('_')[1]
+    const key = `${item.titleManga}-${numeroCapitulo}`
+
+    if (!groups.has(key)) {
+      groups.set(key, {
+        manga: item.titleManga,
+        chapter: numeroCapitulo,
+        items: []
+      })
+    }
+
+    groups.get(key)!.items.push(item)
+  })
+
+  groups.forEach((group) => {
+    group.items.sort((a, b) => new Date(a.lastCheck).getTime() - new Date(b.lastCheck).getTime())
+  })
+
+  return Array.from(groups.values())
+})
 
 function formatDate(dateInput: string | Date): string {
   const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput
@@ -51,9 +77,7 @@ function formatDate(dateInput: string | Date): string {
   return `${dia}/${mes}/${ano} ${horas}:${minutos}`
 }
 
-function getTimelineType(index: number): 'default' | 'success' | 'warning' {
-  const total = props.historico.length
-
+function getTimelineType(index: number, total: number): 'default' | 'success' | 'warning' {
   if (total === 1) return 'success'
   if (index === 0) return 'default'
   if (index === total - 1) return 'success'
@@ -64,6 +88,12 @@ function getTimelineType(index: number): 'default' | 'success' | 'warning' {
 <style scoped>
 .history {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.timeline-group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -77,13 +107,11 @@ function getTimelineType(index: number): 'default' | 'success' | 'warning' {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #b2f8b2;
 }
 
 .manga-info p {
   margin: 0.25rem 0 0 0;
   font-size: 0.95rem;
   opacity: 0.7;
-  color: #b2f8b2;
 }
 </style>
